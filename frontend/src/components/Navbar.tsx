@@ -151,20 +151,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               >
                 <Shield className="w-3 h-3 text-amber-600" /> Admin
               </button>
-              <button
-                onClick={onOpenAuth}
+              <Link
+                to="/login"
                 className="px-3.5 py-1.5 text-xs font-bold text-blue-600 hover:bg-blue-50 rounded-xl transition"
               >
                 Log In
-              </button>
-              <button
-                onClick={onOpenAuth}
+              </Link>
+              <Link
+                to="/register"
                 className="px-3.5 py-1.5 text-xs font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition shadow-sm shadow-blue-200"
               >
                 Sign Up
-              </button>
+              </Link>
             </div>
           )}
+
         </div>
 
       </div>

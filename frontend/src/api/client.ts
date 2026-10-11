@@ -36,6 +36,38 @@ export const api = {
     return response.data;
   },
 
+  sendOTP: async (email: string, purpose: 'register' | 'login' = 'register') => {
+    const response = await apiClient.post<{
+      status: string;
+      message: string;
+      email: string;
+      expires_in_seconds: number;
+      dev_otp?: string;
+    }>('/auth/send-otp', { email, purpose });
+    return response.data;
+  },
+
+  verifyRegister: async (data: { email: string; otp: string; password: string; full_name?: string; role?: string }) => {
+    const response = await apiClient.post('/auth/verify-register', data);
+    if (response.data.access_token) {
+      localStorage.setItem('access_token', response.data.access_token);
+      localStorage.setItem('user_role', response.data.role);
+      localStorage.setItem('user_email', response.data.email);
+    }
+    return response.data;
+  },
+
+  verifyOTPLogin: async (email: string, otp: string) => {
+    const response = await apiClient.post('/auth/verify-otp-login', { email, otp });
+    if (response.data.access_token) {
+      localStorage.setItem('access_token', response.data.access_token);
+      localStorage.setItem('user_role', response.data.role);
+      localStorage.setItem('user_email', response.data.email);
+    }
+    return response.data;
+  },
+
+
   quickLoginAsCandidate: async () => {
     return api.login('nithin@example.com', 'NithinPass123!');
   },

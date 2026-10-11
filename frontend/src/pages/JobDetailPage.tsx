@@ -36,6 +36,8 @@ export const JobDetailPage: React.FC = () => {
     return <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-600">Job listing not found.</div>;
   }
 
+  const isExpired = job.status === 'expired' || job.status === 'closed' || job.status === 'stale';
+
   return (
     <div className="space-y-6 pb-12 max-w-5xl mx-auto">
       
@@ -44,8 +46,21 @@ export const JobDetailPage: React.FC = () => {
         <ArrowLeft className="w-4 h-4" /> Back to Jobs
       </Link>
 
+      {/* Expired Warning Banner if listing is expired */}
+      {isExpired && (
+        <div className="bg-amber-50 border border-amber-200 text-amber-900 p-4 rounded-2xl flex items-center gap-3.5 shadow-xs">
+          <div className="text-2xl shrink-0">⚠️</div>
+          <div>
+            <div className="font-bold text-sm text-amber-900">Position Expired / Application Closed</div>
+            <div className="text-xs text-amber-700 font-medium mt-0.5">
+              This job posting has been archived because it is no longer listed on the employer's official career portal or job website.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Detail Header Box matching Image 2 */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
+      <div className={`bg-white rounded-3xl border p-8 shadow-sm space-y-6 ${isExpired ? 'border-amber-200 bg-slate-50/30' : 'border-slate-200'}`}>
         <div className="flex items-start justify-between gap-6 flex-wrap">
           
           <div className="flex items-start gap-4">
@@ -70,7 +85,14 @@ export const JobDetailPage: React.FC = () => {
             </div>
 
             <div>
-              <h1 className="text-2xl font-bold text-slate-900">{job.title}</h1>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <h1 className="text-2xl font-bold text-slate-900">{job.title}</h1>
+                {isExpired && (
+                  <span className="text-amber-800 bg-amber-100 border border-amber-300 text-xs font-bold px-2.5 py-0.5 rounded-full">
+                    Expired
+                  </span>
+                )}
+              </div>
               <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
                 <span className="font-semibold text-slate-800">{job.company_name}</span>
                 <span className="text-xs px-2 py-0.5 rounded font-medium border border-slate-200 text-slate-500">
@@ -111,21 +133,32 @@ export const JobDetailPage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3">
-            <a
-              href={job.apply_url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl transition shadow-md shadow-blue-200 flex items-center gap-2"
-            >
-              <span>{job.source_type === 'job_portal' ? `Apply via ${job.source_name || 'Job Platform'}` : `Apply on ${job.company_name} Careers`}</span>
-              <ExternalLink className="w-4 h-4" />
-            </a>
+            {isExpired ? (
+              <button
+                disabled
+                className="px-6 py-3 bg-slate-100 text-slate-400 font-bold text-sm rounded-2xl border border-slate-200 cursor-not-allowed flex items-center gap-2"
+                title="Position removed from company career portal (application closed)"
+              >
+                <span>Application Closed</span>
+              </button>
+            ) : (
+              <a
+                href={job.apply_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl transition shadow-md shadow-blue-200 flex items-center gap-2"
+              >
+                <span>{job.source_type === 'job_portal' ? `Apply via ${job.source_name || 'Job Platform'}` : `Apply on ${job.company_name} Careers`}</span>
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            )}
             <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-slate-600">
               <Bookmark className="w-5 h-5" />
             </button>
           </div>
 
         </div>
+
 
         {/* Tabbed Navigation matching Image 2 */}
         <div className="flex items-center gap-6 border-b border-slate-100 pt-4">

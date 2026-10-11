@@ -37,14 +37,23 @@ class Settings(BaseSettings):
 
     # Ingestion & Scanner
     TARGET_CITY: str = "Bengaluru"
-    SCAN_SCHEDULE_CRON: str = "0 6 * * *"
+    SCAN_SCHEDULE_CRON: str = "0 8 * * *"  # Every day at 8:00 AM
     MAX_CONCURRENT_REQUESTS_PER_HOST: int = 2
     REQUEST_TIMEOUT_SECONDS: int = 10
+
+    # SMTP / Email Configuration for OTP Authentication
+    SMTP_HOST: str = "smtp.gmail.com"
+    SMTP_PORT: int = 587
+    SMTP_USER: Optional[str] = None
+    SMTP_PASSWORD: Optional[str] = None
+    EMAILS_FROM_EMAIL: Optional[str] = None
+    EMAILS_FROM_NAME: str = "JobNexa Intelligence"
 
     # AI / Embedding Settings
     ENABLE_EMBEDDINGS: bool = False
     EMBEDDING_MODEL_NAME: str = "all-MiniLM-L6-v2"
     OLLAMA_BASE_URL: str = "http://localhost:11434"
+
 
     model_config = SettingsConfigDict(
         env_file=".env",

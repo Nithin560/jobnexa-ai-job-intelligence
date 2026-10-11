@@ -9,8 +9,11 @@ interface JobCardProps {
 }
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
+  const isExpired = job.status === 'expired' || job.status === 'closed' || job.status === 'stale';
+
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-md hover:border-slate-300 transition group relative">
+
+    <div className={`bg-white rounded-2xl border p-5 transition group relative ${isExpired ? 'border-amber-200 bg-slate-50/50' : 'border-slate-200 hover:shadow-md hover:border-slate-300'}`}>
       <div className="flex items-start justify-between gap-4">
         
         {/* Left: Company Logo & Details */}
@@ -40,11 +43,15 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               <Link to={`/jobs/${job.id}`} className="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition">
                 {job.title}
               </Link>
-              {job.is_new && (
+              {isExpired ? (
+                <span className="text-amber-700 bg-amber-50 border border-amber-200 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                  ⚠️ Expired on Career Portal
+                </span>
+              ) : job.is_new ? (
                 <span className="text-emerald-600 text-xs font-semibold flex items-center gap-1">
                   <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> New
                 </span>
-              )}
+              ) : null}
             </div>
 
             {/* Company Name & Source Type */}
@@ -115,24 +122,34 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
             <button
               onClick={() => onToggleSave && onToggleSave(job.id)}
               className={`p-2 rounded-xl border transition ${job.is_saved ? 'bg-blue-50 text-blue-600 border-blue-200' : 'bg-white text-slate-400 border-slate-200 hover:text-slate-600'}`}
-
             >
               <Bookmark className="w-4 h-4" />
             </button>
           </div>
 
-          <a
-            href={job.apply_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition flex items-center gap-1.5 shadow-sm shadow-blue-200"
-          >
-            <span>Apply Now</span>
-            <ExternalLink className="w-4 h-4" />
-          </a>
+          {isExpired ? (
+            <button
+              disabled
+              className="px-4 py-2 bg-slate-100 text-slate-400 font-bold text-xs rounded-xl cursor-not-allowed flex items-center gap-1.5 border border-slate-200"
+              title="Position removed from company career portal (application closed)"
+            >
+              <span>Application Closed</span>
+            </button>
+          ) : (
+            <a
+              href={job.apply_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition flex items-center gap-1.5 shadow-sm shadow-blue-200"
+            >
+              <span>Apply Now</span>
+              <ExternalLink className="w-4 h-4" />
+            </a>
+          )}
         </div>
 
       </div>
+
     </div>
   );
 };

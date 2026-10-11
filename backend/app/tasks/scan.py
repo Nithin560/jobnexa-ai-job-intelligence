@@ -324,6 +324,8 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
         total_found = 0
         total_new = 0
         total_updated = 0
+        total_expired = 0
+
 
         for target in TARGET_SOURCES:
             slug = target["slug"]
@@ -353,7 +355,25 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
             source_new = 0
             source_updated = 0
 
+            # Mark jobs as expired if no longer listed on the employer career portal
+            if not is_job_portal and relevant_jobs:
+                fresh_apply_urls = {j.apply_url for j in relevant_jobs if j.apply_url}
+                existing_active = db.query(Job).filter(Job.source_id == source.id, Job.status == "active").all()
+                for ej in existing_active:
+                    if ej.apply_url and ej.apply_url not in fresh_apply_urls:
+                        ej.status = "expired"
+                        ej.last_seen_at = now
+                        hist = JobHistory(
+                            job_id=ej.id,
+                            observed_at=now,
+                            changed_fields={"status": "expired"},
+                            snapshot_json={"reason": "Position removed from company career portal (expired)"}
+                        )
+                        db.add(hist)
+                        total_expired += 1
+
             for raw in relevant_jobs:
+
                 total_found += 1
                 norm_loc = normalize_location(raw.location)
                 if not norm_loc or "bengaluru" not in norm_loc.lower():
@@ -449,9 +469,10 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
 
         # Mark expired jobs (not seen in last 7 days)
         seven_days_ago = now - timedelta(days=7)
-        expired_count = db.query(Job).filter(Job.last_seen_at < seven_days_ago, Job.status == "active").update(
-            {"status": "stale"}
+        stale_expired = db.query(Job).filter(Job.last_seen_at < seven_days_ago, Job.status == "active").update(
+            {"status": "expired"}
         )
+        total_expired += stale_expired
         db.commit()
 
         scan_run.finished_at = datetime.utcnow()
@@ -461,13 +482,14 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
             "jobs_found": total_found,
             "new_jobs": total_new,
             "updated_jobs": total_updated,
-            "expired_jobs": expired_count,
+            "expired_jobs": total_expired,
             "success_rate": 98.5
         }
         db.commit()
 
-        print(f"[Daily Scan] COMPLETED. Found: {total_found}, New: {total_new}, Updated: {total_updated}, Expired: {expired_count}")
+        print(f"[Daily Scan] COMPLETED. Found: {total_found}, New: {total_new}, Updated: {total_updated}, Expired: {total_expired}")
         return scan_run.totals_json
+
     finally:
         if close_db:
             db.close()

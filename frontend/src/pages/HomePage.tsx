@@ -198,8 +198,9 @@ export const HomePage: React.FC = () => {
                 <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Latest Scan Completed
               </span>
               <span className="text-xs text-slate-200 font-medium">
-                {insights?.latest_scan?.time || 'Today, 06:00 AM'}
+                {insights?.latest_scan?.time || 'Today, 08:00 AM'}
               </span>
+
             </div>
             <div className="space-y-2 text-xs text-slate-100 font-medium">
               <div className="flex items-center justify-between">

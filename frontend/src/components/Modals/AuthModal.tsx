@@ -18,6 +18,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  const [devOtpHint, setDevOtpHint] = useState<string | null>(null);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -35,10 +37,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
           window.location.reload();
         }
       } else if (mode === 'signup') {
-        await api.register(email, password, role);
+        const res = await api.sendOTP(email.trim(), 'register');
+        if (res.dev_otp) setDevOtpHint(res.dev_otp);
         setMode('otp');
       } else if (mode === 'otp') {
-        await api.login(email, password);
+        const code = otp.join('');
+        await api.verifyRegister({ email: email.trim(), otp: code, password, role });
         onClose();
         window.location.reload();
       }
@@ -48,6 +52,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       setLoading(false);
     }
   };
+
+  const handleOtpDigitChange = (idx: number, val: string) => {
+    const digit = val.slice(-1).replace(/\D/g, '');
+    const nextOtp = [...otp];
+    nextOtp[idx] = digit;
+    setOtp(nextOtp);
+  };
+
 
   const handleSelectRole = (selectedRole: 'candidate' | 'admin') => {
     setRole(selectedRole);
@@ -96,8 +108,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
             </div>
             <div>
               <h3 className="text-2xl font-bold text-slate-900">Verify Your Account</h3>
-              <p className="text-xs text-slate-500 mt-1">We've sent a 6-digit OTP code to <strong className="text-slate-700">+91 98765 43210</strong></p>
+              <p className="text-xs text-slate-500 mt-1">We've sent a 6-digit OTP code to <strong className="text-slate-800">{email || 'your email'}</strong></p>
             </div>
+
+            {devOtpHint && (
+              <div className="bg-blue-50 border border-blue-200 text-blue-800 p-2.5 rounded-xl text-xs flex items-center justify-between">
+                <span>Test OTP Code: <strong>{devOtpHint}</strong></span>
+                <button
+                  type="button"
+                  onClick={() => setOtp(devOtpHint.split(''))}
+                  className="font-bold text-blue-600 underline text-xs"
+                >
+                  Auto-fill
+                </button>
+              </div>
+            )}
 
             <div className="flex justify-center gap-2">
               {otp.map((digit, idx) => (
@@ -106,19 +131,21 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   type="text"
                   maxLength={1}
                   value={digit}
-                  readOnly
-                  className="w-11 h-12 text-center font-bold text-lg border border-slate-300 rounded-xl bg-slate-50 focus:border-blue-600 outline-none"
+                  onChange={(e) => handleOtpDigitChange(idx, e.target.value)}
+                  className="w-11 h-12 text-center font-bold text-lg border-2 border-slate-200 rounded-xl bg-slate-50 focus:border-blue-600 focus:bg-white outline-none transition"
                 />
               ))}
             </div>
 
             <button
               onClick={handleSubmit}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 transition"
+              disabled={loading}
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 transition disabled:opacity-50"
             >
-              Verify OTP & Continue
+              {loading ? 'Verifying...' : 'Verify OTP & Continue'}
             </button>
           </div>
+
         ) : (
           /* Login / Signup Form */
           <div>

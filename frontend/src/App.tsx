@@ -7,6 +7,8 @@ import { JobDetailPage } from './pages/JobDetailPage';
 import { UserDashboard } from './pages/UserDashboard';
 import { CandidateProfilePage } from './pages/CandidateProfilePage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
+import { LoginPage } from './pages/LoginPage';
+import { RegisterPage } from './pages/RegisterPage';
 
 export function App() {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -30,8 +32,11 @@ export function App() {
                   <Route path="/jobs/:id" element={<JobDetailPage />} />
                   <Route path="/dashboard" element={<UserDashboard />} />
                   <Route path="/profile" element={<CandidateProfilePage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
                 </Routes>
               </main>
+
 
               <footer className="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
                 <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
