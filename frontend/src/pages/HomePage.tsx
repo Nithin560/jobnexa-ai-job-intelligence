@@ -6,7 +6,7 @@ import { Job } from '../types';
 import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
-  Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2
+  Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
@@ -35,6 +35,10 @@ export const HomePage: React.FC = () => {
   const [totalJobs, setTotalJobs] = useState(24842);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('Relevance');
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const pageSize = 4; // Display jobs up to the recent scan section
+
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
     work_mode: '',
@@ -55,9 +59,17 @@ export const HomePage: React.FC = () => {
         work_mode: filters.work_mode,
         company_type: filters.company_type,
         employment_type: filters.employment_type,
+        page: page,
+        page_size: pageSize,
       });
       setJobs(data.items);
-      if (data.total) setTotalJobs(data.total);
+      if (data.total !== undefined) {
+        setTotalJobs(data.total);
+        setTotalPages(Math.ceil(data.total / pageSize));
+      }
+      if (data.total_pages !== undefined) {
+        setTotalPages(data.total_pages);
+      }
     } catch (err) {
       console.error(err);
     } finally {
@@ -66,8 +78,12 @@ export const HomePage: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchJobs();
+    setPage(1);
   }, [searchParams, filters]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [searchParams, filters, page]);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -215,26 +231,51 @@ export const HomePage: React.FC = () => {
         {/* Center Column: Job Listings Feed (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           
-          {/* Feed Header */}
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+          {/* Feed Header with Previous and Next Arrows */}
+          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-3">
             <div>
               <h2 className="text-lg font-black text-slate-900">Jobs in Bengaluru</h2>
               <p className="text-xs text-slate-500 font-medium">
-                Showing 1-{jobs.length} of {totalJobs.toLocaleString()} jobs
+                Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-slate-500">Sort by:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
-              >
-                <option value="Relevance">Relevance</option>
-                <option value="Recent">Most Recent</option>
-                <option value="Match">Highest Match Score</option>
-              </select>
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs font-medium text-slate-500">Sort by:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                >
+                  <option value="Relevance">Relevance</option>
+                  <option value="Recent">Most Recent</option>
+                  <option value="Match">Highest Match Score</option>
+                </select>
+              </div>
+
+              {/* Top Navigation Arrows: Left (<-) and Right (->) */}
+              <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+                <button
+                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                  disabled={page <= 1}
+                  className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-xs flex items-center justify-center"
+                  title="Previous Jobs (<-)"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                <span className="text-xs font-bold text-slate-700 min-w-10 text-center">
+                  {page} / {totalPages || 1}
+                </span>
+                <button
+                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                  disabled={page >= totalPages}
+                  className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-xs flex items-center justify-center"
+                  title="Next Jobs (->)"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           </div>
 

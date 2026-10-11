@@ -4,7 +4,7 @@ import { api } from '../api/client';
 import { Job } from '../types';
 import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
-import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, IndianRupee } from 'lucide-react';
+import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle } from 'lucide-react';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -75,7 +75,7 @@ export const JobDetailPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Hiring Role, Location, Salary */}
+              {/* Hiring Role & Location */}
               <div className="flex items-center gap-4 mt-2.5 text-xs text-slate-600 flex-wrap">
                 <span className="inline-flex items-center gap-1.5">
                   <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
@@ -87,12 +87,6 @@ export const JobDetailPage: React.FC = () => {
                   <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="text-slate-500">Location:</span>
                   <span className="font-semibold text-slate-800">{job.location}</span>
-                </span>
-
-                <span className="inline-flex items-center gap-1.5">
-                  <IndianRupee className="w-4 h-4 text-slate-400 shrink-0" />
-                  <span className="text-slate-500">Salary:</span>
-                  <span className="font-semibold text-slate-800">{job.salary_label || '₹18 - 32 LPA'}</span>
                 </span>
               </div>
 

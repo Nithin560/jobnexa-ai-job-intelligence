@@ -42,10 +42,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div className="max-w-[1600px] w-full mx-auto px-6 sm:px-8 lg:px-10 h-16 flex items-center justify-between">
         
-        {/* Brand Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group">
+        {/* Brand Logo - with dedicated right spacing */}
+        <Link to="/" className="flex items-center gap-2.5 shrink-0 mr-8 xl:mr-10 group">
           <div className="bg-blue-600 text-white p-2 rounded-xl group-hover:bg-blue-700 transition">
             <Briefcase className="w-5 h-5" />
           </div>
@@ -55,8 +55,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
           </div>
         </Link>
 
-        {/* Global Search Bar Header */}
-        <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-3 py-1.5 w-80 lg:w-96 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white transition">
+        {/* Global Search Bar Header - with dedicated spacing */}
+        <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-3.5 py-1.5 w-72 xl:w-80 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white transition shrink-0 mr-8 xl:mr-10">
           <Search className="w-4 h-4 text-slate-400 mr-2" />
           <input
             type="text"
@@ -74,20 +74,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
           </div>
         </div>
 
-        {/* Navigation Links */}
-        <nav className="hidden lg:flex items-center gap-5 text-sm font-medium text-slate-600">
-          <Link to="/" className={`hover:text-blue-600 ${location.pathname === '/' ? 'text-blue-600 font-semibold' : ''}`}>Home</Link>
-          <Link to="/jobs" className={`hover:text-blue-600 ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
-          <Link to="/dashboard" className={`hover:text-blue-600 ${location.pathname === '/dashboard' ? 'text-blue-600 font-semibold' : ''}`}>Dashboard</Link>
-          <Link to="/profile" className={`hover:text-blue-600 ${location.pathname === '/profile' ? 'text-blue-600 font-semibold' : ''}`}>My Profile</Link>
-          <Link to="/admin" className={`hover:text-blue-600 flex items-center gap-1 ${location.pathname === '/admin' ? 'text-blue-600 font-semibold' : ''}`}>
+        {/* Navigation Links - with spacious gaps and right margin */}
+        <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-600 mr-8 xl:mr-10">
+          <Link to="/" className={`hover:text-blue-600 transition ${location.pathname === '/' ? 'text-blue-600 font-semibold' : ''}`}>Home</Link>
+          <Link to="/jobs" className={`hover:text-blue-600 transition ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
+          <Link to="/dashboard" className={`hover:text-blue-600 transition ${location.pathname === '/dashboard' ? 'text-blue-600 font-semibold' : ''}`}>Dashboard</Link>
+          <Link to="/profile" className={`hover:text-blue-600 transition ${location.pathname === '/profile' ? 'text-blue-600 font-semibold' : ''}`}>My Profile</Link>
+          <Link to="/admin" className={`hover:text-blue-600 transition flex items-center gap-1 ${location.pathname === '/admin' ? 'text-blue-600 font-semibold' : ''}`}>
             <Shield className="w-4 h-4 text-amber-500" />
             <span>Admin</span>
           </Link>
         </nav>
 
         {/* Right Actions & Easy Role Switcher */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3 shrink-0 ml-auto">
           
           {token ? (
             <div className="flex items-center gap-2">

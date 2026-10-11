@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles, IndianRupee } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles } from 'lucide-react';
 import { Job } from '../types';
 
 interface JobCardProps {
@@ -33,11 +33,6 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                   <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> New
                 </span>
               )}
-              {job.match && (
-                <span className="text-blue-600 text-xs font-bold">
-                  {job.match.score}% Match
-                </span>
-              )}
             </div>
 
             {/* Company Name & Source Type */}
@@ -57,7 +52,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               )}
             </div>
 
-            {/* Hiring Role, Location, Salary */}
+            {/* Hiring Role & Location */}
             <div className="flex items-center gap-4 mt-2.5 text-xs text-slate-600 flex-wrap">
               <span className="inline-flex items-center gap-1.5">
                 <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0" />
@@ -69,12 +64,6 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Location:</span>
                 <span className="font-semibold text-slate-800">{job.location}</span>
-              </span>
-
-              <span className="inline-flex items-center gap-1.5">
-                <IndianRupee className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                <span className="text-slate-500">Salary:</span>
-                <span className="font-semibold text-slate-800">{job.salary_label || '₹18 - 32 LPA'}</span>
               </span>
             </div>
 
