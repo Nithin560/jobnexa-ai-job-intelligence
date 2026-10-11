@@ -61,45 +61,45 @@ export const JobDetailPage: React.FC = () => {
               <h1 className="text-2xl font-bold text-slate-900">{job.title}</h1>
               <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
                 <span className="font-semibold text-slate-800">{job.company_name}</span>
-                <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium border border-blue-200">
+                <span className="text-xs px-2 py-0.5 rounded font-medium border border-slate-200 text-slate-500">
                   {job.company_type}
                 </span>
                 {job.source_type === 'job_portal' ? (
-                  <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
                     🌐 {job.source_name || 'Job Platform'}
                   </span>
                 ) : (
-                  <span className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
                     🏢 {job.source_name || 'Company Career Site'}
                   </span>
                 )}
               </div>
 
-              {/* Hiring Role, Location, Salary Info Bar */}
-              <div className="flex items-center gap-2 mt-2.5 text-xs flex-wrap">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 font-semibold border border-blue-100">
-                  <Briefcase className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span className="text-slate-500 font-normal">Role:</span>
-                  <span>{job.hiring_role || job.title}</span>
+              {/* Hiring Role, Location, Salary */}
+              <div className="flex items-center gap-4 mt-2.5 text-xs text-slate-600 flex-wrap">
+                <span className="inline-flex items-center gap-1.5">
+                  <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span className="text-slate-500">Role:</span>
+                  <span className="font-semibold text-slate-800">{job.hiring_role || job.title}</span>
                 </span>
 
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 text-slate-700 font-semibold border border-slate-200">
-                  <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
-                  <span className="text-slate-500 font-normal">Location:</span>
-                  <span>{job.location}</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span className="text-slate-500">Location:</span>
+                  <span className="font-semibold text-slate-800">{job.location}</span>
                 </span>
 
-                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
-                  <IndianRupee className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span className="text-emerald-700 font-normal">Salary:</span>
-                  <span>{job.salary_label || '₹18 - 32 LPA'}</span>
+                <span className="inline-flex items-center gap-1.5">
+                  <IndianRupee className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span className="text-slate-500">Salary:</span>
+                  <span className="font-semibold text-slate-800">{job.salary_label || '₹18 - 32 LPA'}</span>
                 </span>
               </div>
 
               <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
                 <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {job.experience_label}</span>
-                <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">{job.work_mode}</span>
-                <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">{job.employment_type}</span>
+                <span>{job.work_mode}</span>
+                <span>{job.employment_type}</span>
               </div>
             </div>
           </div>
