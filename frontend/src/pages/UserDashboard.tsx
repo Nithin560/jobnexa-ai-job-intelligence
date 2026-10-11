@@ -13,7 +13,7 @@ export const UserDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
   const [loading, setLoading] = useState(true);
 
-  const userEmail = localStorage.getItem('user_email') || 'nithin@example.com';
+  const userEmail = sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'nithin@example.com';
   const userName = userEmail.split('@')[0];
 
   useEffect(() => {

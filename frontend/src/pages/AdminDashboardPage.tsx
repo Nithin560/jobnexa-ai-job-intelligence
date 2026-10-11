@@ -75,8 +75,8 @@ export const AdminDashboardPage: React.FC = () => {
   };
 
   useEffect(() => {
-    const role = localStorage.getItem('user_role');
-    const token = localStorage.getItem('access_token');
+    const role = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
+    const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token');
     if (!token || role !== 'admin') {
       navigate('/login?role=admin');
       return;
@@ -234,11 +234,11 @@ export const AdminDashboardPage: React.FC = () => {
 
             <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200">
               <div className="w-8 h-8 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center border border-amber-500 shadow-xs">
-                {(localStorage.getItem('user_email') || 'Admin')[0].toUpperCase()}
+                {(sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Admin')[0].toUpperCase()}
               </div>
               <div className="hidden sm:block text-left max-w-[140px] truncate">
                 <div className="text-xs font-bold text-slate-800 leading-none truncate">
-                  {localStorage.getItem('user_email') || 'Super Admin'}
+                  {sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Super Admin'}
                 </div>
                 <div className="text-[10px] text-amber-700 font-semibold mt-0.5">Admin Security</div>
               </div>

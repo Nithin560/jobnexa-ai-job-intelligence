@@ -12,7 +12,7 @@ export const apiClient = axios.create({
 
 // Interceptor to attach Authorization Bearer Token
 apiClient.interceptors.request.use((config) => {
-  const token = localStorage.getItem('access_token');
+  const token = sessionStorage.getItem('access_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -20,9 +20,8 @@ apiClient.interceptors.request.use((config) => {
 });
 
 export const isUserAuthenticated = (): boolean => {
-  const token = localStorage.getItem('access_token');
-  const sessionActive = sessionStorage.getItem('active_session');
-  return Boolean(token && sessionActive);
+  const token = sessionStorage.getItem('access_token');
+  return Boolean(token);
 };
 
 export const api = {
@@ -30,10 +29,12 @@ export const api = {
   login: async (email: string, password: string) => {
     const response = await apiClient.post('/auth/login', { email, password });
     if (response.data.access_token) {
-      sessionStorage.setItem('active_session', 'true');
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('user_role', response.data.role);
-      localStorage.setItem('user_email', response.data.email);
+      sessionStorage.setItem('access_token', response.data.access_token);
+      sessionStorage.setItem('user_role', response.data.role);
+      sessionStorage.setItem('user_email', response.data.email);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_email');
     }
     return response.data;
   },
@@ -57,10 +58,12 @@ export const api = {
   verifyRegister: async (data: { email: string; otp: string; password: string; full_name?: string; role?: string }) => {
     const response = await apiClient.post('/auth/verify-register', data);
     if (response.data.access_token) {
-      sessionStorage.setItem('active_session', 'true');
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('user_role', response.data.role);
-      localStorage.setItem('user_email', response.data.email);
+      sessionStorage.setItem('access_token', response.data.access_token);
+      sessionStorage.setItem('user_role', response.data.role);
+      sessionStorage.setItem('user_email', response.data.email);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_email');
     }
     return response.data;
   },
@@ -68,10 +71,12 @@ export const api = {
   verifyOTPLogin: async (email: string, otp: string) => {
     const response = await apiClient.post('/auth/verify-otp-login', { email, otp });
     if (response.data.access_token) {
-      sessionStorage.setItem('active_session', 'true');
-      localStorage.setItem('access_token', response.data.access_token);
-      localStorage.setItem('user_role', response.data.role);
-      localStorage.setItem('user_email', response.data.email);
+      sessionStorage.setItem('access_token', response.data.access_token);
+      sessionStorage.setItem('user_role', response.data.role);
+      sessionStorage.setItem('user_email', response.data.email);
+      localStorage.removeItem('access_token');
+      localStorage.removeItem('user_role');
+      localStorage.removeItem('user_email');
     }
     return response.data;
   },
@@ -90,10 +95,10 @@ export const api = {
   },
 
   logout: () => {
+    sessionStorage.clear();
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_email');
-    sessionStorage.clear();
   },
 
   // Jobs Search & Details
