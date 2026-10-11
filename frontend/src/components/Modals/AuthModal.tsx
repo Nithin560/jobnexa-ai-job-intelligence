@@ -210,7 +210,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 className="p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-2xl text-left transition group"
               >
                 <div className="flex items-center gap-1.5 text-xs font-bold text-blue-700">
-                  <User className="w-4 h-4" /> 1-Click Candidate
+                  <User className="w-4 h-4" /> 1-Click User
                 </div>
                 <div className="text-[10px] text-slate-500 mt-0.5">Explore jobs & matching</div>
               </button>
@@ -240,7 +240,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 onClick={() => handleSelectRole('candidate')}
                 className={`flex-1 py-2 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 ${role === 'candidate' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
               >
-                <User className="w-3.5 h-3.5" /> Job Seeker
+                <User className="w-3.5 h-3.5" /> User
               </button>
               <button
                 type="button"
@@ -336,7 +336,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     ? 'Send Admin OTP to Email'
                     : 'Login as Admin'
                   : mode === 'login'
-                  ? 'Login as Job Seeker'
+                  ? 'Login as User'
                   : 'Send OTP'}
               </button>
             </form>

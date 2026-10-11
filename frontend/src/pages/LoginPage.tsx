@@ -257,7 +257,7 @@ export const LoginPage: React.FC = () => {
             }`}
           >
             <User className="w-4 h-4" />
-            <span>Job Seeker</span>
+            <span>User</span>
           </button>
           <button
             type="button"
@@ -457,7 +457,7 @@ export const LoginPage: React.FC = () => {
                   : 'bg-blue-600 hover:bg-blue-700 shadow-blue-200'
               }`}
             >
-              {loading ? 'Authenticating...' : portalRole === 'admin' ? 'Sign In as Admin' : 'Sign In'}
+              {loading ? 'Authenticating...' : portalRole === 'admin' ? 'Sign In as Admin' : 'Sign In as User'}
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
@@ -685,7 +685,7 @@ export const LoginPage: React.FC = () => {
               onClick={() => handleQuickLogin('candidate')}
               className="px-3 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 transition"
             >
-              Candidate Demo
+              User Demo
             </button>
             <button
               type="button"

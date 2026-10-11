@@ -100,16 +100,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                   <button
                     onClick={handleSwitchToCandidate}
                     className="text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-xl transition flex items-center gap-1"
-                    title="Switch to Job Seeker View"
+                    title="Switch to User View"
                   >
                     <User className="w-3.5 h-3.5" />
-                    <span>Job Seeker</span>
+                    <span>User</span>
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5">
                   <span className="hidden sm:inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-xl">
-                    <User className="w-3.5 h-3.5 text-blue-600" /> Job Seeker
+                    <User className="w-3.5 h-3.5 text-blue-600" /> User
                   </span>
                   <button
                     onClick={handleSwitchToAdmin}
@@ -140,9 +140,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               <button
                 onClick={handleSwitchToCandidate}
                 className="hidden sm:inline-flex text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1.5 rounded-xl transition items-center gap-1"
-                title="1-Click Job Seeker Login"
+                title="1-Click User Login"
               >
-                <User className="w-3 h-3" /> Job Seeker
+                <User className="w-3 h-3" /> User
               </button>
               <button
                 onClick={handleSwitchToAdmin}

@@ -239,8 +239,8 @@ export const RegisterPage: React.FC = () => {
                 >
                   <Briefcase className="w-4 h-4 text-blue-600 shrink-0" />
                   <div>
-                    <div className="text-xs font-bold">Job Seeker</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Candidate</div>
+                    <div className="text-xs font-bold">User</div>
+                    <div className="text-[10px] text-slate-400 font-medium">Professional / Candidate</div>
                   </div>
                 </div>
 
@@ -252,8 +252,8 @@ export const RegisterPage: React.FC = () => {
                 >
                   <Building2 className="w-4 h-4 text-purple-600 shrink-0" />
                   <div>
-                    <div className="text-xs font-bold">Recruiter</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Admin / Employer</div>
+                    <div className="text-xs font-bold">Admin</div>
+                    <div className="text-[10px] text-slate-400 font-medium">Recruiter / Employer</div>
                   </div>
                 </div>
               </div>
