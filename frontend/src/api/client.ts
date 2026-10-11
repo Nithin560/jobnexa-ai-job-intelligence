@@ -36,6 +36,14 @@ export const api = {
     return response.data;
   },
 
+  quickLoginAsCandidate: async () => {
+    return api.login('nithin@example.com', 'NithinPass123!');
+  },
+
+  quickLoginAsAdmin: async () => {
+    return api.login('nithinvandana26@gmail.com', '22H71A0560pandu@');
+  },
+
   logout: () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_role');

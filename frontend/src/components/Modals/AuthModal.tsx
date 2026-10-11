@@ -25,9 +25,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     try {
       if (mode === 'login') {
-        await api.login(email || (role === 'admin' ? 'admin@bangalorejobs.ai' : 'nithin@example.com'), password || (role === 'admin' ? 'AdminPass123!' : 'NithinPass123!'));
+        const loginEmail = email.trim() || (role === 'admin' ? 'nithinvandana26@gmail.com' : 'nithin@example.com');
+        const loginPassword = password.trim() || (role === 'admin' ? '22H71A0560pandu@' : 'NithinPass123!');
+        await api.login(loginEmail, loginPassword);
         onClose();
-        window.location.reload();
+        if (role === 'admin') {
+          window.location.href = '/admin';
+        } else {
+          window.location.reload();
+        }
       } else if (mode === 'signup') {
         await api.register(email, password, role);
         setMode('otp');
@@ -38,6 +44,37 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Authentication failed. Please check credentials.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSelectRole = (selectedRole: 'candidate' | 'admin') => {
+    setRole(selectedRole);
+    if (selectedRole === 'candidate') {
+      setEmail('nithin@example.com');
+      setPassword('NithinPass123!');
+    } else {
+      setEmail('nithinvandana26@gmail.com');
+      setPassword('22H71A0560pandu@');
+    }
+  };
+
+  const handleQuickLogin = async (targetRole: 'candidate' | 'admin') => {
+    setLoading(true);
+    setError('');
+    try {
+      if (targetRole === 'admin') {
+        await api.quickLoginAsAdmin();
+        onClose();
+        window.location.href = '/admin';
+      } else {
+        await api.quickLoginAsCandidate();
+        onClose();
+        window.location.reload();
+      }
+    } catch (err: any) {
+      setError('Quick login failed. Please retry.');
     } finally {
       setLoading(false);
     }
@@ -85,30 +122,61 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         ) : (
           /* Login / Signup Form */
           <div>
-            <div className="text-center mb-6">
+            <div className="text-center mb-5">
               <h3 className="text-2xl font-bold text-slate-900">
                 {mode === 'login' ? 'Welcome Back' : 'Create Your Account'}
               </h3>
               <p className="text-xs text-slate-500 mt-1">
-                {mode === 'login' ? 'Login to your account to continue' : 'Join thousands of job seekers in Bengaluru'}
+                {mode === 'login' ? 'Select your role or click 1-Click login below' : 'Join thousands of job seekers in Bengaluru'}
               </p>
             </div>
 
-            {/* Role Switcher */}
-            <div className="bg-slate-100 p-1 rounded-2xl flex gap-1 mb-6">
+            {/* Quick 1-Click Login Shortcuts */}
+            <div className="grid grid-cols-2 gap-2.5 mb-5">
               <button
                 type="button"
-                onClick={() => setRole('candidate')}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition ${role === 'candidate' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                onClick={() => handleQuickLogin('candidate')}
+                className="p-3 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-2xl text-left transition group"
               >
-                Job Seeker
+                <div className="flex items-center gap-1.5 text-xs font-bold text-blue-700">
+                  <User className="w-4 h-4" /> 1-Click Candidate
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5">Explore jobs & matching</div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('admin')}
+                className="p-3 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-2xl text-left transition group"
+              >
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-800">
+                  <Shield className="w-4 h-4" /> 1-Click Admin
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5">Live scanner & metrics</div>
+              </button>
+            </div>
+
+            <div className="flex items-center my-4 text-xs text-slate-400">
+              <div className="flex-1 border-t border-slate-200"></div>
+              <span className="px-3 font-semibold uppercase text-[10px]">Or sign in with role</span>
+              <div className="flex-1 border-t border-slate-200"></div>
+            </div>
+
+            {/* Role Switcher Tabs */}
+            <div className="bg-slate-100 p-1 rounded-2xl flex gap-1 mb-4">
+              <button
+                type="button"
+                onClick={() => handleSelectRole('candidate')}
+                className={`flex-1 py-2 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 ${role === 'candidate' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+              >
+                <User className="w-3.5 h-3.5" /> Job Seeker
               </button>
               <button
                 type="button"
-                onClick={() => setRole('admin')}
-                className={`flex-1 py-2 text-xs font-bold rounded-xl transition ${role === 'admin' ? 'bg-blue-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
+                onClick={() => handleSelectRole('admin')}
+                className={`flex-1 py-2 text-xs font-bold rounded-xl transition flex items-center justify-center gap-1.5 ${role === 'admin' ? 'bg-amber-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}
               >
-                Admin Panel
+                <Shield className="w-3.5 h-3.5" /> Admin Panel
               </button>
             </div>
 
@@ -118,14 +186,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3.5">
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">Email Address</label>
                 <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus-within:border-blue-600 focus-within:bg-white transition">
                   <Mail className="w-4 h-4 text-slate-400 mr-2" />
                   <input
                     type="email"
-                    placeholder={role === 'admin' ? 'admin@bangalorejobs.ai' : 'nithin@example.com'}
+                    placeholder={role === 'admin' ? 'nithinvandana26@gmail.com' : 'nithin@example.com'}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="bg-transparent text-sm w-full outline-none text-slate-800"
@@ -152,7 +220,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 disabled={loading}
                 className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-md shadow-blue-200 transition mt-2"
               >
-                {loading ? 'Processing...' : (mode === 'login' ? 'Login' : 'Send OTP')}
+                {loading ? 'Processing...' : (mode === 'login' ? `Login as ${role === 'admin' ? 'Admin' : 'Job Seeker'}` : 'Send OTP')}
               </button>
             </form>
 

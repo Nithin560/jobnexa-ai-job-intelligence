@@ -6,7 +6,7 @@ import {
   Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
-  FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Terminal, Settings
+  FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Terminal, Settings, LogOut
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
@@ -213,12 +213,38 @@ export const AdminDashboardPage: React.FC = () => {
               <span className="absolute top-1 right-1 bg-rose-500 text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center">5</span>
             </button>
 
+            <button
+              onClick={async () => {
+                await api.quickLoginAsCandidate();
+                navigate('/');
+                window.location.reload();
+              }}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition shadow-sm"
+              title="Switch to Job Seeker view"
+            >
+              <User className="w-3.5 h-3.5" />
+              <span>Job Seeker View</span>
+            </button>
+
             <div className="flex items-center gap-2.5 pl-3 border-l border-slate-200">
               <div className="w-8 h-8 rounded-full bg-slate-800 text-white font-bold text-xs flex items-center justify-center border border-slate-700">
                 A
               </div>
-              <span className="text-xs font-bold text-slate-800">Admin</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+              <div className="hidden sm:block text-left">
+                <div className="text-xs font-bold text-slate-800 leading-none">Admin</div>
+                <div className="text-[10px] text-slate-400 font-medium">Administrator</div>
+              </div>
+              <button
+                onClick={() => {
+                  api.logout();
+                  navigate('/');
+                  window.location.reload();
+                }}
+                className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-100 transition ml-1"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
             </div>
           </div>
 
