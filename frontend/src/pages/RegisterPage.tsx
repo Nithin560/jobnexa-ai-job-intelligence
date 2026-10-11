@@ -143,18 +143,20 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 bg-cover bg-center bg-no-repeat"
-      style={{
-        backgroundImage: `url(${vidhanaSoudhaBg})`,
-        backgroundAttachment: 'fixed',
-      }}
-    >
-      {/* Semi-transparent dark/blur atmospheric overlay */}
-      <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-[2px]" />
+    <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 overflow-hidden">
+      {/* Blurred Landmark Background Image Layer */}
+      <div
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 filter blur-[6px]"
+        style={{
+          backgroundImage: `url(${vidhanaSoudhaBg})`,
+        }}
+      />
+
+      {/* Atmospheric Dark Overlay */}
+      <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" />
 
       {/* Registration Card */}
-      <div className="relative z-10 max-w-md w-full bg-white/95 backdrop-blur-md rounded-3xl border border-white/80 shadow-2xl shadow-slate-950/30 p-8 space-y-6">
+      <div className="relative z-10 max-w-md w-full bg-white/95 backdrop-blur-xl rounded-3xl border border-white/80 shadow-2xl shadow-slate-950/35 p-8 space-y-6">
         
         {/* Back Link */}
         <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
