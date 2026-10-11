@@ -12,6 +12,7 @@ from app.models.scan import ScanRun, SourceRunResult
 from app.connectors.registry import get_connector
 from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
+from app.core.company_logos import get_company_logo, get_canonical_domain
 
 # Real Companies & Career ATS endpoints + Job Platforms
 TARGET_SOURCES = [
@@ -21,7 +22,7 @@ TARGET_SOURCES = [
         "domain": "razorpay.com",
         "careers_url": "https://razorpay.com/jobs",
         "company_type": "Mid-size",
-        "logo_url": "https://logo.clearbit.com/razorpay.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=razorpay.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "razorpaysoftwareprivatelimited",
         "source_type": "career_portal"
@@ -31,7 +32,7 @@ TARGET_SOURCES = [
         "domain": "meesho.com",
         "careers_url": "https://meesho.io/jobs",
         "company_type": "Startup",
-        "logo_url": "https://logo.clearbit.com/meesho.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=meesho.com&sz=128",
         "connector_key": "lever_api",
         "slug": "meesho",
         "source_type": "career_portal"
@@ -41,7 +42,7 @@ TARGET_SOURCES = [
         "domain": "cred.club",
         "careers_url": "https://careers.cred.club",
         "company_type": "Startup",
-        "logo_url": "https://logo.clearbit.com/cred.club",
+        "logo_url": "https://www.google.com/s2/favicons?domain=cred.club&sz=128",
         "connector_key": "lever_api",
         "slug": "cred",
         "source_type": "career_portal"
@@ -51,7 +52,7 @@ TARGET_SOURCES = [
         "domain": "groww.in",
         "careers_url": "https://groww.in/careers",
         "company_type": "Startup",
-        "logo_url": "https://logo.clearbit.com/groww.in",
+        "logo_url": "https://www.google.com/s2/favicons?domain=groww.in&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "groww",
         "source_type": "career_portal"
@@ -61,7 +62,7 @@ TARGET_SOURCES = [
         "domain": "inmobi.com",
         "careers_url": "https://www.inmobi.com/company/careers",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/inmobi.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=inmobi.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "inmobi",
         "source_type": "career_portal"
@@ -71,7 +72,7 @@ TARGET_SOURCES = [
         "domain": "stripe.com",
         "careers_url": "https://stripe.com/jobs",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/stripe.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=stripe.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "stripe",
         "source_type": "career_portal"
@@ -81,7 +82,7 @@ TARGET_SOURCES = [
         "domain": "okta.com",
         "careers_url": "https://www.okta.com/company/careers",
         "company_type": "Enterprise",
-        "logo_url": "https://logo.clearbit.com/okta.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=okta.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "okta",
         "source_type": "career_portal"
@@ -91,7 +92,7 @@ TARGET_SOURCES = [
         "domain": "gitlab.com",
         "careers_url": "https://about.gitlab.com/jobs",
         "company_type": "Enterprise",
-        "logo_url": "https://logo.clearbit.com/gitlab.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=gitlab.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "gitlab",
         "source_type": "career_portal"
@@ -101,7 +102,7 @@ TARGET_SOURCES = [
         "domain": "twilio.com",
         "careers_url": "https://www.twilio.com/company/jobs",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/twilio.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=twilio.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "twilio",
         "source_type": "career_portal"
@@ -111,7 +112,7 @@ TARGET_SOURCES = [
         "domain": "mongodb.com",
         "careers_url": "https://www.mongodb.com/careers",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/mongodb.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=mongodb.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "mongodb",
         "source_type": "career_portal"
@@ -121,7 +122,7 @@ TARGET_SOURCES = [
         "domain": "elastic.co",
         "careers_url": "https://www.elastic.co/about/careers",
         "company_type": "Mid-size",
-        "logo_url": "https://logo.clearbit.com/elastic.co",
+        "logo_url": "https://www.google.com/s2/favicons?domain=elastic.co&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "elastic",
         "source_type": "career_portal"
@@ -131,7 +132,7 @@ TARGET_SOURCES = [
         "domain": "airbnb.com",
         "careers_url": "https://careers.airbnb.com",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/airbnb.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=airbnb.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "airbnb",
         "source_type": "career_portal"
@@ -141,7 +142,7 @@ TARGET_SOURCES = [
         "domain": "thoughtworks.com",
         "careers_url": "https://www.thoughtworks.com/careers",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/thoughtworks.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=thoughtworks.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "thoughtworks",
         "source_type": "career_portal"
@@ -151,7 +152,7 @@ TARGET_SOURCES = [
         "domain": "zeta.tech",
         "careers_url": "https://www.zeta.tech/careers",
         "company_type": "Startup",
-        "logo_url": "https://logo.clearbit.com/zeta.tech",
+        "logo_url": "https://www.google.com/s2/favicons?domain=zeta.tech&sz=128",
         "connector_key": "lever_api",
         "slug": "zeta",
         "source_type": "career_portal"
@@ -161,7 +162,7 @@ TARGET_SOURCES = [
         "domain": "rubrik.com",
         "careers_url": "https://www.rubrik.com/company/careers",
         "company_type": "Large",
-        "logo_url": "https://logo.clearbit.com/rubrik.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=rubrik.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "rubrik",
         "source_type": "career_portal"
@@ -172,7 +173,7 @@ TARGET_SOURCES = [
         "domain": "arbeitnow.com",
         "careers_url": "https://www.arbeitnow.com",
         "company_type": "Job Platform",
-        "logo_url": "https://logo.clearbit.com/arbeitnow.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=arbeitnow.com&sz=128",
         "connector_key": "job_portal_api",
         "slug": "arbeitnow",
         "source_type": "job_portal"
@@ -182,7 +183,7 @@ TARGET_SOURCES = [
         "domain": "jobicy.com",
         "careers_url": "https://jobicy.com",
         "company_type": "Job Platform",
-        "logo_url": "https://logo.clearbit.com/jobicy.com",
+        "logo_url": "https://www.google.com/s2/favicons?domain=jobicy.com&sz=128",
         "connector_key": "job_portal_api",
         "slug": "jobicy",
         "source_type": "job_portal"
@@ -191,24 +192,28 @@ TARGET_SOURCES = [
 
 
 def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
-    """Ensure all real target companies and job sources exist in DB."""
+    """Ensure all real target companies and job sources exist in DB with robust logo URLs."""
     source_map = {}
     for item in TARGET_SOURCES:
         comp = db.query(Company).filter(Company.name == item["name"]).first()
+        canonical_dom = get_canonical_domain(item["name"], item["domain"])
+        logo = get_company_logo(item["name"], item["logo_url"], canonical_dom)
+
         if not comp:
             comp = Company(
                 name=item["name"],
-                canonical_domain=item["domain"],
+                canonical_domain=canonical_dom,
                 careers_url=item["careers_url"],
                 company_type=item["company_type"],
-                logo_url=item["logo_url"],
+                logo_url=logo,
                 active=True
             )
             db.add(comp)
             db.flush()
         else:
             comp.company_type = item["company_type"]
-            comp.logo_url = item["logo_url"]
+            comp.canonical_domain = canonical_dom
+            comp.logo_url = logo
             comp.careers_url = item["careers_url"]
 
         source = db.query(JobSource).filter(JobSource.company_id == comp.id).first()
@@ -236,19 +241,33 @@ def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
 
 
 def get_or_create_employer(db: Session, company_name: str, careers_url: str = None, company_type: str = "Startup", logo_url: str = None) -> Company:
-    """Find or create an employer entity for postings from job platforms."""
+    """Find or create an employer entity for postings from job platforms with high-res logos."""
     clean_name = (company_name or "Tech Employer").strip()
+    canonical_dom = get_canonical_domain(clean_name)
+    resolved_logo = get_company_logo(clean_name, logo_url, canonical_dom)
+
+    # Search by name first
     comp = db.query(Company).filter(Company.name.ilike(clean_name)).first()
+    # If not found by name, check by canonical domain to avoid duplicates
+    if not comp and canonical_dom:
+        comp = db.query(Company).filter(Company.canonical_domain == canonical_dom).first()
+
     if not comp:
         comp = Company(
             name=clean_name,
+            canonical_domain=canonical_dom,
             company_type=company_type,
             careers_url=careers_url,
-            logo_url=logo_url or f"https://ui-avatars.com/api/?name={clean_name.replace(' ', '+')}&background=0D8ABC&color=fff",
+            logo_url=resolved_logo,
             active=True
         )
         db.add(comp)
         db.flush()
+    else:
+        if not comp.canonical_domain and canonical_dom:
+            comp.canonical_domain = canonical_dom
+        if not comp.logo_url or "logo.clearbit.com" in comp.logo_url or ("ui-avatars.com" in comp.logo_url and canonical_dom):
+            comp.logo_url = resolved_logo
     return comp
 
 

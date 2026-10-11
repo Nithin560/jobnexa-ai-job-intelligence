@@ -11,6 +11,7 @@ from app.api.deps import get_current_user
 from app.schemas.job import JobListItemResponse
 from app.services.match_service import calculate_job_match
 from app.pipeline.normalizer import extract_hiring_role, calculate_salary_range
+from app.core.company_logos import get_company_logo
 
 router = APIRouter()
 
@@ -134,7 +135,9 @@ def get_job_matches(
     for j in jobs:
         comp_name = j.company.name if j.company else "Direct Employer"
         comp_type = j.company.company_type if j.company else "Mid-size"
-        comp_logo = j.company.logo_url if j.company else None
+        raw_logo = j.company.logo_url if j.company else None
+        comp_dom = j.company.canonical_domain if j.company else None
+        comp_logo = get_company_logo(comp_name, raw_logo, comp_dom)
         
         extracted_skills = [js.skill.canonical_name for js in j.job_skills if js.skill]
         match_breakdown = calculate_job_match(j, profile, candidate_skills)
@@ -200,7 +203,9 @@ def get_saved_jobs(
             continue
         comp_name = j.company.name if j.company else "Direct Employer"
         comp_type = j.company.company_type if j.company else "Mid-size"
-        comp_logo = j.company.logo_url if j.company else None
+        raw_logo = j.company.logo_url if j.company else None
+        comp_dom = j.company.canonical_domain if j.company else None
+        comp_logo = get_company_logo(comp_name, raw_logo, comp_dom)
         
         extracted_skills = [js.skill.canonical_name for js in j.job_skills if js.skill]
         match_breakdown = calculate_job_match(j, profile, candidate_skills)

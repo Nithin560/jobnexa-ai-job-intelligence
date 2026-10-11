@@ -49,12 +49,24 @@ export const JobDetailPage: React.FC = () => {
         <div className="flex items-start justify-between gap-6 flex-wrap">
           
           <div className="flex items-start gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center shrink-0">
-              {job.company_logo ? (
-                <img src={job.company_logo} alt={job.company_name} className="w-10 h-10 object-contain" />
-              ) : (
-                <Briefcase className="w-8 h-8 text-slate-400" />
-              )}
+            <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center shrink-0 p-2 overflow-hidden">
+              <img 
+                src={
+                  job.company_logo && !job.company_logo.includes('logo.clearbit.com')
+                    ? job.company_logo
+                    : `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company_name || 'Job')}&background=2563eb&color=fff&size=128&bold=true`
+                } 
+                alt={job.company_name} 
+                className="w-full h-full object-contain rounded-xl" 
+                onError={(e) => {
+                  const target = e.currentTarget;
+                  const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company_name || 'Job')}&background=2563eb&color=fff&size=128&bold=true`;
+                  if (target.src !== fallback) {
+                    target.onerror = null;
+                    target.src = fallback;
+                  }
+                }} 
+              />
             </div>
 
             <div>

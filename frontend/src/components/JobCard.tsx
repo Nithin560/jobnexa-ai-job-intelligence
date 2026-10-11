@@ -15,12 +15,24 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
         
         {/* Left: Company Logo & Details */}
         <div className="flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden shrink-0">
-            {job.company_logo ? (
-              <img src={job.company_logo} alt={job.company_name} className="w-8 h-8 object-contain" onError={(e) => { e.currentTarget.style.display = 'none'; }} />
-            ) : (
-              <Briefcase className="w-6 h-6 text-slate-400" />
-            )}
+          <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center overflow-hidden shrink-0 p-1.5">
+            <img 
+              src={
+                job.company_logo && !job.company_logo.includes('logo.clearbit.com')
+                  ? job.company_logo
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company_name || 'Job')}&background=2563eb&color=fff&size=128&bold=true`
+              } 
+              alt={job.company_name} 
+              className="w-full h-full object-contain rounded-lg" 
+              onError={(e) => {
+                const target = e.currentTarget;
+                const fallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(job.company_name || 'Job')}&background=2563eb&color=fff&size=128&bold=true`;
+                if (target.src !== fallback) {
+                  target.onerror = null;
+                  target.src = fallback;
+                }
+              }} 
+            />
           </div>
 
           <div>

@@ -14,6 +14,7 @@ from app.api.deps import get_optional_current_user
 from app.models.user import User
 from app.services.match_service import calculate_job_match
 from app.pipeline.normalizer import extract_hiring_role, calculate_salary_range
+from app.core.company_logos import get_company_logo
 
 router = APIRouter()
 
@@ -122,7 +123,9 @@ def list_jobs(
     for j in jobs:
         comp_name = j.company.name if j.company else "Direct Employer"
         comp_type = j.company.company_type if j.company else "Mid-size"
-        comp_logo = j.company.logo_url if j.company else None
+        raw_logo = j.company.logo_url if j.company else None
+        comp_dom = j.company.canonical_domain if j.company else None
+        comp_logo = get_company_logo(comp_name, raw_logo, comp_dom)
         
         extracted_skills = [js.skill.canonical_name for js in j.job_skills if js.skill]
         match_breakdown = calculate_job_match(j, candidate_profile, candidate_skills)
@@ -211,9 +214,10 @@ def get_job_detail(
 
     comp_name = job.company.name if job.company else "Direct Employer"
     comp_type = job.company.company_type if job.company else "Mid-size"
-    comp_logo = job.company.logo_url if job.company else None
+    raw_logo = job.company.logo_url if job.company else None
     comp_domain = job.company.canonical_domain if job.company else None
     comp_careers = job.company.careers_url if job.company else None
+    comp_logo = get_company_logo(comp_name, raw_logo, comp_domain)
 
     # Determine source metadata
     src_type = "career_portal"
