@@ -9,6 +9,7 @@ import {
   Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
+import bengaluruBanner from '../assets/bengaluru_landmark.webp';
 
 const topSkillsList = [
   { name: 'Python', count: 1842, percent: 95 },
@@ -105,40 +106,43 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-8 pb-16">
       
-      {/* Hero Banner matching Image 2 (Bengaluru Skyline Background) */}
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900 text-white p-8 md:p-12 shadow-2xl">
+      {/* Hero Banner with Realistic Bengaluru Landmark (Vidhana Soudha) Background */}
+      <div className="relative overflow-hidden rounded-3xl text-white p-8 md:p-12 shadow-2xl bg-slate-900 min-h-[300px]">
         
-        {/* Background Image Overlay */}
+        {/* Realistic Vidhana Soudha Background Image */}
         <div 
-          className="absolute inset-0 opacity-30 bg-cover bg-center mix-blend-overlay"
-          style={{ backgroundImage: `url('https://images.unsplash.com/photo-1596176530529-78163a4f7af2?q=80&w=1600&auto=format&fit=crop')` }}
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${bengaluruBanner})` }}
         ></div>
 
+        {/* Realistic Contrast Overlay: Keeps the landmark visible while ensuring crisp text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-slate-950/40"></div>
+
         <div className="relative z-10 max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-2 bg-blue-500/20 backdrop-blur-md text-blue-300 border border-blue-400/30 text-xs font-bold px-3 py-1 rounded-full">
+          <div className="inline-flex items-center gap-2 bg-blue-500/25 backdrop-blur-md text-blue-300 border border-blue-400/30 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
             <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             <span>AI Powered Job Discovery</span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-black leading-tight tracking-tight">
+          <h1 className="text-3xl md:text-5xl font-black leading-tight tracking-tight drop-shadow-md">
             Discover <span className="text-blue-400">Bengaluru</span> Jobs
           </h1>
 
-          <p className="text-slate-300 text-sm md:text-base leading-relaxed">
+          <p className="text-slate-200 text-sm md:text-base leading-relaxed drop-shadow-sm">
             AI-powered job discovery from 1000+ companies. Updated daily. Direct application links. No middlemen.
           </p>
 
-          <div className="flex items-center gap-3 text-xs font-semibold text-slate-300 flex-wrap pt-2">
-            <span className="bg-white/10 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10">🏢 Startups</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10">🏢 Mid-size</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10">🏢 Large Companies</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10">🔗 Direct Apply Links</span>
-            <span className="bg-white/10 px-2.5 py-1 rounded-lg backdrop-blur-sm border border-white/10">⚡ No Middlemen</span>
+          <div className="flex items-center gap-3 text-xs font-semibold text-slate-200 flex-wrap pt-2">
+            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🏢 Startups</span>
+            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🏢 Mid-size</span>
+            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🏢 Large Companies</span>
+            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🔗 Direct Apply Links</span>
+            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">⚡ No Middlemen</span>
           </div>
         </div>
 
-        {/* Hero Floating Stats Box matching Image 2 */}
-        <div className="mt-8 md:mt-0 md:absolute md:top-8 md:right-8 bg-white/15 backdrop-blur-md border border-white/20 p-5 rounded-2xl w-full md:w-80 space-y-3.5 shadow-xl">
+        {/* Hero Floating Stats Box */}
+        <div className="mt-8 md:mt-0 md:absolute md:top-8 md:right-8 bg-slate-950/65 backdrop-blur-md border border-white/20 p-5 rounded-2xl w-full md:w-80 space-y-3.5 shadow-2xl">
           <div className="flex items-center justify-between border-b border-white/15 pb-2.5">
             <span className="text-xs font-bold text-emerald-400 flex items-center gap-2">
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Latest Scan Completed
@@ -160,6 +164,7 @@ export const HomePage: React.FC = () => {
             </div>
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Direct Application Links</span>
+              <span className="text-emerald-400 font-bold text-xs">100% Direct</span>
             </div>
           </div>
         </div>
