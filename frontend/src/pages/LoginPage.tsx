@@ -226,19 +226,19 @@ export const LoginPage: React.FC = () => {
 
   return (
     <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 overflow-hidden">
-      {/* Blurred Landmark Background Image Layer */}
+      {/* Original Crisp Landmark Background Image (Sharp & Clear, No Blur on Image) */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat scale-105 filter blur-[6px]"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url(${vidhanaSoudhaBg})`,
         }}
       />
 
-      {/* Atmospheric Dark Overlay */}
-      <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" />
+      {/* Subtle atmospheric tint overlay to preserve true daylight brightness */}
+      <div className="absolute inset-0 bg-slate-900/15" />
 
-      {/* Login Card */}
-      <div className="relative z-10 max-w-md w-full bg-white/95 backdrop-blur-xl rounded-3xl border border-white/80 shadow-2xl shadow-slate-950/35 p-8 space-y-6">
+      {/* Login Card with Frosted Glass Blur Background */}
+      <div className="relative z-10 max-w-md w-full bg-white/85 backdrop-blur-xl rounded-3xl border border-white/70 shadow-2xl shadow-slate-950/30 p-8 space-y-6">
         
         {/* Back Link */}
         <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">

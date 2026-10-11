@@ -99,9 +99,15 @@ def list_jobs(
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
 
     # Experience Filter
-    if exp_min is not None:
+    if exp_min is not None and exp_max is not None:
+        if exp_min == 0 and exp_max <= 1:
+            # Strict Fresher filter: 0 to 1 years only
+            query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)
+        else:
+            query = query.filter(Job.experience_max >= exp_min, Job.experience_min <= exp_max)
+    elif exp_min is not None:
         query = query.filter(Job.experience_max >= exp_min)
-    if exp_max is not None:
+    elif exp_max is not None:
         query = query.filter(Job.experience_min <= exp_max)
 
     # Filter by Skills list
@@ -151,7 +157,12 @@ def list_jobs(
         extracted_skills = [js.skill.canonical_name for js in j.job_skills if js.skill]
         match_breakdown = calculate_job_match(j, candidate_profile, candidate_skills)
 
-        exp_label = f"{j.experience_min}-{j.experience_max} years" if j.experience_max > j.experience_min else f"{j.experience_min}+ years"
+        if j.experience_min == 0 and j.experience_max <= 1:
+            exp_label = "0 - 1 yrs"
+        elif j.experience_max > j.experience_min:
+            exp_label = f"{j.experience_min} - {j.experience_max} yrs"
+        else:
+            exp_label = f"{j.experience_min}+ yrs"
         is_new = (now - j.first_seen_at).total_seconds() < 86400  # Seen within 24h
 
         hiring_role = extract_hiring_role(j.title)
@@ -251,11 +262,12 @@ def get_job_insights(db: Session = Depends(get_db)):
     }
     for emin, emax in exp_rows:
         emin = emin or 0
-        if emin == 0:
+        emax = emax or 1
+        if emin == 0 and emax <= 1:
             exp_counts['Fresher'] += 1
-        elif emin in (1, 2):
+        elif (emin >= 1 and emin <= 2) or (emin == 0 and emax <= 3):
             exp_counts['1-3 years'] += 1
-        elif emin in (3, 4):
+        elif emin in (3, 4) or (emin == 0 and emax <= 5):
             exp_counts['3-5 years'] += 1
         elif emin < 10:
             exp_counts['5-10 years'] += 1
@@ -456,7 +468,12 @@ def get_job_detail(
     extracted_skill_names = [s.canonical_name for s in detailed_skills]
     match_breakdown = calculate_job_match(job, candidate_profile, candidate_skills)
 
-    exp_label = f"{job.experience_min}-{job.experience_max} years" if job.experience_max > job.experience_min else f"{job.experience_min}+ years"
+    if job.experience_min == 0 and job.experience_max <= 1:
+        exp_label = "0 - 1 yrs"
+    elif job.experience_max > job.experience_min:
+        exp_label = f"{job.experience_min} - {job.experience_max} yrs"
+    else:
+        exp_label = f"{job.experience_min}+ yrs"
     is_new = (datetime.utcnow() - job.first_seen_at).total_seconds() < 86400
 
     hiring_role = extract_hiring_role(job.title)

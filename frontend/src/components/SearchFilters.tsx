@@ -35,7 +35,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
   ];
 
   const experienceOptions = [
-    { label: 'Fresher', count: getExpCount('Fresher', 170), val: '0' },
+    { label: 'Fresher (0 - 1 years)', count: getExpCount('Fresher', 54), val: '0' },
     { label: '1-3 years', count: getExpCount('1-3 years', 39), val: '1-3' },
     { label: '3-5 years', count: getExpCount('3-5 years', 53), val: '3-5' },
     { label: '5-10 years', count: getExpCount('5-10 years', 151), val: '5-10' },

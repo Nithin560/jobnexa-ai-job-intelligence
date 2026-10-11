@@ -23,10 +23,10 @@ const defaultTopSkillsList = [
 ];
 
 const defaultExpDonutData = [
-  { name: 'Fresher', value: 36, count: 170, color: '#3b82f6' },
+  { name: 'Fresher', value: 11, count: 54, color: '#3b82f6' },
   { name: '1-3 years', value: 8, count: 39, color: '#10b981' },
   { name: '3-5 years', value: 11, count: 53, color: '#f59e0b' },
-  { name: '5-10 years', value: 32, count: 151, color: '#8b5cf6' },
+  { name: '5-10 years', value: 57, count: 264, color: '#8b5cf6' },
   { name: '10+ years', value: 12, count: 59, color: '#ef4444' },
 ];
 
@@ -79,7 +79,7 @@ export const HomePage: React.FC = () => {
     try {
       let exp_min: number | undefined = undefined;
       let exp_max: number | undefined = undefined;
-      if (filters.experience_level === '0') {
+      if (filters.experience_level === '0' || filters.experience_level === '0-1') {
         exp_min = 0;
         exp_max = 1;
       } else if (filters.experience_level === '1-3') {

@@ -75,16 +75,25 @@ def extract_skills_from_text(text: str) -> List[Tuple[str, float]]:
 
 def parse_experience_range(text: str) -> Tuple[int, int]:
     """Parse years of experience from description text (e.g. '2-5 years' -> (2, 5))."""
+    text_lower = text.lower()
+    if any(k in text_lower for k in ["fresher", "intern", "internship", "trainee", "entry level", "entry-level", "graduate engineer"]):
+        return 0, 1
+
     match = re.search(r'(\d+)\s*[-to]*\s*(\d+)\s*years?', text, re.IGNORECASE)
     if match:
-        return int(match.group(1)), int(match.group(2))
+        min_v = int(match.group(1))
+        max_v = int(match.group(2))
+        return min_v, max_v
         
     single_match = re.search(r'(\d+)\+?\s*years?', text, re.IGNORECASE)
     if single_match:
         val = int(single_match.group(1))
         return val, val + 3
         
-    return 0, 5
+    if any(k in text_lower for k in ["senior", "lead", "manager", "architect", "head"]):
+        return 5, 8
+
+    return 1, 3
 
 
 def extract_hiring_role(title: str) -> str:
