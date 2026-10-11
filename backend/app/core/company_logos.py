@@ -112,3 +112,90 @@ def get_company_logo(company_name: Optional[str] = None, logo_url: Optional[str]
     name_display = (company_name or "Company").strip()
     encoded_name = urllib.parse.quote_plus(name_display)
     return f"https://ui-avatars.com/api/?name={encoded_name}&background=2563eb&color=fff&size=128&bold=true"
+
+
+# Real-world company classification mapping
+COMPANY_TYPE_MAP = {
+    # Startups (High growth, early/growth stage, founded < 10 yrs or venture backed)
+    "alma": "Startup",
+    "cred": "Startup",
+    "double": "Startup",
+    "dr. ansay ltd.": "Startup",
+    "echodyne": "Startup",
+    "elevenlabs": "Startup",
+    "fieldguide": "Startup",
+    "groww": "Startup",
+    "happyrobot.ai": "Startup",
+    "meesho": "Startup",
+    "netbox labs": "Startup",
+    "parloa": "Startup",
+    "proof": "Startup",
+    "roboflow": "Startup",
+    "steuerberaterin nadine brandstätter": "Startup",
+    "zepto": "Startup",
+    "zeta": "Startup",
+
+    # Mid-size (Scaleups, 200-3000 employees, series D+)
+    "angeheuert gmbh": "Mid-size",
+    "camunda": "Mid-size",
+    "cognite": "Mid-size",
+    "cordance": "Mid-size",
+    "datavant": "Mid-size",
+    "distribusion technologies": "Mid-size",
+    "duckduckgo": "Mid-size",
+    "grafana labs": "Mid-size",
+    "grafanalabs": "Mid-size",
+    "harness": "Mid-size",
+    "instrument": "Mid-size",
+    "language services associates": "Mid-size",
+    "razorpay": "Mid-size",
+    "vercel": "Mid-size",
+    "who gives a crap": "Mid-size",
+
+    # Enterprise (Publicly traded, MNCs, 3000+ employees, global tech giants)
+    "airbnb": "Enterprise",
+    "angi": "Enterprise",
+    "bridgebio": "Enterprise",
+    "capco": "Enterprise",
+    "datadog": "Enterprise",
+    "deliveroo": "Enterprise",
+    "elastic": "Enterprise",
+    "flipkart": "Enterprise",
+    "gitlab": "Enterprise",
+    "google": "Enterprise",
+    "inmobi": "Enterprise",
+    "microsoft": "Enterprise",
+    "mongodb": "Enterprise",
+    "mozilla": "Enterprise",
+    "okta": "Enterprise",
+    "phonepe": "Enterprise",
+    "qualtrics": "Enterprise",
+    "rubrik": "Enterprise",
+    "samsara": "Enterprise",
+    "spotify": "Enterprise",
+    "stripe": "Enterprise",
+    "swiggy": "Enterprise",
+    "thoughtworks": "Enterprise",
+    "twilio": "Enterprise",
+    "veeamsoftware": "Enterprise",
+    "walkme": "Enterprise",
+    "xebiadach": "Enterprise",
+
+    # Platforms
+    "arbeitnow": "Job Platform",
+    "jobicy": "Job Platform",
+}
+
+
+def get_company_type(company_name: Optional[str], default_type: str = "Mid-size") -> str:
+    """Resolve the real-world company type (Startup, Mid-size, Enterprise)."""
+    if not company_name:
+        return default_type
+    clean = company_name.strip().lower()
+    if clean in COMPANY_TYPE_MAP:
+        return COMPANY_TYPE_MAP[clean]
+    for k, v in COMPANY_TYPE_MAP.items():
+        if k in clean or clean in k:
+            return v
+    return default_type
+

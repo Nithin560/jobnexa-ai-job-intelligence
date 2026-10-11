@@ -12,7 +12,7 @@ from app.models.scan import ScanRun, SourceRunResult
 from app.connectors.registry import get_connector
 from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
-from app.core.company_logos import get_company_logo, get_canonical_domain
+from app.core.company_logos import get_company_logo, get_canonical_domain, get_company_type
 
 # Real Companies & Career ATS endpoints + Job Platforms
 TARGET_SOURCES = [
@@ -241,10 +241,11 @@ def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
 
 
 def get_or_create_employer(db: Session, company_name: str, careers_url: str = None, company_type: str = "Startup", logo_url: str = None) -> Company:
-    """Find or create an employer entity for postings from job platforms with high-res logos."""
+    """Find or create an employer entity for postings from job platforms with real company types and high-res logos."""
     clean_name = (company_name or "Tech Employer").strip()
     canonical_dom = get_canonical_domain(clean_name)
     resolved_logo = get_company_logo(clean_name, logo_url, canonical_dom)
+    real_type = get_company_type(clean_name, company_type)
 
     # Search by name first
     comp = db.query(Company).filter(Company.name.ilike(clean_name)).first()
@@ -256,7 +257,7 @@ def get_or_create_employer(db: Session, company_name: str, careers_url: str = No
         comp = Company(
             name=clean_name,
             canonical_domain=canonical_dom,
-            company_type=company_type,
+            company_type=real_type,
             careers_url=careers_url,
             logo_url=resolved_logo,
             active=True
@@ -264,6 +265,7 @@ def get_or_create_employer(db: Session, company_name: str, careers_url: str = No
         db.add(comp)
         db.flush()
     else:
+        comp.company_type = real_type
         if not comp.canonical_domain and canonical_dom:
             comp.canonical_domain = canonical_dom
         if not comp.logo_url or "logo.clearbit.com" in comp.logo_url or ("ui-avatars.com" in comp.logo_url and canonical_dom):

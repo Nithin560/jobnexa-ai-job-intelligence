@@ -177,15 +177,18 @@ export const HomePage: React.FC = () => {
 
       </div>
 
-      {/* 5 Stat Cards Row matching Image 2 */}
+      {/* 5 Stat Cards Row matching real database counts */}
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
         
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+        <div 
+          onClick={() => handleFilterChange('company_type', '')}
+          className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5 cursor-pointer hover:border-blue-400 hover:shadow-md transition"
+        >
           <div className="p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0"><Briefcase className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Total Jobs</div>
-            <div className="text-xl font-black text-slate-900">24,842</div>
-            <div className="text-[10px] font-bold text-emerald-600">+1,926 new today</div>
+            <div className="text-xl font-black text-slate-900">472</div>
+            <div className="text-[10px] font-bold text-emerald-600">Active in BLR</div>
           </div>
         </div>
 
@@ -193,34 +196,49 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0"><Building2 className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Companies</div>
-            <div className="text-xl font-black text-slate-900">1,248</div>
+            <div className="text-xl font-black text-slate-900">60</div>
             <div className="text-[10px] font-medium text-slate-400">in Bengaluru</div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+        <div 
+          onClick={() => handleFilterChange('company_type', filters.company_type === 'Startup' ? '' : 'Startup')}
+          className={`bg-white p-4 rounded-2xl border shadow-sm flex items-center gap-3.5 cursor-pointer hover:shadow-md transition ${
+            filters.company_type === 'Startup' ? 'border-blue-500 ring-2 ring-blue-100' : 'border-slate-200 hover:border-amber-400'
+          }`}
+        >
           <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0"><Rocket className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Startups</div>
-            <div className="text-xl font-black text-slate-900">642</div>
+            <div className="text-xl font-black text-slate-900">111</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+        <div 
+          onClick={() => handleFilterChange('company_type', filters.company_type === 'Mid-size' ? '' : 'Mid-size')}
+          className={`bg-white p-4 rounded-2xl border shadow-sm flex items-center gap-3.5 cursor-pointer hover:shadow-md transition ${
+            filters.company_type === 'Mid-size' ? 'border-blue-500 ring-2 ring-blue-100' : 'border-slate-200 hover:border-teal-400'
+          }`}
+        >
           <div className="p-3 bg-teal-50 text-teal-600 rounded-xl shrink-0"><Building className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Mid-size</div>
-            <div className="text-xl font-black text-slate-900">403</div>
+            <div className="text-xl font-black text-slate-900">52</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3.5">
+        <div 
+          onClick={() => handleFilterChange('company_type', filters.company_type === 'Enterprise' ? '' : 'Enterprise')}
+          className={`bg-white p-4 rounded-2xl border shadow-sm flex items-center gap-3.5 cursor-pointer hover:shadow-md transition ${
+            filters.company_type === 'Enterprise' ? 'border-blue-500 ring-2 ring-blue-100' : 'border-slate-200 hover:border-purple-400'
+          }`}
+        >
           <div className="p-3 bg-purple-50 text-purple-600 rounded-xl shrink-0"><Building2 className="w-5 h-5" /></div>
           <div>
-            <div className="text-xs font-semibold text-slate-500">Large Companies</div>
-            <div className="text-xl font-black text-slate-900">203</div>
+            <div className="text-xs font-semibold text-slate-500">Enterprise</div>
+            <div className="text-xl font-black text-slate-900">309</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
         </div>
@@ -288,6 +306,66 @@ export const HomePage: React.FC = () => {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Company Category Buttons: Start Up's, Mid-size, Enterprise */}
+          <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-2.5">
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={() => handleFilterChange('company_type', '')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  !filters.company_type
+                    ? 'bg-slate-900 text-white shadow-xs'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
+                }`}
+              >
+                All Companies
+              </button>
+              <button
+                type="button"
+                onClick={() => handleFilterChange('company_type', filters.company_type === 'Startup' ? '' : 'Startup')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  filters.company_type === 'Startup'
+                    ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
+                }`}
+              >
+                <Rocket className="w-3.5 h-3.5" /> Start Up's
+              </button>
+              <button
+                type="button"
+                onClick={() => handleFilterChange('company_type', filters.company_type === 'Mid-size' ? '' : 'Mid-size')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  filters.company_type === 'Mid-size'
+                    ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
+                }`}
+              >
+                <Building className="w-3.5 h-3.5" /> Mid-size
+              </button>
+              <button
+                type="button"
+                onClick={() => handleFilterChange('company_type', filters.company_type === 'Enterprise' ? '' : 'Enterprise')}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                  filters.company_type === 'Enterprise' || filters.company_type === 'Large'
+                    ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
+                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
+                }`}
+              >
+                <Building2 className="w-3.5 h-3.5" /> Enterprise
+              </button>
+            </div>
+
+            {filters.company_type && (
+              <button
+                type="button"
+                onClick={() => handleFilterChange('company_type', '')}
+                className="text-xs font-semibold text-blue-600 hover:underline px-2 py-1"
+              >
+                Clear filter
+              </button>
+            )}
           </div>
 
           {/* Job Feed Cards */}

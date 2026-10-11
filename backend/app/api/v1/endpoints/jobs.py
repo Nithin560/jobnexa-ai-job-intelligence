@@ -74,8 +74,16 @@ def list_jobs(
         query = query.filter(Job.employment_type.ilike(f"%{employment_type}%"))
 
     # Company Type Filter
-    if company_type:
-        query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
+    if company_type and company_type.lower() != "all":
+        ctype_low = company_type.lower().strip()
+        if "start" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike("%startup%"))
+        elif "mid" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike("%mid-size%"))
+        elif "enter" in ctype_low or "large" in ctype_low or "mnc" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(Company.company_type.in_(["Enterprise", "Large"]))
+        else:
+            query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
 
     # Experience Filter
     if exp_min is not None:

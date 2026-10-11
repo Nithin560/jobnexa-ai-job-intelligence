@@ -105,21 +105,23 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Company Type</h4>
         <div className="space-y-2 text-sm text-slate-600">
-          {['Startup (642)', 'Mid-size (403)', 'Large (203)', 'Enterprise (124)'].map((type) => {
-            const rawVal = type.split(' ')[0];
-            return (
-              <label key={type} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
-                <input
-                  type="radio"
-                  name="company_type"
-                  checked={filters.company_type === rawVal}
-                  onChange={() => onFilterChange('company_type', rawVal)}
-                  className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
-                />
-                <span>{type}</span>
-              </label>
-            );
-          })}
+          {[
+            { label: 'All Companies', val: '' },
+            { label: 'Startups (111)', val: 'Startup' },
+            { label: 'Mid-size (52)', val: 'Mid-size' },
+            { label: 'Enterprise (309)', val: 'Enterprise' },
+          ].map((type) => (
+            <label key={type.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
+              <input
+                type="radio"
+                name="company_type"
+                checked={filters.company_type === type.val || (!filters.company_type && type.val === '')}
+                onChange={() => onFilterChange('company_type', type.val)}
+                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+              />
+              <span className={type.val ? '' : 'font-medium'}>{type.label}</span>
+            </label>
+          ))}
         </div>
       </div>
 
