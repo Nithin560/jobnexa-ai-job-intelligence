@@ -308,53 +308,42 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Company Category Buttons: Startups & Scale-ups, Mid-Market Enterprises, Enterprise & MNCs */}
-          <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-2.5">
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                type="button"
-                onClick={() => handleFilterChange('company_type', '')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
-                  !filters.company_type
-                    ? 'bg-slate-900 text-white shadow-xs'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
-                }`}
-              >
-                All Companies
-              </button>
+          {/* Exactly 3 Company Category Buttons: Startups & Scale-ups, Mid-Market Enterprises, Enterprise & MNCs */}
+          <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-2">
+            <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap w-full sm:w-auto">
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', filters.company_type === 'Startup' ? '' : 'Startup')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
                   filters.company_type === 'Startup'
                     ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
-                title="Filter to venture-backed startups and high-growth scaleups"
+                title="Filter to venture-backed startups and high-growth scaleups (click again to deselect)"
               >
                 <Rocket className="w-3.5 h-3.5 text-amber-500" /> Startups & Scale-ups
               </button>
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', filters.company_type === 'Mid-size' ? '' : 'Mid-size')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
                   filters.company_type === 'Mid-size'
                     ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
-                title="Filter to mid-market and mature tech enterprises"
+                title="Filter to mid-market and mature tech enterprises (click again to deselect)"
               >
                 <Building className="w-3.5 h-3.5 text-teal-600" /> Mid-Market Enterprises
               </button>
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', filters.company_type === 'Enterprise' ? '' : 'Enterprise')}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`flex-1 sm:flex-initial px-4 py-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
                   filters.company_type === 'Enterprise' || filters.company_type === 'Large'
                     ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
-                title="Filter to Fortune 500, global multinationals & public tech giants"
+                title="Filter to Fortune 500, global multinationals & public tech giants (click again to deselect)"
               >
                 <Building2 className="w-3.5 h-3.5 text-blue-600" /> Enterprise & MNCs
               </button>
@@ -364,9 +353,10 @@ export const HomePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', '')}
-                className="text-xs font-semibold text-blue-600 hover:underline px-2 py-1"
+                className="text-xs font-semibold text-blue-600 hover:underline px-2 py-1 ml-auto"
+                title="Reset to show all companies"
               >
-                Clear filter
+                Show All
               </button>
             )}
           </div>
