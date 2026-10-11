@@ -75,3 +75,40 @@ export interface AdminOverview {
     disk_storage: string;
   };
 }
+
+export interface SkillInsight {
+  name: string;
+  count: number;
+  percent: number;
+}
+
+export interface ExperienceInsight {
+  name: string;
+  value: number;
+  count: number;
+  color: string;
+}
+
+export interface RecentScanInsight {
+  time: string;
+  count: string;
+  companies_scanned: number;
+  new_jobs: number;
+}
+
+export interface MarketInsights {
+  total_jobs: number;
+  total_companies: number;
+  top_skills: SkillInsight[];
+  experience_breakdown: ExperienceInsight[];
+  work_modes: { [key: string]: number };
+  company_tiers: { [key: string]: number };
+  recent_scans: RecentScanInsight[];
+  latest_scan: {
+    companies_scanned: number;
+    jobs_found: number;
+    new_jobs: number;
+    time: string;
+  };
+}
+

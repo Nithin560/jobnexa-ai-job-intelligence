@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Job, CandidateProfile, AdminOverview } from '../types';
+import { Job, CandidateProfile, AdminOverview, MarketInsights } from '../types';
 
 const API_BASE_URL = '/api/v1';
 
@@ -60,6 +60,12 @@ export const api = {
     const response = await apiClient.get<Job>(`/jobs/${jobId}`);
     return response.data;
   },
+
+  getMarketInsights: async () => {
+    const response = await apiClient.get<MarketInsights>('/jobs/insights');
+    return response.data;
+  },
+
 
   // Candidate Matching & Profile
   getProfile: async () => {

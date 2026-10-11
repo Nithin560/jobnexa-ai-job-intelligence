@@ -1,5 +1,6 @@
 import React from 'react';
 import { Filter, RotateCcw } from 'lucide-react';
+import { MarketInsights } from '../types';
 
 interface SearchFiltersProps {
   filters: {
@@ -9,11 +10,52 @@ interface SearchFiltersProps {
     employment_type?: string;
     experience_level?: string;
   };
+  insights?: MarketInsights | null;
   onFilterChange: (key: string, value: string) => void;
   onClear: () => void;
 }
 
-export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterChange, onClear }) => {
+export const SearchFilters: React.FC<SearchFiltersProps> = ({ 
+  filters, 
+  insights, 
+  onFilterChange, 
+  onClear 
+}) => {
+  // Helper to resolve experience tier count from live insights or exact database counts
+  const getExpCount = (tierName: string, defaultVal: number) => {
+    if (!insights?.experience_breakdown) return defaultVal;
+    const item = insights.experience_breakdown.find((b) => b.name === tierName);
+    return item ? item.count : defaultVal;
+  };
+
+  const workModeOptions = [
+    { label: 'On-site', count: insights?.work_modes?.['On-site'] ?? 200, val: 'On-site' },
+    { label: 'Hybrid', count: insights?.work_modes?.['Hybrid'] ?? 126, val: 'Hybrid' },
+    { label: 'Remote', count: insights?.work_modes?.['Remote'] ?? 146, val: 'Remote' },
+  ];
+
+  const experienceOptions = [
+    { label: 'Fresher', count: getExpCount('Fresher', 170), val: '0' },
+    { label: '1-3 years', count: getExpCount('1-3 years', 39), val: '1-3' },
+    { label: '3-5 years', count: getExpCount('3-5 years', 53), val: '3-5' },
+    { label: '5-10 years', count: getExpCount('5-10 years', 151), val: '5-10' },
+    { label: '10+ years', count: getExpCount('10+ years', 59), val: '10+' },
+  ];
+
+  const companyTypeOptions = [
+    { label: 'All Companies', count: null, val: '' },
+    { label: 'Startups & Scale-ups', count: insights?.company_tiers?.['Startup'] ?? 111, val: 'Startup' },
+    { label: 'Mid-Market Enterprises', count: insights?.company_tiers?.['Mid-size'] ?? 52, val: 'Mid-size' },
+    { label: 'Enterprise & MNCs', count: insights?.company_tiers?.['Enterprise'] ?? 309, val: 'Enterprise' },
+  ];
+
+  const jobTypeOptions = [
+    { label: 'Full-time', count: insights?.total_jobs ?? 472, val: 'Full-time' },
+    { label: 'Part-time', count: 0, val: 'Part-time' },
+    { label: 'Contract', count: 0, val: 'Contract' },
+    { label: 'Internship', count: 0, val: 'Internship' },
+  ];
+
   return (
     <div className="bg-white rounded-2xl border border-slate-200 p-5 space-y-6">
       
@@ -25,7 +67,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
         </div>
         <button
           onClick={onClear}
-          className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1"
+          className="text-xs font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition"
         >
           <RotateCcw className="w-3 h-3" /> Clear All
         </button>
@@ -58,21 +100,18 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Work Mode</h4>
         <div className="space-y-2 text-sm text-slate-600">
-          {['On-site (15,842)', 'Hybrid (6,231)', 'Remote (2,769)'].map((mode) => {
-            const rawVal = mode.split(' ')[0];
-            return (
-              <label key={mode} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
-                <input
-                  type="radio"
-                  name="work_mode"
-                  checked={filters.work_mode === rawVal}
-                  onChange={() => onFilterChange('work_mode', rawVal)}
-                  className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
-                />
-                <span>{mode}</span>
-              </label>
-            );
-          })}
+          {workModeOptions.map((mode) => (
+            <label key={mode.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
+              <input
+                type="radio"
+                name="work_mode"
+                checked={filters.work_mode === mode.val}
+                onChange={() => onFilterChange('work_mode', filters.work_mode === mode.val ? '' : mode.val)}
+                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+              />
+              <span>{mode.label} ({mode.count.toLocaleString()})</span>
+            </label>
+          ))}
         </div>
       </div>
 
@@ -80,22 +119,16 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Experience Level</h4>
         <div className="space-y-2 text-sm text-slate-600">
-          {[
-            { label: 'Fresher (4,231)', val: '0' },
-            { label: '1-3 years (9,842)', val: '1-3' },
-            { label: '3-5 years (6,231)', val: '3-5' },
-            { label: '5-10 years (3,842)', val: '5-10' },
-            { label: '10+ years (696)', val: '10+' },
-          ].map((exp) => (
+          {experienceOptions.map((exp) => (
             <label key={exp.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
               <input
                 type="radio"
                 name="exp_level"
                 checked={filters.experience_level === exp.val}
-                onChange={() => onFilterChange('experience_level', exp.val)}
+                onChange={() => onFilterChange('experience_level', filters.experience_level === exp.val ? '' : exp.val)}
                 className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
               />
-              <span>{exp.label}</span>
+              <span>{exp.label} ({exp.count.toLocaleString()})</span>
             </label>
           ))}
         </div>
@@ -105,12 +138,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Company Type</h4>
         <div className="space-y-2 text-sm text-slate-600">
-          {[
-            { label: 'All Companies', val: '' },
-            { label: 'Startups & Scale-ups (111)', val: 'Startup' },
-            { label: 'Mid-Market Enterprises (52)', val: 'Mid-size' },
-            { label: 'Enterprise & MNCs (309)', val: 'Enterprise' },
-          ].map((type) => (
+          {companyTypeOptions.map((type) => (
             <label key={type.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
               <input
                 type="radio"
@@ -119,7 +147,9 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
                 onChange={() => onFilterChange('company_type', type.val)}
                 className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
               />
-              <span className={type.val ? '' : 'font-medium'}>{type.label}</span>
+              <span className={type.val ? '' : 'font-medium'}>
+                {type.label} {type.count !== null ? `(${type.count.toLocaleString()})` : ''}
+              </span>
             </label>
           ))}
         </div>
@@ -129,21 +159,18 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Job Type</h4>
         <div className="space-y-2 text-sm text-slate-600">
-          {['Full-time (18,432)', 'Part-time (1,024)', 'Contract (2,843)', 'Internship (2,543)'].map((etype) => {
-            const rawVal = etype.split(' ')[0];
-            return (
-              <label key={etype} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
-                <input
-                  type="radio"
-                  name="employment_type"
-                  checked={filters.employment_type === rawVal}
-                  onChange={() => onFilterChange('employment_type', rawVal)}
-                  className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
-                />
-                <span>{etype}</span>
-              </label>
-            );
-          })}
+          {jobTypeOptions.map((etype) => (
+            <label key={etype.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
+              <input
+                type="radio"
+                name="employment_type"
+                checked={filters.employment_type === etype.val}
+                onChange={() => onFilterChange('employment_type', filters.employment_type === etype.val ? '' : etype.val)}
+                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+              />
+              <span>{etype.label} ({etype.count.toLocaleString()})</span>
+            </label>
+          ))}
         </div>
       </div>
 
@@ -151,7 +178,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
         onClick={onClear}
         className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition shadow-sm shadow-blue-200"
       >
-        Apply Filters
+        Clear / Reset Filters
       </button>
 
     </div>

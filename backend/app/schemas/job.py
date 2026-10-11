@@ -67,3 +67,42 @@ class JobListPaginatedResponse(BaseModel):
     page_size: int
     total: int
     total_pages: int
+
+
+class TopSkillInsight(BaseModel):
+    name: str
+    count: int
+    percent: int
+
+
+class ExperienceInsight(BaseModel):
+    name: str
+    value: int
+    count: int
+    color: str
+
+
+class RecentScanItem(BaseModel):
+    time: str
+    count: str
+    companies_scanned: int
+    new_jobs: int
+
+
+class LatestScanMeta(BaseModel):
+    companies_scanned: int
+    jobs_found: int
+    new_jobs: int
+    time: str
+
+
+class MarketInsightsResponse(BaseModel):
+    total_jobs: int
+    total_companies: int
+    top_skills: List[TopSkillInsight]
+    experience_breakdown: List[ExperienceInsight]
+    work_modes: Dict[str, int]
+    company_tiers: Dict[str, int]
+    recent_scans: List[RecentScanItem]
+    latest_scan: LatestScanMeta
+

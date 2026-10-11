@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
-import { Job } from '../types';
+import { Job, MarketInsights } from '../types';
 import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
@@ -11,29 +11,37 @@ import {
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
 
-const topSkillsList = [
-  { name: 'Python', count: 1842, percent: 95 },
-  { name: 'SQL', count: 1621, percent: 85 },
-  { name: 'Java', count: 1203, percent: 70 },
-  { name: 'AWS', count: 1102, percent: 65 },
-  { name: 'JavaScript', count: 986, percent: 55 },
-  { name: 'React', count: 842, percent: 48 },
-  { name: 'Docker', count: 791, percent: 44 },
-  { name: 'Kubernetes', count: 642, percent: 36 },
+const defaultTopSkillsList = [
+  { name: 'AWS', count: 103, percent: 100 },
+  { name: 'Python', count: 89, percent: 86 },
+  { name: 'Kubernetes', count: 64, percent: 62 },
+  { name: 'Java', count: 58, percent: 56 },
+  { name: 'JavaScript', count: 52, percent: 50 },
+  { name: 'SQL', count: 49, percent: 48 },
+  { name: 'Docker', count: 38, percent: 37 },
+  { name: 'React', count: 35, percent: 34 },
 ];
 
-const expDonutData = [
-  { name: 'Fresher', value: 17, color: '#3b82f6' },
-  { name: '1-3 years', value: 40, color: '#10b981' },
-  { name: '3-5 years', value: 25, color: '#f59e0b' },
-  { name: '5-10 years', value: 14, color: '#8b5cf6' },
-  { name: '10+ years', value: 4, color: '#ef4444' },
+const defaultExpDonutData = [
+  { name: 'Fresher', value: 36, count: 170, color: '#3b82f6' },
+  { name: '1-3 years', value: 8, count: 39, color: '#10b981' },
+  { name: '3-5 years', value: 11, count: 53, color: '#f59e0b' },
+  { name: '5-10 years', value: 32, count: 151, color: '#8b5cf6' },
+  { name: '10+ years', value: 12, count: 59, color: '#ef4444' },
+];
+
+const defaultRecentScans = [
+  { time: 'Today, 04:53 AM', count: '497 jobs found' },
+  { time: 'Today, 04:53 AM', count: '80 jobs found' },
+  { time: 'Today, 04:31 AM', count: '372 jobs found' },
+  { time: 'Today, 04:29 AM', count: '372 jobs found' },
 ];
 
 export const HomePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [totalJobs, setTotalJobs] = useState(24842);
+  const [totalJobs, setTotalJobs] = useState(472);
+  const [insights, setInsights] = useState<MarketInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('Relevance');
   const [page, setPage] = useState(1);
@@ -50,16 +58,53 @@ export const HomePage: React.FC = () => {
 
   const queryQ = searchParams.get('q') || '';
 
+  // Load real market insights once on mount
+  useEffect(() => {
+    const loadInsights = async () => {
+      try {
+        const data = await api.getMarketInsights();
+        setInsights(data);
+        if (data.total_jobs) {
+          setTotalJobs(data.total_jobs);
+        }
+      } catch (err) {
+        console.error('Failed to load market insights:', err);
+      }
+    };
+    loadInsights();
+  }, []);
+
   const fetchJobs = async () => {
     setLoading(true);
     try {
+      let exp_min: number | undefined = undefined;
+      let exp_max: number | undefined = undefined;
+      if (filters.experience_level === '0') {
+        exp_min = 0;
+        exp_max = 1;
+      } else if (filters.experience_level === '1-3') {
+        exp_min = 1;
+        exp_max = 3;
+      } else if (filters.experience_level === '3-5') {
+        exp_min = 3;
+        exp_max = 5;
+      } else if (filters.experience_level === '5-10') {
+        exp_min = 5;
+        exp_max = 10;
+      } else if (filters.experience_level === '10+') {
+        exp_min = 10;
+        exp_max = 30;
+      }
+
       const data = await api.getJobs({
         q: queryQ,
         location: 'Bengaluru',
         source_type: filters.source_type || undefined,
-        work_mode: filters.work_mode,
-        company_type: filters.company_type,
-        employment_type: filters.employment_type,
+        work_mode: filters.work_mode || undefined,
+        company_type: filters.company_type || undefined,
+        employment_type: filters.employment_type || undefined,
+        exp_min: exp_min,
+        exp_max: exp_max,
         page: page,
         page_size: pageSize,
       });
@@ -77,6 +122,7 @@ export const HomePage: React.FC = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     setPage(1);
@@ -151,20 +197,28 @@ export const HomePage: React.FC = () => {
               <span className="text-xs font-bold text-emerald-400 flex items-center gap-2 drop-shadow-sm">
                 <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Latest Scan Completed
               </span>
-              <span className="text-xs text-slate-200 font-medium">Today, 06:00 AM</span>
+              <span className="text-xs text-slate-200 font-medium">
+                {insights?.latest_scan?.time || 'Today, 06:00 AM'}
+              </span>
             </div>
             <div className="space-y-2 text-xs text-slate-100 font-medium">
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Companies Scanned:</span>
-                <strong className="text-white font-black text-sm">1,248</strong>
+                <strong className="text-white font-black text-sm">
+                  {(insights?.latest_scan?.companies_scanned ?? 17).toLocaleString()}
+                </strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Jobs Found:</span>
-                <strong className="text-white font-black text-sm">3,842</strong>
+                <strong className="text-white font-black text-sm">
+                  {(insights?.latest_scan?.jobs_found ?? 497).toLocaleString()}
+                </strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> New Jobs Today:</span>
-                <strong className="text-emerald-300 font-black text-sm">1,926</strong>
+                <strong className="text-emerald-300 font-black text-sm">
+                  {(insights?.latest_scan?.new_jobs ?? 44).toLocaleString()}
+                </strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Direct Application Links:</span>
@@ -187,7 +241,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0"><Briefcase className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Total Jobs</div>
-            <div className="text-xl font-black text-slate-900">472</div>
+            <div className="text-xl font-black text-slate-900">{insights?.total_jobs ?? 472}</div>
             <div className="text-[10px] font-bold text-emerald-600">Active in BLR</div>
           </div>
         </div>
@@ -196,7 +250,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0"><Building2 className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Companies</div>
-            <div className="text-xl font-black text-slate-900">60</div>
+            <div className="text-xl font-black text-slate-900">{insights?.total_companies ?? 60}</div>
             <div className="text-[10px] font-medium text-slate-400">in Bengaluru</div>
           </div>
         </div>
@@ -210,7 +264,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0"><Rocket className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Startups & Scale-ups</div>
-            <div className="text-xl font-black text-slate-900">111</div>
+            <div className="text-xl font-black text-slate-900">{insights?.company_tiers?.['Startup'] ?? 111}</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
         </div>
@@ -224,7 +278,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-teal-50 text-teal-600 rounded-xl shrink-0"><Building className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Mid-Market</div>
-            <div className="text-xl font-black text-slate-900">52</div>
+            <div className="text-xl font-black text-slate-900">{insights?.company_tiers?.['Mid-size'] ?? 52}</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
         </div>
@@ -238,7 +292,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-purple-50 text-purple-600 rounded-xl shrink-0"><Building2 className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Enterprise & MNCs</div>
-            <div className="text-xl font-black text-slate-900">309</div>
+            <div className="text-xl font-black text-slate-900">{insights?.company_tiers?.['Enterprise'] ?? 309}</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
         </div>
@@ -252,10 +306,12 @@ export const HomePage: React.FC = () => {
         <div className="lg:col-span-3 space-y-6">
           <SearchFilters
             filters={filters}
+            insights={insights}
             onFilterChange={handleFilterChange}
             onClear={handleClearFilters}
           />
         </div>
+
 
         {/* Center Column: Job Listings Feed (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
@@ -399,7 +455,7 @@ export const HomePage: React.FC = () => {
 
             <div className="space-y-3">
               <div className="text-xs font-bold text-slate-800">Top Hiring Skills</div>
-              {topSkillsList.map((sk) => (
+              {(insights?.top_skills || defaultTopSkillsList).map((sk) => (
                 <div key={sk.name} className="space-y-1">
                   <div className="flex justify-between text-xs font-semibold text-slate-700">
                     <span>{sk.name}</span>
@@ -420,24 +476,33 @@ export const HomePage: React.FC = () => {
             <div className="h-40 w-full relative flex items-center justify-center">
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
-                  <Pie data={expDonutData} innerRadius={40} outerRadius={60} paddingAngle={4} dataKey="value">
-                    {expDonutData.map((entry, index) => (
+                  <Pie 
+                    data={insights?.experience_breakdown || defaultExpDonutData} 
+                    innerRadius={40} 
+                    outerRadius={60} 
+                    paddingAngle={4} 
+                    dataKey="value"
+                  >
+                    {(insights?.experience_breakdown || defaultExpDonutData).map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
-                  <Tooltip />
+                  <Tooltip formatter={(value: any) => [`${value}%`, 'Share']} />
                 </PieChart>
               </ResponsiveContainer>
             </div>
 
             <div className="space-y-1.5 text-xs">
-              {expDonutData.map((item) => (
+              {(insights?.experience_breakdown || defaultExpDonutData).map((item) => (
                 <div key={item.name} className="flex items-center justify-between text-slate-600 font-medium">
                   <span className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></span>
                     <span>{item.name}</span>
                   </span>
-                  <span className="font-bold text-slate-800">{item.value}%</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-slate-400 text-[11px]">({item.count})</span>
+                    <span className="font-bold text-slate-800">{item.value}%</span>
+                  </div>
                 </div>
               ))}
             </div>
@@ -456,12 +521,7 @@ export const HomePage: React.FC = () => {
                 <span>Everything automated</span>
               </div>
 
-              {[
-                { time: 'Today, 06:00 AM', count: '3,842 jobs found' },
-                { time: 'Yesterday, 06:00 AM', count: '3,120 jobs found' },
-                { time: 'Oct 14, 06:00 AM', count: '2,984 jobs found' },
-                { time: 'Oct 13, 06:00 AM', count: '3,421 jobs found' },
-              ].map((sc, idx) => (
+              {(insights?.recent_scans || defaultRecentScans).map((sc, idx) => (
                 <div key={idx} className="flex items-center justify-between text-slate-600 py-1 border-b border-slate-50 last:border-0">
                   <span className="flex items-center gap-2 font-medium">
                     <span className="w-2 h-2 rounded-full border border-emerald-500 bg-emerald-50"></span>
