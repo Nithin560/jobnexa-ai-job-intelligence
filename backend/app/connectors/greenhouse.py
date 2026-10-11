@@ -13,7 +13,7 @@ class GreenhouseConnector:
     def __init__(self, timeout: int = 10):
         self.timeout = timeout
 
-    def fetch_jobs(self, source_id: str, company_slug: str, since: Optional[datetime] = None) -> List[RawJob]:
+    def fetch_jobs(self, source_id: str, company_slug: str, since: Optional[datetime] = None, **kwargs) -> List[RawJob]:
         """Fetch live job postings from Greenhouse Board API."""
         url = f"https://boards-api.greenhouse.io/v1/boards/{company_slug}/jobs?content=true"
         req = urllib.request.Request(

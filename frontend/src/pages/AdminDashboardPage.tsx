@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
-import { AdminOverview } from '../types';
+import { AdminOverview, Job } from '../types';
 import { 
   Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
@@ -53,17 +53,10 @@ const recentScansData = [
   { id: 5, time: 'Oct 23, 06:00 AM', status: 'Completed', companies: 805, found: 3201, newJobs: 378, updated: 642, expired: 181, duration: '46m' },
 ];
 
-const latestJobsData = [
-  { title: 'Backend Engineer', company: 'Razorpay', location: 'Bengaluru', detected: '2 hours ago', source: 'Careers' },
-  { title: 'Data Scientist', company: 'Flipkart', location: 'Bengaluru', detected: '3 hours ago', source: 'Naukri' },
-  { title: 'DevOps Engineer', company: 'Swiggy', location: 'Bengaluru', detected: '4 hours ago', source: 'Careers' },
-  { title: 'Frontend Developer', company: 'PhonePe', location: 'Bengaluru', detected: '5 hours ago', source: 'LinkedIn' },
-  { title: 'ML Engineer', company: 'Zepto', location: 'Bengaluru', detected: '6 hours ago', source: 'Careers' },
-];
-
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const [overview, setOverview] = useState<AdminOverview | null>(null);
+  const [latestJobs, setLatestJobs] = useState<Job[]>([]);
   const [scanning, setScanning] = useState(false);
   const [scanMessage, setScanMessage] = useState('');
   const [activeTab, setActiveTab] = useState('Dashboard');
@@ -72,6 +65,10 @@ export const AdminDashboardPage: React.FC = () => {
     try {
       const data = await api.getAdminOverview();
       setOverview(data);
+      const jobsRes = await api.getJobs({ page_size: 6, sort_by: 'date' });
+      if (jobsRes.items) {
+        setLatestJobs(jobsRes.items);
+      }
     } catch (err) {
       console.error(err);
     }
@@ -281,8 +278,9 @@ export const AdminDashboardPage: React.FC = () => {
                 <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Briefcase className="w-4 h-4" /></div>
               </div>
               <div className="text-2xl font-black text-slate-900">{overview?.total_jobs.toLocaleString() || '24,842'}</div>
-              <div className="text-[11px] font-bold text-emerald-600 mt-1 flex items-center gap-0.5">
-                <span>↑ +3,842 this week</span>
+              <div className="text-[10px] font-semibold text-slate-500 mt-1 flex items-center justify-between">
+                <span className="text-indigo-600 font-bold">🏢 {overview?.career_portal_jobs ?? 0} Career Portals</span>
+                <span className="text-emerald-600 font-bold">🌐 {overview?.job_portal_jobs ?? 0} Platforms</span>
               </div>
             </div>
 
@@ -582,19 +580,33 @@ export const AdminDashboardPage: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {latestJobsData.map((job, idx) => (
-                      <tr key={idx} className="hover:bg-slate-50/50">
-                        <td className="py-3 px-4 font-bold text-slate-900">{job.title}</td>
-                        <td className="py-3 px-4 font-semibold text-slate-700">{job.company}</td>
-                        <td className="py-3 px-4 text-slate-500">{job.location}</td>
-                        <td className="py-3 px-4 text-slate-400">{job.detected}</td>
-                        <td className="py-3 px-4">
-                          <span className="bg-blue-50 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded border border-blue-100">
-                            {job.source}
-                          </span>
-                        </td>
+                    {latestJobs.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="py-6 text-center text-slate-400">Loading discovered jobs...</td>
                       </tr>
-                    ))}
+                    ) : (
+                      latestJobs.map((job) => (
+                        <tr key={job.id} className="hover:bg-slate-50/50">
+                          <td className="py-3 px-4 font-bold text-slate-900 truncate max-w-[180px]">{job.title}</td>
+                          <td className="py-3 px-4 font-semibold text-slate-700">{job.company_name}</td>
+                          <td className="py-3 px-4 text-slate-500 truncate max-w-[120px]">{job.location}</td>
+                          <td className="py-3 px-4 text-slate-400">
+                            {job.last_seen_at ? new Date(job.last_seen_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Recently'}
+                          </td>
+                          <td className="py-3 px-4">
+                            {job.source_type === 'job_portal' ? (
+                              <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1 w-fit">
+                                🌐 {job.source_name || 'Job Platform'}
+                              </span>
+                            ) : (
+                              <span className="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded border border-indigo-100 flex items-center gap-1 w-fit">
+                                🏢 {job.source_name || 'Career Portal'}
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>

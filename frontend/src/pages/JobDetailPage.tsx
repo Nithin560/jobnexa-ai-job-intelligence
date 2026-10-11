@@ -59,11 +59,20 @@ export const JobDetailPage: React.FC = () => {
 
             <div>
               <h1 className="text-2xl font-bold text-slate-900">{job.title}</h1>
-              <div className="flex items-center gap-2 mt-1 text-sm text-slate-600">
+              <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
                 <span className="font-semibold text-slate-800">{job.company_name}</span>
                 <span className="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded font-medium border border-blue-200">
                   {job.company_type}
                 </span>
+                {job.source_type === 'job_portal' ? (
+                  <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                    🌐 {job.source_name || 'Job Platform'}
+                  </span>
+                ) : (
+                  <span className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                    🏢 {job.source_name || 'Company Career Site'}
+                  </span>
+                )}
               </div>
               <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
                 <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {job.location}</span>
@@ -80,7 +89,7 @@ export const JobDetailPage: React.FC = () => {
               rel="noopener noreferrer"
               className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-2xl transition shadow-md shadow-blue-200 flex items-center gap-2"
             >
-              <span>Apply on Company Website</span>
+              <span>{job.source_type === 'job_portal' ? `Apply via ${job.source_name || 'Job Platform'}` : `Apply on ${job.company_name} Careers`}</span>
               <ExternalLink className="w-4 h-4" />
             </a>
             <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-slate-600">

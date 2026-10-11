@@ -13,8 +13,9 @@ from app.connectors.registry import get_connector
 from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
 
-# Real Companies & their official ATS endpoints
+# Real Companies & Career ATS endpoints + Job Platforms
 TARGET_SOURCES = [
+    # --- Direct Company Career Websites (ATS) ---
     {
         "name": "Razorpay",
         "domain": "razorpay.com",
@@ -22,7 +23,8 @@ TARGET_SOURCES = [
         "company_type": "Mid-size",
         "logo_url": "https://logo.clearbit.com/razorpay.com",
         "connector_key": "greenhouse_api",
-        "slug": "razorpaysoftwareprivatelimited"
+        "slug": "razorpaysoftwareprivatelimited",
+        "source_type": "career_portal"
     },
     {
         "name": "Meesho",
@@ -31,7 +33,8 @@ TARGET_SOURCES = [
         "company_type": "Startup",
         "logo_url": "https://logo.clearbit.com/meesho.com",
         "connector_key": "lever_api",
-        "slug": "meesho"
+        "slug": "meesho",
+        "source_type": "career_portal"
     },
     {
         "name": "CRED",
@@ -40,7 +43,8 @@ TARGET_SOURCES = [
         "company_type": "Startup",
         "logo_url": "https://logo.clearbit.com/cred.club",
         "connector_key": "lever_api",
-        "slug": "cred"
+        "slug": "cred",
+        "source_type": "career_portal"
     },
     {
         "name": "Groww",
@@ -49,7 +53,8 @@ TARGET_SOURCES = [
         "company_type": "Startup",
         "logo_url": "https://logo.clearbit.com/groww.in",
         "connector_key": "greenhouse_api",
-        "slug": "groww"
+        "slug": "groww",
+        "source_type": "career_portal"
     },
     {
         "name": "InMobi",
@@ -58,7 +63,8 @@ TARGET_SOURCES = [
         "company_type": "Large",
         "logo_url": "https://logo.clearbit.com/inmobi.com",
         "connector_key": "greenhouse_api",
-        "slug": "inmobi"
+        "slug": "inmobi",
+        "source_type": "career_portal"
     },
     {
         "name": "Stripe",
@@ -67,7 +73,8 @@ TARGET_SOURCES = [
         "company_type": "Large",
         "logo_url": "https://logo.clearbit.com/stripe.com",
         "connector_key": "greenhouse_api",
-        "slug": "stripe"
+        "slug": "stripe",
+        "source_type": "career_portal"
     },
     {
         "name": "Okta",
@@ -76,7 +83,8 @@ TARGET_SOURCES = [
         "company_type": "Enterprise",
         "logo_url": "https://logo.clearbit.com/okta.com",
         "connector_key": "greenhouse_api",
-        "slug": "okta"
+        "slug": "okta",
+        "source_type": "career_portal"
     },
     {
         "name": "GitLab",
@@ -85,7 +93,8 @@ TARGET_SOURCES = [
         "company_type": "Enterprise",
         "logo_url": "https://logo.clearbit.com/gitlab.com",
         "connector_key": "greenhouse_api",
-        "slug": "gitlab"
+        "slug": "gitlab",
+        "source_type": "career_portal"
     },
     {
         "name": "Twilio",
@@ -94,7 +103,8 @@ TARGET_SOURCES = [
         "company_type": "Large",
         "logo_url": "https://logo.clearbit.com/twilio.com",
         "connector_key": "greenhouse_api",
-        "slug": "twilio"
+        "slug": "twilio",
+        "source_type": "career_portal"
     },
     {
         "name": "MongoDB",
@@ -103,7 +113,8 @@ TARGET_SOURCES = [
         "company_type": "Large",
         "logo_url": "https://logo.clearbit.com/mongodb.com",
         "connector_key": "greenhouse_api",
-        "slug": "mongodb"
+        "slug": "mongodb",
+        "source_type": "career_portal"
     },
     {
         "name": "Elastic",
@@ -112,7 +123,8 @@ TARGET_SOURCES = [
         "company_type": "Mid-size",
         "logo_url": "https://logo.clearbit.com/elastic.co",
         "connector_key": "greenhouse_api",
-        "slug": "elastic"
+        "slug": "elastic",
+        "source_type": "career_portal"
     },
     {
         "name": "Airbnb",
@@ -121,7 +133,8 @@ TARGET_SOURCES = [
         "company_type": "Large",
         "logo_url": "https://logo.clearbit.com/airbnb.com",
         "connector_key": "greenhouse_api",
-        "slug": "airbnb"
+        "slug": "airbnb",
+        "source_type": "career_portal"
     },
     {
         "name": "Thoughtworks",
@@ -130,7 +143,49 @@ TARGET_SOURCES = [
         "company_type": "Large",
         "logo_url": "https://logo.clearbit.com/thoughtworks.com",
         "connector_key": "greenhouse_api",
-        "slug": "thoughtworks"
+        "slug": "thoughtworks",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Zeta",
+        "domain": "zeta.tech",
+        "careers_url": "https://www.zeta.tech/careers",
+        "company_type": "Startup",
+        "logo_url": "https://logo.clearbit.com/zeta.tech",
+        "connector_key": "lever_api",
+        "slug": "zeta",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Rubrik",
+        "domain": "rubrik.com",
+        "careers_url": "https://www.rubrik.com/company/careers",
+        "company_type": "Large",
+        "logo_url": "https://logo.clearbit.com/rubrik.com",
+        "connector_key": "greenhouse_api",
+        "slug": "rubrik",
+        "source_type": "career_portal"
+    },
+    # --- Live Job Portals & Aggregators ---
+    {
+        "name": "Arbeitnow",
+        "domain": "arbeitnow.com",
+        "careers_url": "https://www.arbeitnow.com",
+        "company_type": "Job Platform",
+        "logo_url": "https://logo.clearbit.com/arbeitnow.com",
+        "connector_key": "job_portal_api",
+        "slug": "arbeitnow",
+        "source_type": "job_portal"
+    },
+    {
+        "name": "Jobicy",
+        "domain": "jobicy.com",
+        "careers_url": "https://jobicy.com",
+        "company_type": "Job Platform",
+        "logo_url": "https://logo.clearbit.com/jobicy.com",
+        "connector_key": "job_portal_api",
+        "slug": "jobicy",
+        "source_type": "job_portal"
     }
 ]
 
@@ -157,10 +212,11 @@ def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
             comp.careers_url = item["careers_url"]
 
         source = db.query(JobSource).filter(JobSource.company_id == comp.id).first()
+        src_type = item.get("source_type", "career_portal")
         if not source:
             source = JobSource(
                 company_id=comp.id,
-                source_type="ats_api",
+                source_type=src_type,
                 base_url=item["slug"],
                 connector_key=item["connector_key"],
                 enabled=True
@@ -168,6 +224,7 @@ def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
             db.add(source)
             db.flush()
         else:
+            source.source_type = src_type
             source.base_url = item["slug"]
             source.connector_key = item["connector_key"]
             source.enabled = True
@@ -176,6 +233,23 @@ def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
 
     db.commit()
     return source_map
+
+
+def get_or_create_employer(db: Session, company_name: str, careers_url: str = None, company_type: str = "Startup", logo_url: str = None) -> Company:
+    """Find or create an employer entity for postings from job platforms."""
+    clean_name = (company_name or "Tech Employer").strip()
+    comp = db.query(Company).filter(Company.name.ilike(clean_name)).first()
+    if not comp:
+        comp = Company(
+            name=clean_name,
+            company_type=company_type,
+            careers_url=careers_url,
+            logo_url=logo_url or f"https://ui-avatars.com/api/?name={clean_name.replace(' ', '+')}&background=0D8ABC&color=fff",
+            active=True
+        )
+        db.add(comp)
+        db.flush()
+    return comp
 
 
 def is_bengaluru_or_india_job(location_str: str) -> bool:
@@ -244,15 +318,16 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
             total_scanned_sources += 1
             print(f"[Scanner] Connecting to {target['name']} via {connector_key} ({slug})...")
 
+            is_job_portal = (target.get("source_type") == "job_portal")
             try:
-                raw_jobs = connector.fetch_jobs(source_id=source.id, company_slug=slug)
+                raw_jobs = connector.fetch_jobs(source_id=source.id, company_slug=slug, portal_slug=slug)
             except Exception as e:
                 print(f"[Scanner] Failed to fetch {target['name']}: {e}")
                 continue
 
             # Filter for Bengaluru / India postings
             relevant_jobs = [j for j in raw_jobs if is_bengaluru_or_india_job(j.location)]
-            print(f"[Scanner] {target['name']}: {len(raw_jobs)} total listings, {len(relevant_jobs)} for Bengaluru/India")
+            print(f"[Scanner] {target['name']} ({'Job Platform' if is_job_portal else 'Career Portal'}): {len(raw_jobs)} total listings, {len(relevant_jobs)} for Bengaluru/India")
 
             source_new = 0
             source_updated = 0
@@ -263,11 +338,20 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                 if not norm_loc or "bengaluru" not in norm_loc.lower():
                     norm_loc = "Bengaluru, Karnataka"
 
+                # If job platform, resolve the actual hiring company entity
+                if is_job_portal and raw.company and raw.company.lower() != target["name"].lower():
+                    employer = get_or_create_employer(db, raw.company)
+                    employer_id = employer.id
+                    employer_name = employer.name
+                else:
+                    employer_id = source.company_id
+                    employer_name = target["name"]
+
                 # Deduplication check
-                fp = generate_job_fingerprint(target["name"], raw.title, raw.description)
+                fp = generate_job_fingerprint(employer_name, raw.title, raw.description)
                 existing_job, reason = check_and_deduplicate_job(
                     db=db,
-                    company_id=source.company_id,
+                    company_id=employer_id,
                     title=raw.title,
                     fingerprint=fp,
                     apply_url=raw.apply_url
@@ -288,7 +372,7 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                     # Insert new real job
                     new_job = Job(
                         id=str(uuid.uuid4()),
-                        company_id=source.company_id,
+                        company_id=employer_id,
                         source_id=source.id,
                         external_id=raw.external_id,
                         canonical_url=raw.apply_url,
@@ -322,7 +406,7 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                         job_id=new_job.id,
                         observed_at=now,
                         changed_fields={"status": "discovered_by_crawler"},
-                        snapshot_json={"title": new_job.title, "company": target["name"], "source": slug}
+                        snapshot_json={"title": new_job.title, "company": employer_name, "source": target["name"], "source_type": target.get("source_type")}
                     )
                     db.add(hist)
 

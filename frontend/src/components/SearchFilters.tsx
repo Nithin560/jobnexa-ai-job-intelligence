@@ -3,6 +3,7 @@ import { Filter, RotateCcw } from 'lucide-react';
 
 interface SearchFiltersProps {
   filters: {
+    source_type?: string;
     work_mode?: string;
     company_type?: string;
     employment_type?: string;
@@ -28,6 +29,29 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
         >
           <RotateCcw className="w-3 h-3" /> Clear All
         </button>
+      </div>
+
+      {/* Job Source */}
+      <div>
+        <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Job Source</h4>
+        <div className="space-y-2 text-sm text-slate-600">
+          {[
+            { label: 'All Sources', val: '' },
+            { label: '🏢 Company Career Sites', val: 'career_portal' },
+            { label: '🌐 Job Platforms', val: 'job_portal' },
+          ].map((src) => (
+            <label key={src.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
+              <input
+                type="radio"
+                name="source_type"
+                checked={filters.source_type === src.val || (!filters.source_type && src.val === '')}
+                onChange={() => onFilterChange('source_type', src.val)}
+                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+              />
+              <span className={src.val ? 'font-medium' : ''}>{src.label}</span>
+            </label>
+          ))}
+        </div>
       </div>
 
       {/* Work Mode */}

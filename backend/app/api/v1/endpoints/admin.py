@@ -26,6 +26,8 @@ class AdminOverviewResponse(BaseModel):
     total_companies: int = 1248
     active_sources: int = 1126
     total_jobs: int = 24842
+    career_portal_jobs: int = 0
+    job_portal_jobs: int = 0
     bengaluru_jobs: int = 12436
     new_jobs_today: int = 427
     expired_jobs: int = 2134
@@ -45,6 +47,9 @@ def get_admin_overview(
     db_jobs = db.query(Job).count()
     db_bengaluru_jobs = db.query(Job).filter(Job.location.ilike("%bengaluru%")).count()
 
+    job_portal_jobs = db.query(Job).join(Job.job_source).filter(JobSource.source_type == "job_portal").count()
+    career_portal_jobs = max(0, db_jobs - job_portal_jobs)
+
     now = datetime.utcnow()
     day_ago = now - timedelta(days=1)
     db_new_today = db.query(Job).filter(Job.first_seen_at >= day_ago).count()
@@ -60,6 +65,8 @@ def get_admin_overview(
         total_companies=db_companies,
         active_sources=db_sources,
         total_jobs=db_jobs,
+        career_portal_jobs=career_portal_jobs,
+        job_portal_jobs=job_portal_jobs,
         bengaluru_jobs=db_bengaluru_jobs,
         new_jobs_today=db_new_today,
         expired_jobs=db_expired,

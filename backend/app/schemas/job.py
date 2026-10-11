@@ -35,6 +35,8 @@ class JobListItemResponse(BaseModel):
     experience_label: str
     skills: List[str] = Field(default_factory=list)
     apply_url: str
+    source_type: str = "career_portal"  # career_portal or job_portal
+    source_name: Optional[str] = None    # e.g. "Razorpay Careers", "Arbeitnow", "Jobicy"
     status: str = "active"
     posted_at: Optional[datetime] = None
     last_seen_at: datetime

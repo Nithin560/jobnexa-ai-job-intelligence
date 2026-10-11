@@ -12,7 +12,7 @@ class LeverConnector:
     def __init__(self, timeout: int = 10):
         self.timeout = timeout
 
-    def fetch_jobs(self, source_id: str, company_slug: str, since: Optional[datetime] = None) -> List[RawJob]:
+    def fetch_jobs(self, source_id: str, company_slug: str, since: Optional[datetime] = None, **kwargs) -> List[RawJob]:
         """Fetch live job postings from Lever API."""
         url = f"https://api.lever.co/v0/postings/{company_slug}?mode=json"
         req = urllib.request.Request(

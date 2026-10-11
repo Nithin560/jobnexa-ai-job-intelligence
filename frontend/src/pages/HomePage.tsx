@@ -36,6 +36,7 @@ export const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('Relevance');
   const [filters, setFilters] = useState<{ [key: string]: string }>({
+    source_type: '',
     work_mode: '',
     company_type: '',
     employment_type: '',
@@ -50,6 +51,7 @@ export const HomePage: React.FC = () => {
       const data = await api.getJobs({
         q: queryQ,
         location: 'Bengaluru',
+        source_type: filters.source_type || undefined,
         work_mode: filters.work_mode,
         company_type: filters.company_type,
         employment_type: filters.employment_type,
@@ -72,7 +74,7 @@ export const HomePage: React.FC = () => {
   };
 
   const handleClearFilters = () => {
-    setFilters({ work_mode: '', company_type: '', employment_type: '', experience_level: '' });
+    setFilters({ source_type: '', work_mode: '', company_type: '', employment_type: '', experience_level: '' });
   };
 
   const handleToggleSave = async (jobId: string) => {

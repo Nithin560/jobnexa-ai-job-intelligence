@@ -49,11 +49,20 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               )}
             </div>
 
-            <div className="flex items-center gap-2 mt-1 text-sm text-slate-600">
+            <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
               <span className="font-semibold text-slate-800">{job.company_name}</span>
               <span className={`text-xs px-2 py-0.5 rounded-md border font-medium ${getCompanyBadgeColor(job.company_type)}`}>
                 {job.company_type}
               </span>
+              {job.source_type === 'job_portal' ? (
+                <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  🌐 {job.source_name || 'Job Platform'}
+                </span>
+              ) : (
+                <span className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                  🏢 {job.source_name || 'Company Career Site'}
+                </span>
+              )}
             </div>
 
             {/* Meta info: Location, Experience, Work Mode */}

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_, and_, desc
 from app.db.session import get_db
 from app.models.job import Job, JobSkill, SavedJob
-from app.models.company import Company
+from app.models.company import Company, JobSource
 from app.models.skill import Skill
 from app.models.candidate import CandidateProfile, CandidateSkill
 from app.schemas.job import JobListItemResponse, JobDetailResponse, JobListPaginatedResponse, SkillItem
@@ -22,6 +22,7 @@ def list_jobs(
     q: Optional[str] = Query(None, description="Search query by title, company, or keyword"),
     location: Optional[str] = Query("Bengaluru", description="Target city filter"),
     skills: Optional[str] = Query(None, description="Comma-separated list of required skills"),
+    source_type: Optional[str] = Query(None, description="Filter by source type: career_portal or job_portal"),
     work_mode: Optional[str] = Query(None, description="On-site, Hybrid, Remote"),
     company_type: Optional[str] = Query(None, description="Startup, Mid-size, Large, Enterprise"),
     employment_type: Optional[str] = Query(None, description="Full-time, Part-time, Contract, Internship"),
@@ -36,8 +37,16 @@ def list_jobs(
     """List and search Bengaluru job openings with filtering, pagination, and candidate match scores."""
     query = db.query(Job).options(
         joinedload(Job.company),
+        joinedload(Job.job_source),
         joinedload(Job.job_skills).joinedload(JobSkill.skill)
     ).filter(Job.status != "closed")
+
+    # Source Type Filter (Career Portal vs Job Platform)
+    if source_type:
+        if source_type == "job_portal":
+            query = query.join(Job.job_source).filter(JobSource.source_type == "job_portal")
+        elif source_type == "career_portal":
+            query = query.join(Job.job_source).filter(JobSource.source_type.in_(["career_portal", "ats_api", "career_page"]))
 
     # City Location Filter
     if location and location.lower() != "all":
@@ -120,6 +129,23 @@ def list_jobs(
         exp_label = f"{j.experience_min}-{j.experience_max} years" if j.experience_max > j.experience_min else f"{j.experience_min}+ years"
         is_new = (now - j.first_seen_at).total_seconds() < 86400  # Seen within 24h
 
+        # Determine source type and source name
+        src_type = "career_portal"
+        src_name = f"{comp_name} Careers"
+        if j.job_source:
+            if j.job_source.source_type == "job_portal":
+                src_type = "job_portal"
+                base_low = (j.job_source.base_url or "").lower()
+                if "arbeitnow" in base_low:
+                    src_name = "Arbeitnow"
+                elif "jobicy" in base_low:
+                    src_name = "Jobicy"
+                else:
+                    src_name = "Job Platform"
+            else:
+                src_type = "career_portal"
+                src_name = f"{comp_name} Careers"
+
         items.append(
             JobListItemResponse(
                 id=j.id,
@@ -135,6 +161,8 @@ def list_jobs(
                 experience_label=exp_label,
                 skills=extracted_skills,
                 apply_url=j.apply_url,
+                source_type=src_type,
+                source_name=src_name,
                 status=j.status,
                 posted_at=j.posted_at,
                 last_seen_at=j.last_seen_at,
@@ -162,6 +190,7 @@ def get_job_detail(
     """Get complete details, extracted skills, and candidate match breakdown for a specific job."""
     job = db.query(Job).options(
         joinedload(Job.company),
+        joinedload(Job.job_source),
         joinedload(Job.job_skills).joinedload(JobSkill.skill),
         joinedload(Job.history)
     ).filter(Job.id == job_id).first()
@@ -177,6 +206,23 @@ def get_job_detail(
     comp_logo = job.company.logo_url if job.company else None
     comp_domain = job.company.canonical_domain if job.company else None
     comp_careers = job.company.careers_url if job.company else None
+
+    # Determine source metadata
+    src_type = "career_portal"
+    src_name = f"{comp_name} Careers"
+    if job.job_source:
+        if job.job_source.source_type == "job_portal":
+            src_type = "job_portal"
+            base_low = (job.job_source.base_url or "").lower()
+            if "arbeitnow" in base_low:
+                src_name = "Arbeitnow"
+            elif "jobicy" in base_low:
+                src_name = "Jobicy"
+            else:
+                src_name = "Job Platform"
+        else:
+            src_type = "career_portal"
+            src_name = f"{comp_name} Careers"
 
     # Load candidate profile if logged in
     candidate_profile = None
@@ -225,6 +271,8 @@ def get_job_detail(
         description=job.description,
         canonical_url=job.canonical_url,
         apply_url=job.apply_url,
+        source_type=src_type,
+        source_name=src_name,
         status=job.status,
         posted_at=job.posted_at,
         last_seen_at=job.last_seen_at,

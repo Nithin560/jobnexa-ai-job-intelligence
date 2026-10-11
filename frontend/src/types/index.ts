@@ -22,6 +22,8 @@ export interface Job {
   experience_label: string;
   skills: string[];
   apply_url: string;
+  source_type?: 'career_portal' | 'job_portal';
+  source_name?: string;
   status: string;
   posted_at?: string;
   last_seen_at: string;
@@ -54,6 +56,8 @@ export interface AdminOverview {
   total_companies: number;
   active_sources: number;
   total_jobs: number;
+  career_portal_jobs?: number;
+  job_portal_jobs?: number;
   bengaluru_jobs: number;
   new_jobs_today: number;
   expired_jobs: number;
