@@ -107,63 +107,63 @@ export const HomePage: React.FC = () => {
     <div className="space-y-8 pb-16">
       
       {/* Hero Banner with Realistic Bengaluru Landmark (Vidhana Soudha) Background */}
-      <div className="relative overflow-hidden rounded-3xl text-white p-8 md:p-12 shadow-2xl bg-slate-900 min-h-[300px]">
+      <div className="relative overflow-hidden rounded-3xl text-white p-8 md:p-12 shadow-2xl min-h-[320px] flex items-center">
         
-        {/* Realistic Vidhana Soudha Background Image */}
+        {/* Realistic Vidhana Soudha Background Image - Enhanced Brightness & Clarity */}
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat filter brightness-110 contrast-105"
           style={{ backgroundImage: `url(${bengaluruBanner})` }}
         ></div>
 
-        {/* Realistic Contrast Overlay: Keeps the landmark visible while ensuring crisp text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/85 via-slate-900/65 to-slate-950/40"></div>
+        {/* Soft, Transparent Gradient Overlay: Keeps Vidhana Soudha bright, sunlit and clear */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-slate-950/15"></div>
 
         <div className="relative z-10 max-w-2xl space-y-4">
-          <div className="inline-flex items-center gap-2 bg-blue-500/25 backdrop-blur-md text-blue-300 border border-blue-400/30 text-xs font-bold px-3 py-1 rounded-full shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+          <div className="inline-flex items-center gap-2 bg-blue-600/30 backdrop-blur-md text-blue-200 border border-blue-400/40 text-xs font-bold px-3 py-1 rounded-full shadow-md">
+            <Sparkles className="w-3.5 h-3.5 text-blue-300" />
             <span>AI Powered Job Discovery</span>
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-black leading-tight tracking-tight drop-shadow-md">
+          <h1 className="text-3xl md:text-5xl font-black leading-tight tracking-tight drop-shadow-lg text-white">
             Discover <span className="text-blue-400">Bengaluru</span> Jobs
           </h1>
 
-          <p className="text-slate-200 text-sm md:text-base leading-relaxed drop-shadow-sm">
+          <p className="text-slate-100 text-sm md:text-base leading-relaxed drop-shadow-md font-medium">
             AI-powered job discovery from 1000+ companies. Updated daily. Direct application links. No middlemen.
           </p>
 
-          <div className="flex items-center gap-3 text-xs font-semibold text-slate-200 flex-wrap pt-2">
-            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🏢 Startups</span>
-            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🏢 Mid-size</span>
-            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🏢 Large Companies</span>
-            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">🔗 Direct Apply Links</span>
-            <span className="bg-slate-950/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/15">⚡ No Middlemen</span>
+          <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-100 flex-wrap pt-2">
+            <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🏢 Startups</span>
+            <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🏢 Mid-size</span>
+            <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🏢 Large Companies</span>
+            <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🔗 Direct Apply Links</span>
+            <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">⚡ No Middlemen</span>
           </div>
         </div>
 
-        {/* Hero Floating Stats Box */}
-        <div className="mt-8 md:mt-0 md:absolute md:top-8 md:right-8 bg-slate-950/65 backdrop-blur-md border border-white/20 p-5 rounded-2xl w-full md:w-80 space-y-3.5 shadow-2xl">
-          <div className="flex items-center justify-between border-b border-white/15 pb-2.5">
-            <span className="text-xs font-bold text-emerald-400 flex items-center gap-2">
+        {/* Hero Floating Stats Box - Clear Frosted Glass Blur Background */}
+        <div className="mt-8 md:mt-0 md:absolute md:top-8 md:right-8 bg-slate-900/40 backdrop-blur-xl border border-white/25 p-6 rounded-2xl w-full md:w-84 space-y-4 shadow-2xl">
+          <div className="flex items-center justify-between border-b border-white/20 pb-3">
+            <span className="text-xs font-bold text-emerald-400 flex items-center gap-2 drop-shadow-sm">
               <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Latest Scan Completed
             </span>
-            <span className="text-[11px] text-slate-300 font-medium">Today, 06:00 AM</span>
+            <span className="text-xs text-slate-200 font-medium">Today, 06:00 AM</span>
           </div>
-          <div className="space-y-2 text-xs text-slate-200 font-medium">
+          <div className="space-y-2.5 text-xs text-slate-100 font-medium">
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Companies Scanned:</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Companies Scanned:</span>
               <strong className="text-white font-black text-sm">1,248</strong>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Jobs Found:</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Jobs Found:</span>
               <strong className="text-white font-black text-sm">3,842</strong>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> New Jobs Today:</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> New Jobs Today:</span>
               <strong className="text-emerald-300 font-black text-sm">1,926</strong>
             </div>
             <div className="flex items-center justify-between">
-              <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Direct Application Links</span>
+              <span className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Direct Application Links:</span>
               <span className="text-emerald-400 font-bold text-xs">100% Direct</span>
             </div>
           </div>
