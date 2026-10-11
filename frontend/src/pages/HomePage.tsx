@@ -209,7 +209,7 @@ export const HomePage: React.FC = () => {
         >
           <div className="p-3 bg-amber-50 text-amber-600 rounded-xl shrink-0"><Rocket className="w-5 h-5" /></div>
           <div>
-            <div className="text-xs font-semibold text-slate-500">Startups</div>
+            <div className="text-xs font-semibold text-slate-500">Startups & Scale-ups</div>
             <div className="text-xl font-black text-slate-900">111</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
@@ -223,7 +223,7 @@ export const HomePage: React.FC = () => {
         >
           <div className="p-3 bg-teal-50 text-teal-600 rounded-xl shrink-0"><Building className="w-5 h-5" /></div>
           <div>
-            <div className="text-xs font-semibold text-slate-500">Mid-size</div>
+            <div className="text-xs font-semibold text-slate-500">Mid-Market</div>
             <div className="text-xl font-black text-slate-900">52</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
@@ -237,7 +237,7 @@ export const HomePage: React.FC = () => {
         >
           <div className="p-3 bg-purple-50 text-purple-600 rounded-xl shrink-0"><Building2 className="w-5 h-5" /></div>
           <div>
-            <div className="text-xs font-semibold text-slate-500">Enterprise</div>
+            <div className="text-xs font-semibold text-slate-500">Enterprise & MNCs</div>
             <div className="text-xl font-black text-slate-900">309</div>
             <div className="text-[10px] font-medium text-slate-400">Active hiring</div>
           </div>
@@ -308,13 +308,13 @@ export const HomePage: React.FC = () => {
             </div>
           </div>
 
-          {/* Company Category Buttons: Start Up's, Mid-size, Enterprise */}
+          {/* Company Category Buttons: Startups & Scale-ups, Mid-Market Enterprises, Enterprise & MNCs */}
           <div className="bg-white p-3 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-2.5">
             <div className="flex items-center gap-2 flex-wrap">
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', '')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   !filters.company_type
                     ? 'bg-slate-900 text-white shadow-xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200 hover:text-slate-900'
@@ -325,35 +325,38 @@ export const HomePage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', filters.company_type === 'Startup' ? '' : 'Startup')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   filters.company_type === 'Startup'
                     ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
+                title="Filter to venture-backed startups and high-growth scaleups"
               >
-                <Rocket className="w-3.5 h-3.5" /> Start Up's
+                <Rocket className="w-3.5 h-3.5 text-amber-500" /> Startups & Scale-ups
               </button>
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', filters.company_type === 'Mid-size' ? '' : 'Mid-size')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   filters.company_type === 'Mid-size'
                     ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
+                title="Filter to mid-market and mature tech enterprises"
               >
-                <Building className="w-3.5 h-3.5" /> Mid-size
+                <Building className="w-3.5 h-3.5 text-teal-600" /> Mid-Market Enterprises
               </button>
               <button
                 type="button"
                 onClick={() => handleFilterChange('company_type', filters.company_type === 'Enterprise' ? '' : 'Enterprise')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 ${
                   filters.company_type === 'Enterprise' || filters.company_type === 'Large'
                     ? 'bg-blue-600 text-white shadow-xs ring-2 ring-blue-200'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
                 }`}
+                title="Filter to Fortune 500, global multinationals & public tech giants"
               >
-                <Building2 className="w-3.5 h-3.5" /> Enterprise
+                <Building2 className="w-3.5 h-3.5 text-blue-600" /> Enterprise & MNCs
               </button>
             </div>
 

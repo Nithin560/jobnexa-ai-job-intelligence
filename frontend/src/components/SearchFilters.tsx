@@ -107,9 +107,9 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ filters, onFilterC
         <div className="space-y-2 text-sm text-slate-600">
           {[
             { label: 'All Companies', val: '' },
-            { label: 'Startups (111)', val: 'Startup' },
-            { label: 'Mid-size (52)', val: 'Mid-size' },
-            { label: 'Enterprise (309)', val: 'Enterprise' },
+            { label: 'Startups & Scale-ups (111)', val: 'Startup' },
+            { label: 'Mid-Market Companies (52)', val: 'Mid-size' },
+            { label: 'Enterprise & MNCs (309)', val: 'Enterprise' },
           ].map((type) => (
             <label key={type.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
               <input
