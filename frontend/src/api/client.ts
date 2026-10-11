@@ -19,11 +19,18 @@ apiClient.interceptors.request.use((config) => {
   return config;
 });
 
+export const isUserAuthenticated = (): boolean => {
+  const token = localStorage.getItem('access_token');
+  const sessionActive = sessionStorage.getItem('active_session');
+  return Boolean(token && sessionActive);
+};
+
 export const api = {
   // Authentication
   login: async (email: string, password: string) => {
     const response = await apiClient.post('/auth/login', { email, password });
     if (response.data.access_token) {
+      sessionStorage.setItem('active_session', 'true');
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('user_role', response.data.role);
       localStorage.setItem('user_email', response.data.email);
@@ -50,6 +57,7 @@ export const api = {
   verifyRegister: async (data: { email: string; otp: string; password: string; full_name?: string; role?: string }) => {
     const response = await apiClient.post('/auth/verify-register', data);
     if (response.data.access_token) {
+      sessionStorage.setItem('active_session', 'true');
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('user_role', response.data.role);
       localStorage.setItem('user_email', response.data.email);
@@ -60,6 +68,7 @@ export const api = {
   verifyOTPLogin: async (email: string, otp: string) => {
     const response = await apiClient.post('/auth/verify-otp-login', { email, otp });
     if (response.data.access_token) {
+      sessionStorage.setItem('active_session', 'true');
       localStorage.setItem('access_token', response.data.access_token);
       localStorage.setItem('user_role', response.data.role);
       localStorage.setItem('user_email', response.data.email);
@@ -84,6 +93,7 @@ export const api = {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_email');
+    sessionStorage.clear();
   },
 
   // Jobs Search & Details

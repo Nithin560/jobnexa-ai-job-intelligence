@@ -245,7 +245,7 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 onClick={() => {
                   api.logout();
-                  navigate('/');
+                  navigate('/login');
                   window.location.reload();
                 }}
                 className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-100 transition ml-1"

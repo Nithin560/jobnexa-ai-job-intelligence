@@ -15,8 +15,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const userEmail = localStorage.getItem('user_email');
 
   const handleLogout = () => {
-    localStorage.clear();
-    navigate('/');
+    api.logout();
+    navigate('/login');
     window.location.reload();
   };
 
