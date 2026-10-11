@@ -58,17 +58,26 @@ def seed_db(db: Session):
         else:
             skill_map[name] = existing
 
-    # 2. Seed Admin User & Default Candidate User
-    admin_user = db.query(User).filter(User.email == settings.ADMIN_EMAIL_ID).first()
-    if not admin_user:
-        admin_user = User(
-            email=settings.ADMIN_EMAIL_ID,
-            password_hash=get_password_hash(settings.ADMIN_PASSWORD),
-            role="admin"
-        )
-        db.add(admin_user)
-    else:
-        admin_user.password_hash = get_password_hash(settings.ADMIN_PASSWORD)
+    # 2. Seed Admin Users & Default Candidate User
+    admin_emails = [
+        settings.ADMIN_EMAIL_ID,
+        "jobnexaaiplatform@gmail.com"
+    ]
+    for a_email in admin_emails:
+        admin_obj = db.query(User).filter(User.email == a_email).first()
+        if not admin_obj:
+            admin_obj = User(
+                email=a_email,
+                password_hash=get_password_hash(settings.ADMIN_PASSWORD),
+                full_name="JobNexa Admin",
+                role="admin",
+                is_verified=True
+            )
+            db.add(admin_obj)
+        else:
+            admin_obj.password_hash = get_password_hash(settings.ADMIN_PASSWORD)
+            admin_obj.role = "admin"
+            admin_obj.is_verified = True
 
     candidate_user = db.query(User).filter(User.email == "nithin@example.com").first()
     if not candidate_user:

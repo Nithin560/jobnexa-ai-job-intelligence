@@ -73,7 +73,11 @@ export const api = {
   },
 
   quickLoginAsAdmin: async () => {
-    return api.login('nithinvandana26@gmail.com', '22H71A0560pandu@');
+    try {
+      return await api.login('jobnexaaiplatform@gmail.com', '22H71A0560pandu@');
+    } catch {
+      return await api.login('nithinvandana26@gmail.com', '22H71A0560pandu@');
+    }
   },
 
   logout: () => {
