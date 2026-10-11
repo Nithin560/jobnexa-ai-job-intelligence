@@ -4,7 +4,7 @@ import { api } from '../api/client';
 import { Job } from '../types';
 import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
-import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle } from 'lucide-react';
+import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, IndianRupee } from 'lucide-react';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -74,10 +74,32 @@ export const JobDetailPage: React.FC = () => {
                   </span>
                 )}
               </div>
+
+              {/* Hiring Role, Location, Salary Info Bar */}
+              <div className="flex items-center gap-2 mt-2.5 text-xs flex-wrap">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 text-blue-800 font-semibold border border-blue-100">
+                  <Briefcase className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="text-slate-500 font-normal">Role:</span>
+                  <span>{job.hiring_role || job.title}</span>
+                </span>
+
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 text-slate-700 font-semibold border border-slate-200">
+                  <MapPin className="w-4 h-4 text-rose-500 shrink-0" />
+                  <span className="text-slate-500 font-normal">Location:</span>
+                  <span>{job.location}</span>
+                </span>
+
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
+                  <IndianRupee className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span className="text-emerald-700 font-normal">Salary:</span>
+                  <span>{job.salary_label || '₹18 - 32 LPA'}</span>
+                </span>
+              </div>
+
               <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
-                <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {job.location}</span>
-                <span className="flex items-center gap-1"><Briefcase className="w-3.5 h-3.5" /> {job.experience_label}</span>
-                <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {job.work_mode}</span>
+                <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {job.experience_label}</span>
+                <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">{job.work_mode}</span>
+                <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">{job.employment_type}</span>
               </div>
             </div>
           </div>

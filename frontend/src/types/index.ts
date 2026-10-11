@@ -20,6 +20,10 @@ export interface Job {
   experience_min: number;
   experience_max: number;
   experience_label: string;
+  hiring_role?: string;
+  salary_min_lpa?: number;
+  salary_max_lpa?: number;
+  salary_label?: string;
   skills: string[];
   apply_url: string;
   source_type?: 'career_portal' | 'job_portal';

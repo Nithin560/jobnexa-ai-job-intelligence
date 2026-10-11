@@ -13,6 +13,7 @@ from app.schemas.job import JobListItemResponse, JobDetailResponse, JobListPagin
 from app.api.deps import get_optional_current_user
 from app.models.user import User
 from app.services.match_service import calculate_job_match
+from app.pipeline.normalizer import extract_hiring_role, calculate_salary_range
 
 router = APIRouter()
 
@@ -129,6 +130,9 @@ def list_jobs(
         exp_label = f"{j.experience_min}-{j.experience_max} years" if j.experience_max > j.experience_min else f"{j.experience_min}+ years"
         is_new = (now - j.first_seen_at).total_seconds() < 86400  # Seen within 24h
 
+        hiring_role = extract_hiring_role(j.title)
+        sal_min, sal_max, sal_label = calculate_salary_range(j.experience_min, j.experience_max, comp_type)
+
         # Determine source type and source name
         src_type = "career_portal"
         src_name = f"{comp_name} Careers"
@@ -159,6 +163,10 @@ def list_jobs(
                 experience_min=j.experience_min,
                 experience_max=j.experience_max,
                 experience_label=exp_label,
+                hiring_role=hiring_role,
+                salary_min_lpa=sal_min,
+                salary_max_lpa=sal_max,
+                salary_label=sal_label,
                 skills=extracted_skills,
                 apply_url=j.apply_url,
                 source_type=src_type,
@@ -254,6 +262,9 @@ def get_job_detail(
     exp_label = f"{job.experience_min}-{job.experience_max} years" if job.experience_max > job.experience_min else f"{job.experience_min}+ years"
     is_new = (datetime.utcnow() - job.first_seen_at).total_seconds() < 86400
 
+    hiring_role = extract_hiring_role(job.title)
+    sal_min, sal_max, sal_label = calculate_salary_range(job.experience_min, job.experience_max, comp_type)
+
     return JobDetailResponse(
         id=job.id,
         title=job.title,
@@ -268,6 +279,10 @@ def get_job_detail(
         experience_min=job.experience_min,
         experience_max=job.experience_max,
         experience_label=exp_label,
+        hiring_role=hiring_role,
+        salary_min_lpa=sal_min,
+        salary_max_lpa=sal_max,
+        salary_label=sal_label,
         description=job.description,
         canonical_url=job.canonical_url,
         apply_url=job.apply_url,

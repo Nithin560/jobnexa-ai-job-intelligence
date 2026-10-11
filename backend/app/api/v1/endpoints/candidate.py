@@ -10,6 +10,7 @@ from app.models.job import Job, JobSkill, SavedJob
 from app.api.deps import get_current_user
 from app.schemas.job import JobListItemResponse
 from app.services.match_service import calculate_job_match
+from app.pipeline.normalizer import extract_hiring_role, calculate_salary_range
 
 router = APIRouter()
 
@@ -139,6 +140,8 @@ def get_job_matches(
         match_breakdown = calculate_job_match(j, profile, candidate_skills)
 
         exp_label = f"{j.experience_min}-{j.experience_max} years" if j.experience_max > j.experience_min else f"{j.experience_min}+ years"
+        hiring_role = extract_hiring_role(j.title)
+        sal_min, sal_max, sal_label = calculate_salary_range(j.experience_min, j.experience_max, comp_type)
 
         matched_items.append(
             (
@@ -155,6 +158,10 @@ def get_job_matches(
                     experience_min=j.experience_min,
                     experience_max=j.experience_max,
                     experience_label=exp_label,
+                    hiring_role=hiring_role,
+                    salary_min_lpa=sal_min,
+                    salary_max_lpa=sal_max,
+                    salary_label=sal_label,
                     skills=extracted_skills,
                     apply_url=j.apply_url,
                     status=j.status,
@@ -198,6 +205,8 @@ def get_saved_jobs(
         extracted_skills = [js.skill.canonical_name for js in j.job_skills if js.skill]
         match_breakdown = calculate_job_match(j, profile, candidate_skills)
         exp_label = f"{j.experience_min}-{j.experience_max} years" if j.experience_max > j.experience_min else f"{j.experience_min}+ years"
+        hiring_role = extract_hiring_role(j.title)
+        sal_min, sal_max, sal_label = calculate_salary_range(j.experience_min, j.experience_max, comp_type)
 
         items.append(
             JobListItemResponse(
@@ -212,6 +221,10 @@ def get_saved_jobs(
                 experience_min=j.experience_min,
                 experience_max=j.experience_max,
                 experience_label=exp_label,
+                hiring_role=hiring_role,
+                salary_min_lpa=sal_min,
+                salary_max_lpa=sal_max,
+                salary_label=sal_label,
                 skills=extracted_skills,
                 apply_url=j.apply_url,
                 status=j.status,

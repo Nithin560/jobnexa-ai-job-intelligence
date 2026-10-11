@@ -33,6 +33,10 @@ class JobListItemResponse(BaseModel):
     experience_min: int
     experience_max: int
     experience_label: str
+    hiring_role: str = "Software Engineer"
+    salary_min_lpa: Optional[float] = 18.0
+    salary_max_lpa: Optional[float] = 32.0
+    salary_label: str = "₹18 - 32 LPA"
     skills: List[str] = Field(default_factory=list)
     apply_url: str
     source_type: str = "career_portal"  # career_portal or job_portal

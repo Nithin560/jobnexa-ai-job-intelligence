@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles, IndianRupee } from 'lucide-react';
 import { Job } from '../types';
 
 interface JobCardProps {
@@ -49,6 +49,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               )}
             </div>
 
+            {/* Company Name & Source Type */}
             <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
               <span className="font-semibold text-slate-800">{job.company_name}</span>
               <span className={`text-xs px-2 py-0.5 rounded-md border font-medium ${getCompanyBadgeColor(job.company_type)}`}>
@@ -65,16 +66,37 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               )}
             </div>
 
-            {/* Meta info: Location, Experience, Work Mode */}
-            <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 flex-wrap">
-              <span className="flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-slate-400" /> {job.location}
+            {/* Hiring Role, Location, Salary */}
+            <div className="flex items-center gap-2 mt-2.5 text-xs flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-blue-50 text-blue-800 font-semibold border border-blue-100">
+                <Briefcase className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <span className="text-slate-500 font-normal">Role:</span>
+                <span>{job.hiring_role || job.title}</span>
               </span>
-              <span className="flex items-center gap-1">
-                <Briefcase className="w-3.5 h-3.5 text-slate-400" /> {job.experience_label}
+
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-50 text-slate-700 font-semibold border border-slate-200">
+                <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                <span className="text-slate-500 font-normal">Location:</span>
+                <span>{job.location}</span>
               </span>
-              <span className="flex items-center gap-1 bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">
+
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 font-semibold border border-emerald-200">
+                <IndianRupee className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span className="text-emerald-700 font-normal">Salary:</span>
+                <span>{job.salary_label || '₹18 - 32 LPA'}</span>
+              </span>
+            </div>
+
+            {/* Meta info: Experience, Work Mode */}
+            <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 flex-wrap">
+              <span className="flex items-center gap-1">
+                <Clock className="w-3.5 h-3.5 text-slate-400" /> {job.experience_label}
+              </span>
+              <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">
                 {job.work_mode}
+              </span>
+              <span className="bg-slate-100 px-2 py-0.5 rounded text-slate-600 font-medium">
+                {job.employment_type}
               </span>
             </div>
 
