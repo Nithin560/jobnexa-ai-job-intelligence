@@ -1,13 +1,36 @@
+import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from typing import Optional
+from dotenv import load_dotenv
 from app.core.config import settings
+
+
+def get_smtp_credentials():
+    # Reload from .env if present
+    load_dotenv(override=True)
+    user = os.getenv("SMTP_USER") or settings.SMTP_USER
+    password = os.getenv("SMTP_PASSWORD") or settings.SMTP_PASSWORD
+    host = os.getenv("SMTP_HOST") or settings.SMTP_HOST or "smtp.gmail.com"
+    port_val = os.getenv("SMTP_PORT") or settings.SMTP_PORT or 587
+    port = int(port_val)
+    from_email = os.getenv("EMAILS_FROM_EMAIL") or settings.EMAILS_FROM_EMAIL or user
+    from_name = os.getenv("EMAILS_FROM_NAME") or settings.EMAILS_FROM_NAME or "JobNexa Intelligence"
+    return {
+        "user": user,
+        "password": password,
+        "host": host,
+        "port": port,
+        "from_email": from_email,
+        "from_name": from_name,
+    }
 
 
 def is_smtp_configured() -> bool:
     """Check if SMTP credentials have been provided."""
-    return bool(settings.SMTP_USER and settings.SMTP_PASSWORD)
+    creds = get_smtp_credentials()
+    return bool(creds["user"] and creds["password"])
 
 
 def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> bool:
@@ -74,12 +97,13 @@ def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> b
     plain_content = f"Your JobNexa verification code is: {otp_code}. It is valid for 10 minutes."
 
     # If SMTP is configured, attempt sending real email
-    if is_smtp_configured():
+    creds = get_smtp_credentials()
+    if creds["user"] and creds["password"]:
         try:
-            from_addr = settings.EMAILS_FROM_EMAIL or settings.SMTP_USER
+            from_addr = creds["from_email"]
             msg = MIMEMultipart("alternative")
             msg["Subject"] = subject
-            msg["From"] = f"{settings.EMAILS_FROM_NAME} <{from_addr}>"
+            msg["From"] = f"{creds['from_name']} <{from_addr}>"
             msg["To"] = to_email
 
             part1 = MIMEText(plain_content, "plain")
@@ -87,9 +111,9 @@ def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> b
             msg.attach(part1)
             msg.attach(part2)
 
-            with smtplib.SMTP(settings.SMTP_HOST, settings.SMTP_PORT, timeout=10) as server:
+            with smtplib.SMTP(creds["host"], creds["port"], timeout=10) as server:
                 server.starttls()
-                server.login(settings.SMTP_USER, settings.SMTP_PASSWORD)
+                server.login(creds["user"], creds["password"])
                 server.sendmail(from_addr, [to_email], msg.as_string())
 
             print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via SMTP")
