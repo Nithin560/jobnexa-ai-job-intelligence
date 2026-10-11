@@ -19,6 +19,32 @@ export function App() {
         {/* Full-Screen Admin Dashboard Route matching Image 1 */}
         <Route path="/admin" element={<AdminDashboardPage />} />
 
+        {/* Dedicated Full-Width Login & Register Routes with Landmark Background */}
+        <Route
+          path="/login"
+          element={
+            <div className="min-h-screen flex flex-col font-sans">
+              <Navbar onOpenAuth={() => setIsAuthOpen(true)} />
+              <main className="flex-1 flex flex-col">
+                <LoginPage />
+              </main>
+              <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+            </div>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <div className="min-h-screen flex flex-col font-sans">
+              <Navbar onOpenAuth={() => setIsAuthOpen(true)} />
+              <main className="flex-1 flex flex-col">
+                <RegisterPage />
+              </main>
+              <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+            </div>
+          }
+        />
+
         {/* Standard User-Facing Routes */}
         <Route
           path="*"
@@ -32,8 +58,6 @@ export function App() {
                   <Route path="/jobs/:id" element={<JobDetailPage />} />
                   <Route path="/dashboard" element={<UserDashboard />} />
                   <Route path="/profile" element={<CandidateProfilePage />} />
-                  <Route path="/login" element={<LoginPage />} />
-                  <Route path="/register" element={<RegisterPage />} />
                 </Routes>
               </main>
 

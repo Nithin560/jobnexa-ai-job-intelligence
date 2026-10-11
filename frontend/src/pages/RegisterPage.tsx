@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2 } from 'lucide-react';
 import { api } from '../api/client';
+import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
@@ -142,8 +143,18 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-8 px-4 sm:px-6">
-      <div className="max-w-md w-full bg-white rounded-3xl border border-slate-200 shadow-xl p-8 space-y-6 relative">
+    <div
+      className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 bg-cover bg-center bg-no-repeat"
+      style={{
+        backgroundImage: `url(${vidhanaSoudhaBg})`,
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Semi-transparent dark/blur atmospheric overlay */}
+      <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-[2px]" />
+
+      {/* Registration Card */}
+      <div className="relative z-10 max-w-md w-full bg-white/95 backdrop-blur-md rounded-3xl border border-white/80 shadow-2xl shadow-slate-950/30 p-8 space-y-6">
         
         {/* Back Link */}
         <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
