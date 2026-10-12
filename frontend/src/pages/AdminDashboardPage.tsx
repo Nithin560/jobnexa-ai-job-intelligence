@@ -6,7 +6,7 @@ import {
   Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
-  FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Terminal, Settings, LogOut,
+  FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Settings, LogOut,
   UserCheck, CheckCheck, X, GraduationCap
 } from 'lucide-react';
 import { 
@@ -193,7 +193,6 @@ export const AdminDashboardPage: React.FC = () => {
     { label: 'Data Quality', icon: ShieldCheck, badge: 'Verified' },
     { label: 'Analytics', icon: BarChart3, badge: 'Live' },
     { label: 'Job Alerts', icon: BellRing },
-    { label: 'System Logs', icon: Terminal },
     { label: 'Settings', icon: Settings },
   ];
 
@@ -285,40 +284,18 @@ export const AdminDashboardPage: React.FC = () => {
               </button>
             );
           })}
-        </nav>
 
-        {/* Sidebar Footer Info */}
-        <div className="p-4 border-t border-slate-800 text-slate-500 text-[11px] flex items-center justify-between">
-          <span className="font-semibold text-slate-400">BangaloreJobs Admin</span>
-          <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live
-          </span>
-        </div>
+          {/* Action Buttons in Sidebar (Placed directly after Settings) */}
+          <div className="pt-3 mt-2 border-t border-slate-800 space-y-2">
+            <div className="px-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+              Platform Actions
+            </div>
 
-      </aside>
-
-      {/* 2. Main Container & Top Navigation Header */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
-        
-        {/* Top Header Bar with Action Buttons in Navigation Bar */}
-        <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4">
-          
-          {/* Global Admin Search Bar */}
-          <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-60 md:w-72 lg:w-80 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
-            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search jobs, companies, sources, logs..."
-              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
-            />
-          </div>
-
-          {/* Action Buttons in Header Navigation Bar (Not in the last of Navigation Bar!) */}
-          <div className="flex items-center gap-2 shrink-0">
+            {/* 1. Scan Bangalore Portals */}
             <button
               onClick={handleManualScan}
               disabled={scanning}
-              className="py-2 px-3.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-sm transition flex items-center gap-2 whitespace-nowrap"
+              className="w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs rounded-xl shadow-md shadow-blue-600/20 transition flex items-center justify-center gap-2"
               title="Trigger Bangalore Job Crawlers"
             >
               {scanning ? (
@@ -334,15 +311,17 @@ export const AdminDashboardPage: React.FC = () => {
               )}
             </button>
 
+            {/* 2. Add Job Source */}
             <button
               onClick={() => setActiveTab('Job Sources')}
-              className="hidden lg:flex py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition items-center gap-1.5 border border-slate-200 whitespace-nowrap"
+              className="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs rounded-xl transition flex items-center gap-2 border border-slate-700/60"
               title="Add Job Source"
             >
-              <Plus className="w-3.5 h-3.5 text-emerald-600" />
+              <Plus className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
               <span>Add Job Source</span>
             </button>
 
+            {/* 3. Export Platform Data */}
             <button
               onClick={() => {
                 const blob = new Blob([JSON.stringify(overview, null, 2)], { type: 'application/json' });
@@ -352,12 +331,39 @@ export const AdminDashboardPage: React.FC = () => {
                 a.download = `bangalorejobs-export-${new Date().toISOString().slice(0,10)}.json`;
                 a.click();
               }}
-              className="hidden xl:flex py-2 px-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition items-center gap-1.5 border border-slate-200 whitespace-nowrap"
+              className="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs rounded-xl transition flex items-center gap-2 border border-slate-700/60"
               title="Export Platform Data"
             >
-              <Download className="w-3.5 h-3.5 text-purple-600" />
+              <Download className="w-3.5 h-3.5 text-purple-400 shrink-0" />
               <span>Export Data</span>
             </button>
+          </div>
+        </nav>
+
+        {/* Sidebar Footer Info */}
+        <div className="p-4 border-t border-slate-800 text-slate-500 text-[11px] flex items-center justify-between">
+          <span className="font-semibold text-slate-400">BangaloreJobs Admin</span>
+          <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live
+          </span>
+        </div>
+
+      </aside>
+
+      {/* 2. Main Container & Top Navigation Header */}
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+        
+        {/* Top Header Bar */}
+        <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4">
+          
+          {/* Global Admin Search Bar */}
+          <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-60 md:w-72 lg:w-80 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
+            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+            <input
+              type="text"
+              placeholder="Search jobs, companies, sources..."
+              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
+            />
           </div>
 
           {/* Top Right: Scan Metrics Widget, User Stats, Notifications & Profile */}
@@ -561,7 +567,6 @@ export const AdminDashboardPage: React.FC = () => {
                 {activeTab === 'Duplicate Detection' && 'Duplicate Detection & Deduplication'}
                 {activeTab === 'Data Quality' && 'Data Quality & Posting Verification'}
                 {activeTab === 'Job Alerts' && 'Job Alerts & Notification Dispatcher'}
-                {activeTab === 'System Logs' && 'System Execution & Crawler Logs'}
                 {activeTab === 'Settings' && 'Admin Platform Settings'}
               </h1>
               <p className="text-xs font-medium text-slate-500 mt-0.5">
@@ -576,7 +581,6 @@ export const AdminDashboardPage: React.FC = () => {
                 {activeTab === 'Duplicate Detection' && 'Content hash and fuzzy title deduplication across overlapping Bengaluru platforms'}
                 {activeTab === 'Data Quality' && 'Automated verification ensuring only non-expired, verified postings are published'}
                 {activeTab === 'Job Alerts' && 'Candidate alert dispatch triggers and notification subscriptions'}
-                {activeTab === 'System Logs' && 'Real-time diagnostic logs of crawler workers, API handlers, and database syncs'}
                 {activeTab === 'Settings' && 'Configure automated crawler schedules, API parameters, and platform preferences'}
               </p>
             </div>
@@ -1627,25 +1631,6 @@ export const AdminDashboardPage: React.FC = () => {
                 <p className="text-xs text-slate-500">
                   When a new job is scanned from any Bangalore portal, the system automatically dispatches real-time alerts to registered users whose experience tier matches the opening.
                 </p>
-              </div>
-            </div>
-          ) : activeTab === 'System Logs' ? (
-            /* System Logs Section */
-            <div className="space-y-6">
-              <div className="bg-slate-950 text-emerald-400 p-6 rounded-2xl font-mono text-xs shadow-inner overflow-x-auto space-y-2">
-                <div className="text-slate-400 border-b border-slate-800 pb-2 mb-3 flex items-center justify-between">
-                  <span>BangaloreJobs Scraper & Ingestion Daemon Log</span>
-                  <span className="text-emerald-400 font-bold">● LIVE TAIL</span>
-                </div>
-                <div>[2026-10-12 08:00:01] INFO  CrawlerScheduler: Starting daily Bangalore portal synchronization...</div>
-                <div>[2026-10-12 08:00:04] INFO  CrawlerWorker: Ingesting Google Careers (Bengaluru endpoints)... found 38 jobs.</div>
-                <div>[2026-10-12 08:00:09] INFO  CrawlerWorker: Ingesting Microsoft ATS (Bellandur endpoints)... found 42 jobs.</div>
-                <div>[2026-10-12 08:00:15] INFO  CrawlerWorker: Ingesting Amazon India (Rajajinagar endpoints)... found 51 jobs.</div>
-                <div>[2026-10-12 08:00:22] INFO  Deduplication: Content hash fingerprints computed. 62 duplicates filtered.</div>
-                <div>[2026-10-12 08:00:28] INFO  OllamaNLP: Skill normalization and experience classification completed.</div>
-                <div>[2026-10-12 08:00:35] INFO  DatabaseSync: 60 new Bengaluru jobs committed to SQLite / PostgreSQL.</div>
-                <div>[2026-10-12 08:00:36] SUCCESS Daily scan finished with code 0. Duration: 35.2s.</div>
-                <div className="text-slate-500 pt-2">[2026-10-12 13:00:00] HEALTH System daemon heartbeat OK. 6 active services online.</div>
               </div>
             </div>
           ) : activeTab === 'Settings' ? (
