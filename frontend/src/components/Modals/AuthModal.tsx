@@ -39,7 +39,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         }
 
         // Standard Password Login
-        const loginPassword = password.trim() || (role === 'admin' ? '22H71A0560pandu@' : 'NithinPass123!');
+        const loginPassword = password.trim();
         const data = await api.login(loginEmail, loginPassword);
         onClose();
         if (data.role === 'admin') {
@@ -86,13 +86,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
   const handleSelectRole = (selectedRole: 'candidate' | 'admin') => {
     setRole(selectedRole);
     setError('');
-    if (selectedRole === 'candidate') {
-      setEmail('nithin@example.com');
-      setPassword('NithinPass123!');
-    } else {
-      setEmail('jobnexaaiplatform@gmail.com');
-      setPassword('22H71A0560pandu@');
-    }
+    setEmail('');
+    setPassword('');
   };
 
   const handleQuickLogin = async (targetRole: 'candidate' | 'admin') => {
@@ -198,7 +193,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                 {mode === 'login' ? (role === 'admin' ? 'Admin Sign In' : 'Welcome to JobNexa') : 'Create Your Account'}
               </h3>
               <p className="text-xs text-slate-500 mt-1">
-                {role === 'admin' ? 'Sign in using Master Password or Email OTP' : 'Discover genuine verified jobs across Bengaluru'}
+                {role === 'admin' ? 'Sign in using Password or Email OTP' : 'Discover genuine verified jobs across Bengaluru'}
               </p>
             </div>
 
@@ -305,7 +300,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               {!(role === 'admin' && adminAuthType === 'otp') && (
                 <div>
                   <label className="text-xs font-semibold text-slate-700 block mb-1">
-                    {role === 'admin' ? 'Admin Master Password' : 'Password'}
+                    Password
                   </label>
                   <div className="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 focus-within:border-blue-600 focus-within:bg-white transition">
                     <Lock className="w-4 h-4 text-slate-400 mr-2" />

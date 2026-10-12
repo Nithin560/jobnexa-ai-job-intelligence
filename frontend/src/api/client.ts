@@ -32,6 +32,10 @@ export const api = {
       sessionStorage.setItem('access_token', response.data.access_token);
       sessionStorage.setItem('user_role', response.data.role);
       sessionStorage.setItem('user_email', response.data.email);
+      if (response.data.experience_tier) {
+        sessionStorage.setItem('user_experience_tier', response.data.experience_tier);
+        localStorage.setItem('user_experience_tier', response.data.experience_tier);
+      }
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_role');
       localStorage.removeItem('user_email');
@@ -39,8 +43,8 @@ export const api = {
     return response.data;
   },
 
-  register: async (email: string, password: string, role = 'candidate') => {
-    const response = await apiClient.post('/auth/register', { email, password, role });
+  register: async (email: string, password: string, role = 'candidate', experience_tier = 'fresher', years_experience = 0) => {
+    const response = await apiClient.post('/auth/register', { email, password, role, experience_tier, years_experience });
     return response.data;
   },
 
@@ -55,12 +59,24 @@ export const api = {
     return response.data;
   },
 
-  verifyRegister: async (data: { email: string; otp: string; password: string; full_name?: string; role?: string }) => {
+  verifyRegister: async (data: {
+    email: string;
+    otp: string;
+    password: string;
+    full_name?: string;
+    role?: string;
+    experience_tier?: string;
+    years_experience?: number;
+  }) => {
     const response = await apiClient.post('/auth/verify-register', data);
     if (response.data.access_token) {
       sessionStorage.setItem('access_token', response.data.access_token);
       sessionStorage.setItem('user_role', response.data.role);
       sessionStorage.setItem('user_email', response.data.email);
+      if (response.data.experience_tier) {
+        sessionStorage.setItem('user_experience_tier', response.data.experience_tier);
+        localStorage.setItem('user_experience_tier', response.data.experience_tier);
+      }
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_role');
       localStorage.removeItem('user_email');
@@ -74,6 +90,10 @@ export const api = {
       sessionStorage.setItem('access_token', response.data.access_token);
       sessionStorage.setItem('user_role', response.data.role);
       sessionStorage.setItem('user_email', response.data.email);
+      if (response.data.experience_tier) {
+        sessionStorage.setItem('user_experience_tier', response.data.experience_tier);
+        localStorage.setItem('user_experience_tier', response.data.experience_tier);
+      }
       localStorage.removeItem('access_token');
       localStorage.removeItem('user_role');
       localStorage.removeItem('user_email');
@@ -87,11 +107,7 @@ export const api = {
   },
 
   quickLoginAsAdmin: async () => {
-    try {
-      return await api.login('jobnexaaiplatform@gmail.com', '22H71A0560pandu@');
-    } catch {
-      return await api.login('nithinvandana26@gmail.com', '22H71A0560pandu@');
-    }
+    return await api.login('jobnexaaiplatform@gmail.com', '22H71A0560pandu@');
   },
 
   logout: () => {
@@ -99,6 +115,7 @@ export const api = {
     localStorage.removeItem('access_token');
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_email');
+    localStorage.removeItem('user_experience_tier');
   },
 
   // Jobs Search & Details

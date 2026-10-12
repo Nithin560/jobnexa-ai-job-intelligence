@@ -43,6 +43,7 @@ def list_jobs(
     employment_type: Optional[str] = Query(None, description="Full-time, Part-time, Contract, Internship"),
     exp_min: Optional[int] = Query(None, ge=0),
     exp_max: Optional[int] = Query(None, le=30),
+    exp_tier: Optional[str] = Query(None, description="Filter specifically for 'fresher' (0-1 yrs) or 'experienced' (>1 yrs)"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     sort_by: str = Query("relevance", description="relevance or date"),
@@ -98,8 +99,12 @@ def list_jobs(
         else:
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
 
-    # Experience Filter
-    if exp_min is not None and exp_max is not None:
+    # Experience Filter (Strict Fresher vs Experienced Separation)
+    if exp_tier == "fresher":
+        query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)
+    elif exp_tier == "experienced":
+        query = query.filter(or_(Job.experience_min >= 1, Job.experience_max > 1))
+    elif exp_min is not None and exp_max is not None:
         if exp_min == 0 and exp_max <= 1:
             # Strict Fresher filter: 0 to 1 years only
             query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)

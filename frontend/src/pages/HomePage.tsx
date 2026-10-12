@@ -6,7 +6,8 @@ import { Job, MarketInsights } from '../types';
 import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
-  Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight
+  Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight,
+  GraduationCap
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
@@ -48,6 +49,14 @@ export const HomePage: React.FC = () => {
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 4; // Display jobs up to the recent scan section
 
+  // User's experience tier (auto-initialized from registered user profile or toggleable)
+  const [activeExpTab, setActiveExpTab] = useState<'all' | 'fresher' | 'experienced'>(() => {
+    const savedTier = sessionStorage.getItem('user_experience_tier') || localStorage.getItem('user_experience_tier');
+    if (savedTier === 'fresher') return 'fresher';
+    if (savedTier === 'experienced') return 'experienced';
+    return 'all';
+  });
+
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
     work_mode: '',
@@ -79,9 +88,20 @@ export const HomePage: React.FC = () => {
     try {
       let exp_min: number | undefined = undefined;
       let exp_max: number | undefined = undefined;
+      let exp_tier: string | undefined = undefined;
+
+      if (activeExpTab === 'fresher') {
+        exp_tier = 'fresher';
+        exp_min = 0;
+        exp_max = 1;
+      } else if (activeExpTab === 'experienced') {
+        exp_tier = 'experienced';
+      }
+
       if (filters.experience_level === '0' || filters.experience_level === '0-1') {
         exp_min = 0;
         exp_max = 1;
+        exp_tier = 'fresher';
       } else if (filters.experience_level === '1-3') {
         exp_min = 1;
         exp_max = 3;
@@ -105,6 +125,7 @@ export const HomePage: React.FC = () => {
         employment_type: filters.employment_type || undefined,
         exp_min: exp_min,
         exp_max: exp_max,
+        exp_tier: exp_tier,
         page: page,
         page_size: pageSize,
       });
@@ -123,20 +144,41 @@ export const HomePage: React.FC = () => {
     }
   };
 
-
   useEffect(() => {
     setPage(1);
-  }, [searchParams, filters]);
+  }, [searchParams, filters, activeExpTab]);
 
   useEffect(() => {
     fetchJobs();
-  }, [searchParams, filters, page]);
+  }, [searchParams, filters, page, activeExpTab]);
 
   const handleFilterChange = (key: string, value: string) => {
+    if (key === 'experience_level') {
+      if (value === '0') {
+        setActiveExpTab('fresher');
+      } else if (value) {
+        setActiveExpTab('experienced');
+      } else {
+        setActiveExpTab('all');
+      }
+    }
     setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleTabChange = (tab: 'all' | 'fresher' | 'experienced') => {
+    setActiveExpTab(tab);
+    setPage(1);
+    if (tab === 'fresher') {
+      setFilters((prev) => ({ ...prev, experience_level: '0' }));
+    } else if (tab === 'experienced') {
+      setFilters((prev) => ({ ...prev, experience_level: '' }));
+    } else {
+      setFilters((prev) => ({ ...prev, experience_level: '' }));
+    }
+  };
+
   const handleClearFilters = () => {
+    setActiveExpTab('all');
     setFilters({ source_type: '', work_mode: '', company_type: '', employment_type: '', experience_level: '' });
   };
 
@@ -317,10 +359,72 @@ export const HomePage: React.FC = () => {
         {/* Center Column: Job Listings Feed (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           
+          {/* Dedicated Experience Separation Tabs (Fresher vs Experienced) */}
+          <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1.5 flex-wrap sm:flex-nowrap">
+            <button
+              type="button"
+              onClick={() => handleTabChange('fresher')}
+              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                activeExpTab === 'fresher'
+                  ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              <GraduationCap className="w-4 h-4 shrink-0" />
+              <span>Fresher Jobs (0 - 1 Yrs)</span>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                activeExpTab === 'fresher' ? 'bg-blue-700 text-white' : 'bg-blue-100 text-blue-700'
+              }`}>
+                54
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleTabChange('experienced')}
+              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                activeExpTab === 'experienced'
+                  ? 'bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-100'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              }`}
+            >
+              <Briefcase className="w-4 h-4 shrink-0" />
+              <span>Experienced Jobs (1+ Yrs)</span>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                activeExpTab === 'experienced' ? 'bg-indigo-700 text-white' : 'bg-indigo-100 text-indigo-700'
+              }`}>
+                418
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => handleTabChange('all')}
+              className={`py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                activeExpTab === 'all'
+                  ? 'bg-slate-900 text-white shadow-sm'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+              }`}
+            >
+              <span>All Jobs</span>
+              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
+                activeExpTab === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
+              }`}>
+                472
+              </span>
+            </button>
+          </div>
+
           {/* Feed Header with Previous and Next Arrows */}
           <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-3">
             <div>
-              <h2 className="text-lg font-black text-slate-900">Jobs in Bengaluru</h2>
+              <h2 className="text-lg font-black text-slate-900">
+                {activeExpTab === 'fresher' 
+                  ? '🎓 Fresher Jobs (0 - 1 Years)' 
+                  : activeExpTab === 'experienced' 
+                  ? '💼 Experienced Jobs (> 1 Years)' 
+                  : 'Jobs in Bengaluru'}
+              </h2>
               <p className="text-xs text-slate-500 font-medium">
                 Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs
               </p>

@@ -30,9 +30,7 @@ export const LoginPage: React.FC = () => {
   const [authMethod, setAuthMethod] = useState<'password' | 'otp' | 'two_factor'>('password');
 
   // Input states
-  const [email, setEmail] = useState(
-    initialRole === 'admin' ? 'jobnexaaiplatform@gmail.com' : ''
-  );
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,22 +45,17 @@ export const LoginPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);
 
-  // When changing portal role, adjust default email
+  // When changing portal role, reset input fields
   const handleRoleChange = (newRole: 'candidate' | 'admin') => {
     setPortalRole(newRole);
     setError(null);
     setSuccessMsg(null);
     setOtpStep('request');
     setOtpDigits(['', '', '', '', '', '']);
-    if (newRole === 'admin') {
-      setEmail('jobnexaaiplatform@gmail.com');
-      setPassword('22H71A0560pandu@');
-    } else {
-      setEmail('');
-      setPassword('');
-      if (authMethod === 'two_factor') {
-        setAuthMethod('password');
-      }
+    setEmail('');
+    setPassword('');
+    if (newRole !== 'admin' && authMethod === 'two_factor') {
+      setAuthMethod('password');
     }
   };
 
@@ -283,7 +276,7 @@ export const LoginPage: React.FC = () => {
               </div>
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">Admin Sign-In</h1>
               <p className="text-xs text-slate-500 font-medium">
-                Log in via Email OTP, Master Password, or Two-Factor Authentication
+                Log in via Email OTP, Password, or Two-Factor Authentication
               </p>
             </>
           ) : (
@@ -328,48 +321,6 @@ export const LoginPage: React.FC = () => {
           )}
         </div>
 
-        {/* Admin Quick Email Switcher */}
-        {portalRole === 'admin' && (
-          <div className="bg-amber-50/70 border border-amber-200/60 rounded-2xl p-3 space-y-2">
-            <div className="text-[11px] font-bold text-amber-900 flex items-center justify-between">
-              <span>Admin Accounts:</span>
-              <span className="text-[10px] text-amber-700">Verified</span>
-            </div>
-            <div className="grid grid-cols-2 gap-1.5">
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('jobnexaaiplatform@gmail.com');
-                  setPassword('22H71A0560pandu@');
-                }}
-                className={`px-2.5 py-1.5 text-left rounded-xl text-[11px] font-semibold border transition truncate ${
-                  email === 'jobnexaaiplatform@gmail.com'
-                    ? 'bg-amber-600 text-white border-amber-600'
-                    : 'bg-white text-slate-700 border-amber-200 hover:bg-amber-100/50'
-                }`}
-                title="Super Admin: jobnexaaiplatform@gmail.com"
-              >
-                Super Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  setEmail('nithinvandana26@gmail.com');
-                  setPassword('22H71A0560pandu@');
-                }}
-                className={`px-2.5 py-1.5 text-left rounded-xl text-[11px] font-semibold border transition truncate ${
-                  email === 'nithinvandana26@gmail.com'
-                    ? 'bg-amber-600 text-white border-amber-600'
-                    : 'bg-white text-slate-700 border-amber-200 hover:bg-amber-100/50'
-                }`}
-                title="System Admin: nithinvandana26@gmail.com"
-              >
-                System Admin
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Error / Success Alerts */}
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl text-xs font-medium flex items-center gap-2">
@@ -409,7 +360,7 @@ export const LoginPage: React.FC = () => {
           <form onSubmit={handlePasswordLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                {portalRole === 'admin' ? 'Administrator Email' : 'Email Address'}
+                {portalRole === 'admin' ? 'Admin Email' : 'Email Address'}
               </label>
               <div className="relative">
                 <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
@@ -426,7 +377,7 @@ export const LoginPage: React.FC = () => {
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                {portalRole === 'admin' ? 'Admin Master Password' : 'Password'}
+                Password
               </label>
               <div className="relative">
                 <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />

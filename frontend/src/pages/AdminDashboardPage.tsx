@@ -395,7 +395,7 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
               <div className="hidden sm:block text-left max-w-[150px] truncate">
                 <div className="text-xs font-bold text-slate-800 leading-none truncate">
-                  {sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Super Admin'}
+                  {sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Admin'}
                 </div>
                 <div className="text-[10px] text-amber-700 font-semibold mt-0.5">Admin Security</div>
               </div>

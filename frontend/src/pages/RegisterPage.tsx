@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2 } from 'lucide-react';
+import { Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
 import { api } from '../api/client';
 import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
 
@@ -10,6 +10,8 @@ export const RegisterPage: React.FC = () => {
 
   // Form Fields
   const [role, setRole] = useState<'candidate' | 'admin'>('candidate');
+  const [experienceTier, setExperienceTier] = useState<'fresher' | 'experienced'>('fresher');
+  const [yearsExperience, setYearsExperience] = useState<number>(2);
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -110,12 +112,18 @@ export const RegisterPage: React.FC = () => {
         otp: code,
         password: password,
         full_name: fullName.trim() || undefined,
-        role: role
+        role: role,
+        experience_tier: role === 'candidate' ? experienceTier : undefined,
+        years_experience: role === 'candidate' ? (experienceTier === 'fresher' ? 0 : yearsExperience) : undefined,
       });
+      if (role === 'candidate') {
+        sessionStorage.setItem('user_experience_tier', experienceTier);
+        localStorage.setItem('user_experience_tier', experienceTier);
+      }
       if (data.role === 'admin') {
         navigate('/admin');
       } else {
-        navigate('/profile');
+        navigate('/');
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Verification failed. Please ensure the code is correct.');
@@ -258,6 +266,73 @@ export const RegisterPage: React.FC = () => {
                 </div>
               </div>
             </div>
+
+            {/* Experience Level Selector for Normal User */}
+            {role === 'candidate' && (
+              <div className="space-y-2 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80">
+                <div className="flex items-center justify-between">
+                  <label className="block text-xs font-bold text-slate-800">
+                    Experience Level:
+                  </label>
+                  <span className="text-[10px] text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                    {experienceTier === 'fresher' ? '0 - 1 Years' : `${yearsExperience}+ Years`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2">
+                  <div
+                    onClick={() => setExperienceTier('fresher')}
+                    className={`p-3 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
+                      experienceTier === 'fresher'
+                        ? 'border-blue-600 bg-white text-blue-900 ring-2 ring-blue-100 shadow-xs'
+                        : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white/60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <GraduationCap className="w-4 h-4 text-blue-600 shrink-0" />
+                      <div className="text-xs font-bold">Fresher</div>
+                    </div>
+                    <div className="text-[10px] text-slate-500 font-medium mt-1 leading-snug">
+                      0 - 1 Years (Entry-level & fresh graduates)
+                    </div>
+                  </div>
+
+                  <div
+                    onClick={() => setExperienceTier('experienced')}
+                    className={`p-3 rounded-xl border cursor-pointer transition flex flex-col justify-between ${
+                      experienceTier === 'experienced'
+                        ? 'border-indigo-600 bg-white text-indigo-900 ring-2 ring-indigo-100 shadow-xs'
+                        : 'border-slate-200 hover:border-slate-300 text-slate-700 bg-white/60'
+                    }`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <Briefcase className="w-4 h-4 text-indigo-600 shrink-0" />
+                      <div className="text-xs font-bold">Experienced</div>
+                    </div>
+                    <div className="text-[10px] text-slate-500 font-medium mt-1 leading-snug">
+                      1+ Years (Industry professionals)
+                    </div>
+                  </div>
+                </div>
+
+                {experienceTier === 'experienced' && (
+                  <div className="pt-2 flex items-center justify-between border-t border-slate-200/60 mt-2 text-xs">
+                    <span className="text-slate-600 font-medium">Years of Experience:</span>
+                    <select
+                      value={yearsExperience}
+                      onChange={(e) => setYearsExperience(Number(e.target.value))}
+                      className="bg-white border border-slate-200 rounded-lg px-2.5 py-1 font-bold text-slate-800 text-xs outline-none"
+                    >
+                      <option value={1}>1 - 2 Years</option>
+                      <option value={3}>3 - 5 Years</option>
+                      <option value={5}>5 - 8 Years</option>
+                      <option value={8}>8 - 10 Years</option>
+                      <option value={10}>10+ Years</option>
+                    </select>
+                  </div>
+                )}
+              </div>
+            )}
 
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">Full Name</label>

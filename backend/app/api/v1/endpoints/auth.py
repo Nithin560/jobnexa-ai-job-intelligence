@@ -139,19 +139,24 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     # Initialize candidate profile
+    exp_tier = None
+    years = None
     if new_user.role == "candidate":
+        exp_tier = req.experience_tier if req.experience_tier in ["fresher", "experienced"] else "fresher"
+        years = 0 if exp_tier == "fresher" else max(req.years_experience or 2, 1)
+        target_title = "Fresher Software Engineer" if exp_tier == "fresher" else "Software Engineer"
         profile = CandidateProfile(
             user_id=new_user.id,
-            target_titles=["Software Engineer", "Backend Engineer"],
+            target_titles=[target_title, "Backend Engineer"],
             location_preferences=["Bengaluru"],
-            years_experience=2,
+            years_experience=years,
             work_mode="Hybrid"
         )
         db.add(profile)
         db.commit()
 
     # Record real Admin Notification for user registration with date & time
-    role_label = "Admin" if new_user.role == "admin" else "User"
+    role_label = "Admin" if new_user.role == "admin" else f"User ({'Fresher' if exp_tier == 'fresher' else 'Experienced'})"
     admin_notif = AdminNotification(
         category="user_registration",
         title="New User Registered",
@@ -160,7 +165,9 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
             "email": new_user.email,
             "full_name": new_user.full_name or new_user.email.split('@')[0],
             "role": new_user.role,
-            "user_id": new_user.id
+            "user_id": new_user.id,
+            "experience_tier": exp_tier,
+            "years_experience": years
         },
         created_at=now
     )
@@ -173,7 +180,9 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
         token_type="bearer",
         role=new_user.role,
         user_id=new_user.id,
-        email=new_user.email
+        email=new_user.email,
+        experience_tier=exp_tier,
+        years_experience=years
     )
 
 
@@ -229,13 +238,23 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
     user.is_verified = True
     db.commit()
 
+    exp_tier = None
+    years = None
+    if user.role == "candidate":
+        profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == user.id).first()
+        if profile:
+            years = profile.years_experience
+            exp_tier = "fresher" if profile.years_experience <= 1 else "experienced"
+
     access_token = create_access_token(subject=user.id)
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
         role=user.role,
         user_id=user.id,
-        email=user.email
+        email=user.email,
+        experience_tier=exp_tier,
+        years_experience=years
     )
 
 
@@ -260,19 +279,24 @@ def register(user_in: UserRegister, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(user)
 
+    exp_tier = None
+    years = None
     if user.role == "candidate":
+        exp_tier = user_in.experience_tier if user_in.experience_tier in ["fresher", "experienced"] else "fresher"
+        years = 0 if exp_tier == "fresher" else max(user_in.years_experience or 2, 1)
+        target_title = "Fresher Software Engineer" if exp_tier == "fresher" else "Software Engineer"
         profile = CandidateProfile(
             user_id=user.id,
-            target_titles=["Backend Engineer", "Software Engineer"],
+            target_titles=[target_title, "Backend Engineer"],
             location_preferences=["Bengaluru"],
-            years_experience=2,
+            years_experience=years,
             work_mode="Hybrid"
         )
         db.add(profile)
         db.commit()
 
     # Record Admin Notification
-    role_label = "Admin" if user.role == "admin" else "User"
+    role_label = "Admin" if user.role == "admin" else f"User ({'Fresher' if exp_tier == 'fresher' else 'Experienced'})"
     admin_notif = AdminNotification(
         category="user_registration",
         title="New User Registered",
@@ -281,7 +305,9 @@ def register(user_in: UserRegister, db: Session = Depends(get_db)):
             "email": user.email,
             "full_name": user_in.full_name or user.email.split('@')[0],
             "role": user.role,
-            "user_id": user.id
+            "user_id": user.id,
+            "experience_tier": exp_tier,
+            "years_experience": years
         },
         created_at=datetime.utcnow()
     )
@@ -308,13 +334,23 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
             detail="Account is disabled"
         )
     
+    exp_tier = None
+    years = None
+    if user.role == "candidate":
+        profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == user.id).first()
+        if profile:
+            years = profile.years_experience
+            exp_tier = "fresher" if profile.years_experience <= 1 else "experienced"
+
     access_token = create_access_token(subject=user.id)
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
         role=user.role,
         user_id=user.id,
-        email=user.email
+        email=user.email,
+        experience_tier=exp_tier,
+        years_experience=years
     )
 
 

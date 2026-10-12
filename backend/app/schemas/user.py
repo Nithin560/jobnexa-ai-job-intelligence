@@ -8,6 +8,8 @@ class UserRegister(BaseModel):
     password: str = Field(..., min_length=6)
     full_name: Optional[str] = None
     role: str = Field(default="candidate")  # "candidate" or "admin"
+    experience_tier: Optional[str] = Field(default="fresher")  # "fresher" or "experienced"
+    years_experience: Optional[int] = Field(default=0)
 
 
 class UserLogin(BaseModel):
@@ -21,6 +23,8 @@ class TokenResponse(BaseModel):
     role: str
     user_id: str
     email: str
+    experience_tier: Optional[str] = None
+    years_experience: Optional[int] = None
 
 
 class UserResponse(BaseModel):
@@ -55,6 +59,8 @@ class VerifyRegisterRequest(BaseModel):
     password: str = Field(..., min_length=6)
     full_name: Optional[str] = None
     role: str = Field(default="candidate")  # "candidate" or "admin"
+    experience_tier: Optional[str] = Field(default="fresher")  # "fresher" or "experienced"
+    years_experience: Optional[int] = Field(default=0)
 
 
 class VerifyOTPLoginRequest(BaseModel):
