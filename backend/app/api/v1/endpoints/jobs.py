@@ -106,7 +106,8 @@ def list_jobs(
         if cand_prof:
             candidate_tier = "fresher" if cand_prof.years_experience <= 1 else "experienced"
 
-    effective_tier = exp_tier or candidate_tier
+    # Authenticated candidate profile is authoritative; otherwise use exp_tier for guests
+    effective_tier = candidate_tier if candidate_tier else exp_tier
 
     # Experience Filter (Strict Fresher vs Experienced Account Separation)
     if effective_tier == "fresher":

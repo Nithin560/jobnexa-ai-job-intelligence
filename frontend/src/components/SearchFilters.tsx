@@ -11,6 +11,7 @@ interface SearchFiltersProps {
     experience_level?: string;
   };
   insights?: MarketInsights | null;
+  activeTier?: 'all' | 'fresher' | 'experienced';
   onFilterChange: (key: string, value: string) => void;
   onClear: () => void;
 }
@@ -18,9 +19,11 @@ interface SearchFiltersProps {
 export const SearchFilters: React.FC<SearchFiltersProps> = ({ 
   filters, 
   insights, 
+  activeTier,
   onFilterChange, 
   onClear 
 }) => {
+  const effectiveTier = activeTier || sessionStorage.getItem('user_experience_tier') || 'all';
   // Helper to resolve experience tier count from live insights or exact database counts
   const getExpCount = (tierName: string, defaultVal: number) => {
     if (!insights?.experience_breakdown) return defaultVal;
@@ -118,7 +121,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
       {/* Experience Level (Tailored to logged-in user tier) */}
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Experience Level</h4>
-        {sessionStorage.getItem('user_experience_tier') === 'fresher' ? (
+        {effectiveTier === 'fresher' ? (
           <div className="bg-blue-50/80 border border-blue-200 text-blue-900 rounded-xl p-3 text-xs flex items-center justify-between">
             <span className="flex items-center gap-2 font-bold">
               <GraduationCap className="w-4 h-4 text-blue-600" />
@@ -131,7 +134,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         ) : (
           <div className="space-y-2 text-sm text-slate-600">
             {experienceOptions
-              .filter(exp => sessionStorage.getItem('user_experience_tier') === 'experienced' ? exp.val !== '0' : true)
+              .filter(exp => effectiveTier === 'experienced' ? exp.val !== '0' : true)
               .map((exp) => (
                 <label key={exp.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
                   <input

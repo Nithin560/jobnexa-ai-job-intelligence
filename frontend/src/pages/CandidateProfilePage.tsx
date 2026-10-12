@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { CandidateProfile } from '../types';
-import { User, Briefcase, MapPin, Award, Check } from 'lucide-react';
+import { User, Briefcase, MapPin, Award, Check, Loader2 } from 'lucide-react';
 
 export const CandidateProfilePage: React.FC = () => {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [targetTitle, setTargetTitle] = useState('Backend Software Engineer');
-  const [exp, setExp] = useState(2);
+  const [exp, setExp] = useState(0);
   const [workMode, setWorkMode] = useState('Hybrid');
   const [newSkill, setNewSkill] = useState('');
   const [skills, setSkills] = useState<string[]>(['Python', 'FastAPI', 'PostgreSQL', 'Docker', 'AWS']);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const fetchProf = async () => {
@@ -18,7 +21,7 @@ export const CandidateProfilePage: React.FC = () => {
         const data = await api.getProfile();
         setProfile(data);
         if (data.target_titles.length) setTargetTitle(data.target_titles[0]);
-        if (data.years_experience) setExp(data.years_experience);
+        if (typeof data.years_experience === 'number') setExp(data.years_experience);
         if (data.work_mode) setWorkMode(data.work_mode);
         if (data.skills.length) setSkills(data.skills);
       } catch (err) {
@@ -41,17 +44,36 @@ export const CandidateProfilePage: React.FC = () => {
 
   const handleSave = async () => {
     try {
+      setSaving(true);
+      const parsedExp = Number(exp) || 0;
       await api.updateProfile({
         target_titles: [targetTitle],
         location_preferences: ['Bengaluru'],
-        years_experience: exp,
+        years_experience: parsedExp,
         work_mode: workMode,
         skills: skills,
       });
+
+      // Update experience tier in session and local storage
+      const newTier: 'fresher' | 'experienced' = parsedExp <= 1 ? 'fresher' : 'experienced';
+      sessionStorage.setItem('user_experience_tier', newTier);
+      localStorage.setItem('user_experience_tier', newTier);
+      sessionStorage.setItem('years_experience', String(parsedExp));
+      localStorage.setItem('years_experience', String(parsedExp));
+
+      // Broadcast tier change event to active listeners
+      window.dispatchEvent(new CustomEvent('userTierChanged', { detail: { tier: newTier, years: parsedExp } }));
+
       setSaved(true);
-      setTimeout(() => setSaved(false), 3000);
+      // Give brief feedback then smoothly redirect to Home page
+      setTimeout(() => {
+        navigate('/', { replace: true });
+      }, 700);
     } catch (err) {
-      alert('Error updating profile.');
+      console.error(err);
+      alert('Error updating profile. Please check your connection and retry.');
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -70,8 +92,14 @@ export const CandidateProfilePage: React.FC = () => {
         </div>
 
         {saved && (
-          <div className="bg-emerald-50 text-emerald-700 p-3 rounded-xl text-xs font-semibold flex items-center gap-2 border border-emerald-200">
-            <Check className="w-4 h-4" /> Profile updated successfully!
+          <div className="bg-emerald-50 text-emerald-800 p-4 rounded-2xl text-xs font-bold flex items-center justify-between border border-emerald-200">
+            <div className="flex items-center gap-2">
+              <Check className="w-4 h-4 text-emerald-600" />
+              <span>
+                Profile updated! Feed configured for {exp <= 1 ? 'Fresher (0 - 1 Years)' : 'Experienced (1+ Years)'} roles. Redirecting to Home...
+              </span>
+            </div>
+            <Loader2 className="w-4 h-4 text-emerald-600 animate-spin" />
           </div>
         )}
 
@@ -82,26 +110,43 @@ export const CandidateProfilePage: React.FC = () => {
               type="text"
               value={targetTitle}
               onChange={(e) => setTargetTitle(e.target.value)}
-              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-600"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-600 focus:bg-white transition"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Years of Experience</label>
+              <div className="flex items-center justify-between mb-1">
+                <label className="text-xs font-bold text-slate-700 block">Years of Experience</label>
+                <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
+                  exp <= 1 ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-indigo-100 text-indigo-700 border border-indigo-200'
+                }`}>
+                  {exp <= 1 ? '🎓 Fresher (0 - 1 Yrs)' : '💼 Experienced (1+ Yrs)'}
+                </span>
+              </div>
               <input
                 type="number"
+                min="0"
+                max="30"
                 value={exp}
-                onChange={(e) => setExp(parseInt(e.target.value) || 0)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-600"
+                onChange={(e) => {
+                  const val = e.target.value === '' ? 0 : parseInt(e.target.value, 10);
+                  setExp(isNaN(val) ? 0 : Math.max(0, val));
+                }}
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-600 focus:bg-white transition"
               />
+              <p className="text-[11px] text-slate-500 mt-1">
+                {exp <= 1 
+                  ? '✨ Saving will set your account to Fresher jobs (0 - 1 years, 54 roles).'
+                  : '✨ Saving will set your account to Experienced jobs (1+ years, 418 roles).'}
+              </p>
             </div>
             <div>
               <label className="text-xs font-bold text-slate-700 block mb-1">Work Mode Preference</label>
               <select
                 value={workMode}
                 onChange={(e) => setWorkMode(e.target.value)}
-                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-600"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-blue-600 focus:bg-white transition"
               >
                 <option value="On-site">On-site</option>
                 <option value="Hybrid">Hybrid</option>
@@ -120,12 +165,12 @@ export const CandidateProfilePage: React.FC = () => {
                 value={newSkill}
                 onChange={(e) => setNewSkill(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleAddSkill()}
-                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-blue-600"
+                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2 text-sm outline-none focus:border-blue-600 focus:bg-white transition"
               />
               <button
                 type="button"
                 onClick={handleAddSkill}
-                className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl hover:bg-slate-900"
+                className="px-4 py-2 bg-slate-800 text-white text-xs font-bold rounded-xl hover:bg-slate-900 transition"
               >
                 Add Skill
               </button>
@@ -142,10 +187,19 @@ export const CandidateProfilePage: React.FC = () => {
           </div>
 
           <button
+            type="button"
+            disabled={saving}
             onClick={handleSave}
-            className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-2xl shadow-md shadow-blue-200 transition mt-4"
+            className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold rounded-2xl shadow-md shadow-blue-200 transition mt-4 flex items-center justify-center gap-2 text-sm"
           >
-            Save Profile & Update Matching Engine
+            {saving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Saving Profile & Redirecting...</span>
+              </>
+            ) : (
+              <span>Save Profile & Update Matching Engine</span>
+            )}
           </button>
         </div>
 

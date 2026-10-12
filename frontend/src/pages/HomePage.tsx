@@ -57,6 +57,11 @@ export const HomePage: React.FC = () => {
     return 'all';
   });
 
+  const isCandidateUser = Boolean(
+    (sessionStorage.getItem('access_token') || localStorage.getItem('access_token')) &&
+    (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'candidate'
+  );
+
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
     work_mode: '',
@@ -81,6 +86,38 @@ export const HomePage: React.FC = () => {
       }
     };
     loadInsights();
+  }, []);
+
+  // Synchronize candidate experience tier directly from profile database on mount
+  useEffect(() => {
+    const syncProfileTier = async () => {
+      const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token');
+      const role = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
+      if (token && role === 'candidate') {
+        try {
+          const prof = await api.getProfile();
+          if (prof && typeof prof.years_experience === 'number') {
+            const resolvedTier: 'fresher' | 'experienced' = prof.years_experience <= 1 ? 'fresher' : 'experienced';
+            sessionStorage.setItem('user_experience_tier', resolvedTier);
+            localStorage.setItem('user_experience_tier', resolvedTier);
+            sessionStorage.setItem('years_experience', String(prof.years_experience));
+            localStorage.setItem('years_experience', String(prof.years_experience));
+            setActiveExpTab((prev) => (prev !== resolvedTier ? resolvedTier : prev));
+          }
+        } catch (e) {
+          // Keep storage fallback if offline
+        }
+      }
+    };
+    syncProfileTier();
+
+    const handleTierChange = (e: any) => {
+      if (e?.detail?.tier) {
+        setActiveExpTab(e.detail.tier);
+      }
+    };
+    window.addEventListener('userTierChanged', handleTierChange);
+    return () => window.removeEventListener('userTierChanged', handleTierChange);
   }, []);
 
   const fetchJobs = async () => {
@@ -330,6 +367,7 @@ export const HomePage: React.FC = () => {
           <SearchFilters
             filters={filters}
             insights={insights}
+            activeTier={activeExpTab}
             onFilterChange={handleFilterChange}
             onClear={handleClearFilters}
           />
@@ -340,7 +378,7 @@ export const HomePage: React.FC = () => {
         <div className="lg:col-span-6 space-y-4">
           
           {/* Conditional Feed Headers: Strict Account-Level Personalization */}
-          {sessionStorage.getItem('user_experience_tier') === 'fresher' ? (
+          {isCandidateUser && activeExpTab === 'fresher' ? (
             /* Dedicated Header for Fresher Candidate Account */
             <div className="bg-white p-4 rounded-2xl border border-blue-200/80 shadow-xs flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-3">
@@ -395,7 +433,7 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
             </div>
-          ) : sessionStorage.getItem('user_experience_tier') === 'experienced' ? (
+          ) : isCandidateUser && activeExpTab === 'experienced' ? (
             /* Dedicated Header for Experienced Candidate Account */
             <div className="bg-white p-4 rounded-2xl border border-indigo-200/80 shadow-xs flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-3">

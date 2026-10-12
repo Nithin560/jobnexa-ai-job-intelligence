@@ -30,6 +30,7 @@ class CandidateProfileResponse(BaseModel):
     target_titles: List[str]
     location_preferences: List[str]
     years_experience: int
+    experience_tier: Optional[str] = None
     work_mode: str
     skills: List[str]
 
@@ -55,6 +56,7 @@ def get_profile(
 
     cand_skills_objs = db.query(CandidateSkill).options(joinedload(CandidateSkill.skill)).filter(CandidateSkill.profile_id == profile.id).all()
     skills_list = [cs.skill.canonical_name for cs in cand_skills_objs if cs.skill]
+    exp_tier = "fresher" if profile.years_experience <= 1 else "experienced"
 
     return CandidateProfileResponse(
         user_id=current_user.id,
@@ -62,6 +64,7 @@ def get_profile(
         target_titles=profile.target_titles if isinstance(profile.target_titles, list) else [],
         location_preferences=profile.location_preferences if isinstance(profile.location_preferences, list) else ["Bengaluru"],
         years_experience=profile.years_experience,
+        experience_tier=exp_tier,
         work_mode=profile.work_mode or "Hybrid",
         skills=skills_list
     )
@@ -101,12 +104,15 @@ def update_profile(
     db.commit()
     db.refresh(profile)
 
+    exp_tier = "fresher" if profile.years_experience <= 1 else "experienced"
+
     return CandidateProfileResponse(
         user_id=current_user.id,
         email=current_user.email,
         target_titles=profile.target_titles if isinstance(profile.target_titles, list) else [],
         location_preferences=profile.location_preferences if isinstance(profile.location_preferences, list) else ["Bengaluru"],
         years_experience=profile.years_experience,
+        experience_tier=exp_tier,
         work_mode=profile.work_mode or "Hybrid",
         skills=payload.skills
     )

@@ -52,6 +52,7 @@ export interface CandidateProfile {
   target_titles: string[];
   location_preferences: string[];
   years_experience: number;
+  experience_tier?: 'fresher' | 'experienced';
   work_mode: string;
   skills: string[];
 }
