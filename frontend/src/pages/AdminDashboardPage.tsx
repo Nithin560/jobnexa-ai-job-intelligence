@@ -356,41 +356,14 @@ export const AdminDashboardPage: React.FC = () => {
         {/* Top Header Bar */}
         <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4 min-w-0">
           
-          {/* Left Header Group: Search Bar + Admin Profile & Logout */}
-          <div className="flex items-center gap-3 shrink-0">
-            {/* Global Admin Search Bar */}
-            <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-52 md:w-64 lg:w-72 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
-              <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-              <input
-                type="text"
-                placeholder="Search jobs, companies, sources..."
-                className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
-              />
-            </div>
-
-            {/* Admin Profile & Logout (Moved to left so it is never cut off or overridden on the right) */}
-            <div className="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl shadow-2xs shrink-0">
-              <div className="w-7 h-7 rounded-full bg-amber-600 text-white font-bold text-xs flex items-center justify-center border border-amber-500 shadow-2xs shrink-0">
-                {(sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Admin')[0].toUpperCase()}
-              </div>
-              <div className="hidden sm:block text-left max-w-[200px] truncate">
-                <div className="text-xs font-bold text-slate-800 leading-none truncate" title={sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Admin'}>
-                  {sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Admin'}
-                </div>
-                <div className="text-[10px] text-amber-700 font-semibold mt-0.5">Admin Security</div>
-              </div>
-              <button
-                onClick={() => {
-                  api.logout();
-                  navigate('/login');
-                  window.location.reload();
-                }}
-                className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-200/70 transition ml-1 shrink-0"
-                title="Logout"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
+          {/* Global Admin Search Bar */}
+          <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-60 md:w-72 lg:w-80 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
+            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+            <input
+              type="text"
+              placeholder="Search jobs, companies, sources..."
+              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
+            />
           </div>
 
           {/* Top Right: Scan Metrics Widget, User Stats, Notifications */}
@@ -546,6 +519,27 @@ export const AdminDashboardPage: React.FC = () => {
 
                 </div>
               )}
+            </div>
+
+            {/* Admin Avatar & Logout (Matching Image 2 - placed last after the notification icon) */}
+            <div className="flex items-center gap-2 pl-3 border-l border-slate-200 shrink-0">
+              <div 
+                className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm"
+                title={sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'nithinvandana560@gmail.com'}
+              >
+                {(sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'N')[0].toUpperCase()}
+              </div>
+              <button
+                onClick={() => {
+                  api.logout();
+                  navigate('/login');
+                  window.location.reload();
+                }}
+                className="p-1.5 text-slate-400 hover:text-rose-600 rounded-lg hover:bg-slate-100 transition"
+                title="Logout"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
             </div>
 
           </div>
