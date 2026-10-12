@@ -356,20 +356,19 @@ export const AdminDashboardPage: React.FC = () => {
         {/* Top Header Bar */}
         <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4 min-w-0">
           
-          {/* Global Admin Search Bar */}
-          <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-60 md:w-72 lg:w-80 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
-            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search jobs, companies, sources..."
-              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
-            />
-          </div>
+          {/* Left Header Group: Search Bar + Users Section Badge */}
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Global Admin Search Bar */}
+            <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-56 md:w-64 lg:w-72 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
+              <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+              <input
+                type="text"
+                placeholder="Search jobs, companies, sources..."
+                className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
+              />
+            </div>
 
-          {/* Top Right: Scan Metrics Widget, User Stats, Notifications */}
-          <div className="flex items-center gap-3 ml-auto shrink-0 pr-1">
-            
-            {/* Quick Registered & Active Users Navigation Badge (Properly aligned, will not wrap vertically) */}
+            {/* Quick Registered & Active Users Navigation Badge (Moved to left side) */}
             <button
               onClick={() => setActiveTab('Users')}
               className={`shrink-0 whitespace-nowrap hidden sm:inline-flex items-center gap-2 text-xs px-3 py-2 rounded-xl border transition shadow-2xs ${
@@ -384,6 +383,10 @@ export const AdminDashboardPage: React.FC = () => {
                 Users: <strong className={activeTab === 'Users' ? 'text-white' : 'text-blue-950 font-black'}>{adminUsersData?.total_registered ?? overview?.total_users ?? 6}</strong> Reg • <strong className={activeTab === 'Users' ? 'text-emerald-300' : 'text-emerald-700 font-black'}>{adminUsersData?.total_active ?? overview?.active_users ?? 6}</strong> Act
               </span>
             </button>
+          </div>
+
+          {/* Top Right: Scan Metrics Widget, Notifications & Admin Avatar */}
+          <div className="flex items-center gap-3 ml-auto shrink-0 pr-1">
 
             {/* Scan Status Widget with real date and time */}
             <div className="hidden lg:flex items-center gap-2.5 text-xs bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 font-medium shadow-2xs">
@@ -521,13 +524,13 @@ export const AdminDashboardPage: React.FC = () => {
               )}
             </div>
 
-            {/* Admin Avatar & Logout (Matching Image 2 - placed last after the notification icon) */}
+            {/* Admin Avatar & Logout (Orange background, letter 'A', placed last after notification icon) */}
             <div className="flex items-center gap-2 pl-3 border-l border-slate-200 shrink-0">
               <div 
-                className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm"
-                title={sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'nithinvandana560@gmail.com'}
+                className="w-8 h-8 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-sm shadow-sm border border-orange-400"
+                title={sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'Admin Account'}
               >
-                {(sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'N')[0].toUpperCase()}
+                A
               </div>
               <button
                 onClick={() => {
