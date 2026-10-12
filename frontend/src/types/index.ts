@@ -68,6 +68,10 @@ export interface AdminOverview {
   expired_jobs: number;
   fresher_jobs: number;
   experienced_jobs: number;
+  total_users?: number;
+  active_users?: number;
+  fresher_users?: number;
+  experienced_users?: number;
   last_scan_time?: string;
   next_scan_time?: string;
   crawler_success_rate: number;
@@ -81,6 +85,57 @@ export interface AdminOverview {
   };
   top_skills?: { name: string; count: number; percent: number }[];
   company_type_breakdown?: { name: string; count: number; value: number; color: string }[];
+  day_wise_job_trends?: DayWiseJobItem[];
+}
+
+export interface AdminUserItem {
+  id: string;
+  email: string;
+  full_name: string;
+  role: string;
+  experience_tier: 'fresher' | 'experienced' | 'admin' | string;
+  years_experience: number;
+  is_verified: boolean;
+  is_active: boolean;
+  created_at: string;
+  created_at_iso: string;
+}
+
+export interface AdminUsersResponse {
+  total_registered: number;
+  total_active: number;
+  fresher_count: number;
+  experienced_count: number;
+  admin_count: number;
+  users: AdminUserItem[];
+  registration_trends: { date: string; count: number }[];
+  demographics: {
+    fresher_percent: number;
+    experienced_percent: number;
+    admin_percent: number;
+  };
+}
+
+export interface DayWiseJobItem {
+  date: string;
+  short_date: string;
+  fresher_jobs: number;
+  experienced_jobs: number;
+  total_jobs: number;
+  new_jobs: number;
+  scans_count: number;
+}
+
+export interface DayWiseJobsResponse {
+  day_wise: DayWiseJobItem[];
+  summary: {
+    total_fresher: number;
+    total_experienced: number;
+    total_jobs: number;
+    fresher_ratio_percent: number;
+    experienced_ratio_percent: number;
+    peak_day: string;
+  };
 }
 
 export interface AdminNotificationItem {

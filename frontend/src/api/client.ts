@@ -1,5 +1,8 @@
 import axios from 'axios';
-import { Job, CandidateProfile, AdminOverview, MarketInsights, AdminNotificationsResponse, AdminNotificationItem, ScanRunItem } from '../types';
+import { 
+  Job, CandidateProfile, AdminOverview, MarketInsights, AdminNotificationsResponse, 
+  AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse 
+} from '../types';
 
 const API_BASE_URL = '/api/v1';
 
@@ -197,6 +200,21 @@ export const api = {
       updated_jobs: number;
       companies_scanned: number;
     }>('/admin/scans/trigger');
+    return response.data;
+  },
+
+  getAdminUsers: async () => {
+    const response = await apiClient.get<AdminUsersResponse>('/admin/users');
+    return response.data;
+  },
+
+  toggleUserStatus: async (userId: string) => {
+    const response = await apiClient.post<{ status: string; user_id: string; account_status: string }>(`/admin/users/${userId}/toggle-status`);
+    return response.data;
+  },
+
+  getDayWiseJobs: async () => {
+    const response = await apiClient.get<DayWiseJobsResponse>('/admin/jobs/day-wise-breakdown');
     return response.data;
   }
 };

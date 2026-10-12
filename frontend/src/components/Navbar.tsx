@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Briefcase, Search, MapPin, User, LogOut, Shield } from 'lucide-react';
+import { Briefcase, Search, MapPin, User, LogOut, Shield, Users } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
 
 interface NavbarProps {
@@ -14,6 +14,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const userRole = sessionStorage.getItem('user_role');
   const userEmail = sessionStorage.getItem('user_email');
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
+  const [userCounts, setUserCounts] = React.useState<{ registered: number; active: number }>({ registered: 6, active: 6 });
+
+  React.useEffect(() => {
+    if (authenticated && userRole === 'admin') {
+      api.getAdminUsers().then(res => {
+        if (res) {
+          setUserCounts({ registered: res.total_registered, active: res.total_active });
+        }
+      }).catch(() => {});
+    }
+  }, [authenticated, userRole]);
 
   const handleLogout = () => {
     api.logout();
@@ -87,10 +98,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
             <Link to="/jobs" className={`hover:text-blue-600 transition ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
             <Link to="/dashboard" className={`hover:text-blue-600 transition ${location.pathname === '/dashboard' ? 'text-blue-600 font-semibold' : ''}`}>Dashboard</Link>
             <Link to="/profile" className={`hover:text-blue-600 transition ${location.pathname === '/profile' ? 'text-blue-600 font-semibold' : ''}`}>My Profile</Link>
-            <Link to="/admin" className={`hover:text-blue-600 transition flex items-center gap-1 ${location.pathname === '/admin' ? 'text-blue-600 font-semibold' : ''}`}>
+            <Link to="/admin" className={`hover:text-blue-600 transition flex items-center gap-1 ${location.pathname === '/admin' && (location.state as any)?.tab !== 'Users' ? 'text-blue-600 font-semibold' : ''}`}>
               <Shield className="w-4 h-4 text-amber-500" />
               <span>Admin</span>
             </Link>
+            {userRole === 'admin' && (
+              <Link 
+                to="/admin" 
+                state={{ tab: 'Users' }} 
+                className={`hover:text-blue-600 transition flex items-center gap-1.5 ${location.pathname === '/admin' && (location.state as any)?.tab === 'Users' ? 'text-blue-600 font-bold' : ''}`}
+                title="Users Analysis & Directory"
+              >
+                <Users className="w-4 h-4 text-blue-600" />
+                <span>Users ({userCounts.registered} Reg • {userCounts.active} Act)</span>
+              </Link>
+            )}
           </nav>
         )}
 
@@ -100,7 +122,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
             <div className="flex items-center gap-2">
               {/* Active Role Badge & Switcher */}
               {userRole === 'admin' ? (
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-2">
+                  <Link
+                    to="/admin"
+                    state={{ tab: 'Users' }}
+                    className="hidden sm:inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-xl transition"
+                    title="View Registered & Active Users"
+                  >
+                    <Users className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Users: {userCounts.registered} Reg • {userCounts.active} Act</span>
+                  </Link>
                   <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl">
                     <Shield className="w-3.5 h-3.5 text-amber-600" /> Admin Mode
                   </span>

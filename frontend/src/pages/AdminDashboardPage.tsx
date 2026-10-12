@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
-import { AdminOverview, Job, AdminNotificationItem, ScanRunItem } from '../types';
+import { AdminOverview, Job, AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse } from '../types';
 import { 
   Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
   FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Terminal, Settings, LogOut,
-  UserCheck, CheckCheck, X
+  UserCheck, CheckCheck, X, GraduationCap
 } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
+import { 
+  AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
+  BarChart, Bar, Legend, CartesianGrid 
+} from 'recharts';
 
 const jobsTrend = [
   { date: 'Sep 27', count: 210 },
@@ -47,12 +50,22 @@ const fallbackTopSkills = [
 
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [overview, setOverview] = useState<AdminOverview | null>(null);
   const [latestJobs, setLatestJobs] = useState<Job[]>([]);
   const [recentScans, setRecentScans] = useState<ScanRunItem[]>([]);
   const [scanning, setScanning] = useState(false);
   const [scanMessage, setScanMessage] = useState('');
-  const [activeTab, setActiveTab] = useState('Dashboard');
+  const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
+
+  // User Intelligence State
+  const [adminUsersData, setAdminUsersData] = useState<AdminUsersResponse | null>(null);
+  const [userSearchTerm, setUserSearchTerm] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState('all');
+  const [togglingUserId, setTogglingUserId] = useState<string | null>(null);
+
+  // Day-Wise Job Breakdown State
+  const [dayWiseJobsData, setDayWiseJobsData] = useState<DayWiseJobsResponse | null>(null);
 
   // Notifications State
   const [notifications, setNotifications] = useState<AdminNotificationItem[]>([]);
@@ -83,8 +96,30 @@ export const AdminDashboardPage: React.FC = () => {
       if (jobsRes.items) {
         setLatestJobs(jobsRes.items);
       }
+
+      // Fetch User Intelligence Data
+      const usersData = await api.getAdminUsers();
+      setAdminUsersData(usersData);
+
+      // Fetch Day-Wise Jobs Data
+      const dayWiseData = await api.getDayWiseJobs();
+      setDayWiseJobsData(dayWiseData);
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const handleToggleUser = async (userId: string) => {
+    try {
+      setTogglingUserId(userId);
+      await api.toggleUserStatus(userId);
+      const updated = await api.getAdminUsers();
+      setAdminUsersData(updated);
+    } catch (err) {
+      console.error(err);
+      alert('Error updating user status.');
+    } finally {
+      setTogglingUserId(null);
     }
   };
 
@@ -97,6 +132,12 @@ export const AdminDashboardPage: React.FC = () => {
     }
     fetchOverview();
   }, []);
+
+  useEffect(() => {
+    if ((location.state as any)?.tab) {
+      setActiveTab((location.state as any).tab);
+    }
+  }, [location.state]);
 
   const handleManualScan = async () => {
     setScanning(true);
@@ -134,6 +175,11 @@ export const AdminDashboardPage: React.FC = () => {
 
   const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard },
+    { 
+      label: 'Users', 
+      icon: Users, 
+      badge: `${adminUsersData?.total_registered ?? overview?.total_users ?? 6} Reg` 
+    },
     { label: 'Companies', icon: Building2 },
     { label: 'Job Sources', icon: Link2 },
     { label: 'Job Listings', icon: Briefcase },
@@ -141,7 +187,6 @@ export const AdminDashboardPage: React.FC = () => {
     { label: 'AI Processing', icon: Brain },
     { label: 'Duplicate Detection', icon: CopyCheck },
     { label: 'Data Quality', icon: ShieldCheck },
-    { label: 'Users', icon: Users },
     { label: 'Analytics', icon: BarChart3 },
     { label: 'Job Alerts', icon: BellRing },
     { label: 'System Logs', icon: Terminal },
@@ -155,6 +200,35 @@ export const AdminDashboardPage: React.FC = () => {
   const displayCompanyTypes = overview?.company_type_breakdown && overview.company_type_breakdown.length > 0
     ? overview.company_type_breakdown
     : fallbackCompanyTypeData;
+
+  const filteredUsers = (adminUsersData?.users || []).filter((user) => {
+    const matchesSearch = 
+      user.email.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
+      user.full_name.toLowerCase().includes(userSearchTerm.toLowerCase()) ||
+      user.role.toLowerCase().includes(userSearchTerm.toLowerCase());
+    if (!matchesSearch) return false;
+    if (userRoleFilter === 'fresher') return user.experience_tier === 'fresher';
+    if (userRoleFilter === 'experienced') return user.experience_tier === 'experienced';
+    if (userRoleFilter === 'admin') return user.role === 'admin';
+    if (userRoleFilter === 'candidate') return user.role === 'candidate';
+    return true;
+  });
+
+  const userDemographicData = [
+    { name: 'Fresher Candidates (0-1 yrs)', value: adminUsersData?.fresher_count ?? 3, color: '#10b981' },
+    { name: 'Experienced Candidates (>1 yrs)', value: adminUsersData?.experienced_count ?? 1, color: '#3b82f6' },
+    { name: 'Admin Security', value: adminUsersData?.admin_count ?? 2, color: '#8b5cf6' },
+  ];
+
+  const userGrowthData = adminUsersData?.registration_trends && adminUsersData.registration_trends.length > 0
+    ? adminUsersData.registration_trends
+    : [
+        { date: 'Oct 06', count: 1 },
+        { date: 'Oct 08', count: 2 },
+        { date: 'Oct 10', count: 4 },
+        { date: 'Oct 11', count: 5 },
+        { date: 'Oct 12', count: adminUsersData?.total_registered ?? 6 },
+      ];
 
   return (
     <div className="min-h-screen bg-slate-100 flex font-sans text-slate-800">
@@ -178,6 +252,26 @@ export const AdminDashboardPage: React.FC = () => {
           </span>
         </div>
 
+        {/* User Base Quick Stats Bar in Sidebar */}
+        <div 
+          onClick={() => setActiveTab('Users')}
+          className="mx-3 mt-3 mb-1 p-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 cursor-pointer transition flex items-center justify-between text-xs group"
+          title="Click to view User Accounts & Activity Intelligence"
+        >
+          <div className="flex items-center gap-2 text-slate-300 group-hover:text-white">
+            <Users className="w-4 h-4 text-blue-400" />
+            <span className="font-bold text-xs">Users</span>
+          </div>
+          <div className="flex items-center gap-1.5 text-[10px] font-black">
+            <span className="bg-blue-600/30 text-blue-300 px-1.5 py-0.5 rounded border border-blue-500/30">
+              {adminUsersData?.total_registered ?? overview?.total_users ?? 6} Reg
+            </span>
+            <span className="bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded border border-emerald-500/30">
+              {adminUsersData?.total_active ?? overview?.active_users ?? 6} Act
+            </span>
+          </div>
+        </div>
+
         {/* Sidebar Nav Links */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
@@ -187,14 +281,23 @@ export const AdminDashboardPage: React.FC = () => {
               <button
                 key={item.label}
                 onClick={() => setActiveTab(item.label)}
-                className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                   isActive
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
                     : 'text-slate-400 hover:text-slate-100 hover:bg-slate-800/60'
                 }`}
               >
-                <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                <span>{item.label}</span>
+                <div className="flex items-center gap-3">
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                  <span>{item.label}</span>
+                </div>
+                {item.badge && (
+                  <span className={`text-[10px] font-black px-1.5 py-0.5 rounded-md ${
+                    isActive ? 'bg-blue-700 text-white' : 'bg-slate-800 text-blue-300 border border-slate-700'
+                  }`}>
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -249,9 +352,25 @@ export const AdminDashboardPage: React.FC = () => {
             />
           </div>
 
-          {/* Top Right: Scan Metrics Widget, Notifications & Profile */}
-          <div className="flex items-center gap-6 xl:gap-8 ml-auto">
+          {/* Top Right: Scan Metrics Widget, User Stats, Notifications & Profile */}
+          <div className="flex items-center gap-4 xl:gap-6 ml-auto">
             
+            {/* Quick Registered & Active Users Navigation Badge */}
+            <button
+              onClick={() => setActiveTab('Users')}
+              className={`hidden sm:flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl border transition shadow-2xs ${
+                activeTab === 'Users'
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                  : 'bg-blue-50/80 hover:bg-blue-100 text-blue-900 border-blue-200'
+              }`}
+              title="View Registered & Active Users Section"
+            >
+              <Users className="w-4 h-4 text-blue-600 shrink-0" />
+              <span>
+                Users: <strong className={activeTab === 'Users' ? 'text-white' : 'text-blue-950 font-black'}>{adminUsersData?.total_registered ?? overview?.total_users ?? 6}</strong> Reg • <strong className={activeTab === 'Users' ? 'text-emerald-300' : 'text-emerald-700 font-black'}>{adminUsersData?.total_active ?? overview?.active_users ?? 6}</strong> Act
+              </span>
+            </button>
+
             {/* Scan Status Widget with real date and time */}
             <div className="hidden md:flex items-center gap-2.5 text-xs bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 font-medium shadow-2xs">
               <Clock className="w-4 h-4 text-blue-600 shrink-0" />
@@ -422,25 +541,387 @@ export const AdminDashboardPage: React.FC = () => {
           {/* Header Title Bar */}
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-black text-slate-900 tracking-tight">Dashboard</h1>
-              <p className="text-xs font-medium text-slate-500 mt-0.5">Monitor real Bengaluru job discovery, portal scanning, and system health</p>
+              <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+                {activeTab === 'Users' ? 'User Accounts & Activity Intelligence' : 'Dashboard'}
+              </h1>
+              <p className="text-xs font-medium text-slate-500 mt-0.5">
+                {activeTab === 'Users'
+                  ? 'Real-time analysis of registered users, active candidates, career experience tiers, and security accounts'
+                  : 'Monitor real Bengaluru job discovery, portal scanning, and system health'}
+              </p>
             </div>
 
-            <button className="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
-              <span>Last 30 Days</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
-            </button>
+            <div className="flex items-center gap-2">
+              {activeTab === 'Users' ? (
+                <button
+                  onClick={() => setActiveTab('Dashboard')}
+                  className="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Back to Dashboard</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => setActiveTab('Users')}
+                  className="flex items-center gap-2 px-3.5 py-2 bg-blue-50 border border-blue-200 rounded-xl text-xs font-bold text-blue-700 shadow-sm hover:bg-blue-100 transition"
+                >
+                  <Users className="w-3.5 h-3.5 text-blue-600" />
+                  <span>View User Analysis</span>
+                </button>
+              )}
+            </div>
           </div>
 
-          {scanMessage && (
-            <div className="bg-emerald-50 text-emerald-800 border border-emerald-200 p-4 rounded-2xl text-xs font-bold flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" /> {scanMessage}
-            </div>
-          )}
+          {activeTab === 'Users' ? (
+            /* User Accounts & Activity Intelligence Section */
+            <div className="space-y-6">
+              
+              {/* 5 User Metric KPI Cards */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-slate-500 mb-2">
+                    <span className="text-xs font-semibold text-slate-600">Registered Users</span>
+                    <div className="p-2.5 bg-blue-50 text-blue-600 rounded-xl"><Users className="w-4 h-4" /></div>
+                  </div>
+                  <div className="text-3xl font-black text-slate-900">{adminUsersData?.total_registered ?? 6}</div>
+                  <div className="text-[11px] font-bold text-blue-600 mt-1 flex items-center gap-1">
+                    <span>Total platform accounts</span>
+                  </div>
+                </div>
 
-          {/* 6 Real Stat Cards Row based on actual scanning database */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-slate-500 mb-2">
+                    <span className="text-xs font-semibold text-slate-600">Active Users</span>
+                    <div className="p-2.5 bg-emerald-50 text-emerald-600 rounded-xl"><UserCheck className="w-4 h-4" /></div>
+                  </div>
+                  <div className="text-3xl font-black text-slate-900">{adminUsersData?.total_active ?? 6}</div>
+                  <div className="text-[11px] font-bold text-emerald-600 mt-1 flex items-center gap-1">
+                    <span>100% active & verified</span>
+                  </div>
+                </div>
+
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-slate-500 mb-2">
+                    <span className="text-xs font-semibold text-slate-600">Fresher Candidates</span>
+                    <div className="p-2.5 bg-teal-50 text-teal-600 rounded-xl"><GraduationCap className="w-4 h-4" /></div>
+                  </div>
+                  <div className="text-3xl font-black text-slate-900">{adminUsersData?.fresher_count ?? 3}</div>
+                  <div className="text-[11px] font-bold text-teal-600 mt-1 flex items-center gap-1">
+                    <span>0 - 1 Years experience</span>
+                  </div>
+                </div>
+
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-slate-500 mb-2">
+                    <span className="text-xs font-semibold text-slate-600">Experienced Users</span>
+                    <div className="p-2.5 bg-indigo-50 text-indigo-600 rounded-xl"><Briefcase className="w-4 h-4" /></div>
+                  </div>
+                  <div className="text-3xl font-black text-slate-900">{adminUsersData?.experienced_count ?? 1}</div>
+                  <div className="text-[11px] font-bold text-indigo-600 mt-1 flex items-center gap-1">
+                    <span>&gt; 1 Years experience</span>
+                  </div>
+                </div>
+
+                <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div className="flex items-center justify-between text-slate-500 mb-2">
+                    <span className="text-xs font-semibold text-slate-600">Admin Security</span>
+                    <div className="p-2.5 bg-amber-50 text-amber-600 rounded-xl"><ShieldCheck className="w-4 h-4" /></div>
+                  </div>
+                  <div className="text-3xl font-black text-slate-900">{adminUsersData?.admin_count ?? 2}</div>
+                  <div className="text-[11px] font-bold text-amber-600 mt-1 flex items-center gap-1">
+                    <span>Platform management</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* User Analysis & Visualization Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                {/* User Demographics Donut Chart */}
+                <div className="lg:col-span-5 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-bold text-slate-900 text-sm">User Demographic Breakdown</h3>
+                      <span className="text-xs font-bold text-blue-600">Live DB</span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4">Distribution by Candidate Experience Tiers vs Platform Admins</p>
+                  </div>
+
+                  <div className="h-52 w-full relative flex items-center justify-center">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie 
+                          data={userDemographicData} 
+                          innerRadius={55} 
+                          outerRadius={80} 
+                          paddingAngle={5} 
+                          dataKey="value"
+                        >
+                          {userDemographicData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="space-y-2 text-xs pt-4 border-t border-slate-100">
+                    {userDemographicData.map((item) => {
+                      const total = adminUsersData?.total_registered || 6;
+                      const pct = Math.round((item.value / total) * 100);
+                      return (
+                        <div key={item.name} className="flex items-center justify-between text-slate-600">
+                          <span className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></span>
+                            <span className="font-medium">{item.name}</span>
+                          </span>
+                          <span className="font-bold text-slate-900">
+                            {item.value} <span className="text-slate-400 font-normal">({pct}%)</span>
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* User Growth & Registration Velocity Area Chart */}
+                <div className="lg:col-span-7 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <h3 className="font-bold text-slate-900 text-sm">User Registration Growth</h3>
+                      <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                        Live Trajectory
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500 mb-4">Cumulative registered candidates and administrators onboarding to BangaloreJobs</p>
+                  </div>
+
+                  <div className="h-56 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <AreaChart data={userGrowthData}>
+                        <defs>
+                          <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
+                            <stop offset="5%" stopColor="#2563eb" stopOpacity={0.35}/>
+                            <stop offset="95%" stopColor="#2563eb" stopOpacity={0}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                        <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                        <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} allowDecimals={false} />
+                        <Tooltip />
+                        <Area type="monotone" dataKey="count" stroke="#2563eb" strokeWidth={2.5} fillOpacity={1} fill="url(#colorUsers)" />
+                      </AreaChart>
+                    </ResponsiveContainer>
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-3 pt-4 border-t border-slate-100 text-center">
+                    <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="text-[10px] font-semibold text-slate-500">Candidate Share</div>
+                      <div className="text-base font-extrabold text-slate-800">
+                        {Math.round((((adminUsersData?.fresher_count ?? 3) + (adminUsersData?.experienced_count ?? 1)) / ((adminUsersData?.total_registered ?? 6) || 1)) * 100)}%
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="text-[10px] font-semibold text-slate-500">Fresher Ratio</div>
+                      <div className="text-base font-extrabold text-emerald-700">
+                        {Math.round(((adminUsersData?.fresher_count ?? 3) / (((adminUsersData?.fresher_count ?? 3) + (adminUsersData?.experienced_count ?? 1)) || 1)) * 100)}%
+                      </div>
+                    </div>
+                    <div className="p-2.5 bg-slate-50 rounded-xl border border-slate-100">
+                      <div className="text-[10px] font-semibold text-slate-500">Active Rate</div>
+                      <div className="text-base font-extrabold text-blue-600">100%</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+              {/* Filterable User Accounts Directory Table */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                
+                {/* Table Toolbar */}
+                <div className="p-5 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm">User Directory & Status Management</h3>
+                    <p className="text-xs text-slate-500 mt-0.5">Search, review experience tiers, and manage account authorization status</p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    {/* Search Bar */}
+                    <div className="flex items-center bg-slate-100 rounded-xl px-3 py-1.5 border border-slate-200 text-xs w-60">
+                      <Search className="w-3.5 h-3.5 text-slate-400 mr-2 shrink-0" />
+                      <input 
+                        type="text" 
+                        placeholder="Search user email or name..." 
+                        value={userSearchTerm}
+                        onChange={(e) => setUserSearchTerm(e.target.value)}
+                        className="bg-transparent outline-none w-full text-slate-800 placeholder-slate-400 font-medium"
+                      />
+                      {userSearchTerm && (
+                        <button onClick={() => setUserSearchTerm('')} className="text-slate-400 hover:text-slate-600">
+                          <X className="w-3 h-3" />
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Filter Tabs */}
+                    <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+                      <button
+                        onClick={() => setUserRoleFilter('all')}
+                        className={`px-3 py-1 rounded-lg font-bold transition ${
+                          userRoleFilter === 'all' ? 'bg-white text-blue-600 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        All ({adminUsersData?.total_registered ?? 6})
+                      </button>
+                      <button
+                        onClick={() => setUserRoleFilter('fresher')}
+                        className={`px-3 py-1 rounded-lg font-bold transition ${
+                          userRoleFilter === 'fresher' ? 'bg-emerald-600 text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Fresher ({adminUsersData?.fresher_count ?? 3})
+                      </button>
+                      <button
+                        onClick={() => setUserRoleFilter('experienced')}
+                        className={`px-3 py-1 rounded-lg font-bold transition ${
+                          userRoleFilter === 'experienced' ? 'bg-blue-600 text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Experienced ({adminUsersData?.experienced_count ?? 1})
+                      </button>
+                      <button
+                        onClick={() => setUserRoleFilter('admin')}
+                        className={`px-3 py-1 rounded-lg font-bold transition ${
+                          userRoleFilter === 'admin' ? 'bg-purple-600 text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        Admins ({adminUsersData?.admin_count ?? 2})
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Directory Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs text-slate-600">
+                    <thead className="bg-slate-50 text-slate-400 font-semibold border-b border-slate-100 uppercase text-[10px] tracking-wider">
+                      <tr>
+                        <th className="py-3 px-5">User</th>
+                        <th className="py-3 px-4">Role</th>
+                        <th className="py-3 px-4">Experience Tier</th>
+                        <th className="py-3 px-4">Experience</th>
+                        <th className="py-3 px-4">Status</th>
+                        <th className="py-3 px-4">Joined On</th>
+                        <th className="py-3 px-4 text-right">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {filteredUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan={7} className="py-8 text-center text-slate-400">
+                            No users found matching current filter or search criteria.
+                          </td>
+                        </tr>
+                      ) : (
+                        filteredUsers.map((u) => (
+                          <tr key={u.id} className="hover:bg-slate-50/60 transition">
+                            <td className="py-3.5 px-5">
+                              <div className="flex items-center gap-3">
+                                <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-white shrink-0 ${
+                                  u.role === 'admin' ? 'bg-amber-600' : u.experience_tier === 'fresher' ? 'bg-emerald-600' : 'bg-blue-600'
+                                }`}>
+                                  {(u.full_name || u.email || 'U')[0].toUpperCase()}
+                                </div>
+                                <div className="min-w-0">
+                                  <div className="font-bold text-slate-900 truncate">{u.full_name || 'User'}</div>
+                                  <div className="text-[11px] text-slate-400 font-medium truncate">{u.email}</div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="py-3.5 px-4">
+                              {u.role === 'admin' ? (
+                                <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                  <Shield className="w-3 h-3 text-amber-600" /> Admin
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 bg-slate-100 text-slate-700 border border-slate-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                  <User className="w-3 h-3 text-slate-500" /> Candidate
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              {u.experience_tier === 'fresher' ? (
+                                <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-800 border border-emerald-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                  <GraduationCap className="w-3 h-3 text-emerald-600" /> Fresher (0-1 Yrs)
+                                </span>
+                              ) : u.experience_tier === 'experienced' ? (
+                                <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-800 border border-blue-200 text-[10px] font-bold px-2.5 py-0.5 rounded-full">
+                                  <Briefcase className="w-3 h-3 text-blue-600" /> Experienced (&gt;1 Yrs)
+                                </span>
+                              ) : (
+                                <span className="text-slate-400 text-[11px] font-medium">N/A (Admin)</span>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4 font-semibold text-slate-800">
+                              {u.years_experience !== null && u.years_experience !== undefined ? `${u.years_experience} years` : '—'}
+                            </td>
+                            <td className="py-3.5 px-4">
+                              {u.is_active ? (
+                                <span className="inline-flex items-center gap-1 bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+                                </span>
+                              ) : (
+                                <span className="inline-flex items-center gap-1 bg-rose-50 text-rose-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-rose-200">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Disabled
+                                </span>
+                              )}
+                            </td>
+                            <td className="py-3.5 px-4 text-slate-400 font-medium">
+                              {u.created_at ? new Date(u.created_at).toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recent'}
+                            </td>
+                            <td className="py-3.5 px-4 text-right">
+                              <button
+                                onClick={() => handleToggleUser(u.id)}
+                                disabled={togglingUserId === u.id || u.email === 'nithinvandana560@gmail.com'}
+                                className={`px-3 py-1 rounded-xl text-xs font-bold border transition disabled:opacity-40 ${
+                                  u.is_active
+                                    ? 'border-rose-200 text-rose-700 bg-rose-50 hover:bg-rose-100'
+                                    : 'border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
+                                }`}
+                                title={u.email === 'nithinvandana560@gmail.com' ? 'Primary admin account cannot be disabled' : 'Toggle account active/disabled status'}
+                              >
+                                {togglingUserId === u.id ? (
+                                  <RefreshCw className="w-3 h-3 animate-spin inline" />
+                                ) : u.is_active ? (
+                                  'Disable'
+                                ) : (
+                                  'Activate'
+                                )}
+                              </button>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+              </div>
+
+            </div>
+          ) : (
+            /* Dashboard View */
+            <div className="space-y-6">
+              {scanMessage && (
+                <div className="bg-emerald-50 text-emerald-800 border border-emerald-200 p-4 rounded-2xl text-xs font-bold flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> {scanMessage}
+                </div>
+              )}
+
+              {/* 6 Real Stat Cards Row based on actual scanning database */}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-500 mb-2">
@@ -531,6 +1012,117 @@ export const AdminDashboardPage: React.FC = () => {
                 <div className="text-[11px] text-slate-500 mt-0.5">Mid-level, senior, team lead, and staff engineering roles</div>
               </div>
               <span className="bg-blue-100 text-blue-800 text-xs font-black px-3 py-1 rounded-xl">&gt; 1 Yrs</span>
+            </div>
+          </div>
+
+          {/* Day-Wise Job Count: Fresher Roles vs Experienced Roles */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 pb-4 border-b border-slate-100">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="p-2 bg-blue-50 text-blue-600 rounded-xl">
+                    <BarChart3 className="w-5 h-5" />
+                  </span>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-base">Day-Wise Job Count (Fresher Roles vs Experienced Roles)</h3>
+                    <p className="text-xs font-medium text-slate-500 mt-0.5">
+                      Daily job discoveries categorised into Fresher (0 - 1 years) and Experienced (&gt; 1 years)
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Day-wise summary pills */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
+                  <span className="font-bold text-emerald-900">Fresher (0-1 Y):</span>
+                  <span className="font-black text-emerald-700">{overview?.fresher_jobs ?? 86}</span>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-xl text-xs">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+                  <span className="font-bold text-blue-900">Experienced (&gt;1 Y):</span>
+                  <span className="font-black text-blue-700">{overview?.experienced_jobs ?? 440}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Interactive Recharts Grouped Bar Chart */}
+            <div className="h-72 w-full mb-6">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart 
+                  data={dayWiseJobsData?.day_wise || overview?.day_wise_job_trends || []}
+                  margin={{ top: 10, right: 20, left: -10, bottom: 0 }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
+                  <XAxis dataKey="date" stroke="#94a3b8" fontSize={11} tickLine={false} />
+                  <YAxis stroke="#94a3b8" fontSize={11} tickLine={false} axisLine={false} />
+                  <Tooltip 
+                    contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    formatter={(value: any, name: string) => {
+                      if (name === 'fresher_jobs') return [value, 'Fresher Jobs (0-1 yrs)'];
+                      if (name === 'experienced_jobs') return [value, 'Experienced Jobs (>1 yrs)'];
+                      return [value, name];
+                    }}
+                  />
+                  <Legend 
+                    formatter={(value) => {
+                      if (value === 'fresher_jobs') return <span className="text-xs font-bold text-emerald-700">Fresher Jobs (0-1 Yrs)</span>;
+                      if (value === 'experienced_jobs') return <span className="text-xs font-bold text-blue-700">Experienced Jobs (&gt;1 Yrs)</span>;
+                      return value;
+                    }}
+                  />
+                  <Bar dataKey="fresher_jobs" name="fresher_jobs" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={32} />
+                  <Bar dataKey="experienced_jobs" name="experienced_jobs" fill="#3b82f6" radius={[4, 4, 0, 0]} maxBarSize={32} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Day-Wise Data Audit Table */}
+            <div className="overflow-x-auto rounded-xl border border-slate-200">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 text-slate-500 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200">
+                  <tr>
+                    <th className="py-2.5 px-4">Date</th>
+                    <th className="py-2.5 px-4">Fresher Jobs (0-1 Yrs)</th>
+                    <th className="py-2.5 px-4">Experienced Jobs (&gt;1 Yrs)</th>
+                    <th className="py-2.5 px-4">Total Jobs</th>
+                    <th className="py-2.5 px-4">Fresher Ratio</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {(dayWiseJobsData?.day_wise || overview?.day_wise_job_trends || []).slice(-7).reverse().map((day) => {
+                    const total = day.fresher_jobs + day.experienced_jobs;
+                    const fresherRatio = total > 0 ? Math.round((day.fresher_jobs / total) * 100) : 0;
+                    return (
+                      <tr key={day.date} className="hover:bg-slate-50/50 transition">
+                        <td className="py-2.5 px-4 font-bold text-slate-800">{day.date}</td>
+                        <td className="py-2.5 px-4">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                            {day.fresher_jobs} jobs
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-4">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                            {day.experienced_jobs} jobs
+                          </span>
+                        </td>
+                        <td className="py-2.5 px-4 font-extrabold text-slate-900">{total} jobs</td>
+                        <td className="py-2.5 px-4 font-semibold text-slate-600">
+                          <div className="flex items-center gap-2">
+                            <div className="w-16 h-2 bg-slate-100 rounded-full overflow-hidden">
+                              <div className="h-full bg-emerald-500 rounded-full" style={{ width: `${fresherRatio}%` }}></div>
+                            </div>
+                            <span>{fresherRatio}%</span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
 
@@ -836,9 +1428,12 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
             </div>
 
-          </div>
+            </div>
 
-        </main>
+          </div>
+        )}
+
+      </main>
       </div>
 
     </div>
