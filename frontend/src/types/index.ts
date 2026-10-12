@@ -65,6 +65,10 @@ export interface AdminOverview {
   bengaluru_jobs: number;
   new_jobs_today: number;
   expired_jobs: number;
+  fresher_jobs: number;
+  experienced_jobs: number;
+  last_scan_time?: string;
+  next_scan_time?: string;
   crawler_success_rate: number;
   system_health: {
     backend_api: string;
@@ -74,6 +78,43 @@ export interface AdminOverview {
     scheduler_cron: string;
     disk_storage: string;
   };
+  top_skills?: { name: string; count: number; percent: number }[];
+  company_type_breakdown?: { name: string; count: number; value: number; color: string }[];
+}
+
+export interface AdminNotificationItem {
+  id: string;
+  category: 'user_registration' | 'scan_update' | 'job_metrics' | string;
+  title: string;
+  message: string;
+  is_read: boolean;
+  created_at: string;
+  formatted_time: string;
+  data: Record<string, any>;
+}
+
+export interface AdminNotificationsResponse {
+  unread_count: number;
+  live_metrics: {
+    expired_jobs: number;
+    new_jobs: number;
+    fresher_jobs: number;
+    experienced_jobs: number;
+    total_jobs: number;
+  };
+  notifications: AdminNotificationItem[];
+}
+
+export interface ScanRunItem {
+  id: string;
+  scan_time: string;
+  status: string;
+  companies: number;
+  jobs_found: number;
+  new: number;
+  updated: number;
+  expired: number;
+  duration: string;
 }
 
 export interface SkillInsight {

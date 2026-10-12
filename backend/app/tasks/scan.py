@@ -9,6 +9,7 @@ from app.models.company import Company, JobSource
 from app.models.job import Job, JobSkill, JobHistory
 from app.models.skill import Skill
 from app.models.scan import ScanRun, SourceRunResult
+from app.models.notification import AdminNotification
 from app.connectors.registry import get_connector
 from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
@@ -485,6 +486,40 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
             "expired_jobs": total_expired,
             "success_rate": 98.5
         }
+        db.commit()
+
+        # Create Admin Notification for scan run completion
+        scan_notif = AdminNotification(
+            category="scan_update",
+            title="Crawler Scan Completed",
+            message=f"Automated crawler scan completed across {total_scanned_sources} sources. Discovered {total_found} jobs ({total_new} new, {total_updated} updated, {total_expired} expired).",
+            data_json=scan_run.totals_json,
+            is_read=False,
+            created_at=datetime.utcnow()
+        )
+        db.add(scan_notif)
+
+        # Create Admin Notification for live catalog counts
+        fresher_cnt = db.query(Job).filter(Job.experience_min == 0, Job.experience_max <= 1).count()
+        experienced_cnt = db.query(Job).filter((Job.experience_min > 1) | (Job.experience_max > 1)).count()
+        expired_cnt = db.query(Job).filter(Job.status.in_(["expired", "stale", "closed"])).count()
+        total_cnt = db.query(Job).count()
+
+        metrics_notif = AdminNotification(
+            category="job_metrics",
+            title="Job Catalog Counts Updated",
+            message=f"Live Catalog Counts: {expired_cnt} Expired jobs, {total_new} New jobs, {fresher_cnt} Fresher jobs (0-1 yrs), {experienced_cnt} Experienced jobs (>1 yrs). Total: {total_cnt} jobs.",
+            data_json={
+                "expired_jobs": expired_cnt,
+                "new_jobs": total_new,
+                "fresher_jobs": fresher_cnt,
+                "experienced_jobs": experienced_cnt,
+                "total_jobs": total_cnt
+            },
+            is_read=False,
+            created_at=datetime.utcnow()
+        )
+        db.add(metrics_notif)
         db.commit()
 
         print(f"[Daily Scan] COMPLETED. Found: {total_found}, New: {total_new}, Updated: {total_updated}, Expired: {total_expired}")

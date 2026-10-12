@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Job, CandidateProfile, AdminOverview, MarketInsights } from '../types';
+import { Job, CandidateProfile, AdminOverview, MarketInsights, AdminNotificationsResponse, AdminNotificationItem, ScanRunItem } from '../types';
 
 const API_BASE_URL = '/api/v1';
 
@@ -144,14 +144,42 @@ export const api = {
     return response.data;
   },
 
-  // Admin Analytics
+  // Admin Analytics & Intelligence
   getAdminOverview: async () => {
     const response = await apiClient.get<AdminOverview>('/admin/overview');
     return response.data;
   },
 
+  getAdminNotifications: async () => {
+    const response = await apiClient.get<AdminNotificationsResponse>('/admin/notifications');
+    return response.data;
+  },
+
+  markNotificationRead: async (id: string) => {
+    const response = await apiClient.post<{ status: string; id: string }>(`/admin/notifications/${id}/read`);
+    return response.data;
+  },
+
+  markAllNotificationsRead: async () => {
+    const response = await apiClient.post<{ status: string }>('/admin/notifications/mark-all-read');
+    return response.data;
+  },
+
+  getScanRuns: async () => {
+    const response = await apiClient.get<ScanRunItem[]>('/admin/scans');
+    return response.data;
+  },
+
   triggerScan: async () => {
-    const response = await apiClient.post('/admin/scans/trigger');
+    const response = await apiClient.post<{
+      status: string;
+      message: string;
+      run_id: string;
+      jobs_found: number;
+      new_jobs: number;
+      updated_jobs: number;
+      companies_scanned: number;
+    }>('/admin/scans/trigger');
     return response.data;
   }
 };

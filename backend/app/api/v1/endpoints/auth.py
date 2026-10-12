@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User, EmailOTP
 from app.models.candidate import CandidateProfile
+from app.models.notification import AdminNotification
 from app.schemas.user import (
     UserRegister, 
     UserLogin, 
@@ -149,6 +150,23 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
         db.add(profile)
         db.commit()
 
+    # Record real Admin Notification for user registration with date & time
+    role_label = "Admin" if new_user.role == "admin" else "User"
+    admin_notif = AdminNotification(
+        category="user_registration",
+        title="New User Registered",
+        message=f"New {role_label} '{new_user.email}' registered successfully on JobNexa platform.",
+        data_json={
+            "email": new_user.email,
+            "full_name": new_user.full_name or new_user.email.split('@')[0],
+            "role": new_user.role,
+            "user_id": new_user.id
+        },
+        created_at=now
+    )
+    db.add(admin_notif)
+    db.commit()
+
     access_token = create_access_token(subject=new_user.id)
     return TokenResponse(
         access_token=access_token,
@@ -252,6 +270,23 @@ def register(user_in: UserRegister, db: Session = Depends(get_db)):
         )
         db.add(profile)
         db.commit()
+
+    # Record Admin Notification
+    role_label = "Admin" if user.role == "admin" else "User"
+    admin_notif = AdminNotification(
+        category="user_registration",
+        title="New User Registered",
+        message=f"New {role_label} '{user.email}' registered successfully on JobNexa platform.",
+        data_json={
+            "email": user.email,
+            "full_name": user_in.full_name or user.email.split('@')[0],
+            "role": user.role,
+            "user_id": user.id
+        },
+        created_at=datetime.utcnow()
+    )
+    db.add(admin_notif)
+    db.commit()
 
     return user
 

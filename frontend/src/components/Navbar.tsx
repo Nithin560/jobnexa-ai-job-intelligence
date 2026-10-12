@@ -101,17 +101,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               {/* Active Role Badge & Switcher */}
               {userRole === 'admin' ? (
                 <div className="flex items-center gap-1.5">
-                  <span className="hidden sm:inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl">
+                  <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl">
                     <Shield className="w-3.5 h-3.5 text-amber-600" /> Admin Mode
                   </span>
-                  <button
-                    onClick={handleSwitchToCandidate}
-                    className="text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-2.5 py-1 rounded-xl transition flex items-center gap-1"
-                    title="Switch to User View"
-                  >
-                    <User className="w-3.5 h-3.5" />
-                    <span>User</span>
-                  </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-1.5">

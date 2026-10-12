@@ -5,6 +5,7 @@ from app.models.company import Company, JobSource
 from app.models.job import Job, JobHistory, JobSkill, JobDuplicate, JobEmbedding, SavedJob
 from app.models.skill import Skill
 from app.models.scan import ScanRun, SourceRunResult
+from app.models.notification import AdminNotification
 
 __all__ = [
     "Base",
@@ -22,4 +23,5 @@ __all__ = [
     "SavedJob",
     "ScanRun",
     "SourceRunResult",
+    "AdminNotification",
 ]
