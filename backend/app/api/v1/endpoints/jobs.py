@@ -99,14 +99,30 @@ def list_jobs(
         else:
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
 
-    # Experience Filter (Strict Fresher vs Experienced Separation)
-    if exp_tier == "fresher":
+    # Auto-detect candidate profile experience tier if user is authenticated
+    candidate_tier = None
+    if current_user and current_user.role == "candidate":
+        cand_prof = db.query(CandidateProfile).filter(CandidateProfile.user_id == current_user.id).first()
+        if cand_prof:
+            candidate_tier = "fresher" if cand_prof.years_experience <= 1 else "experienced"
+
+    effective_tier = exp_tier or candidate_tier
+
+    # Experience Filter (Strict Fresher vs Experienced Account Separation)
+    if effective_tier == "fresher":
+        # Fresher User account ONLY gets Fresher jobs (0 - 1 years)
         query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)
-    elif exp_tier == "experienced":
+    elif effective_tier == "experienced":
+        # Experienced Person ONLY gets Experience jobs (1+ years)
         query = query.filter(or_(Job.experience_min >= 1, Job.experience_max > 1))
+        if exp_min is not None and exp_max is not None:
+            query = query.filter(Job.experience_max >= exp_min, Job.experience_min <= exp_max)
+        elif exp_min is not None:
+            query = query.filter(Job.experience_max >= exp_min)
+        elif exp_max is not None:
+            query = query.filter(Job.experience_min <= exp_max)
     elif exp_min is not None and exp_max is not None:
         if exp_min == 0 and exp_max <= 1:
-            # Strict Fresher filter: 0 to 1 years only
             query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)
         else:
             query = query.filter(Job.experience_max >= exp_min, Job.experience_min <= exp_max)

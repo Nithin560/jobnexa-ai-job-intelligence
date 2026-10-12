@@ -61,7 +61,6 @@ def seed_db(db: Session):
     # 2. Seed Admin Users & Default Candidate User
     admin_emails = [
         settings.ADMIN_EMAIL_ID,
-        "jobnexaaiplatform@gmail.com"
     ]
     for a_email in admin_emails:
         admin_obj = db.query(User).filter(User.email == a_email).first()

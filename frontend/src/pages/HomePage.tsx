@@ -194,84 +194,64 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-8 pb-16">
       
-      {/* Hero Banner with Realistic Bengaluru Landmark (Vidhana Soudha) Background */}
-      <div className="relative overflow-hidden rounded-3xl text-white p-8 md:p-12 shadow-2xl min-h-[300px]">
+      {/* Sleek, Compact Hero Banner with Realistic Bengaluru Landmark (Vidhana Soudha) Background */}
+      <div className="relative overflow-hidden rounded-2xl text-white p-5 md:p-6 shadow-md border border-slate-800/10">
         
-        {/* Realistic Vidhana Soudha Background Image - Enhanced Brightness & Clarity */}
+        {/* Realistic Vidhana Soudha Background Image - Bright, crisp & atmospheric */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat filter brightness-110 contrast-105"
           style={{ backgroundImage: `url(${bengaluruBanner})` }}
         ></div>
 
         {/* Soft, Transparent Gradient Overlay: Keeps Vidhana Soudha bright, sunlit and clear */}
-        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/75 via-slate-950/35 to-slate-950/15"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/80 via-slate-950/45 to-slate-950/20"></div>
 
-        {/* Flex container cleanly separating Left Content and Right Stats Card */}
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-
-          {/* Left Text Content */}
-          <div className="max-w-xl space-y-4">
-            <div className="inline-flex items-center gap-2 bg-blue-600/30 backdrop-blur-md text-blue-200 border border-blue-400/40 text-xs font-bold px-3 py-1 rounded-full shadow-md">
-              <Sparkles className="w-3.5 h-3.5 text-blue-300" />
-              <span>AI Powered Job Discovery</span>
+        {/* Compact Layout */}
+        <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="max-w-xl space-y-2">
+            <div className="inline-flex items-center gap-1.5 bg-blue-600/35 backdrop-blur-md text-blue-200 border border-blue-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+              <Sparkles className="w-3 h-3 text-blue-300" />
+              <span>AI Powered Bengaluru Job Discovery</span>
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-black leading-tight tracking-tight drop-shadow-lg text-white">
+            <h1 className="text-2xl md:text-3xl font-black leading-tight tracking-tight drop-shadow-md text-white">
               Discover <span className="text-blue-400">Bengaluru</span> Jobs
             </h1>
 
-            <p className="text-slate-100 text-sm md:text-base leading-relaxed drop-shadow-md font-medium">
-              AI-powered job discovery from 1000+ companies. Updated daily. Direct application links. No middlemen.
+            <p className="text-slate-100 text-xs md:text-sm leading-relaxed drop-shadow-sm font-medium">
+              Verified tech opportunities from 60+ companies across Bengaluru. 100% direct application links with no middlemen.
             </p>
 
-            <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-100 flex-wrap pt-2">
-              <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🏢 Startups</span>
-              <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🏢 Mid-size</span>
-              <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🏢 Large Companies</span>
-              <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">🔗 Direct Apply Links</span>
-              <span className="bg-slate-900/40 px-3 py-1.5 rounded-xl backdrop-blur-md border border-white/20 shadow-sm">⚡ No Middlemen</span>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-200 flex-wrap pt-1">
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🏢 Startups</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🏢 Mid-size</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🏢 Enterprise & MNCs</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">⚡ Direct Apply</span>
             </div>
           </div>
 
-          {/* Hero Stats Card - Compact 320px width on the right with frosted glass blur */}
-          <div className="w-full sm:w-[320px] lg:w-[320px] shrink-0 bg-slate-900/40 backdrop-blur-xl border border-white/25 p-5 rounded-2xl space-y-3.5 shadow-2xl">
-            <div className="flex items-center justify-between border-b border-white/20 pb-2.5">
-              <span className="text-xs font-bold text-emerald-400 flex items-center gap-2 drop-shadow-sm">
-                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Latest Scan Completed
+          {/* Compact Scan Status Widget on the Right */}
+          <div className="w-full sm:w-[260px] md:w-[260px] shrink-0 bg-slate-900/45 backdrop-blur-xl border border-white/25 p-3.5 rounded-xl space-y-2 shadow-lg">
+            <div className="flex items-center justify-between border-b border-white/20 pb-2 text-[11px]">
+              <span className="font-bold text-emerald-400 flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Live Scan
               </span>
-              <span className="text-xs text-slate-200 font-medium">
+              <span className="text-slate-200 font-medium">
                 {insights?.latest_scan?.time || 'Today, 08:00 AM'}
               </span>
-
             </div>
-            <div className="space-y-2 text-xs text-slate-100 font-medium">
+            <div className="space-y-1 text-xs text-slate-100">
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Companies Scanned:</span>
-                <strong className="text-white font-black text-sm">
-                  {(insights?.latest_scan?.companies_scanned ?? 17).toLocaleString()}
-                </strong>
+                <span className="text-slate-300">Total Openings:</span>
+                <strong className="text-white font-black text-sm">{(insights?.total_jobs ?? 472).toLocaleString()}</strong>
               </div>
               <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Jobs Found:</span>
-                <strong className="text-white font-black text-sm">
-                  {(insights?.latest_scan?.jobs_found ?? 497).toLocaleString()}
-                </strong>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> New Jobs Today:</span>
-                <strong className="text-emerald-300 font-black text-sm">
-                  {(insights?.latest_scan?.new_jobs ?? 44).toLocaleString()}
-                </strong>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Direct Application Links:</span>
-                <span className="text-emerald-400 font-bold text-xs">100% Direct</span>
+                <span className="text-slate-300">Companies Active:</span>
+                <strong className="text-emerald-300 font-black text-xs">{(insights?.total_companies ?? 60).toLocaleString()}</strong>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
 
       {/* 5 Stat Cards Row matching real database counts */}
@@ -359,115 +339,229 @@ export const HomePage: React.FC = () => {
         {/* Center Column: Job Listings Feed (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           
-          {/* Dedicated Experience Separation Tabs (Fresher vs Experienced) */}
-          <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1.5 flex-wrap sm:flex-nowrap">
-            <button
-              type="button"
-              onClick={() => handleTabChange('fresher')}
-              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-                activeExpTab === 'fresher'
-                  ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
-            >
-              <GraduationCap className="w-4 h-4 shrink-0" />
-              <span>Fresher Jobs (0 - 1 Yrs)</span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
-                activeExpTab === 'fresher' ? 'bg-blue-700 text-white' : 'bg-blue-100 text-blue-700'
-              }`}>
-                54
-              </span>
-            </button>
+          {/* Conditional Feed Headers: Strict Account-Level Personalization */}
+          {sessionStorage.getItem('user_experience_tier') === 'fresher' ? (
+            /* Dedicated Header for Fresher Candidate Account */
+            <div className="bg-white p-4 rounded-2xl border border-blue-200/80 shadow-xs flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base font-black text-slate-900">Fresher Opportunities (0 - 1 Years)</h2>
+                    <span className="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-200">
+                      Fresher Account
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Curated exclusively for entry-level and fresh graduate candidates in Bengaluru
+                  </p>
+                </div>
+              </div>
 
-            <button
-              type="button"
-              onClick={() => handleTabChange('experienced')}
-              className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
-                activeExpTab === 'experienced'
-                  ? 'bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-100'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
-              }`}
-            >
-              <Briefcase className="w-4 h-4 shrink-0" />
-              <span>Experienced Jobs (1+ Yrs)</span>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
-                activeExpTab === 'experienced' ? 'bg-indigo-700 text-white' : 'bg-indigo-100 text-indigo-700'
-              }`}>
-                418
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleTabChange('all')}
-              className={`py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
-                activeExpTab === 'all'
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
-              }`}
-            >
-              <span>All Jobs</span>
-              <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
-                activeExpTab === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
-              }`}>
-                472
-              </span>
-            </button>
-          </div>
-
-          {/* Feed Header with Previous and Next Arrows */}
-          <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-3">
-            <div>
-              <h2 className="text-lg font-black text-slate-900">
-                {activeExpTab === 'fresher' 
-                  ? '🎓 Fresher Jobs (0 - 1 Years)' 
-                  : activeExpTab === 'experienced' 
-                  ? '💼 Experienced Jobs (> 1 Years)' 
-                  : 'Jobs in Bengaluru'}
-              </h2>
-              <p className="text-xs text-slate-500 font-medium">
-                Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs
-              </p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs font-medium text-slate-500">Sort by:</span>
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-medium text-slate-500">Sort:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                  className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500"
                 >
                   <option value="Relevance">Relevance</option>
                   <option value="Recent">Most Recent</option>
                   <option value="Match">Highest Match Score</option>
                 </select>
-              </div>
 
-              {/* Top Navigation Arrows: Left (<-) and Right (->) */}
-              <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
-                <button
-                  onClick={() => setPage((p) => Math.max(p - 1, 1))}
-                  disabled={page <= 1}
-                  className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-xs flex items-center justify-center"
-                  title="Previous Jobs (<-)"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
-                <span className="text-xs font-bold text-slate-700 min-w-10 text-center">
-                  {page} / {totalPages || 1}
-                </span>
-                <button
-                  onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
-                  disabled={page >= totalPages}
-                  className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-xs flex items-center justify-center"
-                  title="Next Jobs (->)"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1 border-l border-slate-200 pl-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                    disabled={page <= 1}
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    title="Previous Jobs (<-)"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <span className="text-xs font-bold text-slate-700 px-1">
+                    {page} / {Math.max(totalPages, 1)}
+                  </span>
+                  <button
+                    onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                    disabled={page >= totalPages}
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    title="Next Jobs (->)"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          ) : sessionStorage.getItem('user_experience_tier') === 'experienced' ? (
+            /* Dedicated Header for Experienced Candidate Account */
+            <div className="bg-white p-4 rounded-2xl border border-indigo-200/80 shadow-xs flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                  <Briefcase className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-base font-black text-slate-900">Experienced Career Openings (1+ Years)</h2>
+                    <span className="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-200">
+                      Experienced Account
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 font-medium mt-0.5">
+                    Curated exclusively for experienced software engineers and industry specialists in Bengaluru
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <span className="text-xs font-medium text-slate-500">Sort:</span>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500"
+                >
+                  <option value="Relevance">Relevance</option>
+                  <option value="Recent">Most Recent</option>
+                  <option value="Match">Highest Match Score</option>
+                </select>
+
+                <div className="flex items-center gap-1 border-l border-slate-200 pl-2">
+                  <button
+                    onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                    disabled={page <= 1}
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    title="Previous Jobs (<-)"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                  <span className="text-xs font-bold text-slate-700 px-1">
+                    {page} / {Math.max(totalPages, 1)}
+                  </span>
+                  <button
+                    onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                    disabled={page >= totalPages}
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    title="Next Jobs (->)"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            /* Guest / Public Mode with 3 Exploration Tabs */
+            <>
+              <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1.5 flex-wrap sm:flex-nowrap">
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('fresher')}
+                  className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                    activeExpTab === 'fresher'
+                      ? 'bg-blue-600 text-white shadow-sm ring-2 ring-blue-100'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <GraduationCap className="w-4 h-4 shrink-0" />
+                  <span>Fresher Jobs (0 - 1 Yrs)</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                    activeExpTab === 'fresher' ? 'bg-blue-700 text-white' : 'bg-blue-100 text-blue-700'
+                  }`}>
+                    54
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('experienced')}
+                  className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 ${
+                    activeExpTab === 'experienced'
+                      ? 'bg-indigo-600 text-white shadow-sm ring-2 ring-indigo-100'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  }`}
+                >
+                  <Briefcase className="w-4 h-4 shrink-0" />
+                  <span>Experienced Jobs (1+ Yrs)</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
+                    activeExpTab === 'experienced' ? 'bg-indigo-700 text-white' : 'bg-indigo-100 text-indigo-700'
+                  }`}>
+                    418
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleTabChange('all')}
+                  className={`py-2.5 px-3 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 ${
+                    activeExpTab === 'all'
+                      ? 'bg-slate-900 text-white shadow-sm'
+                      : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                  }`}
+                >
+                  <span>All Jobs</span>
+                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
+                    activeExpTab === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
+                  }`}>
+                    472
+                  </span>
+                </button>
+              </div>
+
+              {/* Feed Header with Previous and Next Arrows */}
+              <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-3">
+                <div>
+                  <h2 className="text-lg font-black text-slate-900">
+                    {activeExpTab === 'fresher' 
+                      ? '🎓 Fresher Jobs (0 - 1 Years)' 
+                      : activeExpTab === 'experienced' 
+                      ? '💼 Experienced Jobs (> 1 Years)' 
+                      : 'Jobs in Bengaluru'}
+                  </h2>
+                  <p className="text-xs text-slate-500 font-medium">
+                    Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs
+                  </p>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-medium text-slate-500">Sort by:</span>
+                    <select
+                      value={sortBy}
+                      onChange={(e) => setSortBy(e.target.value)}
+                      className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                    >
+                      <option value="Relevance">Relevance</option>
+                      <option value="Recent">Most Recent</option>
+                      <option value="Match">Highest Match Score</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+                    <button
+                      onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                      disabled={page <= 1}
+                      className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-xs flex items-center justify-center"
+                      title="Previous Jobs (<-)"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                    </button>
+                    <span className="text-xs font-bold text-slate-700 px-1">
+                      {page} / {Math.max(totalPages, 1)}
+                    </span>
+                    <button
+                      onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                      disabled={page >= totalPages}
+                      className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-xs flex items-center justify-center"
+                      title="Next Jobs (->)"
+                    >
+                      <ChevronRight className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
 
           {/* Exactly 3 Company Category Buttons: Startups & Scale-ups, Mid-Market Enterprises, Enterprise & MNCs */}
           <div className="bg-white p-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-2">

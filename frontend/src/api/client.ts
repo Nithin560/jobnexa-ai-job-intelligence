@@ -107,7 +107,7 @@ export const api = {
   },
 
   quickLoginAsAdmin: async () => {
-    return await api.login('jobnexaaiplatform@gmail.com', '22H71A0560pandu@');
+    return await api.login('nithinvandana560@gmail.com', '9347388372pandu@');
   },
 
   logout: () => {

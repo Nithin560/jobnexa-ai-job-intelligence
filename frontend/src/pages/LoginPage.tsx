@@ -368,7 +368,7 @@ export const LoginPage: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={portalRole === 'admin' ? 'jobnexaaiplatform@gmail.com' : 'name@company.com'}
+                  placeholder={portalRole === 'admin' ? 'nithinvandana560@gmail.com' : 'name@company.com'}
                   required
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition"
                 />
@@ -421,7 +421,7 @@ export const LoginPage: React.FC = () => {
               <form onSubmit={handleRequestOTP} className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    {portalRole === 'admin' ? 'Administrator Email' : 'Email Address'}
+                    {portalRole === 'admin' ? 'Admin Email' : 'Email Address'}
                   </label>
                   <div className="relative">
                     <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
@@ -429,7 +429,7 @@ export const LoginPage: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={portalRole === 'admin' ? 'jobnexaaiplatform@gmail.com' : 'name@company.com'}
+                      placeholder={portalRole === 'admin' ? 'nithinvandana560@gmail.com' : 'name@company.com'}
                       required
                       className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition"
                     />
@@ -530,7 +530,7 @@ export const LoginPage: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="jobnexaaiplatform@gmail.com"
+                      placeholder="nithinvandana560@gmail.com"
                       required
                       className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-amber-600 focus:bg-white transition"
                     />

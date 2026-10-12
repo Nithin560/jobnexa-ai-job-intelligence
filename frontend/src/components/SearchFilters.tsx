@@ -1,5 +1,5 @@
 import React from 'react';
-import { Filter, RotateCcw } from 'lucide-react';
+import { Filter, RotateCcw, GraduationCap } from 'lucide-react';
 import { MarketInsights } from '../types';
 
 interface SearchFiltersProps {
@@ -115,23 +115,37 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         </div>
       </div>
 
-      {/* Experience Level */}
+      {/* Experience Level (Tailored to logged-in user tier) */}
       <div>
         <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Experience Level</h4>
-        <div className="space-y-2 text-sm text-slate-600">
-          {experienceOptions.map((exp) => (
-            <label key={exp.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
-              <input
-                type="radio"
-                name="exp_level"
-                checked={filters.experience_level === exp.val}
-                onChange={() => onFilterChange('experience_level', filters.experience_level === exp.val ? '' : exp.val)}
-                className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
-              />
-              <span>{exp.label} ({exp.count.toLocaleString()})</span>
-            </label>
-          ))}
-        </div>
+        {sessionStorage.getItem('user_experience_tier') === 'fresher' ? (
+          <div className="bg-blue-50/80 border border-blue-200 text-blue-900 rounded-xl p-3 text-xs flex items-center justify-between">
+            <span className="flex items-center gap-2 font-bold">
+              <GraduationCap className="w-4 h-4 text-blue-600" />
+              Fresher (0 - 1 years)
+            </span>
+            <span className="bg-blue-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full">
+              {getExpCount('Fresher', 54)} jobs
+            </span>
+          </div>
+        ) : (
+          <div className="space-y-2 text-sm text-slate-600">
+            {experienceOptions
+              .filter(exp => sessionStorage.getItem('user_experience_tier') === 'experienced' ? exp.val !== '0' : true)
+              .map((exp) => (
+                <label key={exp.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
+                  <input
+                    type="radio"
+                    name="exp_level"
+                    checked={filters.experience_level === exp.val}
+                    onChange={() => onFilterChange('experience_level', filters.experience_level === exp.val ? '' : exp.val)}
+                    className="w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
+                  />
+                  <span>{exp.label} ({exp.count.toLocaleString()})</span>
+                </label>
+              ))}
+          </div>
+        )}
       </div>
 
       {/* Company Type */}

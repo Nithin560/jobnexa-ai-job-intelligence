@@ -27,7 +27,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
 
     try {
       if (mode === 'login') {
-        const loginEmail = email.trim() || (role === 'admin' ? 'jobnexaaiplatform@gmail.com' : 'nithin@example.com');
+        const loginEmail = email.trim() || (role === 'admin' ? 'nithinvandana560@gmail.com' : 'nithin@example.com');
         
         if (role === 'admin' && adminAuthType === 'otp') {
           // Admin OTP Login flow
@@ -289,7 +289,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   <Mail className="w-4 h-4 text-slate-400 mr-2" />
                   <input
                     type="email"
-                    placeholder={role === 'admin' ? 'jobnexaaiplatform@gmail.com' : 'nithin@example.com'}
+                    placeholder={role === 'admin' ? 'nithinvandana560@gmail.com' : 'nithin@example.com'}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="bg-transparent text-sm w-full outline-none text-slate-800"

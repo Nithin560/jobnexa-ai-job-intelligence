@@ -24,8 +24,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24  # 1 day
 
     # Admin Credentials
-    ADMIN_EMAIL_ID: str = "nithinvandana26@gmail.com"
-    ADMIN_PASSWORD: str = "22H71A0560pandu@"
+    ADMIN_EMAIL_ID: str = "nithinvandana560@gmail.com"
+    ADMIN_PASSWORD: str = "9347388372pandu@"
 
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [
