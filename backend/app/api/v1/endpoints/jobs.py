@@ -44,6 +44,7 @@ def list_jobs(
     exp_min: Optional[int] = Query(None, ge=0),
     exp_max: Optional[int] = Query(None, le=30),
     exp_tier: Optional[str] = Query(None, description="Filter specifically for 'fresher' (0-1 yrs) or 'experienced' (>1 yrs)"),
+    role_type: Optional[str] = Query(None, description="Filter by role type: software, data, design, product, qa, sales, operations, hr"),
     page: int = Query(1, ge=1),
     page_size: int = Query(20, ge=1, le=100),
     sort_by: str = Query("relevance", description="relevance or date"),
@@ -98,6 +99,85 @@ def list_jobs(
             query = query.join(Job.company, isouter=True).filter(Company.company_type.in_(["Enterprise", "Large"]))
         else:
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
+
+    # Role Type Filter (Software, Data, Design, Product, QA, Sales, Operations, HR)
+    if role_type and role_type.lower() != "all":
+        rt = role_type.lower().strip()
+        if "soft" in rt or "eng" in rt or "dev" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%software%"),
+                Job.title.ilike("%developer%"),
+                Job.title.ilike("%engineer%"),
+                Job.title.ilike("%backend%"),
+                Job.title.ilike("%frontend%"),
+                Job.title.ilike("%full stack%"),
+                Job.title.ilike("%fullstack%"),
+                Job.title.ilike("%web%"),
+                Job.title.ilike("%ai%"),
+                Job.title.ilike("%python%"),
+                Job.title.ilike("%cloud%"),
+                Job.title.ilike("%architect%"),
+                Job.title.ilike("%tech%")
+            ))
+        elif "data" in rt or "analyst" in rt or "analytics" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%data%"),
+                Job.title.ilike("%analyst%"),
+                Job.title.ilike("%analytics%"),
+                Job.title.ilike("%machine learning%"),
+                Job.title.ilike("%scientist%"),
+                Job.title.ilike("%intelligence%")
+            ))
+        elif "design" in rt or "ui" in rt or "ux" in rt or "creative" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%design%"),
+                Job.title.ilike("%ui%"),
+                Job.title.ilike("%ux%"),
+                Job.title.ilike("%creative%"),
+                Job.title.ilike("%video%"),
+                Job.title.ilike("%content%"),
+                Job.title.ilike("%writer%"),
+                Job.title.ilike("%editor%")
+            ))
+        elif "product" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%product%"),
+                Job.title.ilike("%program manager%")
+            ))
+        elif "qa" in rt or "test" in rt or "quality" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%qa%"),
+                Job.title.ilike("%test%"),
+                Job.title.ilike("%quality%"),
+                Job.title.ilike("%automation%")
+            ))
+        elif "sale" in rt or "business" in rt or "bd" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%sales%"),
+                Job.title.ilike("%business dev%"),
+                Job.title.ilike("%business development%"),
+                Job.title.ilike("%partnership%"),
+                Job.title.ilike("%growth%"),
+                Job.title.ilike("%account executive%")
+            ))
+        elif "op" in rt or "support" in rt or "service" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%operation%"),
+                Job.title.ilike("%support%"),
+                Job.title.ilike("%associate%"),
+                Job.title.ilike("%customer success%"),
+                Job.title.ilike("%specialist%")
+            ))
+        elif "hr" in rt or "recruit" in rt or "talent" in rt or "people" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%hr%"),
+                Job.title.ilike("%recruit%"),
+                Job.title.ilike("%talent%"),
+                Job.title.ilike("%people%"),
+                Job.title.ilike("%human resource%")
+            ))
+        else:
+            query = query.filter(Job.title.ilike(f"%{role_type}%"))
 
     # Auto-detect candidate profile experience tier if user is authenticated
     candidate_tier = None

@@ -62,6 +62,8 @@ export const HomePage: React.FC = () => {
     (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'candidate'
   );
 
+  const [roleType, setRoleType] = useState<string>('all');
+
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
     work_mode: '',
@@ -163,6 +165,7 @@ export const HomePage: React.FC = () => {
         exp_min: exp_min,
         exp_max: exp_max,
         exp_tier: exp_tier,
+        role_type: roleType !== 'all' ? roleType : undefined,
         page: page,
         page_size: pageSize,
       });
@@ -183,11 +186,11 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchParams, filters, activeExpTab]);
+  }, [searchParams, filters, activeExpTab, roleType]);
 
   useEffect(() => {
     fetchJobs();
-  }, [searchParams, filters, page, activeExpTab]);
+  }, [searchParams, filters, page, activeExpTab, roleType]);
 
   const handleFilterChange = (key: string, value: string) => {
     if (key === 'experience_level') {
@@ -216,6 +219,7 @@ export const HomePage: React.FC = () => {
 
   const handleClearFilters = () => {
     setActiveExpTab('all');
+    setRoleType('all');
     setFilters({ source_type: '', work_mode: '', company_type: '', employment_type: '', experience_level: '' });
   };
 
@@ -398,17 +402,42 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2.5">
-                <span className="text-xs font-medium text-slate-500">Sort:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500"
-                >
-                  <option value="Relevance">Relevance</option>
-                  <option value="Recent">Most Recent</option>
-                  <option value="Match">Highest Match Score</option>
-                </select>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                {/* Role Type Filter Dropdown for Freshers */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-slate-500">Role:</span>
+                  <select
+                    value={roleType}
+                    onChange={(e) => {
+                      setRoleType(e.target.value);
+                      setPage(1);
+                    }}
+                    className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="software">Software</option>
+                    <option value="data">Data & Analytics</option>
+                    <option value="design">Design & Creative</option>
+                    <option value="product">Product Management</option>
+                    <option value="qa">QA & Testing</option>
+                    <option value="sales">Sales & Business Dev</option>
+                    <option value="operations">Operations & Support</option>
+                    <option value="hr">HR & Recruitment</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
+                  <span className="text-xs font-medium text-slate-500">Sort:</span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
+                  >
+                    <option value="Relevance">Relevance</option>
+                    <option value="Recent">Most Recent</option>
+                    <option value="Match">Highest Match Score</option>
+                  </select>
+                </div>
 
                 <div className="flex items-center gap-1 border-l border-slate-200 pl-2">
                   <button
@@ -453,17 +482,42 @@ export const HomePage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2.5">
-                <span className="text-xs font-medium text-slate-500">Sort:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500"
-                >
-                  <option value="Relevance">Relevance</option>
-                  <option value="Recent">Most Recent</option>
-                  <option value="Match">Highest Match Score</option>
-                </select>
+              <div className="flex items-center gap-2.5 flex-wrap">
+                {/* Role Type Filter Dropdown for Experienced */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-slate-500">Role:</span>
+                  <select
+                    value={roleType}
+                    onChange={(e) => {
+                      setRoleType(e.target.value);
+                      setPage(1);
+                    }}
+                    className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
+                  >
+                    <option value="all">All Roles</option>
+                    <option value="software">Software</option>
+                    <option value="data">Data & Analytics</option>
+                    <option value="design">Design & Creative</option>
+                    <option value="product">Product Management</option>
+                    <option value="qa">QA & Testing</option>
+                    <option value="sales">Sales & Business Dev</option>
+                    <option value="operations">Operations & Support</option>
+                    <option value="hr">HR & Recruitment</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
+                  <span className="text-xs font-medium text-slate-500">Sort:</span>
+                  <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value)}
+                    className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
+                  >
+                    <option value="Relevance">Relevance</option>
+                    <option value="Recent">Most Recent</option>
+                    <option value="Match">Highest Match Score</option>
+                  </select>
+                </div>
 
                 <div className="flex items-center gap-1 border-l border-slate-200 pl-2">
                   <button
