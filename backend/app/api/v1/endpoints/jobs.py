@@ -92,6 +92,7 @@ def list_jobs(
         elif loc_low in ["worldwide", "worldwide remote", "global", "remote"]:
             query = query.filter(or_(
                 Job.location.ilike("%worldwide%"),
+                Job.location.ilike("%remote%"),
                 Job.location.ilike("%anywhere%"),
                 Job.location.ilike("%global%")
             ))
