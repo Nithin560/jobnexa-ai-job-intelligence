@@ -137,6 +137,33 @@ export const api = {
     return response.data;
   },
 
+  getScanStatus: async () => {
+    const response = await apiClient.get<{
+      is_running: boolean;
+      status: string;
+      formatted_time?: string;
+      last_scan_time?: string;
+      totals?: {
+        companies_scanned?: number;
+        jobs_found?: number;
+        new_jobs?: number;
+        updated_jobs?: number;
+      };
+    }>('/jobs/scan-status');
+    return response.data;
+  },
+
+  autoScanCheck: async (force = false) => {
+    const response = await apiClient.post<{
+      started: boolean;
+      status: string;
+      message: string;
+      last_scan_time?: string;
+      scan_info?: any;
+    }>('/jobs/auto-scan-check', null, { params: { force } });
+    return response.data;
+  },
+
 
   // Candidate Matching & Profile
   getProfile: async () => {

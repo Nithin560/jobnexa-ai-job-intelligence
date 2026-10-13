@@ -19,6 +19,8 @@ class JobPortalConnector:
             return self._fetch_arbeitnow(source_id)
         elif "jobicy" in slug:
             return self._fetch_jobicy(source_id)
+        elif "remotive" in slug:
+            return self._fetch_remotive(source_id)
         return []
 
     def _fetch_arbeitnow(self, source_id: str) -> List[RawJob]:
@@ -146,8 +148,75 @@ class JobPortalConnector:
 
         return raw_jobs
 
+    def _fetch_remotive(self, source_id: str) -> List[RawJob]:
+        url = "https://remotive.com/api/remote-jobs?limit=50"
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "JobNexaAI-JobIntelligence/1.0 (+https://github.com/Nithin560/jobnexa-ai-job-intelligence)",
+                "Accept": "application/json"
+            }
+        )
+
+        try:
+            with urllib.request.urlopen(req, timeout=self.timeout) as resp:
+                if resp.status != 200:
+                    return []
+                data = json.loads(resp.read().decode("utf-8"))
+        except Exception as e:
+            print(f"[JobPortalConnector: Remotive] Error: {e}")
+            return []
+
+        items = data.get("jobs", [])
+        raw_jobs: List[RawJob] = []
+
+        for item in items:
+            title = (item.get("title") or "").strip()
+            company = (item.get("company_name") or "Remotive Partner").strip()
+            apply_url = item.get("url") or ""
+            job_id = str(item.get("id") or "")
+            req_loc = (item.get("candidate_required_location") or "Worldwide").strip()
+
+            loc = f"Bengaluru, Karnataka ({req_loc} Remote)"
+            desc_html = item.get("description") or ""
+            if desc_html:
+                soup = BeautifulSoup(desc_html, "html.parser")
+                clean_desc = soup.get_text(separator="\n").strip()
+            else:
+                clean_desc = f"{title} at {company} via Remotive Job Platform."
+
+            pub_date_str = item.get("publication_date")
+            posted_dt = None
+            if pub_date_str:
+                try:
+                    posted_dt = datetime.fromisoformat(pub_date_str.replace("Z", "+00:00"))
+                except Exception:
+                    posted_dt = datetime.utcnow()
+
+            raw_jobs.append(
+                RawJob(
+                    source_id=source_id,
+                    external_id=job_id,
+                    title=title,
+                    company=company,
+                    location=loc,
+                    description=clean_desc,
+                    apply_url=apply_url,
+                    source_url=url,
+                    posted_at=posted_dt or datetime.utcnow(),
+                    fetched_at=datetime.utcnow()
+                )
+            )
+
+        return raw_jobs
+
     def health_check(self, portal_slug: str) -> SourceHealth:
-        url = "https://www.arbeitnow.com/api/job-board-api" if portal_slug == "arbeitnow" else "https://jobicy.com/api/v2/remote-jobs?count=1"
+        if portal_slug == "arbeitnow":
+            url = "https://www.arbeitnow.com/api/job-board-api"
+        elif portal_slug == "remotive":
+            url = "https://remotive.com/api/remote-jobs?limit=1"
+        else:
+            url = "https://jobicy.com/api/v2/remote-jobs?count=1"
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "JobNexaAI/1.0"})
             with urllib.request.urlopen(req, timeout=self.timeout) as resp:

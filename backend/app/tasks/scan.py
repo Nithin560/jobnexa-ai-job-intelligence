@@ -2,6 +2,7 @@ import sys
 import argparse
 import uuid
 from datetime import datetime, timedelta
+import threading
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
 from app.db.session import SessionLocal
@@ -14,6 +15,10 @@ from app.connectors.registry import get_connector
 from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
 from app.core.company_logos import get_company_logo, get_canonical_domain, get_company_type
+
+_scan_lock = threading.Lock()
+_is_scan_running = False
+_last_scan_result = {}
 
 # Real Companies & Career ATS endpoints + Job Platforms
 TARGET_SOURCES = [
@@ -168,6 +173,96 @@ TARGET_SOURCES = [
         "slug": "rubrik",
         "source_type": "career_portal"
     },
+    {
+        "name": "Databricks",
+        "domain": "databricks.com",
+        "careers_url": "https://www.databricks.com/company/careers",
+        "company_type": "Enterprise",
+        "logo_url": "https://www.google.com/s2/favicons?domain=databricks.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "databricks",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Cloudflare",
+        "domain": "cloudflare.com",
+        "careers_url": "https://www.cloudflare.com/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=cloudflare.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "cloudflare",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Coinbase",
+        "domain": "coinbase.com",
+        "careers_url": "https://www.coinbase.com/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=coinbase.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "coinbase",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Datadog",
+        "domain": "datadoghq.com",
+        "careers_url": "https://www.datadoghq.com/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=datadoghq.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "datadog",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "PagerDuty",
+        "domain": "pagerduty.com",
+        "careers_url": "https://www.pagerduty.com/careers",
+        "company_type": "Mid-size",
+        "logo_url": "https://www.google.com/s2/favicons?domain=pagerduty.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "pagerduty",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Gusto",
+        "domain": "gusto.com",
+        "careers_url": "https://gusto.com/about/careers",
+        "company_type": "Mid-size",
+        "logo_url": "https://www.google.com/s2/favicons?domain=gusto.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "gusto",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Brex",
+        "domain": "brex.com",
+        "careers_url": "https://www.brex.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=brex.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "brex",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Cockroach Labs",
+        "domain": "cockroachlabs.com",
+        "careers_url": "https://www.cockroachlabs.com/careers",
+        "company_type": "Mid-size",
+        "logo_url": "https://www.google.com/s2/favicons?domain=cockroachlabs.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "cockroachlabs",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Spotify",
+        "domain": "spotify.com",
+        "careers_url": "https://www.lifeatspotify.com",
+        "company_type": "Enterprise",
+        "logo_url": "https://www.google.com/s2/favicons?domain=spotify.com&sz=128",
+        "connector_key": "lever_api",
+        "slug": "spotify",
+        "source_type": "career_portal"
+    },
     # --- Live Job Portals & Aggregators ---
     {
         "name": "Arbeitnow",
@@ -187,6 +282,16 @@ TARGET_SOURCES = [
         "logo_url": "https://www.google.com/s2/favicons?domain=jobicy.com&sz=128",
         "connector_key": "job_portal_api",
         "slug": "jobicy",
+        "source_type": "job_portal"
+    },
+    {
+        "name": "Remotive",
+        "domain": "remotive.com",
+        "careers_url": "https://remotive.com",
+        "company_type": "Job Platform",
+        "logo_url": "https://www.google.com/s2/favicons?domain=remotive.com&sz=128",
+        "connector_key": "job_portal_api",
+        "slug": "remotive",
         "source_type": "job_portal"
     }
 ]
@@ -275,9 +380,9 @@ def get_or_create_employer(db: Session, company_name: str, careers_url: str = No
 
 
 def is_bengaluru_or_india_job(location_str: str) -> bool:
-    """Check if location string relates to Bengaluru or India."""
+    """Check if location string relates to Bengaluru or India (including worldwide remote accessible)."""
     loc_lower = (location_str or "").lower()
-    keywords = ["bengaluru", "bangalore", "karnataka", "india", "remote - india", "blr"]
+    keywords = ["bengaluru", "bangalore", "karnataka", "india", "remote - india", "blr", "worldwide", "anywhere"]
     return any(k in loc_lower for k in keywords)
 
 
@@ -523,11 +628,100 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
         db.commit()
 
         print(f"[Daily Scan] COMPLETED. Found: {total_found}, New: {total_new}, Updated: {total_updated}, Expired: {total_expired}")
+        global _last_scan_result
+        _last_scan_result = scan_run.totals_json or {}
         return scan_run.totals_json
 
     finally:
         if close_db:
             db.close()
+
+
+def is_scanner_busy() -> bool:
+    """Returns True if a live scan is currently executing in background."""
+    global _is_scan_running
+    return _is_scan_running
+
+
+def get_last_scan_info() -> Dict[str, Any]:
+    """Returns the most recent scan summary info and status."""
+    global _is_scan_running, _last_scan_result
+    db = SessionLocal()
+    try:
+        latest = db.query(ScanRun).order_by(ScanRun.started_at.desc()).first()
+        if latest:
+            return {
+                "is_running": _is_scan_running,
+                "run_id": latest.id,
+                "status": "running" if _is_scan_running else latest.status,
+                "started_at": latest.started_at.isoformat() if latest.started_at else None,
+                "finished_at": latest.finished_at.isoformat() if latest.finished_at else None,
+                "formatted_time": latest.started_at.strftime("%b %d, %I:%M %p") if latest.started_at else "Today, 08:00 AM",
+                "totals": latest.totals_json or _last_scan_result or {}
+            }
+        return {
+            "is_running": _is_scan_running,
+            "status": "running" if _is_scan_running else "idle",
+            "formatted_time": "Today, 08:00 AM",
+            "totals": _last_scan_result or {}
+        }
+    finally:
+        db.close()
+
+
+def start_background_scan_task(trigger: str = "site_open", force: bool = False) -> Dict[str, Any]:
+    """
+    Thread-safe initiator that scans all real Career Websites and Job Portals in a background worker.
+    Ensures non-blocking execution so the web platform responds immediately.
+    """
+    global _is_scan_running
+    with _scan_lock:
+        if _is_scan_running:
+            return {
+                "started": False,
+                "status": "already_running",
+                "message": "Live Bengaluru job scan is already executing across Career Websites & Job Portals."
+            }
+        
+        if not force:
+            # Check if a fresh scan was executed in the last 60 minutes
+            db = SessionLocal()
+            try:
+                latest = db.query(ScanRun).filter(ScanRun.status == "completed").order_by(ScanRun.finished_at.desc()).first()
+                if latest and latest.finished_at:
+                    elapsed_minutes = (datetime.utcnow() - latest.finished_at).total_seconds() / 60.0
+                    if elapsed_minutes < 60.0:
+                        return {
+                            "started": False,
+                            "status": "fresh",
+                            "message": f"Job catalog is up to date (scanned {int(elapsed_minutes)}m ago).",
+                            "last_scan_time": latest.started_at.strftime("%b %d, %I:%M %p"),
+                            "totals": latest.totals_json or {}
+                        }
+            finally:
+                db.close()
+
+        _is_scan_running = True
+
+    def _worker():
+        global _is_scan_running
+        print(f"[Live Scanner Worker] Launching scan across all Career Websites & Job Portals (trigger: {trigger})...")
+        try:
+            run_daily_scan(scope="bengaluru", trigger=trigger)
+            print(f"[Live Scanner Worker] Scan completed successfully.")
+        except Exception as err:
+            print(f"[Live Scanner Worker] Error during scan execution: {err}")
+        finally:
+            with _scan_lock:
+                _is_scan_running = False
+
+    t = threading.Thread(target=_worker, daemon=True)
+    t.start()
+    return {
+        "started": True,
+        "status": "scanning",
+        "message": "Live Bengaluru job scan started in background across all Career Websites & Job Portals."
+    }
 
 
 if __name__ == "__main__":

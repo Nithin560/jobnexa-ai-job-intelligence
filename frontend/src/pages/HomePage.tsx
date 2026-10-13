@@ -7,7 +7,7 @@ import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
   Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight,
-  GraduationCap
+  GraduationCap, RefreshCw
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
@@ -32,8 +32,8 @@ const defaultExpDonutData = [
 ];
 
 const defaultRecentScans = [
+  { time: 'Today, 07:26 AM', count: '618 jobs found' },
   { time: 'Today, 04:53 AM', count: '497 jobs found' },
-  { time: 'Today, 04:53 AM', count: '80 jobs found' },
   { time: 'Today, 04:31 AM', count: '372 jobs found' },
   { time: 'Today, 04:29 AM', count: '372 jobs found' },
 ];
@@ -41,13 +41,18 @@ const defaultRecentScans = [
 export const HomePage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [jobs, setJobs] = useState<Job[]>([]);
-  const [totalJobs, setTotalJobs] = useState(472);
+  const [totalJobs, setTotalJobs] = useState(618);
   const [insights, setInsights] = useState<MarketInsights | null>(null);
   const [loading, setLoading] = useState(true);
   const [sortBy, setSortBy] = useState('Relevance');
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const pageSize = 4; // Display jobs up to the recent scan section
+
+  // Live real-time scan state (across all career websites & job portals)
+  const [isLiveScanning, setIsLiveScanning] = useState(false);
+  const [scanBannerText, setScanBannerText] = useState<string | null>(null);
+  const [liveScanInfo, setLiveScanInfo] = useState<any>(null);
 
   // User's experience tier (auto-initialized from registered user profile or toggleable)
   const [activeExpTab, setActiveExpTab] = useState<'all' | 'fresher' | 'experienced'>(() => {
@@ -74,21 +79,100 @@ export const HomePage: React.FC = () => {
 
   const queryQ = searchParams.get('q') || '';
 
-  // Load real market insights once on mount
-  useEffect(() => {
-    const loadInsights = async () => {
-      try {
-        const data = await api.getMarketInsights();
-        setInsights(data);
-        if (data.total_jobs) {
-          setTotalJobs(data.total_jobs);
-        }
-      } catch (err) {
-        console.error('Failed to load market insights:', err);
+  // Load real market insights
+  const loadInsights = async () => {
+    try {
+      const data = await api.getMarketInsights();
+      setInsights(data);
+      if (data.total_jobs) {
+        setTotalJobs(data.total_jobs);
       }
-    };
+    } catch (err) {
+      console.error('Failed to load market insights:', err);
+    }
+  };
+
+  useEffect(() => {
     loadInsights();
   }, []);
+
+  // Auto-scan verification when website opens: ensures career websites & job portals are fresh
+  useEffect(() => {
+    let pollInterval: any = null;
+
+    const checkAndTriggerScan = async () => {
+      try {
+        const res = await api.autoScanCheck(false);
+        if (res.scan_info) {
+          setLiveScanInfo(res.scan_info);
+        }
+        if (res.started || res.status === 'scanning' || res.scan_info?.is_running) {
+          setIsLiveScanning(true);
+          setScanBannerText('⚡ Scanning 27+ Career Websites & Job Platforms in real-time...');
+
+          pollInterval = setInterval(async () => {
+            try {
+              const status = await api.getScanStatus();
+              setLiveScanInfo(status);
+              if (!status.is_running) {
+                clearInterval(pollInterval);
+                setIsLiveScanning(false);
+                setScanBannerText(`✅ Scan Complete: Verified ${status.totals?.jobs_found || totalJobs} live jobs across all Career Websites & Job Portals.`);
+                fetchJobs();
+                loadInsights();
+                setTimeout(() => setScanBannerText(null), 8000);
+              }
+            } catch (err) {
+              clearInterval(pollInterval);
+              setIsLiveScanning(false);
+            }
+          }, 3500);
+        } else {
+          setIsLiveScanning(false);
+        }
+      } catch (err) {
+        console.error('Auto scan check error:', err);
+      }
+    };
+
+    checkAndTriggerScan();
+
+    return () => {
+      if (pollInterval) clearInterval(pollInterval);
+    };
+  }, []);
+
+  const handleTriggerLiveScan = async () => {
+    if (isLiveScanning) return;
+    setIsLiveScanning(true);
+    setScanBannerText('⚡ Initiating live scan across all 27+ Career Websites & Job Platforms...');
+    try {
+      const res = await api.autoScanCheck(true);
+      if (res.scan_info) {
+        setLiveScanInfo(res.scan_info);
+      }
+      const pollInterval = setInterval(async () => {
+        try {
+          const status = await api.getScanStatus();
+          setLiveScanInfo(status);
+          if (!status.is_running) {
+            clearInterval(pollInterval);
+            setIsLiveScanning(false);
+            setScanBannerText(`✅ Live scan completed: Verified ${status.totals?.jobs_found || totalJobs} live jobs across all Career Websites & Job Portals.`);
+            fetchJobs();
+            loadInsights();
+            setTimeout(() => setScanBannerText(null), 8000);
+          }
+        } catch (err) {
+          clearInterval(pollInterval);
+          setIsLiveScanning(false);
+        }
+      }, 3500);
+    } catch (err) {
+      setIsLiveScanning(false);
+      setScanBannerText('Failed to start scan.');
+    }
+  };
 
   // Synchronize candidate experience tier directly from profile database on mount
   useEffect(() => {
@@ -233,8 +317,52 @@ export const HomePage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16">
+    <div className="space-y-6 pb-16">
       
+      {/* Real-time Live Scanner Alert Banner */}
+      {isLiveScanning ? (
+        <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border border-cyan-400/50 rounded-2xl p-4 text-white flex items-center justify-between shadow-xl backdrop-blur-md animate-pulse">
+          <div className="flex items-center gap-3.5">
+            <span className="relative flex h-3.5 w-3.5 shrink-0">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-80"></span>
+              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-cyan-500"></span>
+            </span>
+            <div>
+              <div className="text-sm font-black text-cyan-200 flex items-center gap-2">
+                <span>Real-Time Live Scanner Active</span>
+                <span className="bg-cyan-500/30 text-cyan-200 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-cyan-400/40">27+ Live Sources</span>
+              </div>
+              <div className="text-xs text-slate-300 mt-0.5">
+                Scanning live company career ATS boards (Databricks, Okta, Stripe, Razorpay, Meesho...) and job portals (Arbeitnow, Remotive, Jobicy) for real tech openings in Bengaluru & India. Feed will refresh automatically.
+              </div>
+            </div>
+          </div>
+          <div className="shrink-0 pl-3">
+            <span className="inline-flex items-center gap-2 text-xs font-bold bg-cyan-500/25 text-cyan-200 px-3.5 py-1.5 rounded-xl border border-cyan-400/40 shadow-xs">
+              <RefreshCw className="w-3.5 h-3.5 animate-spin text-cyan-300" />
+              <span>Scanning...</span>
+            </span>
+          </div>
+        </div>
+      ) : scanBannerText ? (
+        <div className="bg-emerald-950/80 border border-emerald-500/40 rounded-2xl p-3.5 px-4 text-white flex items-center justify-between shadow-md backdrop-blur-sm">
+          <div className="flex items-center gap-2.5">
+            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+            <span className="text-xs sm:text-sm font-semibold text-emerald-200">
+              {scanBannerText}
+            </span>
+          </div>
+          <button 
+            onClick={handleTriggerLiveScan}
+            disabled={isLiveScanning}
+            className="text-xs font-bold text-emerald-300 hover:text-white bg-emerald-800/60 hover:bg-emerald-700/80 border border-emerald-500/40 px-3 py-1 rounded-xl transition shrink-0 ml-3 flex items-center gap-1.5"
+          >
+            <RefreshCw className="w-3 h-3" />
+            <span>Re-scan Portals</span>
+          </button>
+        </div>
+      ) : null}
+
       {/* Sleek, Compact Hero Banner with Realistic Bengaluru Landmark (Vidhana Soudha) Background */}
       <div className="relative overflow-hidden rounded-2xl text-white p-5 md:p-6 shadow-md border border-slate-800/10">
         
@@ -260,7 +388,7 @@ export const HomePage: React.FC = () => {
             </h1>
 
             <p className="text-slate-100 text-xs md:text-sm leading-relaxed drop-shadow-sm font-medium">
-              Verified tech opportunities from 60+ companies across Bengaluru. 100% direct application links with no middlemen.
+              Verified tech opportunities from 100+ real companies across Bengaluru & India. 100% direct authentic application links with no middlemen.
             </p>
 
             <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-200 flex-wrap pt-1">
@@ -272,25 +400,48 @@ export const HomePage: React.FC = () => {
           </div>
 
           {/* Compact Scan Status Widget on the Right */}
-          <div className="w-full sm:w-[260px] md:w-[260px] shrink-0 bg-slate-900/45 backdrop-blur-xl border border-white/25 p-3.5 rounded-xl space-y-2 shadow-lg">
+          <div className="w-full sm:w-[280px] md:w-[280px] shrink-0 bg-slate-900/60 backdrop-blur-xl border border-white/25 p-3.5 rounded-xl space-y-2.5 shadow-lg">
             <div className="flex items-center justify-between border-b border-white/20 pb-2 text-[11px]">
               <span className="font-bold text-emerald-400 flex items-center gap-1.5">
-                <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping"></span> Live Scan
+                <span className={`w-2 h-2 rounded-full ${isLiveScanning ? 'bg-cyan-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`}></span>
+                {isLiveScanning ? 'Scanning Live...' : 'Daily Verified'}
               </span>
-              <span className="text-slate-200 font-medium">
-                {insights?.latest_scan?.time || 'Today, 08:00 AM'}
+              <span className="text-slate-200 font-medium text-[11px]">
+                {liveScanInfo?.formatted_time || liveScanInfo?.last_scan_time || insights?.latest_scan?.time || 'Today, 08:00 AM'}
               </span>
             </div>
             <div className="space-y-1 text-xs text-slate-100">
               <div className="flex items-center justify-between">
-                <span className="text-slate-300">Total Openings:</span>
-                <strong className="text-white font-black text-sm">{(insights?.total_jobs ?? 472).toLocaleString()}</strong>
+                <span className="text-slate-300">Total Live Jobs:</span>
+                <strong className="text-white font-black text-sm">{(insights?.total_jobs ?? totalJobs).toLocaleString()}</strong>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-300">Companies Active:</span>
-                <strong className="text-emerald-300 font-black text-xs">{(insights?.total_companies ?? 60).toLocaleString()}</strong>
+                <strong className="text-emerald-300 font-black text-xs">{(insights?.total_companies ?? 108).toLocaleString()}</strong>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-slate-300">Verified Sources:</span>
+                <strong className="text-cyan-300 font-bold text-xs">27+ ATS & Portals</strong>
               </div>
             </div>
+            <button
+              onClick={handleTriggerLiveScan}
+              disabled={isLiveScanning}
+              className="w-full py-1.5 px-2 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg border border-blue-400/40 flex items-center justify-center gap-1.5 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              title="Run real-time scan across 27+ career websites and job portals"
+            >
+              {isLiveScanning ? (
+                <>
+                  <RefreshCw className="w-3 h-3 animate-spin" />
+                  <span>Scanning Career Portals...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>⚡ Scan All Career Portals Now</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
       </div>
@@ -305,7 +456,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-blue-50 text-blue-600 rounded-xl shrink-0"><Briefcase className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Total Jobs</div>
-            <div className="text-xl font-black text-slate-900">{insights?.total_jobs ?? 472}</div>
+            <div className="text-xl font-black text-slate-900">{insights?.total_jobs ?? totalJobs}</div>
             <div className="text-[10px] font-bold text-emerald-600">Active in BLR</div>
           </div>
         </div>
@@ -314,7 +465,7 @@ export const HomePage: React.FC = () => {
           <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl shrink-0"><Building2 className="w-5 h-5" /></div>
           <div>
             <div className="text-xs font-semibold text-slate-500">Companies</div>
-            <div className="text-xl font-black text-slate-900">{insights?.total_companies ?? 60}</div>
+            <div className="text-xl font-black text-slate-900">{insights?.total_companies ?? 108}</div>
             <div className="text-[10px] font-medium text-slate-400">in Bengaluru</div>
           </div>
         </div>

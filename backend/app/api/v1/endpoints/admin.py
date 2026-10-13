@@ -373,7 +373,7 @@ def list_scan_runs(
             "id": r.id,
             "scan_time": r.started_at.strftime("%b %d, %I:%M %p"),
             "status": r.status.capitalize(),
-            "companies": totals.get("companies_scanned", 23),
+            "companies": totals.get("companies_scanned", 27),
             "jobs_found": totals.get("jobs_found", 0),
             "new": totals.get("new_jobs", 0),
             "updated": totals.get("updated_jobs", 0),
@@ -398,7 +398,7 @@ def trigger_manual_scan(
     scan_notif = AdminNotification(
         category="scan_update",
         title="Crawler Scan Completed",
-        message=f"Live manual scan completed across {totals.get('companies_scanned', 23)} sources. Found {totals.get('jobs_found', 0)} jobs ({totals.get('new_jobs', 0)} new, {totals.get('expired_jobs', 0)} expired).",
+        message=f"Live manual scan completed across {totals.get('companies_scanned', 27)} sources. Found {totals.get('jobs_found', 0)} jobs ({totals.get('new_jobs', 0)} new, {totals.get('expired_jobs', 0)} expired).",
         data_json=totals,
         is_read=False,
         created_at=now
