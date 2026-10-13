@@ -7,7 +7,7 @@ import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
   Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight,
-  GraduationCap, RefreshCw
+  GraduationCap, RefreshCw, Globe
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
@@ -68,6 +68,7 @@ export const HomePage: React.FC = () => {
   );
 
   const [roleType, setRoleType] = useState<string>('all');
+  const [activeLocation, setActiveLocation] = useState<string>('all');
 
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
@@ -241,7 +242,7 @@ export const HomePage: React.FC = () => {
 
       const data = await api.getJobs({
         q: queryQ,
-        location: 'Bengaluru',
+        location: activeLocation !== 'all' ? activeLocation : undefined,
         source_type: filters.source_type || undefined,
         work_mode: filters.work_mode || undefined,
         company_type: filters.company_type || undefined,
@@ -270,11 +271,11 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchParams, filters, activeExpTab, roleType]);
+  }, [searchParams, filters, activeExpTab, roleType, activeLocation]);
 
   useEffect(() => {
     fetchJobs();
-  }, [searchParams, filters, page, activeExpTab, roleType]);
+  }, [searchParams, filters, page, activeExpTab, roleType, activeLocation]);
 
   const handleFilterChange = (key: string, value: string) => {
     if (key === 'experience_level') {
@@ -303,6 +304,7 @@ export const HomePage: React.FC = () => {
 
   const handleClearFilters = () => {
     setActiveExpTab('all');
+    setActiveLocation('all');
     setRoleType('all');
     setFilters({ source_type: '', work_mode: '', company_type: '', employment_type: '', experience_level: '' });
   };
@@ -380,21 +382,22 @@ export const HomePage: React.FC = () => {
           <div className="max-w-xl space-y-2">
             <div className="inline-flex items-center gap-1.5 bg-blue-600/35 backdrop-blur-md text-blue-200 border border-blue-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <Sparkles className="w-3 h-3 text-blue-300" />
-              <span>AI Powered Bengaluru Job Discovery</span>
+              <span>AI Powered Tech Job Discovery</span>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-black leading-tight tracking-tight drop-shadow-md text-white">
-              Discover <span className="text-blue-400">Bengaluru</span> Jobs
+              Discover <span className="text-blue-400">Tech & Engineering</span> Jobs
             </h1>
 
             <p className="text-slate-100 text-xs md:text-sm leading-relaxed drop-shadow-sm font-medium">
-              Verified tech opportunities from 100+ real companies across Bengaluru & India. 100% direct authentic application links with no middlemen.
+              Verified tech opportunities from 100+ top companies across Bengaluru, India, United States, and Worldwide Remote. 100% direct authentic application links.
             </p>
 
             <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-200 flex-wrap pt-1">
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🏢 Startups</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🏢 Mid-size</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🏢 Enterprise & MNCs</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🇮🇳 Bengaluru</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🇮🇳 India</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🇺🇸 United States</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🌐 Worldwide Remote</span>
               <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">⚡ Direct Apply</span>
             </div>
           </div>
@@ -457,7 +460,7 @@ export const HomePage: React.FC = () => {
           <div>
             <div className="text-xs font-semibold text-slate-500">Total Jobs</div>
             <div className="text-xl font-black text-slate-900">{insights?.total_jobs ?? totalJobs}</div>
-            <div className="text-[10px] font-bold text-emerald-600">Active in BLR</div>
+            <div className="text-[10px] font-bold text-emerald-600">Active & Verified</div>
           </div>
         </div>
 
@@ -466,7 +469,7 @@ export const HomePage: React.FC = () => {
           <div>
             <div className="text-xs font-semibold text-slate-500">Companies</div>
             <div className="text-xl font-black text-slate-900">{insights?.total_companies ?? 108}</div>
-            <div className="text-[10px] font-medium text-slate-400">in Bengaluru</div>
+            <div className="text-[10px] font-medium text-slate-400">Tech Companies</div>
           </div>
         </div>
 
@@ -532,6 +535,42 @@ export const HomePage: React.FC = () => {
         {/* Center Column: Job Listings Feed (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           
+          {/* Region / Location Separation Bar */}
+          <div className="bg-white p-2.5 rounded-2xl border border-slate-200/90 shadow-2xs flex items-center justify-between gap-2 overflow-x-auto">
+            <div className="flex items-center gap-1.5 min-w-max">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-2 flex items-center gap-1">
+                <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                Region:
+              </span>
+              {[
+                { id: 'all', label: 'All Regions', icon: '🌐' },
+                { id: 'bengaluru', label: 'Bengaluru', icon: '🇮🇳' },
+                { id: 'india', label: 'India (All)', icon: '🇮🇳' },
+                { id: 'united_states', label: 'United States', icon: '🇺🇸' },
+                { id: 'worldwide', label: 'Worldwide Remote', icon: '🌍' },
+              ].map((loc) => {
+                const isActive = activeLocation === loc.id;
+                return (
+                  <button
+                    key={loc.id}
+                    onClick={() => {
+                      setActiveLocation(loc.id);
+                      setPage(1);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                      isActive
+                        ? 'bg-slate-900 text-white shadow-xs'
+                        : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60'
+                    }`}
+                  >
+                    <span>{loc.icon}</span>
+                    <span>{loc.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           {/* Conditional Feed Headers: Strict Account-Level Personalization */}
           {isCandidateUser && activeExpTab === 'fresher' ? (
             /* Dedicated Header for Fresher Candidate Account */
@@ -548,7 +587,7 @@ export const HomePage: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Curated exclusively for entry-level and fresh graduate candidates in Bengaluru
+                    Curated exclusively for entry-level and fresh graduate candidates {activeLocation === 'united_states' ? 'in United States' : activeLocation === 'worldwide' ? 'Worldwide Remote' : activeLocation === 'india' ? 'in India' : activeLocation === 'bengaluru' ? 'in Bengaluru' : 'across all regions'}
                   </p>
                 </div>
               </div>
@@ -628,7 +667,7 @@ export const HomePage: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Curated exclusively for experienced software engineers and industry specialists in Bengaluru
+                    Curated exclusively for experienced software engineers and industry specialists {activeLocation === 'united_states' ? 'in United States' : activeLocation === 'worldwide' ? 'Worldwide Remote' : activeLocation === 'india' ? 'in India' : activeLocation === 'bengaluru' ? 'in Bengaluru' : 'across all regions'}
                   </p>
                 </div>
               </div>
@@ -759,7 +798,15 @@ export const HomePage: React.FC = () => {
                       ? '🎓 Fresher Jobs (0 - 1 Years)' 
                       : activeExpTab === 'experienced' 
                       ? '💼 Experienced Jobs (> 1 Years)' 
-                      : 'Jobs in Bengaluru'}
+                      : activeLocation === 'united_states'
+                      ? '🇺🇸 United States Tech Jobs'
+                      : activeLocation === 'worldwide'
+                      ? '🌍 Worldwide Remote Jobs'
+                      : activeLocation === 'india'
+                      ? '🇮🇳 India Tech Jobs'
+                      : activeLocation === 'bengaluru'
+                      ? '🇮🇳 Bengaluru Tech Jobs'
+                      : '🌐 Verified Tech Jobs'}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
                     Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs
@@ -862,7 +909,7 @@ export const HomePage: React.FC = () => {
           {/* Job Feed Cards */}
           {loading ? (
             <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-400 font-medium">
-              Loading Bengaluru jobs...
+              Loading verified tech jobs...
             </div>
           ) : jobs.length === 0 ? (
             <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-500 space-y-2">
@@ -885,13 +932,13 @@ export const HomePage: React.FC = () => {
         {/* Right Column: AI Job Insights Sidebar (3 cols) matching Image 2 */}
         <div className="lg:col-span-3 space-y-6">
           
-          {/* Card 1: Top Hiring Skills (Bengaluru) */}
+          {/* Card 1: Top Hiring Skills */}
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
               <BarChart2 className="w-4 h-4 text-blue-600" />
               <div>
                 <h3 className="font-bold text-slate-900 text-sm">AI Job Insights</h3>
-                <div className="text-[10px] text-slate-400 font-medium">Bengaluru • Last 30 Days</div>
+                <div className="text-[10px] text-slate-400 font-medium">Global & Bengaluru • Last 30 Days</div>
               </div>
             </div>
 

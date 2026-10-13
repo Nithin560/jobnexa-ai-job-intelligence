@@ -65,9 +65,50 @@ def list_jobs(
         elif source_type == "career_portal":
             query = query.join(Job.job_source).filter(JobSource.source_type.in_(["career_portal", "ats_api", "career_page"]))
 
-    # City Location Filter
+    # Location & Region Filter (Accurately separates Bengaluru, India, United States, Worldwide Remote)
     if location and location.lower() != "all":
-        query = query.filter(Job.location.ilike(f"%{location}%"))
+        loc_low = location.lower().strip()
+        if loc_low in ["bengaluru", "bangalore", "blr"]:
+            query = query.filter(or_(
+                Job.location.ilike("%bengaluru%"),
+                Job.location.ilike("%bangalore%"),
+                Job.location.ilike("%blr%")
+            ))
+        elif loc_low in ["united states", "united_states", "us", "usa"]:
+            query = query.filter(or_(
+                Job.location.ilike("%united states%"),
+                Job.location.ilike("%usa%"),
+                Job.location.ilike("%u.s.%"),
+                Job.location.ilike("%us remote%"),
+                Job.location.ilike("%chicago%"),
+                Job.location.ilike("%denver%"),
+                Job.location.ilike("%boston%"),
+                Job.location.ilike("%san francisco%"),
+                Job.location.ilike("%new york%"),
+                Job.location.ilike("%austin%"),
+                Job.location.ilike("%seattle%"),
+                Job.location.ilike("%americas%")
+            ))
+        elif loc_low in ["worldwide", "worldwide remote", "global", "remote"]:
+            query = query.filter(or_(
+                Job.location.ilike("%worldwide%"),
+                Job.location.ilike("%anywhere%"),
+                Job.location.ilike("%global%")
+            ))
+        elif loc_low in ["india", "in"]:
+            query = query.filter(or_(
+                Job.location.ilike("%india%"),
+                Job.location.ilike("%bengaluru%"),
+                Job.location.ilike("%bangalore%"),
+                Job.location.ilike("%mumbai%"),
+                Job.location.ilike("%delhi%"),
+                Job.location.ilike("%hyderabad%"),
+                Job.location.ilike("%pune%"),
+                Job.location.ilike("%gurugram%"),
+                Job.location.ilike("%noida%")
+            ))
+        else:
+            query = query.filter(Job.location.ilike(f"%{location}%"))
 
     # Free text search
     if q:

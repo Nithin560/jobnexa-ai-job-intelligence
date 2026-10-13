@@ -54,10 +54,16 @@ class JobPortalConnector:
 
             # Location
             loc = (item.get("location") or "").strip()
-            if is_remote or not loc:
-                loc = "Bengaluru, Karnataka (Remote Accessible)"
-            elif any(k in loc.lower() for k in ["bengaluru", "bangalore", "india"]):
+            if any(k in loc.lower() for k in ["bengaluru", "bangalore"]):
                 loc = "Bengaluru, Karnataka"
+            elif any(k in loc.lower() for k in ["india"]):
+                loc = f"{loc}, India" if "india" not in loc.lower() else loc
+            elif any(k in loc.lower() for k in ["usa", "united states", "us"]):
+                loc = "United States (Remote)" if is_remote else f"{loc}, United States"
+            elif is_remote or not loc:
+                loc = "Worldwide (Remote)"
+            else:
+                loc = loc
 
             # Clean HTML description
             desc_html = item.get("description") or ""
@@ -121,8 +127,14 @@ class JobPortalConnector:
             apply_url = item.get("url") or item.get("jobExcerpt") or ""
             job_id = str(item.get("id") or "")
             geo = (item.get("jobGeo") or "Anywhere").strip()
-
-            loc = f"Bengaluru, Karnataka ({geo} Remote)"
+            if any(k in geo.lower() for k in ["usa", "united states", "americas", "canada, usa"]):
+                loc = "United States (Remote)"
+            elif any(k in geo.lower() for k in ["worldwide", "anywhere"]):
+                loc = "Worldwide (Remote)"
+            elif any(k in geo.lower() for k in ["india", "bengaluru", "bangalore"]):
+                loc = "Bengaluru, Karnataka"
+            else:
+                loc = f"{geo} (Remote)"
 
             desc_html = item.get("jobDescription") or ""
             if desc_html:
@@ -176,8 +188,14 @@ class JobPortalConnector:
             apply_url = item.get("url") or ""
             job_id = str(item.get("id") or "")
             req_loc = (item.get("candidate_required_location") or "Worldwide").strip()
-
-            loc = f"Bengaluru, Karnataka ({req_loc} Remote)"
+            if any(k in req_loc.lower() for k in ["worldwide", "anywhere"]):
+                loc = "Worldwide (Remote)"
+            elif any(k in req_loc.lower() for k in ["usa", "united states", "americas", "north america"]):
+                loc = "United States (Remote)"
+            elif any(k in req_loc.lower() for k in ["india", "bengaluru"]):
+                loc = "Bengaluru, Karnataka"
+            else:
+                loc = f"{req_loc} (Remote)"
             desc_html = item.get("description") or ""
             if desc_html:
                 soup = BeautifulSoup(desc_html, "html.parser")

@@ -12,7 +12,7 @@ from app.models.skill import Skill
 from app.models.scan import ScanRun, SourceRunResult
 from app.models.notification import AdminNotification
 from app.connectors.registry import get_connector
-from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range
+from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range, parse_job_location_and_region
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
 from app.core.company_logos import get_company_logo, get_canonical_domain, get_company_type
 
@@ -380,9 +380,14 @@ def get_or_create_employer(db: Session, company_name: str, careers_url: str = No
 
 
 def is_bengaluru_or_india_job(location_str: str) -> bool:
-    """Check if location string relates to Bengaluru or India (including worldwide remote accessible)."""
+    """Check if location string relates to platform scopes (Bengaluru, India, United States, or Worldwide Remote)."""
     loc_lower = (location_str or "").lower()
-    keywords = ["bengaluru", "bangalore", "karnataka", "india", "remote - india", "blr", "worldwide", "anywhere"]
+    keywords = [
+        "bengaluru", "bangalore", "karnataka", "india", "remote - india", "blr",
+        "united states", "usa", "u.s.", "us remote", "remote - us", "chicago", "denver", "boston",
+        "san francisco", "new york", "austin", "seattle", "california", "americas",
+        "worldwide", "anywhere", "global", "remote"
+    ]
     return any(k in loc_lower for k in keywords)
 
 
@@ -481,9 +486,6 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
             for raw in relevant_jobs:
 
                 total_found += 1
-                norm_loc = normalize_location(raw.location)
-                if not norm_loc or "bengaluru" not in norm_loc.lower():
-                    norm_loc = "Bengaluru, Karnataka"
 
                 # If job platform, resolve the actual hiring company entity
                 if is_job_portal and raw.company and raw.company.lower() != target["name"].lower():
@@ -493,6 +495,13 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                 else:
                     employer_id = source.company_id
                     employer_name = target["name"]
+
+                norm_loc, region_code = parse_job_location_and_region(
+                    raw_location=raw.location,
+                    title=raw.title,
+                    description=raw.description,
+                    company_name=employer_name
+                )
 
                 # Deduplication check
                 fp = generate_job_fingerprint(employer_name, raw.title, raw.description)
@@ -504,13 +513,16 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                     apply_url=raw.apply_url
                 )
 
-                work_mode = determine_work_mode(raw.title, raw.description, raw.location)
-                exp_min, exp_max = parse_experience_range(raw.description)
+                work_mode = determine_work_mode(raw.title, raw.description, norm_loc)
+                exp_min, exp_max = parse_experience_range(raw.description, title=raw.title)
 
                 if existing_job:
-                    # Update existing job
+                    # Update existing job with re-evaluated location and experience
                     existing_job.last_seen_at = now
                     existing_job.status = "active"
+                    existing_job.location = norm_loc
+                    existing_job.experience_min = exp_min
+                    existing_job.experience_max = exp_max
                     if not existing_job.description:
                         existing_job.description = raw.description
                     source_updated += 1

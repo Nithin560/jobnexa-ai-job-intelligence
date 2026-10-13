@@ -72,7 +72,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
             </div>
 
             {/* Hiring Role & Location */}
-            <div className="flex items-center gap-4 mt-2.5 text-xs text-slate-600 flex-wrap">
+            <div className="flex items-center gap-3 mt-2.5 text-xs text-slate-600 flex-wrap">
               <span className="inline-flex items-center gap-1.5">
                 <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Role:</span>
@@ -82,19 +82,48 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Location:</span>
-                <span className="font-semibold text-slate-800">{job.location}</span>
+                {job.location.toLowerCase().includes('united states') || job.location.toLowerCase().includes('usa') || job.location.toLowerCase().includes('us remote') ? (
+                  <span className="font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                    🇺🇸 {job.location}
+                  </span>
+                ) : job.location.toLowerCase().includes('worldwide') || job.location.toLowerCase().includes('anywhere') ? (
+                  <span className="font-bold text-sky-700 bg-sky-50 border border-sky-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                    🌐 {job.location}
+                  </span>
+                ) : (
+                  <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                    🇮🇳 {job.location}
+                  </span>
+                )}
               </span>
             </div>
 
             {/* Meta info: Experience, Work Mode */}
-            <div className="flex items-center gap-4 mt-2 text-xs text-slate-500 flex-wrap">
+            <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 flex-wrap">
               <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-slate-400" /> {job.experience_label}
+                <Clock className="w-3.5 h-3.5 text-slate-400" />
+                {job.experience_min === 0 && job.experience_max <= 1 ? (
+                  <span className="font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded-md text-[11px]">
+                    🎓 Fresher ({job.experience_label})
+                  </span>
+                ) : job.experience_min >= 8 ? (
+                  <span className="font-bold text-purple-700 bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md text-[11px]">
+                    💼 Lead / Senior ({job.experience_label})
+                  </span>
+                ) : job.experience_min >= 5 ? (
+                  <span className="font-bold text-violet-700 bg-violet-50 border border-violet-200/80 px-2 py-0.5 rounded-md text-[11px]">
+                    💼 Senior ({job.experience_label})
+                  </span>
+                ) : (
+                  <span className="font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md text-[11px]">
+                    💼 {job.experience_label}
+                  </span>
+                )}
               </span>
-              <span>
+              <span className="bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md font-medium text-slate-600 text-[11px]">
                 {job.work_mode}
               </span>
-              <span>
+              <span className="bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md font-medium text-slate-600 text-[11px]">
                 {job.employment_type}
               </span>
             </div>
