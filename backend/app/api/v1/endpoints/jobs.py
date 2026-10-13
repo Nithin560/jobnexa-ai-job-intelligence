@@ -499,6 +499,30 @@ def get_job_insights(db: Session = Depends(get_db)):
     )
 
 
+@router.get("/scan-status")
+def get_live_scan_status():
+    """Returns live status of background scanner, whether currently running, and last scan metrics."""
+    from app.tasks.scan import get_last_scan_info, is_scanner_busy
+    info = get_last_scan_info()
+    return info
+
+
+@router.post("/auto-scan-check")
+def trigger_auto_scan_on_site_open(force: bool = False):
+    """
+    Called when a user opens the platform.
+    Verifies if daily scan is fresh; if not (or if force=True), dispatches live scan
+    across all Career Websites and Job Portals in a background worker thread.
+    """
+    from app.tasks.scan import start_background_scan_task, get_last_scan_info
+    res = start_background_scan_task(trigger="website_opened", force=force)
+    last_info = get_last_scan_info()
+    return {
+        **res,
+        "scan_info": last_info
+    }
+
+
 @router.get("/{job_id}", response_model=JobDetailResponse)
 def get_job_detail(
     job_id: str,
@@ -614,27 +638,3 @@ def get_job_detail(
         history_count=len(job.history),
         match=match_breakdown
     )
-
-
-@router.get("/scan-status")
-def get_live_scan_status():
-    """Returns live status of background scanner, whether currently running, and last scan metrics."""
-    from app.tasks.scan import get_last_scan_info, is_scanner_busy
-    info = get_last_scan_info()
-    return info
-
-
-@router.post("/auto-scan-check")
-def trigger_auto_scan_on_site_open(force: bool = False):
-    """
-    Called when a user opens the platform.
-    Verifies if daily scan is fresh; if not (or if force=True), dispatches live scan
-    across all Career Websites and Job Portals in a background worker thread.
-    """
-    from app.tasks.scan import start_background_scan_task, get_last_scan_info
-    res = start_background_scan_task(trigger="website_opened", force=force)
-    last_info = get_last_scan_info()
-    return {
-        **res,
-        "scan_info": last_info
-    }
