@@ -81,87 +81,72 @@ def parse_job_location_and_region(raw_location: str, title: str = "", descriptio
         'north america', 'americas', 'us/canada', 'canada, usa', 'europe, usa'
     ]
 
-    # Check raw_location first
-    if any(re.search(r'\b' + re.escape(k) + r'\b', raw_lower) for k in ['usa', 'united states', 'u.s.']):
-        return "United States (Remote)", "united_states"
-
-    for city in us_cities:
-        if city in raw_lower:
-            return f"{city.title()}, United States", "united_states"
-
-    # Check title for US city/state (e.g. 'Account Executive - Chicago, IL')
-    for city in us_cities:
-        if re.search(r'\b' + re.escape(city) + r'\b', t_lower):
-            return f"{city.title()}, United States", "united_states"
-
-    if any(re.search(r'\b' + re.escape(k) + r'\b', t_lower) for k in ['usa', 'united states', 'us remote']):
-        return "United States (Remote)", "united_states"
-
-    # Check JD requirements for US
-    if any(re.search(r'\b' + re.escape(k) + r'\b', d_snippet) for k in [
-        'must be located in the united states', 'based in the us', 'authorized to work in the us', 
-        'us citizenship', 'located in the us', 'resident of the united states', 'usa remote'
-    ]):
-        return "United States (Remote)", "united_states"
-
-    if 'usa' in raw_lower or 'americas' in raw_lower:
-        return "United States (Remote)", "united_states"
-
-    # 2. Check Worldwide / Global Remote indicators
-    if any(k in raw_lower for k in ['worldwide', 'anywhere', 'global remote', 'remote - worldwide', 'work from anywhere']):
-        return "Worldwide (Remote)", "worldwide"
-
-    if 'worldwide' in t_lower or 'anywhere' in t_lower:
-        return "Worldwide (Remote)", "worldwide"
-
-    if any(k in d_snippet for k in ['candidate required location: worldwide', 'open to candidates worldwide', 'work from anywhere in the world']):
-        return "Worldwide (Remote)", "worldwide"
-
-    # 3. Check Bengaluru indicators
-    blr_aliases = ['bangalore', 'bengaluru', 'blr', 'karnataka', 'koramangala', 'whitefield', 'bellandur', 'electronic city', 'hsr layout', 'indiranagar']
-    if any(re.search(r'\b' + re.escape(a) + r'\b', raw_lower) for a in blr_aliases):
-        return "Bengaluru, Karnataka", "bengaluru"
-    if any(re.search(r'\b' + re.escape(a) + r'\b', t_lower) for a in blr_aliases):
-        return "Bengaluru, Karnataka", "bengaluru"
-
-    # 4. Check other India cities
-    india_cities = {
-        'mumbai': 'Mumbai, Maharashtra',
-        'delhi': 'Delhi-NCR, India',
-        'gurgaon': 'Gurugram, Haryana',
-        'gurugram': 'Gurugram, Haryana',
-        'noida': 'Noida, Uttar Pradesh',
-        'hyderabad': 'Hyderabad, Telangana',
-        'pune': 'Pune, Maharashtra',
-        'chennai': 'Chennai, Tamil Nadu',
-        'kolkata': 'Kolkata, West Bengal',
-        'ahmedabad': 'Ahmedabad, Gujarat'
-    }
-    for c_key, c_display in india_cities.items():
-        if c_key in raw_lower or c_key in t_lower:
-            return c_display, "india"
-
-    if any(k in raw_lower or k in t_lower for k in ['india', 'india remote', 'remote - india']):
-        return "India (Remote)", "india"
-
-    # 5. Check other international locations
-    if any(k in raw_lower for k in ['europe', 'germany', 'berlin', 'uk', 'united kingdom', 'london', 'canada', 'toronto', 'apac', 'singapore', 'australia']):
-        cleaned_raw = raw_loc.replace('Remote', '').strip(" ,-/()")
-        if cleaned_raw:
-            return f"{cleaned_raw} (Remote)", "international"
-        return "International (Remote)", "international"
-
-    # 6. Default handling based on company origin
-    indian_companies = [
-        'razorpay', 'meesho', 'cred', 'groww', 'inmobi', 'zeta', 'thoughtworks', 'swiggy', 'zepto', 'flipkart'
+    # 1. Check Bengaluru Tech Hubs & Neighborhoods FIRST
+    blr_hubs = [
+        ('koramangala', 'Koramangala, Bengaluru'),
+        ('hsr layout', 'HSR Layout, Bengaluru'),
+        ('hsr', 'HSR Layout, Bengaluru'),
+        ('whitefield', 'Whitefield, Bengaluru'),
+        ('electronic city', 'Electronic City, Bengaluru'),
+        ('electonic city', 'Electronic City, Bengaluru'),
+        ('bellandur', 'Bellandur, Bengaluru'),
+        ('indiranagar', 'Indiranagar, Bengaluru'),
+        ('manyata', 'Manyata Tech Park, Bengaluru'),
+        ('outer ring road', 'Outer Ring Road (ORR), Bengaluru'),
+        ('orr', 'Outer Ring Road (ORR), Bengaluru'),
+        ('bagmane', 'Bagmane Tech Park, Bengaluru'),
+        ('domlur', 'Domlur (EGL), Bengaluru'),
+        ('egl', 'Embassy GolfLinks, Bengaluru'),
+        ('marathahalli', 'Marathahalli, Bengaluru'),
+        ('sarjapur', 'Sarjapur Road, Bengaluru'),
+        ('hebbal', 'Hebbal, Bengaluru'),
+        ('jayanagar', 'Jayanagar, Bengaluru'),
+        ('jp nagar', 'JP Nagar, Bengaluru'),
+        ('btm', 'BTM Layout, Bengaluru'),
+        ('mysuru', 'Mysuru, Karnataka'),
+        ('mysore', 'Mysuru, Karnataka'),
+        ('hubli', 'Hubli, Karnataka'),
+        ('hubballi', 'Hubli, Karnataka'),
+        ('mangalore', 'Mangalore, Karnataka'),
+        ('mangaluru', 'Mangalore, Karnataka')
     ]
-    if any(ic in comp_lower for ic in indian_companies):
+
+    for hub_key, hub_display in blr_hubs:
+        pattern = r'\b' + re.escape(hub_key) + r'\b'
+        if re.search(pattern, raw_lower) or re.search(pattern, t_lower):
+            return hub_display, "bengaluru"
+
+    # General Bengaluru / Bangalore / Karnataka indicators
+    blr_general = ['bangalore', 'bengaluru', 'blr', 'karnataka']
+    if any(re.search(r'\b' + re.escape(a) + r'\b', raw_lower) or re.search(r'\b' + re.escape(a) + r'\b', t_lower) for a in blr_general):
+        if 'remote' in raw_lower or 'remote' in t_lower:
+            return "Bengaluru, Karnataka (Remote)", "bengaluru"
         return "Bengaluru, Karnataka", "bengaluru"
 
-    if raw_loc and raw_loc.lower() not in ['remote', 'anywhere', 'various']:
-        return raw_loc, "bengaluru"
+    # Bengaluru-headquartered companies hiring in India / Remote
+    blr_companies = [
+        'razorpay', 'meesho', 'cred', 'groww', 'inmobi', 'zeta', 'thoughtworks', 
+        'clear', 'cleartax', 'slice', 'porter', 'hackerrank', 'swiggy', 'flipkart', 
+        'ather', 'atherenergy', 'postman', 'browserstack', 'zepto', 'phonepe'
+    ]
+    if any(bc in comp_lower for bc in blr_companies):
+        if any(k in raw_lower or k in t_lower for k in ['india', 'remote', 'flexible', 'hybrid', 'work from anywhere']) or not raw_loc:
+            # Exclude other explicit Indian metros
+            if not any(k in raw_lower for k in ['mumbai', 'delhi', 'gurgaon', 'noida', 'hyderabad', 'pune', 'chennai', 'kolkata']):
+                return "Bengaluru, Karnataka (HQ)", "bengaluru"
 
-    return "Bengaluru, Karnataka", "bengaluru"
+    # Non-Karnataka locations
+    for city in us_cities:
+        if city in raw_lower or city in t_lower:
+            return f"{city.title()}, United States", "non_karnataka"
+
+    if any(re.search(r'\b' + re.escape(k) + r'\b', raw_lower) for k in ['usa', 'united states', 'u.s.']):
+        return "United States", "non_karnataka"
+
+    if any(k in raw_lower for k in ['europe', 'germany', 'berlin', 'uk', 'united kingdom', 'london', 'canada', 'australia']):
+        return "International", "non_karnataka"
+
+    return raw_loc if raw_loc else "Bengaluru, Karnataka", "bengaluru"
 
 
 def extract_skills_from_text(text: str) -> List[Tuple[str, float]]:

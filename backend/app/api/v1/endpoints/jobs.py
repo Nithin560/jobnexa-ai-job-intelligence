@@ -65,49 +65,46 @@ def list_jobs(
         elif source_type == "career_portal":
             query = query.join(Job.job_source).filter(JobSource.source_type.in_(["career_portal", "ats_api", "career_page"]))
 
-    # Location & Region Filter (Accurately separates Bengaluru, India, United States, Worldwide Remote)
+    # Location Filter (Bangalore Tech Hubs & Karnataka State)
     if location and location.lower() != "all":
         loc_low = location.lower().strip()
-        if loc_low in ["bengaluru", "bangalore", "blr"]:
+        if loc_low in ["bengaluru", "bangalore", "blr", "karnataka"]:
             query = query.filter(or_(
                 Job.location.ilike("%bengaluru%"),
                 Job.location.ilike("%bangalore%"),
-                Job.location.ilike("%blr%")
+                Job.location.ilike("%blr%"),
+                Job.location.ilike("%karnataka%")
             ))
-        elif loc_low in ["united states", "united_states", "us", "usa"]:
+        elif loc_low in ["koramangala", "hsr", "hsr layout"]:
             query = query.filter(or_(
-                Job.location.ilike("%united states%"),
-                Job.location.ilike("%usa%"),
-                Job.location.ilike("%u.s.%"),
-                Job.location.ilike("%us remote%"),
-                Job.location.ilike("%chicago%"),
-                Job.location.ilike("%denver%"),
-                Job.location.ilike("%boston%"),
-                Job.location.ilike("%san francisco%"),
-                Job.location.ilike("%new york%"),
-                Job.location.ilike("%austin%"),
-                Job.location.ilike("%seattle%"),
-                Job.location.ilike("%americas%")
+                Job.location.ilike("%koramangala%"),
+                Job.location.ilike("%hsr%")
             ))
-        elif loc_low in ["worldwide", "worldwide remote", "global", "remote"]:
+        elif loc_low in ["whitefield", "bellandur", "outer ring road", "orr"]:
             query = query.filter(or_(
-                Job.location.ilike("%worldwide%"),
-                Job.location.ilike("%remote%"),
-                Job.location.ilike("%anywhere%"),
-                Job.location.ilike("%global%")
+                Job.location.ilike("%whitefield%"),
+                Job.location.ilike("%bellandur%"),
+                Job.location.ilike("%outer ring road%"),
+                Job.location.ilike("%orr%")
             ))
-        elif loc_low in ["india", "in"]:
+        elif loc_low in ["electronic_city", "electronic city", "e-city"]:
             query = query.filter(or_(
-                Job.location.ilike("%india%"),
-                Job.location.ilike("%bengaluru%"),
-                Job.location.ilike("%bangalore%"),
-                Job.location.ilike("%mumbai%"),
-                Job.location.ilike("%delhi%"),
-                Job.location.ilike("%hyderabad%"),
-                Job.location.ilike("%pune%"),
-                Job.location.ilike("%gurugram%"),
-                Job.location.ilike("%noida%")
+                Job.location.ilike("%electronic city%"),
+                Job.location.ilike("%electonic city%")
             ))
+        elif loc_low in ["manyata", "hebbal", "north_blr"]:
+            query = query.filter(or_(
+                Job.location.ilike("%manyata%"),
+                Job.location.ilike("%hebbal%")
+            ))
+        elif loc_low in ["indiranagar", "domlur", "egl", "central"]:
+            query = query.filter(or_(
+                Job.location.ilike("%indiranagar%"),
+                Job.location.ilike("%domlur%"),
+                Job.location.ilike("%egl%")
+            ))
+        elif loc_low in ["remote", "hybrid"]:
+            query = query.filter(Job.work_mode.in_(["Remote", "Hybrid"]))
         else:
             query = query.filter(Job.location.ilike(f"%{location}%"))
 

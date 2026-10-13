@@ -82,19 +82,9 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               <span className="inline-flex items-center gap-1.5">
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Location:</span>
-                {job.location.toLowerCase().includes('united states') || job.location.toLowerCase().includes('usa') || job.location.toLowerCase().includes('us remote') ? (
-                  <span className="font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
-                    🇺🇸 {job.location}
-                  </span>
-                ) : job.location.toLowerCase().includes('worldwide') || job.location.toLowerCase().includes('anywhere') ? (
-                  <span className="font-bold text-sky-700 bg-sky-50 border border-sky-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
-                    🌐 {job.location}
-                  </span>
-                ) : (
-                  <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
-                    🇮🇳 {job.location}
-                  </span>
-                )}
+                <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                  📍 {job.location}
+                </span>
               </span>
             </div>
 

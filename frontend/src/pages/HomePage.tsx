@@ -382,23 +382,23 @@ export const HomePage: React.FC = () => {
           <div className="max-w-xl space-y-2">
             <div className="inline-flex items-center gap-1.5 bg-blue-600/35 backdrop-blur-md text-blue-200 border border-blue-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <Sparkles className="w-3 h-3 text-blue-300" />
-              <span>AI Powered Tech Job Discovery</span>
+              <span>Silicon Valley of India • Bengaluru & Karnataka</span>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-black leading-tight tracking-tight drop-shadow-md text-white">
-              Discover <span className="text-blue-400">Tech & Engineering</span> Jobs
+              Discover <span className="text-blue-400">Bangalore Tech</span> Jobs
             </h1>
 
             <p className="text-slate-100 text-xs md:text-sm leading-relaxed drop-shadow-sm font-medium">
-              Verified tech opportunities from 100+ top companies across Bengaluru, India, United States, and Worldwide Remote. 100% direct authentic application links.
+              Verified active jobs continuously scanned from every company career portal and job platform located in Bengaluru & Karnataka state.
             </p>
 
             <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-200 flex-wrap pt-1">
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🇮🇳 Bengaluru</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🇮🇳 India</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🇺🇸 United States</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">🌐 Worldwide Remote</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">⚡ Direct Apply</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Koramangala & HSR</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Whitefield & Bellandur</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Electronic City</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Manyata (ORR)</span>
+              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">⚡ 100% Direct Apply</span>
             </div>
           </div>
 
@@ -535,19 +535,21 @@ export const HomePage: React.FC = () => {
         {/* Center Column: Job Listings Feed (6 cols) */}
         <div className="lg:col-span-6 space-y-4">
           
-          {/* Region / Location Separation Bar */}
+          {/* Bangalore Tech Hubs & Neighborhoods Selector Bar */}
           <div className="bg-white p-2.5 rounded-2xl border border-slate-200/90 shadow-2xs flex items-center justify-between gap-2 overflow-x-auto">
             <div className="flex items-center gap-1.5 min-w-max">
               <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 px-2 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-slate-400" />
-                Region:
+                <MapPin className="w-3.5 h-3.5 text-blue-600" />
+                Tech Hubs:
               </span>
               {[
-                { id: 'all', label: 'All Regions', icon: '🌐' },
-                { id: 'bengaluru', label: 'Bengaluru', icon: '🇮🇳' },
-                { id: 'india', label: 'India (All)', icon: '🇮🇳' },
-                { id: 'united_states', label: 'United States', icon: '🇺🇸' },
-                { id: 'worldwide', label: 'Worldwide Remote', icon: '🌍' },
+                { id: 'all', label: 'All Bengaluru & Karnataka', icon: '🏢' },
+                { id: 'koramangala', label: 'Koramangala & HSR', icon: '📍' },
+                { id: 'whitefield', label: 'Whitefield & Bellandur', icon: '📍' },
+                { id: 'electronic_city', label: 'Electronic City', icon: '📍' },
+                { id: 'manyata', label: 'Manyata & North BLR', icon: '📍' },
+                { id: 'indiranagar', label: 'Indiranagar & Central', icon: '📍' },
+                { id: 'remote', label: 'Remote / Hybrid (BLR)', icon: '🏠' },
               ].map((loc) => {
                 const isActive = activeLocation === loc.id;
                 return (
@@ -559,7 +561,7 @@ export const HomePage: React.FC = () => {
                     }}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                       isActive
-                        ? 'bg-slate-900 text-white shadow-xs'
+                        ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60'
                     }`}
                   >
@@ -587,7 +589,7 @@ export const HomePage: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Curated exclusively for entry-level and fresh graduate candidates {activeLocation === 'united_states' ? 'in United States' : activeLocation === 'worldwide' ? 'Worldwide Remote' : activeLocation === 'india' ? 'in India' : activeLocation === 'bengaluru' ? 'in Bengaluru' : 'across all regions'}
+                    Curated exclusively for entry-level and fresh graduate candidates across Bengaluru and Karnataka
                   </p>
                 </div>
               </div>
@@ -667,7 +669,7 @@ export const HomePage: React.FC = () => {
                     </span>
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Curated exclusively for experienced software engineers and industry specialists {activeLocation === 'united_states' ? 'in United States' : activeLocation === 'worldwide' ? 'Worldwide Remote' : activeLocation === 'india' ? 'in India' : activeLocation === 'bengaluru' ? 'in Bengaluru' : 'across all regions'}
+                    Curated exclusively for experienced software engineers and industry specialists across Bengaluru and Karnataka
                   </p>
                 </div>
               </div>
@@ -795,18 +797,22 @@ export const HomePage: React.FC = () => {
                 <div>
                   <h2 className="text-lg font-black text-slate-900">
                     {activeExpTab === 'fresher' 
-                      ? '🎓 Fresher Jobs (0 - 1 Years)' 
+                      ? '🎓 Fresher Openings in Bengaluru (0 - 1 Years)' 
                       : activeExpTab === 'experienced' 
-                      ? '💼 Experienced Jobs (> 1 Years)' 
-                      : activeLocation === 'united_states'
-                      ? '🇺🇸 United States Tech Jobs'
-                      : activeLocation === 'worldwide'
-                      ? '🌍 Worldwide Remote Jobs'
-                      : activeLocation === 'india'
-                      ? '🇮🇳 India Tech Jobs'
-                      : activeLocation === 'bengaluru'
-                      ? '🇮🇳 Bengaluru Tech Jobs'
-                      : '🌐 Verified Tech Jobs'}
+                      ? '💼 Experienced Openings in Bengaluru (1+ Years)' 
+                      : activeLocation === 'koramangala'
+                      ? '📍 Tech Jobs in Koramangala & HSR Layout'
+                      : activeLocation === 'whitefield'
+                      ? '📍 Tech Jobs in Whitefield & Bellandur (ORR)'
+                      : activeLocation === 'electronic_city'
+                      ? '📍 Tech Jobs in Electronic City Tech Parks'
+                      : activeLocation === 'manyata'
+                      ? '📍 Tech Jobs in Manyata & North Bengaluru'
+                      : activeLocation === 'indiranagar'
+                      ? '📍 Tech Jobs in Indiranagar & Central Bengaluru'
+                      : activeLocation === 'remote'
+                      ? '🏠 Remote & Hybrid Tech Jobs in Karnataka'
+                      : '🏢 Verified Jobs in Bengaluru & Karnataka'}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
                     Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs

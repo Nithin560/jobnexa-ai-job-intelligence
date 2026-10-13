@@ -52,18 +52,14 @@ class JobPortalConnector:
             slug = item.get("slug") or ""
             is_remote = item.get("remote", False)
 
-            # Location
+            # Location - filter strictly for Bangalore / Karnataka
             loc = (item.get("location") or "").strip()
-            if any(k in loc.lower() for k in ["bengaluru", "bangalore"]):
+            if any(k in loc.lower() for k in ["bengaluru", "bangalore", "blr", "karnataka"]):
                 loc = "Bengaluru, Karnataka"
             elif any(k in loc.lower() for k in ["india"]):
-                loc = f"{loc}, India" if "india" not in loc.lower() else loc
-            elif any(k in loc.lower() for k in ["usa", "united states", "us"]):
-                loc = "United States (Remote)" if is_remote else f"{loc}, United States"
-            elif is_remote or not loc:
-                loc = "Worldwide (Remote)"
+                loc = "Bengaluru, Karnataka (Remote)"
             else:
-                loc = loc
+                continue
 
             # Clean HTML description
             desc_html = item.get("description") or ""
@@ -126,15 +122,14 @@ class JobPortalConnector:
             company = (item.get("companyName") or "Jobicy Partner").strip()
             apply_url = item.get("url") or item.get("jobExcerpt") or ""
             job_id = str(item.get("id") or "")
-            geo = (item.get("jobGeo") or "Anywhere").strip()
-            if any(k in geo.lower() for k in ["usa", "united states", "americas", "canada, usa"]):
-                loc = "United States (Remote)"
-            elif any(k in geo.lower() for k in ["worldwide", "anywhere"]):
-                loc = "Worldwide (Remote)"
-            elif any(k in geo.lower() for k in ["india", "bengaluru", "bangalore"]):
+            geo = (item.get("jobGeo") or "").strip()
+            
+            if any(k in geo.lower() for k in ["bengaluru", "bangalore", "blr", "karnataka"]):
                 loc = "Bengaluru, Karnataka"
+            elif any(k in geo.lower() for k in ["india"]):
+                loc = "Bengaluru, Karnataka (Remote)"
             else:
-                loc = f"{geo} (Remote)"
+                continue
 
             desc_html = item.get("jobDescription") or ""
             if desc_html:
@@ -187,15 +182,14 @@ class JobPortalConnector:
             company = (item.get("company_name") or "Remotive Partner").strip()
             apply_url = item.get("url") or ""
             job_id = str(item.get("id") or "")
-            req_loc = (item.get("candidate_required_location") or "Worldwide").strip()
-            if any(k in req_loc.lower() for k in ["worldwide", "anywhere"]):
-                loc = "Worldwide (Remote)"
-            elif any(k in req_loc.lower() for k in ["usa", "united states", "americas", "north america"]):
-                loc = "United States (Remote)"
-            elif any(k in req_loc.lower() for k in ["india", "bengaluru"]):
+            req_loc = (item.get("candidate_required_location") or "").strip()
+            
+            if any(k in req_loc.lower() for k in ["bengaluru", "bangalore", "blr", "karnataka"]):
                 loc = "Bengaluru, Karnataka"
+            elif any(k in req_loc.lower() for k in ["india"]):
+                loc = "Bengaluru, Karnataka (Remote)"
             else:
-                loc = f"{req_loc} (Remote)"
+                continue
             desc_html = item.get("description") or ""
             if desc_html:
                 soup = BeautifulSoup(desc_html, "html.parser")

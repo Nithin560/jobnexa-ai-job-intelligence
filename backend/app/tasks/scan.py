@@ -254,6 +254,17 @@ TARGET_SOURCES = [
         "source_type": "career_portal"
     },
     {
+        "name": "HackerRank",
+        "domain": "hackerrank.com",
+        "careers_url": "https://www.hackerrank.com/careers",
+        "company_type": "Mid-size",
+        "logo_url": "https://www.google.com/s2/favicons?domain=hackerrank.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "hackerrank",
+        "source_type": "career_portal"
+    },
+
+    {
         "name": "Spotify",
         "domain": "spotify.com",
         "careers_url": "https://www.lifeatspotify.com",
@@ -379,16 +390,48 @@ def get_or_create_employer(db: Session, company_name: str, careers_url: str = No
     return comp
 
 
-def is_bengaluru_or_india_job(location_str: str) -> bool:
-    """Check if location string relates to platform scopes (Bengaluru, India, United States, or Worldwide Remote)."""
+def is_bengaluru_or_karnataka_job(location_str: str, company_name: str = "", title: str = "", description: str = "") -> bool:
+    """Strictly checks if a job is in Bengaluru / Karnataka state."""
     loc_lower = (location_str or "").lower()
-    keywords = [
-        "bengaluru", "bangalore", "karnataka", "india", "remote - india", "blr",
-        "united states", "usa", "u.s.", "us remote", "remote - us", "chicago", "denver", "boston",
-        "san francisco", "new york", "austin", "seattle", "california", "americas",
-        "worldwide", "anywhere", "global", "remote"
+    text = f"{loc_lower} {title.lower()} {description[:300].lower()}"
+
+    # 1. Reject explicit foreign countries / cities unless Karnataka is explicitly stated
+    foreign_locs = [
+        "united states", "usa", "u.s.", "us remote", "remote - us", "remote us",
+        "chicago", "denver", "boston", "san francisco", "new york", "austin", "seattle",
+        "california", "americas", "canada", "germany", "poland", "united kingdom",
+        "london", "berlin", "australia", "netherlands", "france", "ireland", "spain",
+        "singapore", "tokyo", "japan"
     ]
-    return any(k in loc_lower for k in keywords)
+    has_foreign = any(fl in loc_lower for fl in foreign_locs)
+    has_blr = any(k in loc_lower for k in ["bengaluru", "bangalore", "blr", "karnataka"])
+    if has_foreign and not has_blr:
+        return False
+
+    blr_keywords = [
+        "bengaluru", "bangalore", "blr", "karnataka", "koramangala", "whitefield", 
+        "electronic city", "bellandur", "hsr layout", "hsr", "indiranagar", 
+        "manyata", "marathahalli", "sarjapur", "bagmane", "outer ring road", 
+        "domlur", "hebbal", "mysuru", "mysore", "hubli", "mangalore", "mangaluru"
+    ]
+    if any(k in text for k in blr_keywords):
+        return True
+
+    # 2. Check Bangalore-headquartered companies hiring in India / Remote
+    blr_companies = [
+        'razorpay', 'meesho', 'cred', 'groww', 'inmobi', 'zeta', 'thoughtworks', 
+        'clear', 'cleartax', 'slice', 'porter', 'hackerrank', 'swiggy', 'flipkart', 
+        'ather', 'atherenergy', 'postman', 'browserstack', 'zepto', 'phonepe'
+    ]
+    comp_lower = company_name.lower()
+    if any(bc in comp_lower for bc in blr_companies):
+        if any(k in loc_lower for k in ["india", "remote", "flexible", "hybrid"]) or not location_str:
+            # Exclude other explicit Indian non-Karnataka metros
+            other_cities = ["mumbai", "delhi", "gurgaon", "noida", "hyderabad", "pune", "chennai", "kolkata"]
+            if not any(oc in loc_lower for oc in other_cities):
+                return True
+
+    return False
 
 
 def determine_work_mode(title: str, description: str, location: str) -> str:
@@ -459,9 +502,9 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                 print(f"[Scanner] Failed to fetch {target['name']}: {e}")
                 continue
 
-            # Filter for Bengaluru / India postings
-            relevant_jobs = [j for j in raw_jobs if is_bengaluru_or_india_job(j.location)]
-            print(f"[Scanner] {target['name']} ({'Job Platform' if is_job_portal else 'Career Portal'}): {len(raw_jobs)} total listings, {len(relevant_jobs)} for Bengaluru/India")
+            # Filter strictly for Bengaluru & Karnataka postings
+            relevant_jobs = [j for j in raw_jobs if is_bengaluru_or_karnataka_job(j.location, target['name'], j.title, j.description)]
+            print(f"[Scanner] {target['name']} ({'Job Platform' if is_job_portal else 'Career Portal'}): {len(raw_jobs)} total listings, {len(relevant_jobs)} strictly for Bengaluru & Karnataka")
 
             source_new = 0
             source_updated = 0
