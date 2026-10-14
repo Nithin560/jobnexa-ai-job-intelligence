@@ -363,7 +363,7 @@ export const LoginPage: React.FC = () => {
 
         {/* METHOD 1: Password Login */}
         {authMethod === 'password' && (
-          <form onSubmit={handlePasswordLogin} className="space-y-4">
+          <form onSubmit={handlePasswordLogin} autoComplete="off" className="space-y-4">
             <div>
               <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 {portalRole === 'admin' ? 'Admin Email' : 'Email Address'}
@@ -374,7 +374,8 @@ export const LoginPage: React.FC = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={portalRole === 'admin' ? 'nithinvandana560@gmail.com' : 'name@company.com'}
+                  placeholder="example@gmail.com"
+                  autoComplete="off"
                   required
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition"
                 />
@@ -392,6 +393,7 @@ export const LoginPage: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
+                  autoComplete="off"
                   required
                   className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition"
                 />
@@ -424,7 +426,7 @@ export const LoginPage: React.FC = () => {
         {authMethod === 'otp' && (
           <div className="space-y-4">
             {otpStep === 'request' ? (
-              <form onSubmit={handleRequestOTP} className="space-y-4">
+              <form onSubmit={handleRequestOTP} autoComplete="off" className="space-y-4">
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     {portalRole === 'admin' ? 'Admin Email' : 'Email Address'}
@@ -435,7 +437,8 @@ export const LoginPage: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder={portalRole === 'admin' ? 'nithinvandana560@gmail.com' : 'name@company.com'}
+                      placeholder="example@gmail.com"
+                      autoComplete="off"
                       required
                       className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-blue-500 focus:bg-white transition"
                     />
@@ -523,7 +526,7 @@ export const LoginPage: React.FC = () => {
         {portalRole === 'admin' && authMethod === 'two_factor' && (
           <div className="space-y-4">
             {otpStep === 'request' ? (
-              <form onSubmit={handleTwoFactorValidate} className="space-y-4">
+              <form onSubmit={handleTwoFactorValidate} autoComplete="off" className="space-y-4">
                 <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 text-xs text-amber-800">
                   <strong>High-Security 2FA Mode:</strong> Enter your administrator credentials. Upon validation, a real 6-digit OTP will be dispatched to your email for final authentication.
                 </div>
@@ -536,7 +539,8 @@ export const LoginPage: React.FC = () => {
                       type="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      placeholder="nithinvandana560@gmail.com"
+                      placeholder="example@gmail.com"
+                      autoComplete="off"
                       required
                       className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-amber-600 focus:bg-white transition"
                     />
@@ -552,6 +556,7 @@ export const LoginPage: React.FC = () => {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
+                      autoComplete="off"
                       required
                       className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 outline-none focus:border-amber-600 focus:bg-white transition"
                     />

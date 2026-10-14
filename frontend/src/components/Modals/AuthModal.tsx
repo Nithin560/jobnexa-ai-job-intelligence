@@ -289,7 +289,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                   <Mail className="w-4 h-4 text-slate-400 mr-2" />
                   <input
                     type="email"
-                    placeholder={role === 'admin' ? 'nithinvandana560@gmail.com' : 'nithin@example.com'}
+                    placeholder="example@gmail.com"
+                    autoComplete="off"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     className="bg-transparent text-sm w-full outline-none text-slate-800"
@@ -306,7 +307,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
                     <Lock className="w-4 h-4 text-slate-400 mr-2" />
                     <input
                       type="password"
-                      placeholder="••••••••••••"
+                      placeholder="••••••••"
+                      autoComplete="off"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="bg-transparent text-sm w-full outline-none text-slate-800"
