@@ -79,53 +79,53 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
 
           <div className="flex-1 min-w-0">
             {/* Title & Status */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <Link to={`/jobs/${job.id}`} className="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <Link to={`/jobs/${job.id}`} className="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition truncate">
                 {job.title}
               </Link>
               {isExpired ? (
-                <span className="text-amber-700 bg-amber-50 border border-amber-200 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                <span className="text-amber-700 bg-amber-50 border border-amber-200 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
                   ⚠️ Expired on Career Portal
                 </span>
               ) : job.is_new ? (
-                <span className="text-emerald-600 text-xs font-semibold flex items-center gap-1">
+                <span className="text-emerald-600 text-xs font-semibold flex items-center gap-1 shrink-0">
                   <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> New
                 </span>
               ) : null}
             </div>
 
             {/* Row 2: Company Name, Category & IT Role Family */}
-            <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-600 flex-wrap">
-              <span className="font-semibold text-slate-800">{job.company_name}</span>
-              <span className="text-xs px-2 py-0.5 rounded-md border border-slate-200 text-slate-500 font-medium">
+            <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-600 flex-wrap sm:flex-nowrap">
+              <span className="font-semibold text-slate-800 shrink-0">{job.company_name}</span>
+              <span className="text-xs px-2 py-0.5 rounded-md border border-slate-200 text-slate-500 font-medium shrink-0">
                 {job.company_type}
               </span>
               {job.it_role_family && (
-                <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md shadow-2xs">
+                <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md shadow-2xs shrink-0">
                   {job.it_role_family}
                 </span>
               )}
             </div>
 
             {/* Row 3: Verified BLR Unit Badge & Source Badge */}
-            <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-600 flex-wrap">
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md inline-flex items-center gap-1 shadow-2xs">
+            <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-600 flex-wrap sm:flex-nowrap">
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md inline-flex items-center gap-1 shadow-2xs shrink-0">
                 <ShieldCheck className="w-3 h-3 text-emerald-600" />
                 Verified BLR Unit ({job.confidence_score || 95}%)
               </span>
               {job.source_type === 'job_portal' ? (
-                <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1 shrink-0">
                   🌐 {job.source_name || 'Job Platform'}
                 </span>
               ) : (
-                <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
+                <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1 shrink-0">
                   🏢 {job.source_name || 'Company Career Site'}
                 </span>
               )}
             </div>
 
             {/* Row 4: Role and Location on the SAME line with space between them */}
-            <div className="flex items-center gap-6 sm:gap-8 mt-2.5 text-xs text-slate-600 flex-wrap">
+            <div className="flex items-center gap-6 sm:gap-8 mt-2.5 text-xs text-slate-600 flex-wrap sm:flex-nowrap">
               <span className="inline-flex items-center gap-1.5 shrink-0">
                 <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Role:</span>
@@ -142,8 +142,8 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
             </div>
 
             {/* Row 5: Meta info: Experience, Work Mode */}
-            <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 flex-wrap">
-              <span className="flex items-center gap-1">
+            <div className="flex items-center gap-2.5 mt-2 text-xs text-slate-500 flex-wrap sm:flex-nowrap">
+              <span className="flex items-center gap-1 shrink-0">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 {job.experience_min === 0 && job.experience_max <= 1 ? (
                   <span className="font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded-md text-[11px]">
@@ -163,10 +163,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                   </span>
                 )}
               </span>
-              <span className="bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md font-medium text-slate-600 text-[11px]">
+              <span className="bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md font-medium text-slate-600 text-[11px] shrink-0">
                 {job.work_mode}
               </span>
-              <span className="bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md font-medium text-slate-600 text-[11px]">
+              <span className="bg-slate-50 border border-slate-200 px-2 py-0.5 rounded-md font-medium text-slate-600 text-[11px] shrink-0">
                 {job.employment_type}
               </span>
             </div>
