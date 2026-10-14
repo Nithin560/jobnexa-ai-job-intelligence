@@ -7,7 +7,7 @@ import {
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
   FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Settings, LogOut,
-  UserCheck, CheckCheck, X, GraduationCap
+  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
@@ -51,6 +51,16 @@ const fallbackTopSkills = [
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Ensure that pressing browser Back button reliably returns directly to Home
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate('/', { replace: true });
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [navigate]);
+
   const [overview, setOverview] = useState<AdminOverview | null>(null);
   const [latestJobs, setLatestJobs] = useState<Job[]>([]);
   const [recentScans, setRecentScans] = useState<ScanRunItem[]>([]);
@@ -246,13 +256,28 @@ export const AdminDashboardPage: React.FC = () => {
               <Briefcase className="w-5 h-5" />
             </div>
             <div>
-              <div className="font-extrabold text-base text-white leading-tight">BangaloreJobs</div>
-              <div className="text-[11px] font-semibold text-slate-400">Admin Panel</div>
+              <div className="font-extrabold text-base text-white leading-tight">JobNexa</div>
+              <div className="text-[11px] font-semibold text-slate-400">Admin Intelligence</div>
             </div>
           </Link>
           <span className="bg-blue-600/30 text-blue-400 border border-blue-500/30 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
             ADMIN
           </span>
+        </div>
+
+        {/* Back to Home Platform Link */}
+        <div className="px-3 pt-3 pb-1">
+          <Link
+            to="/"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 transition group shadow-2xs"
+            title="Return to Main Job Portal"
+          >
+            <div className="flex items-center gap-2">
+              <ArrowLeft className="w-3.5 h-3.5 text-blue-400 group-hover:-translate-x-0.5 transition-transform" />
+              <span>Back to Home</span>
+            </div>
+            <span className="text-[10px] text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-700">Main Portal</span>
+          </Link>
         </div>
 
         {/* Sidebar Nav Links */}
@@ -356,14 +381,26 @@ export const AdminDashboardPage: React.FC = () => {
         {/* Top Header Bar */}
         <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4 min-w-0">
           
-          {/* 1. Global Admin Search Bar */}
-          <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-56 md:w-64 lg:w-72 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
-            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search jobs, companies, sources..."
-              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
-            />
+          <div className="flex items-center gap-3 shrink-0">
+            {/* Back to Home Button */}
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 px-3 py-2 rounded-xl transition shadow-2xs shrink-0 group"
+              title="Return to Main Portal (Home)"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-600 group-hover:-translate-x-0.5 transition-transform" />
+              <span className="hidden sm:inline">Back to Home</span>
+            </Link>
+
+            {/* 1. Global Admin Search Bar */}
+            <div className="flex items-center bg-slate-100 rounded-xl px-3.5 py-2 w-52 md:w-60 lg:w-64 border border-slate-200 focus-within:bg-white focus-within:border-blue-500 transition shrink-0">
+              <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
+              <input
+                type="text"
+                placeholder="Search jobs, companies, sources..."
+                className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
+              />
+            </div>
           </div>
 
           {/* 2. Registered & Active Users Navigation Badge */}

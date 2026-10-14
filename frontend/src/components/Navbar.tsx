@@ -35,20 +35,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const handleSwitchToAdmin = async () => {
     try {
       await api.quickLoginAsAdmin();
-      navigate('/admin');
+      navigate('/admin', { replace: true });
       window.location.reload();
     } catch (e) {
-      navigate('/admin');
+      navigate('/admin', { replace: true });
     }
   };
 
   const handleSwitchToCandidate = async () => {
     try {
       await api.quickLoginAsCandidate();
-      navigate('/');
+      navigate('/', { replace: true });
       window.location.reload();
     } catch (e) {
-      navigate('/');
+      navigate('/', { replace: true });
     }
   };
 

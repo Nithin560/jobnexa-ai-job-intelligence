@@ -1,15 +1,25 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   Compass, ShieldCheck, CheckCircle2, XCircle, Terminal, 
   Layers, Database, Clock, Cpu, Server, FileText, ArrowRight, 
   ExternalLink, Sparkles, Building2, Globe, Code2, AlertTriangle,
-  Search, BookOpen, Check, Copy, ChevronRight, Award, Zap
+  Search, BookOpen, Check, Copy, ChevronRight, Award, Zap, ArrowLeft
 } from 'lucide-react';
 
 export const DiscoveryStrategyPage: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'strategy' | 'taxonomy' | 'ats' | 'stack' | 'schedule' | 'prep'>('strategy');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
+  // Ensure that pressing browser Back button reliably returns directly to Home
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate('/', { replace: true });
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [navigate]);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -18,8 +28,22 @@ export const DiscoveryStrategyPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-8 pb-16 max-w-6xl mx-auto">
+    <div className="space-y-6 pb-16 max-w-6xl mx-auto">
       
+      {/* Back to Home Button */}
+      <div className="flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition group"
+          title="Return to Home"
+        >
+          <div className="p-2 rounded-xl bg-white border border-slate-200 group-hover:border-blue-300 group-hover:bg-blue-50 transition shadow-2xs">
+            <ArrowLeft className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
+          </div>
+          <span>Back to Home</span>
+        </Link>
+      </div>
+
       {/* Top Banner / Breadcrumb */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800 relative overflow-hidden">
         <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>

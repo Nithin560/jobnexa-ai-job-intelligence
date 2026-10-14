@@ -20,6 +20,14 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// GuestOnlyRoute: If user is already authenticated, redirect to / (Home) so browser back doesn't land on login/register
+function GuestOnlyRoute({ children }: { children: React.ReactNode }) {
+  if (isUserAuthenticated()) {
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
+}
+
 function PlatformLayout({ children }: { children: React.ReactNode }) {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
@@ -60,23 +68,27 @@ export function App() {
         <Route
           path="/login"
           element={
-            <div className="min-h-screen flex flex-col font-sans">
-              <Navbar onOpenAuth={() => {}} />
-              <main className="flex-1 flex flex-col">
-                <LoginPage />
-              </main>
-            </div>
+            <GuestOnlyRoute>
+              <div className="min-h-screen flex flex-col font-sans">
+                <Navbar onOpenAuth={() => {}} />
+                <main className="flex-1 flex flex-col">
+                  <LoginPage />
+                </main>
+              </div>
+            </GuestOnlyRoute>
           }
         />
         <Route
           path="/register"
           element={
-            <div className="min-h-screen flex flex-col font-sans">
-              <Navbar onOpenAuth={() => {}} />
-              <main className="flex-1 flex flex-col">
-                <RegisterPage />
-              </main>
-            </div>
+            <GuestOnlyRoute>
+              <div className="min-h-screen flex flex-col font-sans">
+                <Navbar onOpenAuth={() => {}} />
+                <main className="flex-1 flex flex-col">
+                  <RegisterPage />
+                </main>
+              </div>
+            </GuestOnlyRoute>
           }
         />
 

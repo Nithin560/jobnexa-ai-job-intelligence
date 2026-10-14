@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, useLocation, Link } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
 import { Job, MarketInsights } from '../types';
@@ -7,7 +7,7 @@ import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
   Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight,
-  GraduationCap, RefreshCw, Globe, Compass
+  GraduationCap, RefreshCw, Globe, Compass, ArrowLeft
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
@@ -40,6 +40,7 @@ const defaultRecentScans = [
 
 export const HomePage: React.FC = () => {
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [totalJobs, setTotalJobs] = useState(618);
   const [insights, setInsights] = useState<MarketInsights | null>(null);
@@ -109,7 +110,7 @@ export const HomePage: React.FC = () => {
         }
         if (res.started || res.status === 'scanning' || res.scan_info?.is_running) {
           setIsLiveScanning(true);
-          setScanBannerText('⚡ Scanning 27+ Career Websites & Job Platforms in real-time...');
+          setScanBannerText('⚡ Scanning 120+ verified Bengaluru company career portals & ATS feeds in real-time...');
 
           pollInterval = setInterval(async () => {
             try {
@@ -118,7 +119,7 @@ export const HomePage: React.FC = () => {
               if (!status.is_running) {
                 clearInterval(pollInterval);
                 setIsLiveScanning(false);
-                setScanBannerText(`✅ Scan Complete: Verified ${status.totals?.jobs_found || totalJobs} live jobs across all Career Websites & Job Portals.`);
+                setScanBannerText(`✅ Scan Complete: Verified ${status.totals?.jobs_found || totalJobs} live jobs across 120+ Bengaluru company career portals.`);
                 fetchJobs();
                 loadInsights();
                 setTimeout(() => setScanBannerText(null), 8000);
@@ -146,7 +147,7 @@ export const HomePage: React.FC = () => {
   const handleTriggerLiveScan = async () => {
     if (isLiveScanning) return;
     setIsLiveScanning(true);
-    setScanBannerText('⚡ Initiating live scan across all 27+ Career Websites & Job Platforms...');
+    setScanBannerText('⚡ Initiating live scan across 120+ verified Bengaluru company career portals & ATS feeds...');
     try {
       const res = await api.autoScanCheck(true);
       if (res.scan_info) {
@@ -321,6 +322,25 @@ export const HomePage: React.FC = () => {
   return (
     <div className="space-y-6 pb-16">
       
+      {/* Back to Home Navigation Banner when browsing /jobs */}
+      {location.pathname === '/jobs' && (
+        <div className="flex items-center justify-between bg-white p-3.5 px-5 rounded-2xl border border-slate-200 shadow-2xs">
+          <Link 
+            to="/" 
+            className="inline-flex items-center gap-2 text-xs font-bold text-slate-700 hover:text-blue-600 transition group"
+            title="Return to Home"
+          >
+            <div className="p-1.5 rounded-lg bg-slate-50 border border-slate-200 group-hover:border-blue-300 group-hover:bg-blue-50 transition shadow-2xs">
+              <ArrowLeft className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-600 group-hover:-translate-x-0.5 transition-transform" />
+            </div>
+            <span>Back to Home</span>
+          </Link>
+          <span className="text-xs font-semibold text-slate-500 hidden sm:inline">
+            Bengaluru IT & Engineering Jobs Catalog
+          </span>
+        </div>
+      )}
+      
       {/* Real-time Live Scanner Alert Banner */}
       {isLiveScanning ? (
         <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border border-cyan-400/50 rounded-2xl p-4 text-white flex items-center justify-between shadow-xl backdrop-blur-md animate-pulse">
@@ -388,10 +408,6 @@ export const HomePage: React.FC = () => {
             <h1 className="text-2xl md:text-3xl font-black leading-tight tracking-tight drop-shadow-md text-white">
               Bengaluru <span className="text-blue-400">IT & Engineering</span> Discovery
             </h1>
-
-            <p className="text-slate-100 text-xs md:text-sm leading-relaxed drop-shadow-sm font-medium">
-              Zero-cost direct discovery scanning 120+ verified Bengaluru company career portals and ATS feeds daily at 06:00 AM IST. Strict IT/engineering vacancies exclusively.
-            </p>
 
             <div className="flex items-center gap-2 pt-1 flex-wrap">
               <Link

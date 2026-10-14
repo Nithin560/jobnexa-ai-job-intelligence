@@ -15,12 +15,18 @@ import {
   User,
   AlertCircle
 } from 'lucide-react';
-import { api } from '../api/client';
+import { api, isUserAuthenticated } from '../api/client';
 import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (isUserAuthenticated()) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
 
   // Role: Candidate vs Admin Portal
   const initialRole = searchParams.get('role') === 'admin' ? 'admin' : 'candidate';
@@ -79,9 +85,9 @@ export const LoginPage: React.FC = () => {
     try {
       const data = await api.login(email.trim(), password);
       if (data.role === 'admin') {
-        navigate('/admin');
+        navigate('/admin', { replace: true });
       } else {
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Incorrect email or password. Please try again.');
@@ -187,9 +193,9 @@ export const LoginPage: React.FC = () => {
     try {
       const data = await api.verifyOTPLogin(email.trim(), code);
       if (data.role === 'admin') {
-        navigate('/admin');
+        navigate('/admin', { replace: true });
       } else {
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Invalid or expired OTP. Please try again.');
@@ -205,10 +211,10 @@ export const LoginPage: React.FC = () => {
     try {
       if (targetRole === 'admin') {
         await api.quickLoginAsAdmin();
-        navigate('/admin');
+        navigate('/admin', { replace: true });
       } else {
         await api.quickLoginAsCandidate();
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } catch (err) {
       setError('Quick login failed. Please retry.');

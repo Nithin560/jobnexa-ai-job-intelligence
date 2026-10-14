@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api/client';
 import { CandidateProfile } from '../types';
-import { User, Briefcase, MapPin, Award, Check, Loader2 } from 'lucide-react';
+import { User, Briefcase, MapPin, Award, Check, Loader2, ArrowLeft } from 'lucide-react';
 
 export const CandidateProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +14,15 @@ export const CandidateProfilePage: React.FC = () => {
   const [skills, setSkills] = useState<string[]>(['Python', 'FastAPI', 'PostgreSQL', 'Docker', 'AWS']);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+
+  // Ensure that pressing browser Back button reliably returns directly to Home
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate('/', { replace: true });
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [navigate]);
 
   useEffect(() => {
     const fetchProf = async () => {
@@ -78,8 +87,22 @@ export const CandidateProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto space-y-6 pb-12">
+    <div className="max-w-3xl mx-auto space-y-4 pb-12">
       
+      {/* Back to Home Button */}
+      <div className="flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition group"
+          title="Return to Home"
+        >
+          <div className="p-2 rounded-xl bg-white border border-slate-200 group-hover:border-blue-300 group-hover:bg-blue-50 transition shadow-2xs">
+            <ArrowLeft className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
+          </div>
+          <span>Back to Home</span>
+        </Link>
+      </div>
+
       <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
         <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
           <div className="w-14 h-14 bg-blue-600 text-white font-bold text-2xl rounded-2xl flex items-center justify-center">

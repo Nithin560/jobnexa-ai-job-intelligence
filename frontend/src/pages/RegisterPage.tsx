@@ -1,12 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
-import { api } from '../api/client';
+import { api, isUserAuthenticated } from '../api/client';
 import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<'details' | 'otp'>('details');
+
+  React.useEffect(() => {
+    if (isUserAuthenticated()) {
+      navigate('/', { replace: true });
+    }
+  }, [navigate]);
 
   // Form Fields
   const [role, setRole] = useState<'candidate' | 'admin'>('candidate');
@@ -121,9 +127,9 @@ export const RegisterPage: React.FC = () => {
         localStorage.setItem('user_experience_tier', experienceTier);
       }
       if (data.role === 'admin') {
-        navigate('/admin');
+        navigate('/admin', { replace: true });
       } else {
-        navigate('/');
+        navigate('/', { replace: true });
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Verification failed. Please ensure the code is correct.');

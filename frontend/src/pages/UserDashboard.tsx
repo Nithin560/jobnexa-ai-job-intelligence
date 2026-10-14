@@ -1,17 +1,28 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { JobCard } from '../components/JobCard';
 import { Job } from '../types';
 import { 
   LayoutDashboard, User, FileText, Sparkles, Bookmark, CheckCircle, Bell, Building2, 
-  Target, Settings, Edit3, ArrowUpRight
+  Target, Settings, Edit3, ArrowUpRight, ArrowLeft
 } from 'lucide-react';
 
 export const UserDashboard: React.FC = () => {
+  const navigate = useNavigate();
   const [recommended, setRecommended] = useState<Job[]>([]);
   const [saved, setSaved] = useState<Job[]>([]);
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
   const [loading, setLoading] = useState(true);
+
+  // Ensure that pressing browser Back button reliably returns directly to Home
+  useEffect(() => {
+    const handlePopState = () => {
+      navigate('/', { replace: true });
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [navigate]);
 
   const userEmail = sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || 'nithin@example.com';
   const userName = userEmail.split('@')[0];
@@ -35,7 +46,7 @@ export const UserDashboard: React.FC = () => {
 
   const userNavItems = [
     { label: 'Dashboard', icon: LayoutDashboard, active: true },
-    { label: 'My Profile', icon: User, active: false },
+    { label: 'My Profile', icon: User, active: false, path: '/profile' },
     { label: 'Resume', icon: FileText, active: false },
     { label: 'Recommended', icon: Sparkles, active: false },
     { label: 'Saved Jobs', icon: Bookmark, active: false },
@@ -47,11 +58,34 @@ export const UserDashboard: React.FC = () => {
   ];
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pb-16">
+    <div className="space-y-4 pb-16">
       
-      {/* Left Navigation Sidebar matching Image 3 */}
+      {/* Top Back to Home Button */}
+      <div className="flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="inline-flex items-center gap-2 text-sm font-bold text-slate-700 hover:text-blue-600 transition group"
+          title="Return to Home"
+        >
+          <div className="p-2 rounded-xl bg-white border border-slate-200 group-hover:border-blue-300 group-hover:bg-blue-50 transition shadow-2xs">
+            <ArrowLeft className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
+          </div>
+          <span>Back to Home</span>
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      {/* Left Navigation Sidebar */}
       <div className="lg:col-span-3 space-y-6">
         <div className="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm space-y-1">
+          <Link
+            to="/"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition text-slate-700 hover:bg-blue-50 hover:text-blue-600 border border-slate-200/80 mb-2 shadow-2xs group"
+          >
+            <ArrowLeft className="w-4 h-4 text-blue-600 shrink-0 group-hover:-translate-x-0.5 transition-transform" />
+            <span>← Back to Home</span>
+          </Link>
           {userNavItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -169,5 +203,6 @@ export const UserDashboard: React.FC = () => {
       </div>
 
     </div>
+  </div>
   );
 };
