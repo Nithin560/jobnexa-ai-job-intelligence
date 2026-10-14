@@ -1,128 +1,115 @@
-# BangaloreJobs — AI-Powered Job Intelligence & Direct Application Discovery Platform
+# JobNexa — Bengaluru IT Company Discovery & Engineering Job Intelligence Platform
 
-An AI-powered job discovery platform for Bengaluru, Karnataka, India. Automatically scans permitted company career pages and public feeds on a daily schedule, normalizes job listings, extracts skills, detects duplicates, tracks freshness, and connects candidates directly to official application URLs with explainable match scoring.
+An AI-powered job discovery and engineering intelligence platform built specifically for **Bengaluru and Karnataka state**. JobNexa automatically scans permitted company career ATS portals (Greenhouse, Lever, Ashby, SmartRecruiters, Workday) and verified job platform feeds on a scheduled cadence, normalizes job listings across 7 IT Role Families and 9 Company Categories, extracts skills, detects duplicates, verifies physical Bangalore tech hub locations, and connects candidates directly to official application URLs with explainable match scoring.
 
-![BangaloreJobs Home Dashboard](docs/home_dashboard.jpg)
+![JobNexa Platform](docs/home_dashboard.jpg)
 
 ### Application Screenshots & Workflows
 
-| Candidate Search & Discovery | Admin Panel & Crawler Health |
+| Candidate Discovery & Feed | Admin Operations & Crawler Intelligence |
 |---|---|
 | ![User Experience & Job Match Analysis](docs/dashboard_flow.jpg) | ![Admin Operations Dashboard](docs/admin_dashboard.jpg) |
 
-## Key Features
+---
 
-- **Daily Automated Ingestion:** Scans authorized job sources, normalizes listings, and tracks job status changes idempotently.
-- **Explainable Job Matching:** Ranks candidate fit using transparent weighted scoring (Skill Coverage, Title Match, Experience Fit, Work Mode Fit, Freshness).
-- **Skill Gap Breakdown:** Highlights matched skills, missing skills, and optional candidate profile recommendations.
-- **Direct Apply Links:** Directs candidates straight to the employer's official application page with no middleman.
-- **Admin Operations Dashboard:** Monitors crawler health, processing throughput, data quality metrics, duplicate detection, and system health.
-- **Zero Paid API Requirement (₹0 Local Target):** Runs entirely locally using open-source tools (FastAPI, PostgreSQL, React, Vite, Tailwind, optional Ollama / Sentence Transformers).
+## 🌟 Key Platform Capabilities
+
+- **120+ Bengaluru IT Companies & Direct ATS Ingestion:** Ingests vacancies directly from verified career portals (Razorpay, Swiggy, Zerodha, CRED, Flipkart, PhonePe, Infosys, Wipro, Bosch, etc.) with zero middleman or expired listings.
+- **7 IT Role Families Categorization:**
+  1. Software & Product Engineering
+  2. Cloud, SRE & DevOps
+  3. Cybersecurity & InfoSec
+  4. Data & AI / ML
+  5. QA & SDET
+  6. Hardware & Embedded Systems
+  7. Tech Product & Architecture
+- **Dedicated Candidate Experience Tiers:**
+  - **Fresher Opportunities (0 - 1 Years):** Curated for new graduates, entry-level engineers, and interns with 1-click on-demand fresh recommendations reload.
+  - **Experienced Career Openings (1+ Years):** Tailored for mid, senior, lead, and staff engineers.
+- **Strict Role-Based Security:**
+  - **Admin Mode:** Full control over live career portal scanning, user intelligence, system crawler throughput, and source health.
+  - **Candidate User Mode:** Streamlined, secure job discovery and application tracking with automated 24/7 verification sync.
+- **Dynamic Real-Time Verification Timestamps:** Accurately reflects exact scan and verification times (`Today, 08:01 AM`, `Yesterday`, etc.) with full datetime hover inspection.
+- **Bangalore Tech Hubs Filtering:** Neighborhood-level filtering across Koramangala & HSR, Whitefield & Bellandur (ORR), Electronic City, Manyata & North Bengaluru, Indiranagar & Central, and Remote/Hybrid Karnataka.
+- **Zero Paid API Stack (₹0 Local Target):** Runs entirely locally without expensive third-party APIs using FastAPI, SQLite/PostgreSQL, React 18, Vite, and Tailwind CSS.
 
 ---
 
-## System Architecture
+## 🏗️ System Architecture
 
 ```
-Candidate / Admin Browser (React + TypeScript + Tailwind)
+Candidate / Admin Browser (React 18 + TypeScript + Vite + Tailwind)
        │ (HTTPS / REST JSON)
        ▼
- FastAPI Backend (Python + Pydantic + SQLAlchemy)
+ FastAPI Backend (Python 3.11+ + Pydantic v2 + SQLAlchemy ORM)
        │
-       ├── PostgreSQL (+ optional pgvector)
+       ├── SQLite / PostgreSQL Database
        │
-       └── Daily Scan Orchestrator
-             ├── Permitted Connectors (HTTPX / BeautifulSoup)
-             ├── Normalization & Rule Engine
-             ├── Duplicate Detection & History Tracking
-             └── Match Scoring Pipeline
+       └── Bengaluru Discovery & Scan Pipeline
+             ├── ATS Connectors (Greenhouse, Lever, Ashby, SmartRecruiters)
+             ├── Normalization Engine (7 IT Role Families, 9 Company Types)
+             ├── Physical BLR Location & JD Validator
+             ├── Strict Role Access (Admin Scanner vs Candidate View)
+             └── Explainable Match Scoring (Skills, Experience, Location)
 ```
 
 ---
 
-## Tech Stack
+## 💻 Tech Stack
 
 | Layer | Technology |
 |---|---|
 | **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Lucide Icons, Recharts |
-| **Backend** | Python 3.11+, FastAPI, Pydantic v2, SQLAlchemy ORM, Alembic |
-| **Database** | PostgreSQL 15+ (with `pgvector` extension) |
-| **Security** | JWT Authentication, Passlib (Argon2 / Bcrypt), Role-Based Access Control |
-| **Containerization** | Docker, Docker Compose |
-| **Testing** | Pytest, Vitest |
+| **Backend** | Python 3.11+, FastAPI, Pydantic v2, SQLAlchemy ORM, HTTPX |
+| **Database** | SQLite (development/local) / PostgreSQL 15+ (production) |
+| **Security** | JWT Authentication, Passlib (Bcrypt / Argon2), RBAC (`candidate` vs `admin`) |
+| **Connectors** | Greenhouse ATS, Lever ATS, Ashby ATS, SmartRecruiters, Job Aggregators |
 
 ---
 
-## Getting Started
+## 🚀 Getting Started
 
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+ and npm
-- PostgreSQL 15+ (or Docker Engine / Docker Desktop)
 - Git
 
 ### Quick Setup
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Nithin560/job-intelligence.git
-   cd job-intelligence
+   git clone https://github.com/Nithin560/jobnexa-ai-job-intelligence.git
+   cd jobnexa-ai-job-intelligence
    ```
 
 2. **Backend Setup:**
    ```bash
    cd backend
    python -m venv .venv
-   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   # On Windows:
+   .venv\Scripts\activate
+   # On macOS/Linux:
+   source .venv/bin/activate
    pip install -r requirements.txt
-   cp ../.env.example .env
    uvicorn app.main:app --reload
    ```
 
 3. **Frontend Setup:**
    ```bash
-   cd frontend
+   cd ../frontend
    npm install
    npm run dev
    ```
 
-4. **Access the application:**
-   - Frontend UI: `http://localhost:5173`
-   - FastAPI Interactive API Docs: `http://localhost:8000/docs`
+4. **Access the platform:**
+   - **Candidate & Discovery Portal:** `http://localhost:5173/`
+   - **Admin Intelligence Dashboard:** `http://localhost:5173/admin`
+   - **Interactive API Documentation:** `http://localhost:8000/docs`
 
 ---
 
-## Project Structure
+## 📜 Zero-Cost Discovery Blueprint
 
-```
-job-intelligence/
-├── backend/
-│   ├── app/
-│   │   ├── api/v1/         # REST API Route Handlers
-│   │   ├── core/           # Security, Configuration & Logging
-│   │   ├── db/             # Database connection & SQLAlchemy Base
-│   │   ├── models/         # SQLAlchemy Database Entities
-│   │   ├── schemas/        # Pydantic Input/Output Schemas
-│   │   ├── connectors/     # Source Registry & Adapters
-│   │   ├── pipeline/       # Extraction, Normalization & Deduplication
-│   │   ├── services/       # Match Scoring & Search Logic
-│   │   └── tasks/          # Scanner Commands & Scheduler
-│   └── tests/              # Unit & Integration Tests
-├── frontend/
-│   ├── src/
-│   │   ├── api/            # API Client Functions
-│   │   ├── components/     # UI Component Library (Cards, Charts, Modals)
-│   │   ├── pages/          # Search, Details, Profile, Admin Pages
-│   │   └── types/          # TypeScript Interfaces
-│   └── package.json
-├── docs/                   # PDF Documentation & Architecture Guides
-├── GITHUB_WORKFLOW.md      # Development & Git Commit Standards
-├── PLAN.md                 # Phased Implementation Plan
-└── compose.yaml            # Local Docker Compose Environment
-```
+Read the complete discovery blueprint strategy inside the platform at `/strategy` or in the codebase at `frontend/src/pages/DiscoveryStrategyPage.tsx`.
 
----
-
-## License & Policy Notice
-
-Built with responsible crawling principles: respects `robots.txt`, implements per-host rate limits, stores minimal necessary job metadata, and provides direct links back to original employer postings.
+Built with responsible crawling principles: respects `robots.txt`, implements per-host rate limits, stores minimal necessary metadata, and provides 100% direct application links to verified employer career portals.
