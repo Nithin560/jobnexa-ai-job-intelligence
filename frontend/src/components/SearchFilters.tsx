@@ -46,10 +46,16 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
   ];
 
   const companyTypeOptions = [
-    { label: 'All Companies', count: null, val: '' },
-    { label: 'Startups & Scale-ups', count: insights?.company_tiers?.['Startup'] ?? 111, val: 'Startup' },
-    { label: 'Mid-Market Enterprises', count: insights?.company_tiers?.['Mid-size'] ?? 52, val: 'Mid-size' },
-    { label: 'Enterprise & MNCs', count: insights?.company_tiers?.['Enterprise'] ?? 309, val: 'Enterprise' },
+    { label: 'All Categories', count: null, val: '' },
+    { label: '🚀 Product & Software', count: null, val: 'Product & Software' },
+    { label: '🏢 IT Services & Consulting', count: null, val: 'IT Services & Consulting' },
+    { label: '☁️ SaaS & Cloud', count: null, val: 'SaaS & Cloud' },
+    { label: '🔒 Cybersecurity', count: null, val: 'Cybersecurity' },
+    { label: '🤖 AI & Data Platforms', count: null, val: 'AI & Data' },
+    { label: '💳 Fintech Technology', count: null, val: 'Fintech Technology' },
+    { label: '🎮 Gaming & Media Tech', count: null, val: 'Gaming & Media Tech' },
+    { label: '⚡ Semiconductor & Hardware', count: null, val: 'Semiconductor & Hardware' },
+    { label: '🌐 GCC / Engineering Centre', count: null, val: 'GCC / Engineering Centre' },
   ];
 
   const jobTypeOptions = [

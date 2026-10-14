@@ -290,6 +290,8 @@ def extract_hiring_role(title: str) -> str:
         return "QA / SDET"
     if any(k in t_lower for k in ["security", "cyber", "infosec", "soc analyst"]):
         return "Security Engineer"
+    if any(k in t_lower for k in ["embedded", "firmware", "vlsi", "hardware"]):
+        return "Embedded / Hardware Engineer"
     if any(k in t_lower for k in ["engineering manager", "technical lead", "tech lead", "lead engineer"]):
         return "Engineering Manager"
     if any(k in t_lower for k in ["architect", "system architect"]):
@@ -303,6 +305,84 @@ def extract_hiring_role(title: str) -> str:
     cleaned = re.sub(r'\b(senior|junior|lead|staff|principal|associate|intern|sr\.|jr\.)\b', '', cleaned, flags=re.IGNORECASE)
     cleaned = cleaned.strip(" -–,|/")
     return cleaned if len(cleaned) > 2 else "Software Engineer"
+
+
+def is_it_engineering_job(title: str, description: str = "") -> Tuple[bool, str]:
+    """
+    JobNexa Blueprint Section 2: Exclude non-IT roles (Sales, BD, HR, recruiter, finance, legal, admin, facilities, non-technical support).
+    Returns (is_it, reason)
+    """
+    t_lower = (title or "").lower()
+    d_snippet = (description or "")[:1500].lower()
+
+    # Clear non-IT exclusion keywords in title
+    non_it_title_keywords = [
+        "sales representative", "sales executive", "account executive", "business development", "inside sales",
+        "recruiter", "talent acquisition", "human resources", "hr executive", "hr manager", "hr generalist", "people operations",
+        "finance manager", "accountant", "accounting", "accounts payable", "accounts receivable", "financial analyst", "tax consultant", "auditor",
+        "legal counsel", "paralegal", "attorney", "legal associate",
+        "office manager", "receptionist", "facilities executive", "admin executive", "executive assistant",
+        "warehouse", "delivery partner", "telecaller", "bpo executive", "call center"
+    ]
+    for non_it in non_it_title_keywords:
+        if non_it in t_lower:
+            return False, f"Excluded: Non-IT role family ({non_it})"
+
+    # Positive IT engineering indicators
+    it_indicators = [
+        "software", "developer", "engineer", "sde", "frontend", "backend", "full stack", "fullstack",
+        "devops", "sre", "cloud", "infrastructure", "systems", "network", "linux", "database", "dba",
+        "data", "machine learning", "ml", "ai", "artificial intelligence", "nlp", "computer vision", "llm",
+        "qa", "test", "sdet", "quality assurance", "automation",
+        "security", "infosec", "cyber", "soc", "penetration", "appsec",
+        "embedded", "firmware", "vlsi", "hardware", "fpga", "robotics",
+        "product manager", "architect", "tech lead", "technical lead", "engineering manager", "scrum master"
+    ]
+    if any(k in t_lower for k in it_indicators):
+        return True, "Included: Verified IT/Engineering role"
+
+    # Check description snippet if title is generic
+    if any(k in d_snippet for k in ["python", "java", "react", "golang", "c++", "aws", "kubernetes", "sql", "api", "git", "ci/cd", "microservices"]):
+        return True, "Included: Technical IT engineering duties verified in description"
+
+    # Default to non-IT if no engineering signals
+    return False, "Excluded: No explicit technology or engineering duties identified"
+
+
+def classify_it_role_family(title: str, description: str = "") -> Tuple[str, str]:
+    """
+    Classify a verified IT job into one of the 7 JobNexa Blueprint IT Role Families.
+    Returns (family_key, family_display_name).
+    """
+    t_lower = (title or "").lower()
+    text = f"{t_lower} {description[:800].lower()}"
+
+    # 1. Security
+    if any(k in text for k in ["security", "cyber", "infosec", "soc", "iam", "appsec", "vulnerability", "incident response"]):
+        return "security", "Cybersecurity & InfoSec"
+
+    # 2. Hardware and Embedded
+    if any(k in text for k in ["embedded", "firmware", "vlsi", "rtl", "asic", "hardware engineer", "electronics", "robotics", "fpga"]):
+        return "hardware_embedded", "Hardware & Embedded Systems"
+
+    # 3. Quality & Release (QA / SDET)
+    if any(k in text for k in ["qa", "sdet", "test engineer", "automation engineer", "quality assurance", "test automation", "release engineer"]):
+        return "quality_release", "Quality & SDET"
+
+    # 4. Data & AI / ML
+    if any(k in text for k in ["data engineer", "data scientist", "machine learning", "mlops", "ai ", "analytics engineer", "deep learning", "nlp", "llm", "dba", "big data", "spark", "bi engineer"]):
+        return "data_ai", "Data & AI / ML"
+
+    # 5. Infrastructure and Reliability (Cloud / SRE / DevOps)
+    if any(k in text for k in ["devops", "sre", "site reliability", "cloud", "infrastructure", "platform engineer", "systems engineer", "network engineer", "sysadmin", "it support engineer"]):
+        return "infrastructure_reliability", "Infrastructure & Cloud / DevOps"
+
+    # 6. Technical Product & Architecture
+    if any(k in text for k in ["technical product manager", "solution architect", "enterprise architect", "system architect", "engineering manager", "director of engineering", "vp engineering"]):
+        return "technical_product", "Technical Product & Architecture"
+
+    # 7. Default: Software and Product Engineering
+    return "software_engineering", "Software & Product Engineering"
 
 
 def calculate_salary_range(experience_min: int, experience_max: int, company_type: str = "Mid-size") -> Tuple[float, float, str]:

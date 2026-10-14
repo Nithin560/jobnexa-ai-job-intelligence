@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles, ShieldCheck } from 'lucide-react';
 import { Job } from '../types';
 
 interface JobCardProps {
@@ -54,11 +54,20 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               ) : null}
             </div>
 
-            {/* Company Name & Source Type */}
-            <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
+            {/* Company Name, Category, Source Type & Role Family */}
+            <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-600 flex-wrap">
               <span className="font-semibold text-slate-800">{job.company_name}</span>
               <span className="text-xs px-2 py-0.5 rounded-md border border-slate-200 text-slate-500 font-medium">
                 {job.company_type}
+              </span>
+              {job.it_role_family && (
+                <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md shadow-2xs">
+                  {job.it_role_family}
+                </span>
+              )}
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md inline-flex items-center gap-1 shadow-2xs">
+                <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                Verified BLR Unit ({job.confidence_score || 95}%)
               </span>
               {job.source_type === 'job_portal' ? (
                 <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">

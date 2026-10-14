@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { Navbar } from './components/Navbar';
 import { AuthModal } from './components/Modals/AuthModal';
 import { HomePage } from './pages/HomePage';
@@ -9,6 +9,7 @@ import { CandidateProfilePage } from './pages/CandidateProfilePage';
 import { AdminDashboardPage } from './pages/AdminDashboardPage';
 import { LoginPage } from './pages/LoginPage';
 import { RegisterPage } from './pages/RegisterPage';
+import { DiscoveryStrategyPage } from './pages/DiscoveryStrategyPage';
 import { isUserAuthenticated } from './api/client';
 
 // Route Guard: Ensures visitor is authenticated in an active session, otherwise redirects to /login
@@ -30,12 +31,18 @@ function PlatformLayout({ children }: { children: React.ReactNode }) {
       </main>
 
       <footer className="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between">
-          <div>© 2026 BangaloreJobs AI Powered Platform. Bengaluru, Karnataka, India.</div>
-          <div className="flex gap-4">
+        <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div>
+            © 2026 <strong>JobNexa</strong> — Bengaluru IT Company Discovery & Engineering Job Intelligence.
+          </div>
+          <div className="flex items-center gap-4 flex-wrap justify-center">
+            <Link to="/strategy" className="text-blue-600 font-semibold hover:underline">
+              Discovery Blueprint (14 Oct 2026)
+            </Link>
+            <span>•</span>
             <a href="/docs" target="_blank" className="hover:underline">FastAPI Docs (/docs)</a>
             <span>•</span>
-            <span>Zero-Cost Development Target (₹0)</span>
+            <span className="text-emerald-600 font-bold">Zero-Cost Target (₹0)</span>
           </div>
         </div>
       </footer>
@@ -130,6 +137,16 @@ export function App() {
             <ProtectedRoute>
               <PlatformLayout>
                 <CandidateProfilePage />
+              </PlatformLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/strategy"
+          element={
+            <ProtectedRoute>
+              <PlatformLayout>
+                <DiscoveryStrategyPage />
               </PlatformLayout>
             </ProtectedRoute>
           }

@@ -46,6 +46,8 @@ class JobListItemResponse(BaseModel):
     last_seen_at: datetime
     is_new: bool = False
     is_saved: bool = False
+    it_role_family: Optional[str] = "Software & Product Engineering"
+    confidence_score: int = 95
     match: Optional[MatchBreakdown] = None
 
     class Config:

@@ -25,8 +25,18 @@ from app.schemas.job import (
 from app.api.deps import get_optional_current_user
 from app.models.user import User
 from app.services.match_service import calculate_job_match
-from app.pipeline.normalizer import extract_hiring_role, calculate_salary_range
+from app.pipeline.normalizer import extract_hiring_role, calculate_salary_range, classify_it_role_family
 from app.core.company_logos import get_company_logo
+
+IT_ROLE_FAMILY_LABELS = {
+    "software_engineering": "Software & Product Engineering",
+    "infrastructure_reliability": "Cloud, SRE & DevOps",
+    "security": "Cybersecurity & InfoSec",
+    "data_ai": "Data, Analytics & AI/ML",
+    "quality_release": "QA & SDET",
+    "hardware_embedded": "Hardware & Embedded Systems",
+    "technical_product": "Technical Product & Architecture",
+}
 
 router = APIRouter()
 
@@ -127,10 +137,51 @@ def list_jobs(
     if employment_type:
         query = query.filter(Job.employment_type.ilike(f"%{employment_type}%"))
 
-    # Company Type Filter
+    # Company Type & Category Filter (JobNexa Blueprint Section 3)
     if company_type and company_type.lower() != "all":
         ctype_low = company_type.lower().strip()
-        if "start" in ctype_low:
+        if "product" in ctype_low or "software" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%product%"),
+                Company.company_type.ilike("%software%"),
+                Company.company_type.ilike("%startup%")
+            ))
+        elif "service" in ctype_low or "consulting" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%service%"),
+                Company.company_type.ilike("%consulting%"),
+                Company.company_type.ilike("%mid-size%")
+            ))
+        elif "saas" in ctype_low or "cloud" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%saas%"),
+                Company.company_type.ilike("%cloud%"),
+                Company.name.in_(["Okta", "GitLab", "Elastic", "Datadog", "Twilio", "Cloudflare", "MongoDB"])
+            ))
+        elif "cyber" in ctype_low or "security" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%security%"),
+                Company.name.in_(["Okta", "Rubrik", "Cloudflare"])
+            ))
+        elif "ai" in ctype_low or "data" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%ai%"),
+                Company.company_type.ilike("%data%"),
+                Company.name.in_(["Databricks", "ElevenLabs", "MongoDB", "Elastic"])
+            ))
+        elif "fintech" in ctype_low or "pay" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%fintech%"),
+                Company.name.in_(["Razorpay", "CRED", "Groww", "Zeta", "Stripe"])
+            ))
+        elif "semiconductor" in ctype_low or "hardware" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike("%hardware%"))
+        elif "gcc" in ctype_low or "centre" in ctype_low or "center" in ctype_low:
+            query = query.join(Job.company, isouter=True).filter(or_(
+                Company.company_type.ilike("%gcc%"),
+                Company.company_type.in_(["Enterprise", "Large"])
+            ))
+        elif "start" in ctype_low:
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike("%startup%"))
         elif "mid" in ctype_low:
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike("%mid-size%"))
@@ -139,7 +190,7 @@ def list_jobs(
         else:
             query = query.join(Job.company, isouter=True).filter(Company.company_type.ilike(f"%{company_type}%"))
 
-    # Role Type Filter (Software, Data, Design, Product, QA, Sales, Operations, HR)
+    # IT Role Families Filter (JobNexa Blueprint Section 3: 7 Families)
     if role_type and role_type.lower() != "all":
         rt = role_type.lower().strip()
         if "soft" in rt or "eng" in rt or "dev" in rt:
@@ -151,69 +202,64 @@ def list_jobs(
                 Job.title.ilike("%frontend%"),
                 Job.title.ilike("%full stack%"),
                 Job.title.ilike("%fullstack%"),
-                Job.title.ilike("%web%"),
-                Job.title.ilike("%ai%"),
-                Job.title.ilike("%python%"),
-                Job.title.ilike("%cloud%"),
-                Job.title.ilike("%architect%"),
-                Job.title.ilike("%tech%")
+                Job.title.ilike("%mobile%"),
+                Job.title.ilike("%android%"),
+                Job.title.ilike("%ios%"),
+                Job.title.ilike("%web%")
             ))
-        elif "data" in rt or "analyst" in rt or "analytics" in rt:
+        elif "infra" in rt or "cloud" in rt or "devops" in rt or "sre" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%devops%"),
+                Job.title.ilike("%sre%"),
+                Job.title.ilike("%site reliability%"),
+                Job.title.ilike("%cloud%"),
+                Job.title.ilike("%infrastructure%"),
+                Job.title.ilike("%platform engineer%"),
+                Job.title.ilike("%systems%"),
+                Job.title.ilike("%network%")
+            ))
+        elif "sec" in rt or "cyber" in rt or "infosec" in rt:
+            query = query.filter(or_(
+                Job.title.ilike("%security%"),
+                Job.title.ilike("%cyber%"),
+                Job.title.ilike("%infosec%"),
+                Job.title.ilike("%soc%"),
+                Job.title.ilike("%iam%"),
+                Job.title.ilike("%appsec%")
+            ))
+        elif "data" in rt or "ai" in rt or "ml" in rt:
             query = query.filter(or_(
                 Job.title.ilike("%data%"),
-                Job.title.ilike("%analyst%"),
-                Job.title.ilike("%analytics%"),
                 Job.title.ilike("%machine learning%"),
+                Job.title.ilike("%ai %"),
+                Job.title.ilike("%analytics%"),
                 Job.title.ilike("%scientist%"),
-                Job.title.ilike("%intelligence%")
+                Job.title.ilike("%dba%"),
+                Job.title.ilike("%spark%")
             ))
-        elif "design" in rt or "ui" in rt or "ux" in rt or "creative" in rt:
-            query = query.filter(or_(
-                Job.title.ilike("%design%"),
-                Job.title.ilike("%ui%"),
-                Job.title.ilike("%ux%"),
-                Job.title.ilike("%creative%"),
-                Job.title.ilike("%video%"),
-                Job.title.ilike("%content%"),
-                Job.title.ilike("%writer%"),
-                Job.title.ilike("%editor%")
-            ))
-        elif "product" in rt:
-            query = query.filter(or_(
-                Job.title.ilike("%product%"),
-                Job.title.ilike("%program manager%")
-            ))
-        elif "qa" in rt or "test" in rt or "quality" in rt:
+        elif "qa" in rt or "test" in rt or "sdet" in rt or "quality" in rt:
             query = query.filter(or_(
                 Job.title.ilike("%qa%"),
+                Job.title.ilike("%sdet%"),
                 Job.title.ilike("%test%"),
                 Job.title.ilike("%quality%"),
                 Job.title.ilike("%automation%")
             ))
-        elif "sale" in rt or "business" in rt or "bd" in rt:
+        elif "hard" in rt or "embedded" in rt or "vlsi" in rt or "firmware" in rt:
             query = query.filter(or_(
-                Job.title.ilike("%sales%"),
-                Job.title.ilike("%business dev%"),
-                Job.title.ilike("%business development%"),
-                Job.title.ilike("%partnership%"),
-                Job.title.ilike("%growth%"),
-                Job.title.ilike("%account executive%")
+                Job.title.ilike("%embedded%"),
+                Job.title.ilike("%firmware%"),
+                Job.title.ilike("%vlsi%"),
+                Job.title.ilike("%hardware%"),
+                Job.title.ilike("%robotics%"),
+                Job.title.ilike("%asic%")
             ))
-        elif "op" in rt or "support" in rt or "service" in rt:
+        elif "product" in rt or "architect" in rt:
             query = query.filter(or_(
-                Job.title.ilike("%operation%"),
-                Job.title.ilike("%support%"),
-                Job.title.ilike("%associate%"),
-                Job.title.ilike("%customer success%"),
-                Job.title.ilike("%specialist%")
-            ))
-        elif "hr" in rt or "recruit" in rt or "talent" in rt or "people" in rt:
-            query = query.filter(or_(
-                Job.title.ilike("%hr%"),
-                Job.title.ilike("%recruit%"),
-                Job.title.ilike("%talent%"),
-                Job.title.ilike("%people%"),
-                Job.title.ilike("%human resource%")
+                Job.title.ilike("%product%"),
+                Job.title.ilike("%architect%"),
+                Job.title.ilike("%engineering manager%"),
+                Job.title.ilike("%tech lead%")
             ))
         else:
             query = query.filter(Job.title.ilike(f"%{role_type}%"))
@@ -326,6 +372,10 @@ def list_jobs(
                 src_type = "career_portal"
                 src_name = f"{comp_name} Careers"
 
+        role_fam_key = classify_it_role_family(j.title, j.description or "")
+        it_role_fam = IT_ROLE_FAMILY_LABELS.get(role_fam_key, "Software & Product Engineering")
+        conf_score = 98 if src_type == "career_portal" else 92
+
         items.append(
             JobListItemResponse(
                 id=j.id,
@@ -352,6 +402,8 @@ def list_jobs(
                 last_seen_at=j.last_seen_at,
                 is_new=is_new,
                 is_saved=(j.id in saved_job_ids),
+                it_role_family=it_role_fam,
+                confidence_score=conf_score,
                 match=match_breakdown
             )
         )
@@ -643,6 +695,9 @@ def get_job_detail(
 
     hiring_role = extract_hiring_role(job.title)
     sal_min, sal_max, sal_label = calculate_salary_range(job.experience_min, job.experience_max, comp_type)
+    role_fam_key = classify_it_role_family(job.title, job.description or "")
+    it_role_fam = IT_ROLE_FAMILY_LABELS.get(role_fam_key, "Software & Product Engineering")
+    conf_score = 98 if src_type == "career_portal" else 92
 
     return JobDetailResponse(
         id=job.id,
@@ -672,6 +727,8 @@ def get_job_detail(
         last_seen_at=job.last_seen_at,
         is_new=is_new,
         is_saved=is_saved,
+        it_role_family=it_role_fam,
+        confidence_score=conf_score,
         skills=extracted_skill_names,
         detailed_skills=detailed_skills,
         history_count=len(job.history),

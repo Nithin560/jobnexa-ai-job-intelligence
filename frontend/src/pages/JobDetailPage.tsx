@@ -4,7 +4,7 @@ import { api } from '../api/client';
 import { Job } from '../types';
 import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
-import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle } from 'lucide-react';
+import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck } from 'lucide-react';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -97,6 +97,15 @@ export const JobDetailPage: React.FC = () => {
                 <span className="font-semibold text-slate-800">{job.company_name}</span>
                 <span className="text-xs px-2 py-0.5 rounded font-medium border border-slate-200 text-slate-500">
                   {job.company_type}
+                </span>
+                {job.it_role_family && (
+                  <span className="text-[11px] font-bold text-indigo-700 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md shadow-2xs">
+                    {job.it_role_family}
+                  </span>
+                )}
+                <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md inline-flex items-center gap-1 shadow-2xs">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
+                  Verified BLR Unit ({job.confidence_score || 95}%)
                 </span>
                 {job.source_type === 'job_portal' ? (
                   <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">

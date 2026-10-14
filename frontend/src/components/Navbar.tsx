@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Briefcase, Search, MapPin, User, LogOut, Shield, Users } from 'lucide-react';
+import { Briefcase, Search, MapPin, User, LogOut, Shield, Users, Compass } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
 
 interface NavbarProps {
@@ -59,20 +59,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
         {/* Brand Logo - links to / when authenticated, otherwise stays on /login */}
         <Link
           to={authenticated ? "/" : "/login"}
-          className="flex items-center gap-2.5 shrink-0 mr-8 xl:mr-10 group"
+          className="flex items-center gap-2.5 shrink-0 mr-6 xl:mr-8 group"
         >
-          <div className="bg-blue-600 text-white p-2 rounded-xl group-hover:bg-blue-700 transition">
+          <div className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white p-2 rounded-xl group-hover:from-blue-600 group-hover:to-indigo-500 transition shadow-sm">
             <Briefcase className="w-5 h-5" />
           </div>
           <div>
-            <span className="font-bold text-lg text-slate-900 leading-tight block">BangaloreJobs</span>
-            <span className="text-xs font-semibold text-blue-600 leading-none block">AI Powered</span>
+            <span className="font-extrabold text-lg text-slate-900 leading-tight block tracking-tight">JobNexa</span>
+            <span className="text-[10px] font-bold text-blue-600 leading-none block uppercase tracking-wider">Bengaluru IT Intelligence</span>
           </div>
         </Link>
 
         {/* Global Search Bar Header - ONLY visible for logged-in users inside the platform */}
         {authenticated && !isAuthPage && (
-          <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-3.5 py-1.5 w-72 xl:w-80 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white transition shrink-0 mr-8 xl:mr-10">
+          <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-3.5 py-1.5 w-64 xl:w-72 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white transition shrink-0 mr-6 xl:mr-8">
             <Search className="w-4 h-4 text-slate-400 mr-2" />
             <input
               type="text"
@@ -93,9 +93,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
 
         {/* Navigation Links - ONLY visible for authenticated users inside the platform */}
         {authenticated && !isAuthPage && (
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-sm font-medium text-slate-600 mr-8 xl:mr-10">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-medium text-slate-600 mr-6 xl:mr-8">
             <Link to="/" className={`hover:text-blue-600 transition ${location.pathname === '/' ? 'text-blue-600 font-semibold' : ''}`}>Home</Link>
             <Link to="/jobs" className={`hover:text-blue-600 transition ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
+            <Link to="/strategy" className={`hover:text-blue-600 transition flex items-center gap-1.5 ${location.pathname === '/strategy' ? 'text-blue-600 font-bold' : ''}`}>
+              <Compass className="w-4 h-4 text-blue-600" />
+              <span>Blueprint</span>
+            </Link>
             <Link to="/dashboard" className={`hover:text-blue-600 transition ${location.pathname === '/dashboard' ? 'text-blue-600 font-semibold' : ''}`}>Dashboard</Link>
             <Link to="/profile" className={`hover:text-blue-600 transition ${location.pathname === '/profile' ? 'text-blue-600 font-semibold' : ''}`}>My Profile</Link>
             <Link 

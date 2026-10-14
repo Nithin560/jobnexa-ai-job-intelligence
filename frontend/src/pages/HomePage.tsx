@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
 import { Job, MarketInsights } from '../types';
@@ -7,7 +7,7 @@ import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Sparkles, MapPin, 
   Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight,
-  GraduationCap, RefreshCw, Globe
+  GraduationCap, RefreshCw, Globe, Compass
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
@@ -379,26 +379,31 @@ export const HomePage: React.FC = () => {
 
         {/* Compact Layout */}
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="max-w-xl space-y-2">
-            <div className="inline-flex items-center gap-1.5 bg-blue-600/35 backdrop-blur-md text-blue-200 border border-blue-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+          <div className="max-w-xl space-y-2.5">
+            <div className="inline-flex items-center gap-1.5 bg-blue-600/40 backdrop-blur-md text-blue-200 border border-blue-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <Sparkles className="w-3 h-3 text-blue-300" />
-              <span>Silicon Valley of India • Bengaluru & Karnataka</span>
+              <span>JobNexa • Bengaluru IT Discovery & Engineering Intelligence</span>
             </div>
 
             <h1 className="text-2xl md:text-3xl font-black leading-tight tracking-tight drop-shadow-md text-white">
-              Discover <span className="text-blue-400">Bangalore Tech</span> Jobs
+              Bengaluru <span className="text-blue-400">IT & Engineering</span> Discovery
             </h1>
 
             <p className="text-slate-100 text-xs md:text-sm leading-relaxed drop-shadow-sm font-medium">
-              Verified active jobs continuously scanned from every company career portal and job platform located in Bengaluru & Karnataka state.
+              Zero-cost direct discovery scanning 120+ verified Bengaluru company career portals and ATS feeds daily at 06:00 AM IST. Strict IT/engineering vacancies exclusively.
             </p>
 
-            <div className="flex items-center gap-2 text-[11px] font-semibold text-slate-200 flex-wrap pt-1">
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Koramangala & HSR</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Whitefield & Bellandur</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Electronic City</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">📍 Manyata (ORR)</span>
-              <span className="bg-slate-900/40 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 shadow-2xs">⚡ 100% Direct Apply</span>
+            <div className="flex items-center gap-2 pt-1 flex-wrap">
+              <Link
+                to="/strategy"
+                className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-blue-400/40 shadow-sm flex items-center gap-1.5 transition"
+              >
+                <Compass className="w-3.5 h-3.5" />
+                <span>📘 Read Discovery Blueprint</span>
+              </Link>
+              <span className="bg-slate-900/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200 shadow-2xs">📍 Koramangala & HSR</span>
+              <span className="bg-slate-900/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200 shadow-2xs">📍 Whitefield & Bellandur</span>
+              <span className="bg-slate-900/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200 shadow-2xs">⚡ 100% Direct Apply</span>
             </div>
           </div>
 
@@ -407,31 +412,31 @@ export const HomePage: React.FC = () => {
             <div className="flex items-center justify-between border-b border-white/20 pb-2 text-[11px]">
               <span className="font-bold text-emerald-400 flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full ${isLiveScanning ? 'bg-cyan-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`}></span>
-                {isLiveScanning ? 'Scanning Live...' : 'Daily Verified'}
+                {isLiveScanning ? 'Scanning Live...' : 'Daily Verified (06:00 IST)'}
               </span>
               <span className="text-slate-200 font-medium text-[11px]">
-                {liveScanInfo?.formatted_time || liveScanInfo?.last_scan_time || insights?.latest_scan?.time || 'Today, 08:00 AM'}
+                {liveScanInfo?.formatted_time || liveScanInfo?.last_scan_time || insights?.latest_scan?.time || 'Today, 06:00 AM'}
               </span>
             </div>
             <div className="space-y-1 text-xs text-slate-100">
               <div className="flex items-center justify-between">
-                <span className="text-slate-300">Total Live Jobs:</span>
+                <span className="text-slate-300">Active IT Jobs:</span>
                 <strong className="text-white font-black text-sm">{(insights?.total_jobs ?? totalJobs).toLocaleString()}</strong>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-300">Companies Active:</span>
+                <span className="text-slate-300">Verified Tech Units:</span>
                 <strong className="text-emerald-300 font-black text-xs">{(insights?.total_companies ?? 108).toLocaleString()}</strong>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-300">Verified Sources:</span>
-                <strong className="text-cyan-300 font-bold text-xs">27+ ATS & Portals</strong>
+                <span className="text-slate-300">Cost Target:</span>
+                <strong className="text-cyan-300 font-bold text-xs">₹0 Zero-Cost Stack</strong>
               </div>
             </div>
             <button
               onClick={handleTriggerLiveScan}
               disabled={isLiveScanning}
               className="w-full py-1.5 px-2 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg border border-blue-400/40 flex items-center justify-center gap-1.5 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-              title="Run real-time scan across 27+ career websites and job portals"
+              title="Run real-time scan across company career websites and job portals"
             >
               {isLiveScanning ? (
                 <>
@@ -606,15 +611,14 @@ export const HomePage: React.FC = () => {
                     }}
                     className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
                   >
-                    <option value="all">All Roles</option>
-                    <option value="software">Software</option>
-                    <option value="data">Data & Analytics</option>
-                    <option value="design">Design & Creative</option>
-                    <option value="product">Product Management</option>
-                    <option value="qa">QA & Testing</option>
-                    <option value="sales">Sales & Business Dev</option>
-                    <option value="operations">Operations & Support</option>
-                    <option value="hr">HR & Recruitment</option>
+                    <option value="all">All IT Roles</option>
+                    <option value="software_engineering">Software & Product Eng</option>
+                    <option value="infrastructure_reliability">Cloud, SRE & DevOps</option>
+                    <option value="security">Cybersecurity & InfoSec</option>
+                    <option value="data_ai">Data & AI / ML</option>
+                    <option value="quality_release">QA & SDET</option>
+                    <option value="hardware_embedded">Hardware & Embedded</option>
+                    <option value="technical_product">Tech Product & Arch</option>
                   </select>
                 </div>
 
@@ -686,15 +690,14 @@ export const HomePage: React.FC = () => {
                     }}
                     className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
                   >
-                    <option value="all">All Roles</option>
-                    <option value="software">Software</option>
-                    <option value="data">Data & Analytics</option>
-                    <option value="design">Design & Creative</option>
-                    <option value="product">Product Management</option>
-                    <option value="qa">QA & Testing</option>
-                    <option value="sales">Sales & Business Dev</option>
-                    <option value="operations">Operations & Support</option>
-                    <option value="hr">HR & Recruitment</option>
+                    <option value="all">All IT Roles</option>
+                    <option value="software_engineering">Software & Product Eng</option>
+                    <option value="infrastructure_reliability">Cloud, SRE & DevOps</option>
+                    <option value="security">Cybersecurity & InfoSec</option>
+                    <option value="data_ai">Data & AI / ML</option>
+                    <option value="quality_release">QA & SDET</option>
+                    <option value="hardware_embedded">Hardware & Embedded</option>
+                    <option value="technical_product">Tech Product & Arch</option>
                   </select>
                 </div>
 
@@ -819,13 +822,34 @@ export const HomePage: React.FC = () => {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5 flex-wrap">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-medium text-slate-500">Sort by:</span>
+                    <span className="text-xs font-medium text-slate-500">IT Role:</span>
+                    <select
+                      value={roleType}
+                      onChange={(e) => {
+                        setRoleType(e.target.value);
+                        setPage(1);
+                      }}
+                      className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
+                    >
+                      <option value="all">All IT Roles</option>
+                      <option value="software_engineering">Software & Product Eng</option>
+                      <option value="infrastructure_reliability">Cloud, SRE & DevOps</option>
+                      <option value="security">Cybersecurity & InfoSec</option>
+                      <option value="data_ai">Data & AI / ML</option>
+                      <option value="quality_release">QA & SDET</option>
+                      <option value="hardware_embedded">Hardware & Embedded</option>
+                      <option value="technical_product">Tech Product & Arch</option>
+                    </select>
+                  </div>
+
+                  <div className="flex items-center gap-1.5 border-l border-slate-200 pl-2">
+                    <span className="text-xs font-medium text-slate-500">Sort:</span>
                     <select
                       value={sortBy}
                       onChange={(e) => setSortBy(e.target.value)}
-                      className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-3 py-1.5 outline-none focus:border-blue-500"
+                      className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
                     >
                       <option value="Relevance">Relevance</option>
                       <option value="Recent">Most Recent</option>

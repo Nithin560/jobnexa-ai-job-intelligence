@@ -38,6 +38,8 @@ export interface Job {
   canonical_url?: string;
   company_domain?: string;
   company_careers_url?: string;
+  it_role_family?: string;
+  confidence_score?: number;
 }
 
 export interface User {

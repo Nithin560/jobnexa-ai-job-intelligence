@@ -12,7 +12,10 @@ from app.models.skill import Skill
 from app.models.scan import ScanRun, SourceRunResult
 from app.models.notification import AdminNotification
 from app.connectors.registry import get_connector
-from app.pipeline.normalizer import normalize_location, extract_skills_from_text, parse_experience_range, parse_job_location_and_region
+from app.pipeline.normalizer import (
+    normalize_location, extract_skills_from_text, parse_experience_range, 
+    parse_job_location_and_region, is_it_engineering_job, classify_it_role_family
+)
 from app.pipeline.deduplicator import generate_job_fingerprint, check_and_deduplicate_job
 from app.core.company_logos import get_company_logo, get_canonical_domain, get_company_type
 
@@ -527,6 +530,10 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
                         total_expired += 1
 
             for raw in relevant_jobs:
+                # JobNexa Blueprint Section 2: Exclude non-IT roles (Sales, HR, Finance, Admin, Facilities, Non-tech support)
+                is_it, it_reason = is_it_engineering_job(raw.title, raw.description)
+                if not is_it:
+                    continue
 
                 total_found += 1
 
