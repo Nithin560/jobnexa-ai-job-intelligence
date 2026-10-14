@@ -367,7 +367,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         {/* Sidebar Footer Info */}
         <div className="p-4 border-t border-slate-800 text-slate-500 text-[11px] flex items-center justify-between">
-          <span className="font-semibold text-slate-400">BangaloreJobs Admin</span>
+          <span className="font-semibold text-slate-400">JobNexa Admin</span>
           <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Live
           </span>
@@ -381,7 +381,8 @@ export const AdminDashboardPage: React.FC = () => {
         {/* Top Header Bar */}
         <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4 min-w-0">
           
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Left Navigation & Status Sections (Grouped on the Left Side Direction) */}
+          <div className="flex items-center gap-3 shrink-0 min-w-0">
             {/* Back to Home Button */}
             <Link
               to="/"
@@ -401,34 +402,34 @@ export const AdminDashboardPage: React.FC = () => {
                 className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
               />
             </div>
-          </div>
 
-          {/* 2. Registered & Active Users Navigation Badge */}
-          <button
-            onClick={() => setActiveTab('Users')}
-            className={`shrink-0 whitespace-nowrap hidden sm:inline-flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl border transition shadow-2xs ${
-              activeTab === 'Users'
-                ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                : 'bg-blue-50/80 hover:bg-blue-100 text-blue-900 border-blue-200'
-            }`}
-            title="View Registered & Active Users Section"
-          >
-            <Users className="w-4 h-4 text-blue-600 shrink-0" />
-            <span className="whitespace-nowrap flex items-center gap-1 font-medium">
-              Users: <strong className={activeTab === 'Users' ? 'text-white' : 'text-blue-950 font-black'}>{adminUsersData?.total_registered ?? overview?.total_users ?? 6}</strong> Reg • <strong className={activeTab === 'Users' ? 'text-emerald-300' : 'text-emerald-700 font-black'}>{adminUsersData?.total_active ?? overview?.active_users ?? 6}</strong> Act
-            </span>
-          </button>
+            {/* 2. Registered & Active Users Navigation Badge */}
+            <button
+              onClick={() => setActiveTab('Users')}
+              className={`shrink-0 whitespace-nowrap hidden sm:inline-flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl border transition shadow-2xs ${
+                activeTab === 'Users'
+                  ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
+                  : 'bg-blue-50/80 hover:bg-blue-100 text-blue-900 border-blue-200'
+              }`}
+              title="View Registered & Active Users Section"
+            >
+              <Users className="w-4 h-4 text-blue-600 shrink-0" />
+              <span className="whitespace-nowrap flex items-center gap-1 font-medium">
+                Users: <strong className={activeTab === 'Users' ? 'text-white' : 'text-blue-950 font-black'}>{adminUsersData?.total_registered ?? overview?.total_users ?? 6}</strong> Reg • <strong className={activeTab === 'Users' ? 'text-emerald-300' : 'text-emerald-700 font-black'}>{adminUsersData?.total_active ?? overview?.active_users ?? 6}</strong> Act
+              </span>
+            </button>
 
-          {/* 3. Scan Status Widget with real date and time */}
-          <div className="hidden lg:flex items-center gap-2.5 text-xs bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 font-medium shadow-2xs shrink-0">
-            <Clock className="w-4 h-4 text-blue-600 shrink-0" />
-            <span>Last Scan: <strong className="text-slate-900">{overview?.last_scan_time || 'Today, 08:00 AM'}</strong></span>
-            <span className="text-slate-300">•</span>
-            <span>Next Scan: <strong className="text-slate-900">{overview?.next_scan_time || 'Tomorrow, 08:00 AM'}</strong></span>
+            {/* 3. Scan Status Widget with real date and time */}
+            <div className="hidden lg:flex items-center gap-2.5 text-xs bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 font-medium shadow-2xs shrink-0">
+              <Clock className="w-4 h-4 text-blue-600 shrink-0" />
+              <span>Last Scan: <strong className="text-slate-900">{overview?.last_scan_time || 'Today, 08:00 AM'}</strong></span>
+              <span className="text-slate-300">•</span>
+              <span>Next Scan: <strong className="text-slate-900">{overview?.next_scan_time || 'Tomorrow, 08:00 AM'}</strong></span>
+            </div>
           </div>
 
           {/* 4. Notifications & Admin Profile */}
-          <div className="flex items-center gap-3 shrink-0">
+          <div className="flex items-center gap-3 shrink-0 ml-auto">
 
             {/* Notification Bell with interactive popover */}
             <div className="relative">
