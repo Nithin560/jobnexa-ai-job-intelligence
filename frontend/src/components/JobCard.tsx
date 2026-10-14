@@ -8,16 +8,55 @@ interface JobCardProps {
   onToggleSave?: (jobId: string) => void;
 }
 
+export const formatJobRealTime = (postedAt?: string, lastSeenAt?: string): string => {
+  const raw = postedAt || lastSeenAt;
+  if (!raw) return 'Recently';
+
+  try {
+    const isoStr = raw.includes('T') ? raw : raw.replace(' ', 'T');
+    const date = new Date(isoStr);
+    if (isNaN(date.getTime())) return 'Recently';
+
+    const now = new Date();
+    
+    // Check if same calendar day
+    const isToday = 
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear();
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    const isYesterday = 
+      date.getDate() === yesterday.getDate() &&
+      date.getMonth() === yesterday.getMonth() &&
+      date.getFullYear() === yesterday.getFullYear();
+
+    const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+
+    if (isToday) {
+      return `Today, ${timeStr}`;
+    }
+    if (isYesterday) {
+      return `Yesterday, ${timeStr}`;
+    }
+
+    const dateStr = date.toLocaleDateString([], { day: 'numeric', month: 'short' });
+    return `${dateStr}, ${timeStr}`;
+  } catch {
+    return 'Recently';
+  }
+};
+
 export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
   const isExpired = job.status === 'expired' || job.status === 'closed' || job.status === 'stale';
 
   return (
-
     <div className={`bg-white rounded-2xl border p-5 transition group relative ${isExpired ? 'border-amber-200 bg-slate-50/50' : 'border-slate-200 hover:shadow-md hover:border-slate-300'}`}>
       <div className="flex items-start justify-between gap-4">
         
         {/* Left: Company Logo & Details */}
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-4 flex-1 min-w-0">
           <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-center overflow-hidden shrink-0 p-1.5">
             <img 
               src={
@@ -38,7 +77,8 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
             />
           </div>
 
-          <div>
+          <div className="flex-1 min-w-0">
+            {/* Title & Status */}
             <div className="flex items-center gap-2 flex-wrap">
               <Link to={`/jobs/${job.id}`} className="font-bold text-lg text-slate-900 group-hover:text-blue-600 transition">
                 {job.title}
@@ -54,7 +94,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               ) : null}
             </div>
 
-            {/* Company Name, Category, Source Type & Role Family */}
+            {/* Row 2: Company Name, Category & IT Role Family */}
             <div className="flex items-center gap-2 mt-1.5 text-sm text-slate-600 flex-wrap">
               <span className="font-semibold text-slate-800">{job.company_name}</span>
               <span className="text-xs px-2 py-0.5 rounded-md border border-slate-200 text-slate-500 font-medium">
@@ -65,6 +105,10 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                   {job.it_role_family}
                 </span>
               )}
+            </div>
+
+            {/* Row 3: Verified BLR Unit Badge & Source Badge */}
+            <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-600 flex-wrap">
               <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md inline-flex items-center gap-1 shadow-2xs">
                 <ShieldCheck className="w-3 h-3 text-emerald-600" />
                 Verified BLR Unit ({job.confidence_score || 95}%)
@@ -80,15 +124,15 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               )}
             </div>
 
-            {/* Hiring Role & Location */}
-            <div className="flex items-center gap-3 mt-2.5 text-xs text-slate-600 flex-wrap">
-              <span className="inline-flex items-center gap-1.5">
+            {/* Row 4: Role and Location on the SAME line with space between them */}
+            <div className="flex items-center gap-6 sm:gap-8 mt-2.5 text-xs text-slate-600 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 shrink-0">
                 <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Role:</span>
                 <span className="font-semibold text-slate-800">{job.hiring_role || job.title}</span>
               </span>
 
-              <span className="inline-flex items-center gap-1.5">
+              <span className="inline-flex items-center gap-1.5 shrink-0">
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Location:</span>
                 <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
@@ -97,7 +141,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               </span>
             </div>
 
-            {/* Meta info: Experience, Work Mode */}
+            {/* Row 5: Meta info: Experience, Work Mode */}
             <div className="flex items-center gap-3 mt-2 text-xs text-slate-500 flex-wrap">
               <span className="flex items-center gap-1">
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
@@ -144,8 +188,12 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
         {/* Right Actions */}
         <div className="flex flex-col items-end justify-between h-full gap-4 shrink-0">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-400 flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" /> 2 hours ago
+            <span 
+              className="text-xs text-slate-500 font-medium flex items-center gap-1 whitespace-nowrap"
+              title={`Verification timestamp: ${job.last_seen_at || job.posted_at || 'Recent'}`}
+            >
+              <Clock className="w-3.5 h-3.5 text-slate-400" />
+              <span>{formatJobRealTime(job.posted_at, job.last_seen_at)}</span>
             </span>
             <button
               onClick={() => onToggleSave && onToggleSave(job.id)}

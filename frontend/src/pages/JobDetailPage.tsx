@@ -4,6 +4,7 @@ import { api } from '../api/client';
 import { Job } from '../types';
 import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
+import { formatJobRealTime } from '../components/JobCard';
 import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck } from 'lucide-react';
 
 export const JobDetailPage: React.FC = () => {
@@ -93,6 +94,7 @@ export const JobDetailPage: React.FC = () => {
                   </span>
                 )}
               </div>
+              {/* Row 2: Company Name, Category & IT Role Family */}
               <div className="flex items-center gap-2 mt-1 text-sm text-slate-600 flex-wrap">
                 <span className="font-semibold text-slate-800">{job.company_name}</span>
                 <span className="text-xs px-2 py-0.5 rounded font-medium border border-slate-200 text-slate-500">
@@ -103,6 +105,10 @@ export const JobDetailPage: React.FC = () => {
                     {job.it_role_family}
                   </span>
                 )}
+              </div>
+
+              {/* Row 3: Verified BLR Unit Badge & Source Badge */}
+              <div className="flex items-center gap-2 mt-1.5 text-xs text-slate-600 flex-wrap">
                 <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md inline-flex items-center gap-1 shadow-2xs">
                   <ShieldCheck className="w-3 h-3 text-emerald-600" />
                   Verified BLR Unit ({job.confidence_score || 95}%)
@@ -118,25 +124,36 @@ export const JobDetailPage: React.FC = () => {
                 )}
               </div>
 
-              {/* Hiring Role & Location */}
-              <div className="flex items-center gap-4 mt-2.5 text-xs text-slate-600 flex-wrap">
-                <span className="inline-flex items-center gap-1.5">
+              {/* Row 4: Hiring Role & Location on the SAME line with space between them */}
+              <div className="flex items-center gap-6 sm:gap-8 mt-2.5 text-xs text-slate-600 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 shrink-0">
                   <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="text-slate-500">Role:</span>
                   <span className="font-semibold text-slate-800">{job.hiring_role || job.title}</span>
                 </span>
 
-                <span className="inline-flex items-center gap-1.5">
+                <span className="inline-flex items-center gap-1.5 shrink-0">
                   <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="text-slate-500">Location:</span>
-                  <span className="font-semibold text-slate-800">{job.location}</span>
+                  <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
+                    📍 {job.location}
+                  </span>
                 </span>
               </div>
 
-              <div className="flex items-center gap-4 mt-3 text-xs text-slate-500">
-                <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" /> {job.experience_label}</span>
+              {/* Row 5: Meta info & Live Real Time */}
+              <div className="flex items-center gap-4 mt-3 text-xs text-slate-500 flex-wrap">
+                <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-slate-400" /> {job.experience_label}</span>
                 <span>{job.work_mode}</span>
                 <span>{job.employment_type}</span>
+                <span className="text-slate-300">|</span>
+                <span 
+                  className="flex items-center gap-1 text-slate-600 font-medium"
+                  title={`Verification timestamp: ${job.last_seen_at || job.posted_at || 'Recent'}`}
+                >
+                  <Clock className="w-3.5 h-3.5 text-blue-600" />
+                  <span>{formatJobRealTime(job.posted_at, job.last_seen_at)}</span>
+                </span>
               </div>
             </div>
           </div>
