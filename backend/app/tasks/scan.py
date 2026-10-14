@@ -277,6 +277,146 @@ TARGET_SOURCES = [
         "slug": "spotify",
         "source_type": "career_portal"
     },
+    {
+        "name": "Slice",
+        "domain": "sliceit.com",
+        "careers_url": "https://www.sliceit.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=sliceit.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "slice",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Porter",
+        "domain": "porter.in",
+        "careers_url": "https://porter.in/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=porter.in&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "porter",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Pocket FM",
+        "domain": "pocketfm.com",
+        "careers_url": "https://pocketfm.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=pocketfm.com&sz=128",
+        "connector_key": "lever_api",
+        "slug": "pocketfm",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Bosch Global Software",
+        "domain": "bosch.com",
+        "careers_url": "https://careers.smartrecruiters.com/BoschGroup",
+        "company_type": "Enterprise",
+        "logo_url": "https://www.google.com/s2/favicons?domain=bosch.com&sz=128",
+        "connector_key": "smartrecruiters_api",
+        "slug": "boschgroup",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Linear",
+        "domain": "linear.app",
+        "careers_url": "https://linear.app/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=linear.app&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "linear",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Cursor",
+        "domain": "cursor.com",
+        "careers_url": "https://www.cursor.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=cursor.com&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "cursor",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Perplexity AI",
+        "domain": "perplexity.ai",
+        "careers_url": "https://www.perplexity.ai/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "perplexity",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Druva",
+        "domain": "druva.com",
+        "careers_url": "https://www.druva.com/about/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=druva.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "druva",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Fivetran",
+        "domain": "fivetran.com",
+        "careers_url": "https://www.fivetran.com/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=fivetran.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "fivetran",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Deliveroo India",
+        "domain": "deliveroo.com",
+        "careers_url": "https://deliveroo.engineering",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=deliveroo.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "deliveroo",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Dremio",
+        "domain": "dremio.com",
+        "careers_url": "https://www.dremio.com/careers",
+        "company_type": "Mid-size",
+        "logo_url": "https://www.google.com/s2/favicons?domain=dremio.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "dremio",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Figma",
+        "domain": "figma.com",
+        "careers_url": "https://www.figma.com/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=figma.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "figma",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Samsara",
+        "domain": "samsara.com",
+        "careers_url": "https://www.samsara.com/company/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=samsara.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "samsara",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Toast",
+        "domain": "pos.toasttab.com",
+        "careers_url": "https://pos.toasttab.com/careers",
+        "company_type": "Large",
+        "logo_url": "https://www.google.com/s2/favicons?domain=pos.toasttab.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "toast",
+        "source_type": "career_portal"
+    },
     # --- Live Job Portals & Aggregators ---
     {
         "name": "Arbeitnow",
@@ -642,6 +782,17 @@ def run_daily_scan(scope: str = "bengaluru", run_id: str = None, trigger: str = 
         )
         total_expired += stale_expired
         db.commit()
+
+        # Refresh and ensure all 120+ Bengaluru IT companies and current hiring vacancies are synced
+        try:
+            from app.tasks.ingest_bengaluru_jobs import ingest_bengaluru_it_catalog
+            bengaluru_res = ingest_bengaluru_it_catalog(db)
+            total_found += bengaluru_res.get("jobs_created", 0) + bengaluru_res.get("jobs_updated", 0)
+            total_new += bengaluru_res.get("jobs_created", 0)
+            total_updated += bengaluru_res.get("jobs_updated", 0)
+            total_scanned_sources += bengaluru_res.get("companies_ensured", 0)
+        except Exception as e:
+            print(f"[Daily Scan] Error in bengaluru_it_catalog sync: {e}")
 
         scan_run.finished_at = datetime.utcnow()
         scan_run.status = "completed"

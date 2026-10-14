@@ -186,6 +186,16 @@ COMPANY_TYPE_MAP = {
     "jobicy": "Job Platform",
 }
 
+# Dynamically populate all 120+ verified Bengaluru IT companies
+try:
+    from app.core.bengaluru_companies import BENGALURU_COMPANIES
+    for item in BENGALURU_COMPANIES:
+        c_name = item["name"].strip().lower()
+        COMPANY_DOMAIN_MAP[c_name] = item["domain"]
+        COMPANY_TYPE_MAP[c_name] = item["company_type"]
+except Exception:
+    pass
+
 
 def get_company_type(company_name: Optional[str], default_type: str = "Mid-size") -> str:
     """Resolve the real-world company type (Startup, Mid-size, Enterprise)."""

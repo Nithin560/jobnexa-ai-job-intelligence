@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Briefcase, Search, MapPin, User, LogOut, Shield, Users, Compass } from 'lucide-react';
+import { Briefcase, Search, MapPin, User, LogOut, Shield, Compass } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
 
 interface NavbarProps {
@@ -14,17 +14,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const userRole = sessionStorage.getItem('user_role');
   const userEmail = sessionStorage.getItem('user_email');
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
-  const [userCounts, setUserCounts] = React.useState<{ registered: number; active: number }>({ registered: 6, active: 6 });
-
-  React.useEffect(() => {
-    if (authenticated && userRole === 'admin') {
-      api.getAdminUsers().then(res => {
-        if (res) {
-          setUserCounts({ registered: res.total_registered, active: res.total_active });
-        }
-      }).catch(() => {});
-    }
-  }, [authenticated, userRole]);
 
   const handleLogout = () => {
     api.logout();
@@ -54,12 +43,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm">
-      <div className="max-w-[1600px] w-full mx-auto px-6 sm:px-8 lg:px-10 h-16 flex items-center justify-between">
+      <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         
         {/* Brand Logo - links to / when authenticated, otherwise stays on /login */}
         <Link
           to={authenticated ? "/" : "/login"}
-          className="flex items-center gap-2.5 shrink-0 mr-6 xl:mr-8 group"
+          className="flex items-center gap-2 shrink-0 mr-4 xl:mr-6 group"
         >
           <div className="bg-gradient-to-tr from-blue-700 to-indigo-600 text-white p-2 rounded-xl group-hover:from-blue-600 group-hover:to-indigo-500 transition shadow-sm">
             <Briefcase className="w-5 h-5" />
@@ -72,7 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
 
         {/* Global Search Bar Header - ONLY visible for logged-in users inside the platform */}
         {authenticated && !isAuthPage && (
-          <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-3.5 py-1.5 w-64 xl:w-72 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white transition shrink-0 mr-6 xl:mr-8">
+          <div className="hidden md:flex items-center bg-slate-100 rounded-xl px-3 py-1.5 w-52 xl:w-60 border border-slate-200 focus-within:border-blue-500 focus-within:bg-white transition shrink-0 mr-4 xl:mr-5">
             <Search className="w-4 h-4 text-slate-400 mr-2" />
             <input
               type="text"
@@ -93,7 +82,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
 
         {/* Navigation Links - ONLY visible for authenticated users inside the platform */}
         {authenticated && !isAuthPage && (
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-sm font-medium text-slate-600 mr-6 xl:mr-8">
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-5 text-sm font-medium text-slate-600 mr-4 xl:mr-6">
             <Link to="/" className={`hover:text-blue-600 transition ${location.pathname === '/' ? 'text-blue-600 font-semibold' : ''}`}>Home</Link>
             <Link to="/jobs" className={`hover:text-blue-600 transition ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
             <Link to="/strategy" className={`hover:text-blue-600 transition flex items-center gap-1.5 ${location.pathname === '/strategy' ? 'text-blue-600 font-bold' : ''}`}>
@@ -105,41 +94,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
             <Link 
               to="/admin?tab=Dashboard" 
               state={{ tab: 'Dashboard' }} 
-              className={`hover:text-blue-600 transition flex items-center gap-1 ${location.pathname === '/admin' && !location.search.includes('tab=Users') && (location.state as any)?.tab !== 'Users' ? 'text-blue-600 font-semibold' : ''}`}
+              className={`hover:text-blue-600 transition flex items-center gap-1 ${location.pathname === '/admin' ? 'text-blue-600 font-semibold' : ''}`}
             >
               <Shield className="w-4 h-4 text-amber-500" />
               <span>Admin</span>
             </Link>
-            {userRole === 'admin' && (
-              <Link 
-                to="/admin?tab=Users" 
-                state={{ tab: 'Users' }} 
-                className={`hover:text-blue-600 transition flex items-center gap-1.5 whitespace-nowrap ${location.pathname === '/admin' && (location.search.includes('tab=Users') || (location.state as any)?.tab === 'Users') ? 'text-blue-600 font-bold' : ''}`}
-                title="Users Analysis & Directory"
-              >
-                <Users className="w-4 h-4 text-blue-600 shrink-0" />
-                <span>Users ({userCounts.registered} Reg • {userCounts.active} Act)</span>
-              </Link>
-            )}
           </nav>
         )}
 
         {/* Right Actions & Easy Role Switcher */}
-        <div className="flex items-center gap-3 shrink-0 ml-auto">
+        <div className="flex items-center gap-2.5 shrink-0 ml-auto">
           {authenticated && !isAuthPage ? (
             <div className="flex items-center gap-2">
               {/* Active Role Badge & Switcher */}
               {userRole === 'admin' ? (
-                <div className="flex items-center gap-2">
-                  <Link
-                    to="/admin?tab=Users"
-                    state={{ tab: 'Users' }}
-                    className="hidden sm:inline-flex items-center gap-1.5 bg-blue-50 hover:bg-blue-100 text-blue-800 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-xl transition whitespace-nowrap"
-                    title="View Registered & Active Users"
-                  >
-                    <Users className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                    <span>Users: {userCounts.registered} Reg • {userCounts.active} Act</span>
-                  </Link>
+                <div className="flex items-center gap-1.5">
                   <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl">
                     <Shield className="w-3.5 h-3.5 text-amber-600" /> Admin Mode
                   </span>
