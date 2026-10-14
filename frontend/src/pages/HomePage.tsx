@@ -68,6 +68,16 @@ export const HomePage: React.FC = () => {
     (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'candidate'
   );
 
+  const isAdmin = Boolean(
+    (sessionStorage.getItem('access_token') || localStorage.getItem('access_token')) &&
+    (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin'
+  );
+
+  const [isReloadingFresher, setIsReloadingFresher] = useState(false);
+  const [fresherReloadFeedback, setFresherReloadFeedback] = useState<string | null>(null);
+  const [isReloadingExperienced, setIsReloadingExperienced] = useState(false);
+  const [experiencedReloadFeedback, setExperiencedReloadFeedback] = useState<string | null>(null);
+
   const [roleType, setRoleType] = useState<string>('all');
   const [activeLocation, setActiveLocation] = useState<string>('all');
 
@@ -145,6 +155,10 @@ export const HomePage: React.FC = () => {
   }, []);
 
   const handleTriggerLiveScan = async () => {
+    if (!isAdmin) {
+      alert('Scanning career portals is restricted to administrator accounts.');
+      return;
+    }
     if (isLiveScanning) return;
     setIsLiveScanning(true);
     setScanBannerText('⚡ Initiating live scan across 120+ verified Bengaluru company career portals & ATS feeds...');
@@ -173,6 +187,34 @@ export const HomePage: React.FC = () => {
     } catch (err) {
       setIsLiveScanning(false);
       setScanBannerText('Failed to start scan.');
+    }
+  };
+
+  const handleReloadFresherJobs = async () => {
+    setIsReloadingFresher(true);
+    try {
+      setPage(1);
+      await Promise.all([fetchJobs(), loadInsights()]);
+      setFresherReloadFeedback('Fresh jobs & recommendations updated!');
+      setTimeout(() => setFresherReloadFeedback(null), 3500);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsReloadingFresher(false);
+    }
+  };
+
+  const handleReloadExperiencedJobs = async () => {
+    setIsReloadingExperienced(true);
+    try {
+      setPage(1);
+      await Promise.all([fetchJobs(), loadInsights()]);
+      setExperiencedReloadFeedback('Fresh openings & recommendations updated!');
+      setTimeout(() => setExperiencedReloadFeedback(null), 3500);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsReloadingExperienced(false);
     }
   };
 
@@ -448,24 +490,31 @@ export const HomePage: React.FC = () => {
                 <strong className="text-cyan-300 font-bold text-xs">₹0 Zero-Cost Stack</strong>
               </div>
             </div>
-            <button
-              onClick={handleTriggerLiveScan}
-              disabled={isLiveScanning}
-              className="w-full py-1.5 px-2 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg border border-blue-400/40 flex items-center justify-center gap-1.5 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
-              title="Run real-time scan across company career websites and job portals"
-            >
-              {isLiveScanning ? (
-                <>
-                  <RefreshCw className="w-3 h-3 animate-spin" />
-                  <span>Scanning Career Portals...</span>
-                </>
-              ) : (
-                <>
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                  <span>⚡ Scan All Career Portals Now</span>
-                </>
-              )}
-            </button>
+            {isAdmin ? (
+              <button
+                onClick={handleTriggerLiveScan}
+                disabled={isLiveScanning}
+                className="w-full py-1.5 px-2 bg-blue-600 hover:bg-blue-500 text-white text-[11px] font-bold rounded-lg border border-blue-400/40 flex items-center justify-center gap-1.5 transition shadow-sm disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                title="Run real-time scan across company career websites and job portals"
+              >
+                {isLiveScanning ? (
+                  <>
+                    <RefreshCw className="w-3 h-3 animate-spin" />
+                    <span>Scanning Career Portals...</span>
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                    <span>⚡ Scan All Career Portals Now</span>
+                  </>
+                )}
+              </button>
+            ) : (
+              <div className="w-full py-1.5 px-2 bg-emerald-500/15 text-emerald-300 text-[11px] font-semibold rounded-lg border border-emerald-400/30 flex items-center justify-center gap-1.5 shadow-2xs">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                <span>Automated 24/7 Verified Sync Active</span>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -608,6 +657,12 @@ export const HomePage: React.FC = () => {
                     <span className="bg-blue-100 text-blue-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-blue-200">
                       Fresher Account
                     </span>
+                    {fresherReloadFeedback && (
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full animate-fade-in flex items-center gap-1 shadow-2xs">
+                        <Sparkles className="w-3 h-3 text-emerald-600" />
+                        {fresherReloadFeedback}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
                     Curated exclusively for entry-level and fresh graduate candidates across Bengaluru and Karnataka
@@ -655,7 +710,7 @@ export const HomePage: React.FC = () => {
                   <button
                     onClick={() => setPage((p) => Math.max(p - 1, 1))}
                     disabled={page <= 1}
-                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center cursor-pointer"
                     title="Previous Jobs (<-)"
                   >
                     <ChevronLeft className="w-4 h-4" />
@@ -666,10 +721,18 @@ export const HomePage: React.FC = () => {
                   <button
                     onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                     disabled={page >= totalPages}
-                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center cursor-pointer"
                     title="Next Jobs (->)"
                   >
                     <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleReloadFresherJobs}
+                    disabled={isReloadingFresher}
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600 transition text-slate-700 shadow-2xs flex items-center justify-center cursor-pointer ml-1"
+                    title="Reload fresh jobs applications & recommendations"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isReloadingFresher ? 'animate-spin text-blue-600' : ''}`} />
                   </button>
                 </div>
               </div>
@@ -687,6 +750,12 @@ export const HomePage: React.FC = () => {
                     <span className="bg-indigo-100 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-indigo-200">
                       Experienced Account
                     </span>
+                    {experiencedReloadFeedback && (
+                      <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full animate-fade-in flex items-center gap-1 shadow-2xs">
+                        <Sparkles className="w-3 h-3 text-emerald-600" />
+                        {experiencedReloadFeedback}
+                      </span>
+                    )}
                   </div>
                   <p className="text-xs text-slate-500 font-medium mt-0.5">
                     Curated exclusively for experienced software engineers and industry specialists across Bengaluru and Karnataka
@@ -734,7 +803,7 @@ export const HomePage: React.FC = () => {
                   <button
                     onClick={() => setPage((p) => Math.max(p - 1, 1))}
                     disabled={page <= 1}
-                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center cursor-pointer"
                     title="Previous Jobs (<-)"
                   >
                     <ChevronLeft className="w-4 h-4" />
@@ -745,10 +814,18 @@ export const HomePage: React.FC = () => {
                   <button
                     onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
                     disabled={page >= totalPages}
-                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center"
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition text-slate-700 shadow-2xs flex items-center justify-center cursor-pointer"
                     title="Next Jobs (->)"
                   >
                     <ChevronRight className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={handleReloadExperiencedJobs}
+                    disabled={isReloadingExperienced}
+                    className="p-1.5 rounded-xl border border-slate-200 bg-white hover:bg-indigo-50 hover:border-indigo-300 hover:text-indigo-600 transition text-slate-700 shadow-2xs flex items-center justify-center cursor-pointer ml-1"
+                    title="Reload fresh openings & recommendations"
+                  >
+                    <RefreshCw className={`w-4 h-4 ${isReloadingExperienced ? 'animate-spin text-indigo-600' : ''}`} />
                   </button>
                 </div>
               </div>
