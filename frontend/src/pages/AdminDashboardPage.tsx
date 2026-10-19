@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
+import { TopLoadingBar } from '../components/TopLoadingBar';
 import { AdminOverview, Job, AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse } from '../types';
 import { 
   Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
@@ -65,6 +66,7 @@ export const AdminDashboardPage: React.FC = () => {
   const [latestJobs, setLatestJobs] = useState<Job[]>([]);
   const [recentScans, setRecentScans] = useState<ScanRunItem[]>([]);
   const [scanning, setScanning] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [scanMessage, setScanMessage] = useState('');
   const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
 
@@ -91,6 +93,7 @@ export const AdminDashboardPage: React.FC = () => {
 
   const fetchOverview = async () => {
     try {
+      setLoading(true);
       const data = await api.getAdminOverview();
       setOverview(data);
 
@@ -116,6 +119,8 @@ export const AdminDashboardPage: React.FC = () => {
       setDayWiseJobsData(dayWiseData);
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -391,7 +396,8 @@ export const AdminDashboardPage: React.FC = () => {
       </aside>
 
       {/* 2. Main Container & Top Navigation Header */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto relative">
+        <TopLoadingBar isLoading={loading || scanning} />
         
         {/* Top Header Bar */}
         <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4 min-w-0">
@@ -610,7 +616,44 @@ export const AdminDashboardPage: React.FC = () => {
         </header>
 
         {/* Dashboard Main Content Body */}
-        <main className="p-8 space-y-6">
+        {loading && !overview ? (
+          <main className="p-8 space-y-6 animate-shimmer relative overflow-hidden">
+            <div className="flex items-center justify-between bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 text-xs text-blue-900 shadow-2xs">
+              <div className="flex items-center gap-3">
+                <RefreshCw className="w-4 h-4 text-blue-600 animate-spin shrink-0" />
+                <span className="font-bold">Syncing Admin Command Center Intelligence & Portal Feeds...</span>
+              </div>
+              <span className="text-[11px] font-semibold text-blue-600 animate-pulse">Initializing Data</span>
+            </div>
+
+            {/* 4 KPI Metric Cards Skeleton */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3 animate-pulse">
+                  <div className="flex items-center justify-between">
+                    <div className="h-4 bg-slate-200 rounded w-24" />
+                    <div className="w-8 h-8 rounded-xl bg-slate-100" />
+                  </div>
+                  <div className="h-8 bg-slate-200 rounded-lg w-20" />
+                  <div className="h-3 bg-slate-100 rounded w-32" />
+                </div>
+              ))}
+            </div>
+
+            {/* Chart Area Skeleton */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 animate-pulse">
+                <div className="h-5 bg-slate-200 rounded w-48" />
+                <div className="h-64 bg-slate-100 rounded-2xl" />
+              </div>
+              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 animate-pulse">
+                <div className="h-5 bg-slate-200 rounded w-36" />
+                <div className="h-64 bg-slate-100 rounded-2xl" />
+              </div>
+            </div>
+          </main>
+        ) : (
+          <main className="p-8 space-y-6">
           
           {/* Header Title Bar */}
           <div className="flex items-center justify-between">
@@ -2266,6 +2309,7 @@ export const AdminDashboardPage: React.FC = () => {
         )}
 
       </main>
+      )}
       </div>
 
     </div>

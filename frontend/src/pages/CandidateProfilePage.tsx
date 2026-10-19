@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../api/client';
 import { CandidateProfile } from '../types';
 import { User, Briefcase, MapPin, Award, Check, Loader2, ArrowLeft } from 'lucide-react';
+import { TopLoadingBar } from '../components/TopLoadingBar';
 
 export const CandidateProfilePage: React.FC = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export const CandidateProfilePage: React.FC = () => {
   const [skills, setSkills] = useState<string[]>(['Python', 'FastAPI', 'PostgreSQL', 'Docker', 'AWS']);
   const [saved, setSaved] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [loadingProfile, setLoadingProfile] = useState(true);
 
   // Ensure that pressing browser Back button reliably returns directly to Home
   useEffect(() => {
@@ -35,6 +37,8 @@ export const CandidateProfilePage: React.FC = () => {
         if (data.skills.length) setSkills(data.skills);
       } catch (err) {
         console.error(err);
+      } finally {
+        setLoadingProfile(false);
       }
     };
     fetchProf();
@@ -88,6 +92,7 @@ export const CandidateProfilePage: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto space-y-4 pb-12">
+      <TopLoadingBar isLoading={loadingProfile || saving} />
       
       {/* Back to Home Button */}
       <div className="flex items-center justify-between">

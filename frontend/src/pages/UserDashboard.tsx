@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { JobCard } from '../components/JobCard';
+import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
+import { TopLoadingBar } from '../components/TopLoadingBar';
 import { Job } from '../types';
 import { 
   LayoutDashboard, User, FileText, Sparkles, Bookmark, CheckCircle, Bell, Building2, 
@@ -60,6 +62,7 @@ export const UserDashboard: React.FC = () => {
 
   return (
     <div className="space-y-4 pb-16">
+      <TopLoadingBar isLoading={loading} />
       
       {/* Top Back to Home Button */}
       <div className="flex items-center justify-between">
@@ -234,8 +237,22 @@ export const UserDashboard: React.FC = () => {
 
         {/* Jobs Feed with Match Score Badges */}
         {loading ? (
-          <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-400 font-medium">
-            Calculating personalized AI matches...
+          <div className="space-y-4">
+            <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-4 rounded-2xl border border-blue-200 flex items-center justify-between shadow-2xs">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 animate-spin" />
+                </div>
+                <div>
+                  <div className="text-xs font-bold text-slate-900">Personalizing Recommendations...</div>
+                  <div className="text-[11px] text-slate-500 font-medium">Analyzing skill coverage, title match vectors, and verified Bengaluru job vacancies</div>
+                </div>
+              </div>
+              <span className="text-xs font-bold text-blue-600 animate-pulse">Computing Fit...</span>
+            </div>
+            <JobCardSkeleton />
+            <JobCardSkeleton />
+            <JobCardSkeleton />
           </div>
         ) : (
           <div className="space-y-4">

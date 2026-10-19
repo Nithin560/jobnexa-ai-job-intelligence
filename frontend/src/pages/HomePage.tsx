@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useLocation, Link } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
+import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
+import { TopLoadingBar } from '../components/TopLoadingBar';
 import { Job, MarketInsights } from '../types';
 import { api } from '../api/client';
 import { 
@@ -363,6 +365,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-16">
+      <TopLoadingBar isLoading={loading || isReloadingFresher || isReloadingExperienced} />
       
       {/* Back to Home Navigation Banner when browsing /jobs */}
       {location.pathname === '/jobs' && (
@@ -1027,8 +1030,18 @@ export const HomePage: React.FC = () => {
 
           {/* Job Feed Cards */}
           {loading ? (
-            <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-400 font-medium">
-              Loading verified tech jobs...
+            <div className="space-y-4">
+              <div className="flex items-center justify-between bg-blue-50/80 border border-blue-200/80 rounded-2xl px-4 py-3 text-xs text-blue-900 shadow-2xs">
+                <div className="flex items-center gap-2.5">
+                  <RefreshCw className="w-4 h-4 text-blue-600 animate-spin shrink-0" />
+                  <span className="font-bold">Syncing latest verified tech opportunities...</span>
+                </div>
+                <span className="text-[11px] font-semibold text-blue-600 animate-pulse">Live Feed</span>
+              </div>
+              <JobCardSkeleton />
+              <JobCardSkeleton />
+              <JobCardSkeleton />
+              <JobCardSkeleton />
             </div>
           ) : jobs.length === 0 ? (
             <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-500 space-y-2">

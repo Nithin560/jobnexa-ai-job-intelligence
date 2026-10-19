@@ -6,6 +6,8 @@ import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
 import { formatJobRealTime } from '../components/JobCard';
 import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { JobDetailSkeleton } from '../components/Skeletons/JobDetailSkeleton';
+import { TopLoadingBar } from '../components/TopLoadingBar';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -31,7 +33,12 @@ export const JobDetailPage: React.FC = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="bg-white p-12 text-center rounded-2xl border border-slate-200 text-slate-400">Loading job details...</div>;
+    return (
+      <>
+        <TopLoadingBar isLoading={true} />
+        <JobDetailSkeleton />
+      </>
+    );
   }
 
   if (!job) {
