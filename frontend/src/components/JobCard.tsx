@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles, ShieldCheck } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { Job } from '../types';
 
 interface JobCardProps {
@@ -50,6 +50,7 @@ export const formatJobRealTime = (postedAt?: string, lastSeenAt?: string): strin
 
 export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
   const isExpired = job.status === 'expired' || job.status === 'closed' || job.status === 'stale';
+  const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
 
   return (
     <div className={`bg-white rounded-2xl border p-5 transition group relative ${isExpired ? 'border-amber-200 bg-slate-50/50' : 'border-slate-200 hover:shadow-md hover:border-slate-300'}`}>
@@ -210,6 +211,18 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               title="Position removed from company career portal (application closed)"
             >
               <span>Application Closed</span>
+            </button>
+          ) : isAdmin ? (
+            <button
+              type="button"
+              onClick={() => {
+                alert("Application restricted: Admin accounts are not allowed to apply for jobs. Please use a candidate account to apply.");
+              }}
+              className="px-4 py-2 bg-slate-100 hover:bg-amber-50 text-slate-500 hover:text-amber-800 font-bold text-xs rounded-xl transition flex items-center gap-1.5 border border-slate-200 hover:border-amber-300 cursor-not-allowed shadow-2xs"
+              title="Admins cannot apply for jobs. Please log in with a candidate account to apply."
+            >
+              <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <span>Admin (Cannot Apply)</span>
             </button>
           ) : (
             <a

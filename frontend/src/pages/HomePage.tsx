@@ -485,10 +485,6 @@ export const HomePage: React.FC = () => {
                 <span className="text-slate-300">Verified Tech Units:</span>
                 <strong className="text-emerald-300 font-black text-xs">{(insights?.total_companies ?? 108).toLocaleString()}</strong>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-slate-300">Cost Target:</span>
-                <strong className="text-cyan-300 font-bold text-xs">₹0 Zero-Cost Stack</strong>
-              </div>
             </div>
             {isAdmin ? (
               <button

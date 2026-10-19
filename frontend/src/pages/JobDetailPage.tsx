@@ -5,13 +5,14 @@ import { Job } from '../types';
 import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
 import { formatJobRealTime } from '../components/JobCard';
-import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck } from 'lucide-react';
+import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck, ShieldAlert } from 'lucide-react';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [job, setJob] = useState<Job | null>(null);
   const [activeTab, setActiveTab] = useState<'details' | 'match' | 'company'>('match');
   const [loading, setLoading] = useState(true);
+  const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -166,6 +167,18 @@ export const JobDetailPage: React.FC = () => {
                 title="Position removed from company career portal (application closed)"
               >
                 <span>Application Closed</span>
+              </button>
+            ) : isAdmin ? (
+              <button
+                type="button"
+                onClick={() => {
+                  alert("Application restricted: Admin accounts are not allowed to apply for jobs. Please use a candidate account to apply.");
+                }}
+                className="px-6 py-3 bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-800 font-bold text-sm rounded-2xl border border-slate-200 hover:border-amber-300 cursor-not-allowed flex items-center gap-2 transition shadow-2xs"
+                title="Admins cannot apply for jobs. Please log in with a candidate account to apply."
+              >
+                <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0" />
+                <span>Admin Mode (Apply Disabled)</span>
               </button>
             ) : (
               <a

@@ -280,6 +280,21 @@ export const AdminDashboardPage: React.FC = () => {
           </Link>
         </div>
 
+        {/* User Dashboard Platform Link */}
+        <div className="px-3 pb-1">
+          <Link
+            to="/dashboard"
+            className="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-bold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700/60 transition group shadow-2xs"
+            title="Open Candidate User Dashboard"
+          >
+            <div className="flex items-center gap-2">
+              <LayoutDashboard className="w-3.5 h-3.5 text-cyan-400 group-hover:scale-105 transition-transform" />
+              <span>User Dashboard</span>
+            </div>
+            <span className="text-[10px] text-slate-400 bg-slate-900/60 px-1.5 py-0.5 rounded border border-slate-700">User View</span>
+          </Link>
+        </div>
+
         {/* Sidebar Nav Links */}
         <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {menuItems.map((item) => {
@@ -391,6 +406,16 @@ export const AdminDashboardPage: React.FC = () => {
             >
               <ArrowLeft className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-600 group-hover:-translate-x-0.5 transition-transform" />
               <span className="hidden sm:inline">Back to Home</span>
+            </Link>
+
+            {/* User Dashboard Button */}
+            <Link
+              to="/dashboard"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 px-3 py-2 rounded-xl transition shadow-2xs shrink-0 group"
+              title="Open User Dashboard"
+            >
+              <LayoutDashboard className="w-3.5 h-3.5 text-cyan-600 group-hover:text-blue-600 transition-colors" />
+              <span className="hidden md:inline">User Dashboard</span>
             </Link>
 
             {/* 1. Global Admin Search Bar */}

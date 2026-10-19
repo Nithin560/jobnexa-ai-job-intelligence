@@ -5,7 +5,7 @@ import { JobCard } from '../components/JobCard';
 import { Job } from '../types';
 import { 
   LayoutDashboard, User, FileText, Sparkles, Bookmark, CheckCircle, Bell, Building2, 
-  Target, Settings, Edit3, ArrowUpRight, ArrowLeft
+  Target, Settings, Edit3, ArrowUpRight, ArrowLeft, Shield
 } from 'lucide-react';
 
 export const UserDashboard: React.FC = () => {
@@ -14,6 +14,7 @@ export const UserDashboard: React.FC = () => {
   const [saved, setSaved] = useState<Job[]>([]);
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
   const [loading, setLoading] = useState(true);
+  const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
 
   // Ensure that pressing browser Back button reliably returns directly to Home
   useEffect(() => {
@@ -72,7 +73,34 @@ export const UserDashboard: React.FC = () => {
           </div>
           <span>Back to Home</span>
         </Link>
+        {isAdmin && (
+          <Link
+            to="/admin"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 text-xs font-bold transition shadow-2xs"
+          >
+            <Shield className="w-3.5 h-3.5 text-amber-600" />
+            <span>Switch to Admin Console</span>
+          </Link>
+        )}
       </div>
+
+      {/* Admin Mode Informational Banner */}
+      {isAdmin && (
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900 shadow-2xs gap-3">
+          <div className="flex items-center gap-2.5">
+            <Shield className="w-4 h-4 text-amber-600 shrink-0" />
+            <span>
+              <strong>Admin Mode Active:</strong> You have full access to explore the Candidate User Dashboard, AI matches, and profile management. (Job applications are disabled for admin accounts).
+            </span>
+          </div>
+          <Link
+            to="/admin"
+            className="font-bold text-amber-800 hover:text-amber-950 underline shrink-0 whitespace-nowrap"
+          >
+            Open Admin Panel →
+          </Link>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
@@ -88,11 +116,25 @@ export const UserDashboard: React.FC = () => {
           </Link>
           {userNavItems.map((item) => {
             const Icon = item.icon;
+            const isItemActive = 
+              (item.label === 'Dashboard' && activeTab === 'recommended') || 
+              (item.label === 'Recommended' && activeTab === 'recommended') || 
+              (item.label === 'Saved Jobs' && activeTab === 'saved');
+
             return (
               <button
                 key={item.label}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition ${
-                  item.active 
+                onClick={() => {
+                  if (item.path) {
+                    navigate(item.path);
+                  } else if (item.label === 'Recommended' || item.label === 'Dashboard') {
+                    setActiveTab('recommended');
+                  } else if (item.label === 'Saved Jobs') {
+                    setActiveTab('saved');
+                  }
+                }}
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer ${
+                  isItemActive 
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
@@ -118,7 +160,10 @@ export const UserDashboard: React.FC = () => {
               Here are the latest job opportunities for you in Bengaluru.
             </p>
           </div>
-          <button className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-100 transition border border-blue-200 flex items-center gap-1.5">
+          <button 
+            onClick={() => navigate('/profile')}
+            className="px-4 py-2 bg-blue-50 text-blue-600 font-bold text-xs rounded-xl hover:bg-blue-100 transition border border-blue-200 flex items-center gap-1.5 cursor-pointer"
+          >
             <Edit3 className="w-3.5 h-3.5" />
             <span>Edit Profile</span>
           </button>
