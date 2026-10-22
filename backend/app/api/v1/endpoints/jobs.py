@@ -332,9 +332,20 @@ def list_jobs(
     effective_tier = candidate_tier if candidate_tier else exp_tier
 
     # Experience Filter (Strict Fresher vs Experienced Account Separation)
+    fresher_filter_condition = or_(
+        and_(Job.experience_min == 0, Job.experience_max <= 1),
+        Job.experience_max <= 1,
+        and_(Job.experience_min <= 1, Job.experience_max <= 2),
+        Job.title.ilike("%intern%"),
+        Job.title.ilike("%trainee%"),
+        Job.title.ilike("%graduate%"),
+        Job.title.ilike("%junior%"),
+        Job.title.ilike("%associate%")
+    )
+
     if effective_tier == "fresher":
-        # Fresher User account ONLY gets Fresher jobs (0 - 1 years)
-        query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)
+        # Fresher User account gets Fresher & Entry-level jobs (0 - 1 years)
+        query = query.filter(fresher_filter_condition)
     elif effective_tier == "experienced":
         # Experienced Person ONLY gets Experience jobs (1+ years)
         query = query.filter(or_(Job.experience_min >= 1, Job.experience_max > 1))
@@ -346,7 +357,7 @@ def list_jobs(
             query = query.filter(Job.experience_min <= exp_max)
     elif exp_min is not None and exp_max is not None:
         if exp_min == 0 and exp_max <= 1:
-            query = query.filter(Job.experience_min == 0, Job.experience_max <= 1)
+            query = query.filter(fresher_filter_condition)
         else:
             query = query.filter(Job.experience_max >= exp_min, Job.experience_min <= exp_max)
     elif exp_min is not None:

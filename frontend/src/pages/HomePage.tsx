@@ -59,9 +59,15 @@ export const HomePage: React.FC = () => {
 
   // User's experience tier (auto-initialized from registered user profile or toggleable)
   const [activeExpTab, setActiveExpTab] = useState<'all' | 'fresher' | 'experienced'>(() => {
-    const savedTier = sessionStorage.getItem('user_experience_tier') || localStorage.getItem('user_experience_tier');
-    if (savedTier === 'fresher') return 'fresher';
-    if (savedTier === 'experienced') return 'experienced';
+    const isCand = Boolean(
+      (sessionStorage.getItem('access_token') || localStorage.getItem('access_token')) &&
+      (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'candidate'
+    );
+    if (isCand) {
+      const savedTier = sessionStorage.getItem('user_experience_tier') || localStorage.getItem('user_experience_tier');
+      if (savedTier === 'fresher') return 'fresher';
+      if (savedTier === 'experienced') return 'experienced';
+    }
     return 'all';
   });
 
@@ -358,6 +364,8 @@ export const HomePage: React.FC = () => {
   const handleSelectTechHub = (hubId: string) => {
     setActiveLocation(hubId);
     setPage(1);
+    setActiveExpTab('all');
+    setFilters((prev) => ({ ...prev, experience_level: '' }));
     triggerLoading(500);
 
     // Silently freshen listings in the background without intrusive popup banners
@@ -853,11 +861,15 @@ export const HomePage: React.FC = () => {
                 >
                   <GraduationCap className="w-4 h-4 shrink-0" />
                   <span>Fresher Jobs (0 - 1 Yrs)</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
-                    activeExpTab === 'fresher' ? 'bg-blue-700 text-white' : 'bg-blue-100 text-blue-700'
-                  }`}>
-                    54
-                  </span>
+                  {activeExpTab === 'fresher' ? (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-700 text-white">
+                      {totalJobs}
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-blue-100 text-blue-700">
+                      Fresher
+                    </span>
+                  )}
                 </button>
 
                 <button
@@ -871,11 +883,15 @@ export const HomePage: React.FC = () => {
                 >
                   <Briefcase className="w-4 h-4 shrink-0" />
                   <span>Experienced Jobs (1+ Yrs)</span>
-                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-black ${
-                    activeExpTab === 'experienced' ? 'bg-indigo-700 text-white' : 'bg-indigo-100 text-indigo-700'
-                  }`}>
-                    418
-                  </span>
+                  {activeExpTab === 'experienced' ? (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-700 text-white">
+                      {totalJobs}
+                    </span>
+                  ) : (
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-black bg-indigo-100 text-indigo-700">
+                      1+ Yrs
+                    </span>
+                  )}
                 </button>
 
                 <button
@@ -888,11 +904,15 @@ export const HomePage: React.FC = () => {
                   }`}
                 >
                   <span>All Jobs</span>
-                  <span className={`px-1.5 py-0.5 rounded-full text-[10px] font-black ${
-                    activeExpTab === 'all' ? 'bg-slate-800 text-white' : 'bg-slate-100 text-slate-600'
-                  }`}>
-                    472
-                  </span>
+                  {activeExpTab === 'all' ? (
+                    <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-slate-800 text-white">
+                      {totalJobs}
+                    </span>
+                  ) : (
+                    <span className="px-1.5 py-0.5 rounded-full text-[10px] font-black bg-slate-100 text-slate-600">
+                      All
+                    </span>
+                  )}
                 </button>
               </div>
 
@@ -900,22 +920,22 @@ export const HomePage: React.FC = () => {
               <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between flex-wrap gap-3">
                 <div>
                   <h2 className="text-lg font-black text-slate-900">
-                    {activeExpTab === 'fresher' 
+                    {activeLocation === 'koramangala'
+                      ? (activeExpTab === 'fresher' ? '🚀 Fresher Openings in Koramangala & HSR' : activeExpTab === 'experienced' ? '🚀 Experienced Openings in Koramangala & HSR' : '📍 Tech Jobs in Koramangala & HSR Layout')
+                      : activeLocation === 'whitefield'
+                      ? (activeExpTab === 'fresher' ? '🏢 Fresher Openings in Whitefield & Bellandur' : activeExpTab === 'experienced' ? '🏢 Experienced Openings in Whitefield & Bellandur' : '📍 Tech Jobs in Whitefield & Bellandur (ORR)')
+                      : activeLocation === 'electronic_city'
+                      ? (activeExpTab === 'fresher' ? '⚡ Fresher Openings in Electronic City' : activeExpTab === 'experienced' ? '⚡ Experienced Openings in Electronic City' : '📍 Tech Jobs in Electronic City Tech Parks')
+                      : activeLocation === 'manyata'
+                      ? (activeExpTab === 'fresher' ? '🌐 Fresher Openings in Manyata & North BLR' : activeExpTab === 'experienced' ? '🌐 Experienced Openings in Manyata & North BLR' : '📍 Tech Jobs in Manyata & North Bengaluru')
+                      : activeLocation === 'indiranagar'
+                      ? (activeExpTab === 'fresher' ? '💼 Fresher Openings in Indiranagar & Central' : activeExpTab === 'experienced' ? '💼 Experienced Openings in Indiranagar & Central' : '📍 Tech Jobs in Indiranagar & Central Bengaluru')
+                      : activeLocation === 'remote'
+                      ? '🏠 Remote & Hybrid Tech Jobs in Karnataka'
+                      : activeExpTab === 'fresher' 
                       ? '🎓 Fresher Openings in Bengaluru (0 - 1 Years)' 
                       : activeExpTab === 'experienced' 
                       ? '💼 Experienced Openings in Bengaluru (1+ Years)' 
-                      : activeLocation === 'koramangala'
-                      ? '📍 Tech Jobs in Koramangala & HSR Layout'
-                      : activeLocation === 'whitefield'
-                      ? '📍 Tech Jobs in Whitefield & Bellandur (ORR)'
-                      : activeLocation === 'electronic_city'
-                      ? '📍 Tech Jobs in Electronic City Tech Parks'
-                      : activeLocation === 'manyata'
-                      ? '📍 Tech Jobs in Manyata & North Bengaluru'
-                      : activeLocation === 'indiranagar'
-                      ? '📍 Tech Jobs in Indiranagar & Central Bengaluru'
-                      : activeLocation === 'remote'
-                      ? '🏠 Remote & Hybrid Tech Jobs in Karnataka'
                       : '🏢 Verified Jobs in Bengaluru & Karnataka'}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
