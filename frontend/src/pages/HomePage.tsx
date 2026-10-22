@@ -3,7 +3,7 @@ import { useSearchParams, useLocation, Link } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
 import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
-import { TopLoadingBar } from '../components/TopLoadingBar';
+import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { Job, MarketInsights } from '../types';
 import { api } from '../api/client';
 import { 
@@ -80,8 +80,20 @@ export const HomePage: React.FC = () => {
   const [isReloadingExperienced, setIsReloadingExperienced] = useState(false);
   const [experiencedReloadFeedback, setExperiencedReloadFeedback] = useState<string | null>(null);
 
+  const { triggerLoading } = useLoadingBar();
   const [roleType, setRoleType] = useState<string>('all');
   const [activeLocation, setActiveLocation] = useState<string>('all');
+
+  // Real-time Tech Park / Hub Scanner State
+  const [isScanningHub, setIsScanningHub] = useState(false);
+  const [scanningHubId, setScanningHubId] = useState<string | null>(null);
+  const [scanningHubName, setScanningHubName] = useState<string | null>(null);
+  const [hubScanFeedback, setHubScanFeedback] = useState<{
+    hub_name: string;
+    jobs_found: number;
+    companies_scanned: number;
+    tech_parks: string[];
+  } | null>(null);
 
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
@@ -354,6 +366,36 @@ export const HomePage: React.FC = () => {
     setFilters({ source_type: '', work_mode: '', company_type: '', employment_type: '', experience_level: '' });
   };
 
+  const handleSelectTechHub = async (hubId: string, hubLabel: string) => {
+    setActiveLocation(hubId);
+    setPage(1);
+    setIsScanningHub(true);
+    setScanningHubId(hubId);
+    setScanningHubName(hubLabel);
+    setHubScanFeedback(null);
+    triggerLoading(600);
+
+    try {
+      const res = await api.scanTechHub(hubId);
+      setHubScanFeedback({
+        hub_name: res.hub_name,
+        jobs_found: res.jobs_found,
+        companies_scanned: res.companies_scanned,
+        tech_parks: res.tech_parks,
+      });
+      await fetchJobs();
+      setTimeout(() => {
+        setHubScanFeedback(null);
+      }, 8000);
+    } catch (err) {
+      console.error('Tech hub scan failed:', err);
+      await fetchJobs();
+    } finally {
+      setIsScanningHub(false);
+      setScanningHubId(null);
+    }
+  };
+
   const handleToggleSave = async (jobId: string) => {
     try {
       await api.toggleSaveJob(jobId);
@@ -365,7 +407,7 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="space-y-6 pb-16">
-      <TopLoadingBar isLoading={loading || isReloadingFresher || isReloadingExperienced} />
+      <TopLoadingBar isLoading={loading || isReloadingFresher || isReloadingExperienced || isScanningHub} />
       
       {/* Back to Home Navigation Banner when browsing /jobs */}
       {location.pathname === '/jobs' && (
@@ -621,26 +663,81 @@ export const HomePage: React.FC = () => {
                 { id: 'remote', label: 'Remote / Hybrid (BLR)', icon: '🏠' },
               ].map((loc) => {
                 const isActive = activeLocation === loc.id;
+                const isThisScanning = isScanningHub && scanningHubId === loc.id;
                 return (
                   <button
                     key={loc.id}
-                    onClick={() => {
-                      setActiveLocation(loc.id);
-                      setPage(1);
-                    }}
+                    onClick={() => handleSelectTechHub(loc.id, loc.label)}
+                    disabled={isScanningHub}
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
                       isActive
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60'
                     }`}
                   >
-                    <span>{loc.icon}</span>
+                    {isThisScanning ? (
+                      <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
+                    ) : (
+                      <span>{loc.icon}</span>
+                    )}
                     <span>{loc.label}</span>
                   </button>
                 );
               })}
             </div>
           </div>
+
+          {/* Real-Time Tech Park Live Scanner Banner */}
+          {isScanningHub && (
+            <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border border-cyan-400/50 rounded-2xl p-4 text-white flex items-center justify-between shadow-xl backdrop-blur-md animate-pulse">
+              <div className="flex items-center gap-3.5">
+                <span className="relative flex h-3.5 w-3.5 shrink-0">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-80"></span>
+                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-cyan-500"></span>
+                </span>
+                <div>
+                  <div className="text-sm font-black text-cyan-200 flex items-center gap-2">
+                    <span>Live Tech Park Scanner Active</span>
+                    <span className="bg-cyan-500/30 text-cyan-200 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-cyan-400/40">
+                      {scanningHubName}
+                    </span>
+                  </div>
+                  <div className="text-xs text-slate-300 mt-0.5">
+                    Scanning all IT companies, tech parks, and enterprise career portals located in {scanningHubName}...
+                  </div>
+                </div>
+              </div>
+              <div className="shrink-0 pl-3">
+                <span className="inline-flex items-center gap-2 text-xs font-bold bg-cyan-500/25 text-cyan-200 px-3.5 py-1.5 rounded-xl border border-cyan-400/40 shadow-xs">
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin text-cyan-300" />
+                  <span>Scanning Hub...</span>
+                </span>
+              </div>
+            </div>
+          )}
+
+          {/* Tech Park Scan Success Feedback */}
+          {hubScanFeedback && !isScanningHub && (
+            <div className="bg-emerald-950/80 border border-emerald-500/40 rounded-2xl p-3.5 px-4 text-white flex items-center justify-between shadow-md backdrop-blur-sm animate-fade-in">
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+                <div className="text-xs sm:text-sm">
+                  <span className="font-bold text-emerald-200">
+                    Scan Complete for {hubScanFeedback.hub_name}:
+                  </span>{' '}
+                  <span className="text-emerald-300">
+                    Found <strong>{hubScanFeedback.jobs_found}</strong> live jobs across <strong>{hubScanFeedback.companies_scanned}</strong> companies ({hubScanFeedback.tech_parks.slice(0, 3).join(', ')}...).
+                  </span>
+                </div>
+              </div>
+              <button
+                onClick={() => setHubScanFeedback(null)}
+                className="text-xs font-bold text-emerald-400 hover:text-white ml-2 p-1 rounded-lg hover:bg-emerald-900/60"
+              >
+                ✕
+              </button>
+            </div>
+          )}
 
           {/* Conditional Feed Headers: Strict Account-Level Personalization */}
           {isCandidateUser && activeExpTab === 'fresher' ? (

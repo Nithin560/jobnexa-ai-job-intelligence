@@ -153,6 +153,20 @@ export const api = {
     return response.data;
   },
 
+  scanTechHub: async (hubId: string) => {
+    const response = await apiClient.post<{
+      status: string;
+      hub_id: string;
+      hub_name: string;
+      companies_scanned: number;
+      jobs_found: number;
+      new_jobs: number;
+      tech_parks: string[];
+      message: string;
+    }>('/jobs/scan-hub', { hub_id: hubId });
+    return response.data;
+  },
+
   autoScanCheck: async (force = false) => {
     const response = await apiClient.post<{
       started: boolean;
