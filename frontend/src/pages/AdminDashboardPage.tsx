@@ -410,16 +410,6 @@ export const AdminDashboardPage: React.FC = () => {
           
           {/* Left Navigation & Status Sections (Grouped on the Left Side Direction) */}
           <div className="flex items-center gap-3 shrink-0 min-w-0">
-            {/* Back to Home Button */}
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 px-3 py-2 rounded-xl transition shadow-2xs shrink-0 group"
-              title="Return to Main Portal (Home)"
-            >
-              <ArrowLeft className="w-3.5 h-3.5 text-slate-500 group-hover:text-blue-600 group-hover:-translate-x-0.5 transition-transform" />
-              <span className="hidden sm:inline">Back to Home</span>
-            </Link>
-
             {/* User Dashboard Button */}
             <Link
               to="/dashboard"
