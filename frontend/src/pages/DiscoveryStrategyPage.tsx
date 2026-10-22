@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   Compass, ShieldCheck, CheckCircle2, XCircle, Terminal, 
   Layers, Database, Clock, Cpu, Server, FileText, ArrowRight, 
-  ExternalLink, Sparkles, Building2, Globe, Code2, AlertTriangle,
+  ExternalLink, Building2, Globe, Code2, AlertTriangle,
   Search, BookOpen, Check, Copy, ChevronRight, Award, Zap, ArrowLeft
 } from 'lucide-react';
 import { useLoadingBar } from '../components/TopLoadingBar';
@@ -48,8 +48,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
 
       {/* Top Banner / Breadcrumb */}
       <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800 relative overflow-hidden">
-        <div className="absolute -right-10 -bottom-10 w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="absolute right-20 top-0 w-52 h-52 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
         
         <div className="relative z-10 space-y-4">
           <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-bold px-3 py-1 rounded-full bg-slate-900 border border-blue-500/30">
@@ -76,7 +75,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
               <Clock className="w-4 h-4 text-cyan-400" /> Daily Scan: 06:00 AM IST
             </span>
             <span className="bg-slate-800/80 px-3 py-1.5 rounded-xl border border-slate-700 flex items-center gap-1.5">
-              <Award className="w-4 h-4 text-purple-400" /> 100% Direct Apply
+              <Award className="w-4 h-4 text-blue-400" /> 100% Direct Apply
             </span>
           </div>
         </div>

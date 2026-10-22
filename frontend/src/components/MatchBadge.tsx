@@ -82,7 +82,7 @@ export const MatchBadge: React.FC<MatchBadgeProps> = ({ match }) => {
               <span>{match.role_match_percent}%</span>
             </div>
             <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
-              <div className="h-full bg-purple-500 rounded-full" style={{ width: `${match.role_match_percent}%` }}></div>
+              <div className="h-full bg-indigo-600 rounded-full" style={{ width: `${match.role_match_percent}%` }}></div>
             </div>
           </div>
         </div>

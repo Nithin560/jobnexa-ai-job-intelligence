@@ -1,5 +1,5 @@
 import React from 'react';
-import { Check, X, AlertCircle, Sparkles } from 'lucide-react';
+import { Check, X, AlertCircle, Target } from 'lucide-react';
 import { MatchBreakdown } from '../types';
 
 interface SkillGapAnalysisProps {
@@ -53,7 +53,7 @@ export const SkillGapAnalysis: React.FC<SkillGapAnalysisProps> = ({ match, jobSk
 
       {/* Skill Gap Insights Banner */}
       <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 text-sm text-amber-900">
-        <Sparkles className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+        <Target className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
         <div>
           <span className="font-bold block mb-0.5">Skill Gap Analysis</span>
           <p className="text-xs text-amber-800 leading-relaxed">

@@ -6,8 +6,8 @@ import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { Job } from '../types';
 import { 
-  LayoutDashboard, User, FileText, Sparkles, Bookmark, CheckCircle, Bell, Building2, 
-  Target, Settings, Edit3, ArrowUpRight, ArrowLeft, Shield
+  LayoutDashboard, User, FileText, Compass, Bookmark, CheckCircle, Bell, Building2, 
+  Target, Settings, Edit3, ArrowUpRight, ArrowLeft, Shield, Loader2
 } from 'lucide-react';
 
 export const UserDashboard: React.FC = () => {
@@ -52,7 +52,7 @@ export const UserDashboard: React.FC = () => {
     { label: 'Dashboard', icon: LayoutDashboard, active: true },
     { label: 'My Profile', icon: User, active: false, path: '/profile' },
     { label: 'Resume', icon: FileText, active: false },
-    { label: 'Recommended', icon: Sparkles, active: false },
+    { label: 'Recommended', icon: Compass, active: false },
     { label: 'Saved Jobs', icon: Bookmark, active: false },
     { label: 'Applied Jobs', icon: CheckCircle, active: false },
     { label: 'Job Alerts', icon: Bell, active: false },
@@ -177,7 +177,7 @@ export const UserDashboard: React.FC = () => {
         {/* 4 Dashboard Stat Cards Grid matching Image 3 */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl shrink-0"><Sparkles className="w-5 h-5" /></div>
+            <div className="p-3 bg-blue-50 text-blue-600 rounded-2xl shrink-0"><Compass className="w-5 h-5" /></div>
             <div>
               <div className="text-2xl font-black text-slate-900">{recommended.length || 42}</div>
               <div className="text-xs font-semibold text-slate-500">Recommended</div>
@@ -201,7 +201,7 @@ export const UserDashboard: React.FC = () => {
           </div>
 
           <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className="p-3 bg-purple-50 text-purple-600 rounded-2xl shrink-0"><Bell className="w-5 h-5" /></div>
+            <div className="p-3 bg-amber-50 text-amber-600 rounded-2xl shrink-0"><Bell className="w-5 h-5" /></div>
             <div>
               <div className="text-2xl font-black text-slate-900">3</div>
               <div className="text-xs font-semibold text-slate-500">Active Alerts</div>
@@ -246,10 +246,10 @@ export const UserDashboard: React.FC = () => {
         {/* Jobs Feed with Match Score Badges */}
         {loading ? (
           <div className="space-y-4">
-            <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 p-4 rounded-2xl border border-blue-200 flex items-center justify-between shadow-2xs">
+            <div className="bg-blue-50/70 p-4 rounded-2xl border border-blue-200 flex items-center justify-between shadow-2xs">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-4 h-4 animate-spin" />
                 </div>
                 <div>
                   <div className="text-xs font-bold text-slate-900">Personalizing Recommendations...</div>

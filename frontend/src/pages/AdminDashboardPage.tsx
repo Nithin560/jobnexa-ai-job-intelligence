@@ -4,7 +4,7 @@ import { api } from '../api/client';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { AdminOverview, Job, AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse } from '../types';
 import { 
-  Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
+  Briefcase, Building2, Link2, MapPin, Clock, Shield, Play, Plus, Download, 
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
   FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Settings, LogOut,
@@ -30,7 +30,7 @@ const jobsTrend = [
 ];
 
 const fallbackCompanyTypeData = [
-  { name: 'Enterprise', value: 45.0, count: 27, color: '#8b5cf6' },
+  { name: 'Enterprise', value: 45.0, count: 27, color: '#4f46e5' },
   { name: 'Startup', value: 28.3, count: 17, color: '#3b82f6' },
   { name: 'Mid-size', value: 23.3, count: 14, color: '#10b981' },
   { name: 'Job Platform', value: 3.3, count: 2, color: '#06b6d4' },
@@ -259,7 +259,7 @@ export const AdminDashboardPage: React.FC = () => {
   const userDemographicData = [
     { name: 'Fresher Candidates (0-1 yrs)', value: adminUsersData?.fresher_count ?? 3, color: '#10b981' },
     { name: 'Experienced Candidates (>1 yrs)', value: adminUsersData?.experienced_count ?? 1, color: '#3b82f6' },
-    { name: 'Admin Security', value: adminUsersData?.admin_count ?? 2, color: '#8b5cf6' },
+    { name: 'Admin Security', value: adminUsersData?.admin_count ?? 2, color: '#0f172a' },
   ];
 
   const userGrowthData = adminUsersData?.registration_trends && adminUsersData.registration_trends.length > 0
@@ -403,7 +403,7 @@ export const AdminDashboardPage: React.FC = () => {
               className="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs rounded-xl transition flex items-center gap-2 border border-slate-700/60"
               title="Export Platform Data"
             >
-              <Download className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+              <Download className="w-3.5 h-3.5 text-blue-400 shrink-0" />
               <span>Export Data</span>
             </button>
           </div>
@@ -548,7 +548,7 @@ export const AdminDashboardPage: React.FC = () => {
                               </div>
                             )}
                             {n.category === 'scan_update' && (
-                              <div className="p-2 bg-purple-100 text-purple-700 rounded-xl">
+                              <div className="p-2 bg-indigo-100 text-indigo-700 rounded-xl">
                                 <Activity className="w-4 h-4" />
                               </div>
                             )}
@@ -930,7 +930,7 @@ export const AdminDashboardPage: React.FC = () => {
                       <button
                         onClick={() => setUserRoleFilter('admin')}
                         className={`px-3 py-1 rounded-lg font-bold transition ${
-                          userRoleFilter === 'admin' ? 'bg-purple-600 text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'
+                          userRoleFilter === 'admin' ? 'bg-slate-900 text-white shadow-2xs' : 'text-slate-600 hover:text-slate-900'
                         }`}
                       >
                         Admins ({adminUsersData?.admin_count ?? 2})
@@ -1070,10 +1070,10 @@ export const AdminDashboardPage: React.FC = () => {
                     {Math.round(((overview?.experienced_jobs ?? 440) / ((overview?.total_jobs ?? 532) || 1)) * 100)}% Market Share
                   </div>
                 </div>
-                <div className="bg-gradient-to-br from-purple-50/70 to-white p-5 rounded-2xl border border-purple-200 shadow-sm">
-                  <div className="text-xs font-semibold text-purple-700 mb-1">Active Job Sources</div>
-                  <div className="text-3xl font-black text-purple-900">{overview?.active_sources ?? 23}</div>
-                  <div className="text-[11px] font-bold text-purple-600 mt-1">100% Crawling Uptime</div>
+                <div className="bg-gradient-to-br from-indigo-50/70 to-white p-5 rounded-2xl border border-indigo-200 shadow-sm">
+                  <div className="text-xs font-semibold text-indigo-700 mb-1">Active Job Sources</div>
+                  <div className="text-3xl font-black text-indigo-900">{overview?.active_sources ?? 23}</div>
+                  <div className="text-[11px] font-bold text-indigo-600 mt-1">100% Crawling Uptime</div>
                 </div>
               </div>
 
@@ -1268,7 +1268,7 @@ export const AdminDashboardPage: React.FC = () => {
                       </div>
                       <div className="flex items-center justify-between text-xs">
                         <span className="flex items-center gap-2 text-slate-600 font-medium whitespace-nowrap">
-                          <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0"></span> Scan Schedule
+                          <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0"></span> Scan Schedule
                         </span>
                         <span className="font-bold text-slate-900 whitespace-nowrap">Daily 8:00 AM</span>
                       </div>
@@ -1407,10 +1407,10 @@ export const AdminDashboardPage: React.FC = () => {
                   <div className="text-3xl font-black text-slate-900">{overview?.total_companies ?? 60}</div>
                   <div className="text-[11px] font-bold text-blue-600 mt-1">Hiring in Bengaluru</div>
                 </div>
-                <div className="bg-white p-5 rounded-2xl border border-purple-200 bg-purple-50/30 shadow-sm">
-                  <div className="text-xs font-semibold text-purple-700 mb-1">Enterprise Tech</div>
-                  <div className="text-3xl font-black text-purple-900">27</div>
-                  <div className="text-[11px] font-bold text-purple-600 mt-1">Google, Microsoft, Amazon, Infosys</div>
+                <div className="bg-white p-5 rounded-2xl border border-indigo-200 bg-indigo-50/30 shadow-sm">
+                  <div className="text-xs font-semibold text-indigo-700 mb-1">Enterprise Tech</div>
+                  <div className="text-3xl font-black text-indigo-900">27</div>
+                  <div className="text-[11px] font-bold text-indigo-600 mt-1">Google, Microsoft, Amazon, Infosys</div>
                 </div>
                 <div className="bg-white p-5 rounded-2xl border border-blue-200 bg-blue-50/30 shadow-sm">
                   <div className="text-xs font-semibold text-blue-700 mb-1">High-Growth Startups</div>
@@ -1445,7 +1445,7 @@ export const AdminDashboardPage: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-bold text-sm text-slate-900">{comp.name}</span>
                         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
-                          comp.type === 'Enterprise' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                          comp.type === 'Enterprise' ? 'bg-indigo-100 text-indigo-700' : 'bg-blue-100 text-blue-700'
                         }`}>{comp.type}</span>
                       </div>
                       <div className="text-xs text-slate-500 mb-3 flex items-center gap-1">
@@ -1554,10 +1554,10 @@ export const AdminDashboardPage: React.FC = () => {
                   <div className="text-3xl font-black text-blue-900">{overview?.experienced_jobs ?? 440}</div>
                   <div className="text-[11px] font-bold text-blue-600 mt-1">Mid & Senior Levels</div>
                 </div>
-                <div className="bg-white p-5 rounded-2xl border border-purple-200 bg-purple-50/30 shadow-sm">
-                  <div className="text-xs font-semibold text-purple-700 mb-1">City Geographic Scope</div>
-                  <div className="text-3xl font-black text-purple-900">100%</div>
-                  <div className="text-[11px] font-bold text-purple-600 mt-1">Bengaluru Tech Hub Only</div>
+                <div className="bg-white p-5 rounded-2xl border border-slate-300 bg-slate-50 shadow-sm">
+                  <div className="text-xs font-semibold text-slate-700 mb-1">City Geographic Scope</div>
+                  <div className="text-3xl font-black text-slate-900">100%</div>
+                  <div className="text-[11px] font-bold text-slate-600 mt-1">Bengaluru Tech Hub Only</div>
                 </div>
               </div>
 
@@ -1809,7 +1809,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-500 mb-2">
                 <span className="text-xs font-semibold text-slate-600">Total Jobs</span>
-                <div className="p-2 bg-purple-50 text-purple-600 rounded-xl"><Briefcase className="w-4 h-4" /></div>
+                <div className="p-2 bg-indigo-50 text-indigo-700 rounded-xl"><Briefcase className="w-4 h-4" /></div>
               </div>
               <div className="text-2xl font-black text-slate-900">{overview?.total_jobs.toLocaleString() || '472'}</div>
               <div className="text-[10px] font-semibold text-slate-500 mt-1 flex items-center justify-between">
@@ -1832,7 +1832,7 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-500 mb-2">
                 <span className="text-xs font-semibold text-slate-600">New Jobs (Today)</span>
-                <div className="p-2 bg-amber-50 text-amber-600 rounded-xl"><Sparkles className="w-4 h-4" /></div>
+                <div className="p-2 bg-amber-50 text-amber-600 rounded-xl"><Activity className="w-4 h-4" /></div>
               </div>
               <div className="text-2xl font-black text-slate-900">{overview?.new_jobs_today.toLocaleString() || '0'}</div>
               <div className="text-[11px] font-bold text-emerald-600 mt-1 flex items-center gap-0.5">
@@ -2119,7 +2119,7 @@ export const AdminDashboardPage: React.FC = () => {
 
                   <div className="flex items-center justify-between text-xs">
                     <span className="flex items-center gap-2 text-slate-600 font-medium whitespace-nowrap">
-                      <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0"></span>
+                      <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0"></span>
                       <span>Scan Schedule</span>
                     </span>
                     <span className="font-bold text-slate-900 whitespace-nowrap">

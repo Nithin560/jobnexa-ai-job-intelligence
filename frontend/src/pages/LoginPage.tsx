@@ -3,7 +3,6 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Mail,
   Lock,
-  Sparkles,
   ArrowRight,
   ShieldCheck,
   KeyRound,
@@ -290,7 +289,7 @@ export const LoginPage: React.FC = () => {
           ) : (
             <>
               <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold border border-blue-100">
-                <Sparkles className="w-3.5 h-3.5" />
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />
                 <span>JobNexa Intelligence</span>
               </div>
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">Welcome Back</h1>

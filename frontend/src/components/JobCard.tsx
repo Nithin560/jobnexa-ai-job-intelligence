@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, Sparkles, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { Job } from '../types';
 
 interface JobCardProps {
@@ -89,8 +89,8 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                   Expired on Career Portal
                 </span>
               ) : job.is_new ? (
-                <span className="text-emerald-600 text-xs font-semibold flex items-center gap-1 shrink-0">
-                  <Sparkles className="w-3.5 h-3.5 text-emerald-500" /> New
+                <span className="text-emerald-700 bg-emerald-50 border border-emerald-200/80 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1.5 shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> New
                 </span>
               ) : null}
             </div>
@@ -153,11 +153,11 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                     Fresher ({job.experience_label})
                   </span>
                 ) : job.experience_min >= 8 ? (
-                  <span className="font-bold text-purple-700 bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md text-[11px]">
+                  <span className="font-bold text-indigo-800 bg-indigo-50 border border-indigo-200/80 px-2 py-0.5 rounded-md text-[11px]">
                     Lead / Senior ({job.experience_label})
                   </span>
                 ) : job.experience_min >= 5 ? (
-                  <span className="font-bold text-violet-700 bg-violet-50 border border-violet-200/80 px-2 py-0.5 rounded-md text-[11px]">
+                  <span className="font-bold text-slate-800 bg-slate-100 border border-slate-300 px-2 py-0.5 rounded-md text-[11px]">
                     Senior ({job.experience_label})
                   </span>
                 ) : (

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
+import { Mail, Lock, User, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
 import { TopLoadingBar } from '../components/TopLoadingBar';
 import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
@@ -182,7 +182,7 @@ export const RegisterPage: React.FC = () => {
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold border border-blue-100">
-            <Sparkles className="w-3.5 h-3.5" />
+            <ShieldCheck className="w-3.5 h-3.5" />
             <span>JobNexa Intelligence</span>
           </div>
           <h1 className="text-2xl font-black text-slate-900 tracking-tight">
@@ -266,7 +266,7 @@ export const RegisterPage: React.FC = () => {
                     role === 'admin' ? 'border-blue-600 bg-blue-50/50 text-blue-900 ring-2 ring-blue-100' : 'border-slate-200 hover:border-slate-300 text-slate-700'
                   }`}
                 >
-                  <Building2 className="w-4 h-4 text-purple-600 shrink-0" />
+                  <Building2 className="w-4 h-4 text-slate-800 shrink-0" />
                   <div>
                     <div className="text-xs font-bold">Admin</div>
                     <div className="text-[10px] text-slate-400 font-medium">Recruiter / Employer</div>
