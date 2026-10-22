@@ -439,30 +439,6 @@ export const AdminDashboardPage: React.FC = () => {
                 className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
               />
             </div>
-
-            {/* 2. Registered & Active Users Navigation Badge */}
-            <button
-              onClick={() => handleTabChange('Users')}
-              className={`shrink-0 whitespace-nowrap hidden sm:inline-flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl border transition shadow-2xs cursor-pointer ${
-                activeTab === 'Users'
-                  ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
-                  : 'bg-blue-50/80 hover:bg-blue-100 text-blue-900 border-blue-200'
-              }`}
-              title="View Registered & Active Users Section"
-            >
-              <Users className="w-4 h-4 text-blue-600 shrink-0" />
-              <span className="whitespace-nowrap flex items-center gap-1 font-medium">
-                Users: <strong className={activeTab === 'Users' ? 'text-white' : 'text-blue-950 font-black'}>{adminUsersData?.total_registered ?? overview?.total_users ?? 6}</strong> Reg • <strong className={activeTab === 'Users' ? 'text-emerald-300' : 'text-emerald-700 font-black'}>{adminUsersData?.total_active ?? overview?.active_users ?? 6}</strong> Act
-              </span>
-            </button>
-
-            {/* 3. Scan Status Widget with real date and time */}
-            <div className="hidden lg:flex items-center gap-2.5 text-xs bg-slate-50 px-3.5 py-2 rounded-xl border border-slate-200 text-slate-600 font-medium shadow-2xs shrink-0">
-              <Clock className="w-4 h-4 text-blue-600 shrink-0" />
-              <span>Last Scan: <strong className="text-slate-900">{overview?.last_scan_time || 'Today, 08:00 AM'}</strong></span>
-              <span className="text-slate-300">•</span>
-              <span>Next Scan: <strong className="text-slate-900">{overview?.next_scan_time || 'Tomorrow, 08:00 AM'}</strong></span>
-            </div>
           </div>
 
           {/* 4. Notifications & Admin Profile */}
