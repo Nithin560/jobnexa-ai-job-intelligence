@@ -490,13 +490,10 @@ export const HomePage: React.FC = () => {
 
           {/* Compact Scan Status Widget on the Right */}
           <div className="w-full sm:w-[280px] md:w-[280px] shrink-0 bg-slate-900/60 backdrop-blur-xl border border-white/25 p-3.5 rounded-xl space-y-2.5 shadow-lg">
-            <div className="flex items-center justify-between border-b border-white/20 pb-2 text-[11px]">
+            <div className="flex items-center border-b border-white/20 pb-2 text-[11px]">
               <span className="font-bold text-emerald-400 flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full ${isLiveScanning ? 'bg-cyan-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`}></span>
-                {isLiveScanning ? 'Scanning Live...' : 'Daily Verified (06:00 IST)'}
-              </span>
-              <span className="text-slate-200 font-medium text-[11px]">
-                {liveScanInfo?.formatted_time || liveScanInfo?.last_scan_time || insights?.latest_scan?.time || 'Today, 06:00 AM'}
+                {isLiveScanning ? 'Scanning Live...' : 'Daily Scan'}
               </span>
             </div>
             <div className="space-y-1 text-xs text-slate-100">
