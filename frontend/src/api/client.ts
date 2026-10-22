@@ -217,6 +217,11 @@ export const api = {
     return response.data;
   },
 
+  clearScanHistory: async () => {
+    const response = await apiClient.delete<{ status: string; message: string; deleted_count: number }>('/admin/scans');
+    return response.data;
+  },
+
   triggerScan: async () => {
     const response = await apiClient.post<{
       status: string;

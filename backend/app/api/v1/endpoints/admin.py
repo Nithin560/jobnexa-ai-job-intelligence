@@ -383,6 +383,17 @@ def list_scan_runs(
     return results
 
 
+@router.delete("/scans")
+def clear_scan_history(
+    db: Session = Depends(get_db)
+):
+    """Delete all scan run history / audit trail."""
+    db.query(SourceRunResult).delete()
+    deleted_count = db.query(ScanRun).delete()
+    db.commit()
+    return {"status": "success", "message": "Scan history deleted successfully", "deleted_count": deleted_count}
+
+
 @router.post("/scans/trigger")
 def trigger_manual_scan(
     db: Session = Depends(get_db)

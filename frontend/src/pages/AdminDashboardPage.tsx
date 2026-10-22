@@ -8,7 +8,7 @@ import {
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
   FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Settings, LogOut,
-  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft
+  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft, Trash2
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
@@ -175,6 +175,24 @@ export const AdminDashboardPage: React.FC = () => {
       setScanMessage('Error executing crawler run.');
     } finally {
       setScanning(false);
+    }
+  };
+
+  const [clearingScans, setClearingScans] = useState(false);
+
+  const handleClearScans = async () => {
+    if (!window.confirm('Are you sure you want to delete all scan history? This action cannot be undone.')) {
+      return;
+    }
+    try {
+      setClearingScans(true);
+      await api.clearScanHistory();
+      setRecentScans([]);
+    } catch (err) {
+      console.error('Failed to clear scan history:', err);
+      setRecentScans([]);
+    } finally {
+      setClearingScans(false);
     }
   };
 
@@ -1323,8 +1341,20 @@ export const AdminDashboardPage: React.FC = () => {
               {/* Scans Table */}
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                 <div className="p-5 border-b border-slate-100 flex items-center justify-between">
-                  <h3 className="font-bold text-slate-900 text-sm">Recent Scraper Runs & Audit Trail</h3>
-                  <span className="text-xs text-blue-600 font-bold">14-Day Audit Log</span>
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-sm">Recent Scraper Runs & Audit Trail</h3>
+                    <span className="text-xs text-blue-600 font-bold">14-Day Audit Log</span>
+                  </div>
+                  <button
+                    onClick={handleClearScans}
+                    disabled={clearingScans || recentScans.length === 0}
+                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg border border-slate-200 hover:border-rose-200 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1.5"
+                    title="Delete Scan History"
+                    aria-label="Delete scan history"
+                  >
+                    <Trash2 className="w-4 h-4 text-rose-500" />
+                    <span className="hidden sm:inline text-rose-600 font-bold text-xs">Clear History</span>
+                  </button>
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-left text-xs text-slate-600">
@@ -1338,27 +1368,31 @@ export const AdminDashboardPage: React.FC = () => {
                         <th className="py-3 px-4">New</th>
                         <th className="py-3 px-4">Updated</th>
                         <th className="py-3 px-4">Expired</th>
-                        <th className="py-3 px-4">Duration</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                      {recentScans.map((scan, idx) => (
-                        <tr key={scan.id} className="hover:bg-slate-50/50">
-                          <td className="py-3 px-4 font-bold text-slate-400">#{idx + 1}</td>
-                          <td className="py-3 px-4 font-semibold text-slate-800">{scan.scan_time}</td>
-                          <td className="py-3 px-4">
-                            <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
-                              {scan.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 font-semibold">{scan.companies}</td>
-                          <td className="py-3 px-4 font-bold text-slate-900">{scan.jobs_found.toLocaleString()}</td>
-                          <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
-                          <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
-                          <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
-                          <td className="py-3 px-4 text-slate-400 font-medium">{scan.duration}</td>
+                      {recentScans.length === 0 ? (
+                        <tr>
+                          <td colSpan={8} className="py-6 text-center text-slate-400">No scans recorded yet.</td>
                         </tr>
-                      ))}
+                      ) : (
+                        recentScans.map((scan, idx) => (
+                          <tr key={scan.id} className="hover:bg-slate-50/50">
+                            <td className="py-3 px-4 font-bold text-slate-400">#{idx + 1}</td>
+                            <td className="py-3 px-4 font-semibold text-slate-800">{scan.scan_time}</td>
+                            <td className="py-3 px-4">
+                              <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                                {scan.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 font-semibold">{scan.companies}</td>
+                            <td className="py-3 px-4 font-bold text-slate-900">{scan.jobs_found.toLocaleString()}</td>
+                            <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
+                            <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
+                            <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -2173,13 +2207,25 @@ export const AdminDashboardPage: React.FC = () => {
                   <h3 className="font-bold text-slate-900 text-sm">Recent Automated & Manual Scans</h3>
                   <p className="text-[11px] text-slate-400">Live database crawler audit trail</p>
                 </div>
-                <button
-                  onClick={handleManualScan}
-                  disabled={scanning}
-                  className="text-xs text-blue-600 font-bold hover:underline"
-                >
-                  {scanning ? 'Running...' : 'Run Scan Now'}
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleClearScans}
+                    disabled={clearingScans || recentScans.length === 0}
+                    className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg border border-slate-200 hover:border-rose-200 transition disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1.5"
+                    title="Delete Scan History"
+                    aria-label="Delete scan history"
+                  >
+                    <Trash2 className="w-4 h-4 text-rose-500" />
+                    <span className="hidden sm:inline text-rose-600 font-bold text-xs">Clear History</span>
+                  </button>
+                  <button
+                    onClick={handleManualScan}
+                    disabled={scanning}
+                    className="text-xs text-blue-600 font-bold hover:underline cursor-pointer"
+                  >
+                    {scanning ? 'Running...' : 'Run Scan Now'}
+                  </button>
+                </div>
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full text-left text-xs text-slate-600">
@@ -2193,13 +2239,12 @@ export const AdminDashboardPage: React.FC = () => {
                       <th className="py-3 px-4">New</th>
                       <th className="py-3 px-4">Updated</th>
                       <th className="py-3 px-4">Expired</th>
-                      <th className="py-3 px-4">Duration</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {recentScans.length === 0 ? (
                       <tr>
-                        <td colSpan={9} className="py-6 text-center text-slate-400">No scans recorded yet.</td>
+                        <td colSpan={8} className="py-6 text-center text-slate-400">No scans recorded yet.</td>
                       </tr>
                     ) : (
                       recentScans.map((scan, idx) => (
@@ -2216,7 +2261,6 @@ export const AdminDashboardPage: React.FC = () => {
                           <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
                           <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
                           <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
-                          <td className="py-3 px-4 text-slate-400 font-medium">{scan.duration}</td>
                         </tr>
                       ))
                     )}
