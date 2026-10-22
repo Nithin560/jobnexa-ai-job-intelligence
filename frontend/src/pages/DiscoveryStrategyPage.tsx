@@ -52,7 +52,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
         <div className="absolute right-20 top-0 w-52 h-52 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
         
         <div className="relative z-10 space-y-4">
-          <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-bold px-3 py-1 rounded-full backdrop-blur-md">
+          <div className="inline-flex items-center gap-2 bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-bold px-3 py-1 rounded-full bg-slate-900 border border-blue-500/30">
             <Compass className="w-3.5 h-3.5 text-blue-400" />
             <span>JobNexa Engineering Blueprint • Dated 14 October 2026</span>
           </div>
@@ -188,7 +188,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
                   100-150 foundational Bengaluru employers categorized into Unicorns, GCCs, IT Services, and Tier-1 startups (e.g. Swiggy, Razorpay, Flipkart, Zerodha, Target BLR, Cisco, Qualcomm).
                 </p>
                 <div className="text-[11px] font-semibold text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  ⚡ 100% verified physical presence in Koramangala, Whitefield, E-City, Manyata, HSR.
+                  100% verified physical presence in Koramangala, Whitefield, E-City, Manyata, HSR.
                 </div>
               </div>
 
@@ -202,7 +202,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
                   Direct programmatic JSON endpoints provided by major Applicant Tracking Systems without API keys or browser overhead (Greenhouse, Lever, Ashby HQ, Workable, SmartRecruiters).
                 </p>
                 <div className="text-[11px] font-semibold text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  ⚡ Structured JSON output, direct application links, near-zero bandwidth footprint.
+                  Structured JSON output, direct application links, near-zero bandwidth footprint.
                 </div>
               </div>
 
@@ -216,7 +216,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
                   Syndicated public feeds and developer boards filtered exclusively for Bengaluru and Karnataka entities (e.g., Arbeitnow, Jobicy, open GitHub jobs repos).
                 </p>
                 <div className="text-[11px] font-semibold text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  ⚡ Canonical URL verification to trace original employer careers page.
+                  Canonical URL verification to trace original employer careers page.
                 </div>
               </div>
 
@@ -230,7 +230,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
                   Public open registries including Wikidata SPARQL queries for Karnataka IT employers, OpenStreetMap tech park nodes, and NASSCOM member directories.
                 </p>
                 <div className="text-[11px] font-semibold text-slate-500 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
-                  ⚡ Expands the company registry autonomously while maintaining zero cost.
+                  Expands the company registry autonomously while maintaining zero cost.
                 </div>
               </div>
 

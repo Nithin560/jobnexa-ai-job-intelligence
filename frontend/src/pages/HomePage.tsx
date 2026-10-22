@@ -129,7 +129,7 @@ export const HomePage: React.FC = () => {
         }
         if (res.started || res.status === 'scanning' || res.scan_info?.is_running) {
           setIsLiveScanning(true);
-          setScanBannerText('⚡ Scanning 120+ verified Bengaluru company career portals & ATS feeds in real-time...');
+          setScanBannerText('Scanning 120+ verified Bengaluru company career portals & ATS feeds in real-time...');
 
           pollInterval = setInterval(async () => {
             try {
@@ -138,7 +138,7 @@ export const HomePage: React.FC = () => {
               if (!status.is_running) {
                 clearInterval(pollInterval);
                 setIsLiveScanning(false);
-                setScanBannerText(`✅ Scan Complete: Verified ${status.totals?.jobs_found || totalJobs} live jobs across 120+ Bengaluru company career portals.`);
+                setScanBannerText(`Scan Complete: Verified ${status.totals?.jobs_found || totalJobs} live jobs across 120+ Bengaluru company career portals.`);
                 fetchJobs();
                 loadInsights();
                 setTimeout(() => setScanBannerText(null), 8000);
@@ -170,7 +170,7 @@ export const HomePage: React.FC = () => {
     }
     if (isLiveScanning) return;
     setIsLiveScanning(true);
-    setScanBannerText('⚡ Initiating live scan across 120+ verified Bengaluru company career portals & ATS feeds...');
+    setScanBannerText('Initiating live scan across 120+ verified Bengaluru company career portals & ATS feeds...');
     try {
       const res = await api.autoScanCheck(true);
       if (res.scan_info) {
@@ -183,7 +183,7 @@ export const HomePage: React.FC = () => {
           if (!status.is_running) {
             clearInterval(pollInterval);
             setIsLiveScanning(false);
-            setScanBannerText(`✅ Live scan completed: Verified ${status.totals?.jobs_found || totalJobs} live jobs across all Career Websites & Job Portals.`);
+            setScanBannerText(`Live scan completed: Verified ${status.totals?.jobs_found || totalJobs} live jobs across all Career Websites & Job Portals.`);
             fetchJobs();
             loadInsights();
             setTimeout(() => setScanBannerText(null), 8000);
@@ -408,7 +408,7 @@ export const HomePage: React.FC = () => {
       
       {/* Real-time Live Scanner Alert Banner */}
       {isLiveScanning ? (
-        <div className="bg-gradient-to-r from-blue-950 via-slate-900 to-indigo-950 border border-cyan-400/50 rounded-2xl p-4 text-white flex items-center justify-between shadow-xl backdrop-blur-md animate-pulse">
+        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white flex items-center justify-between shadow-md">
           <div className="flex items-center gap-3.5">
             <span className="relative flex h-3.5 w-3.5 shrink-0">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-80"></span>
@@ -432,7 +432,7 @@ export const HomePage: React.FC = () => {
           </div>
         </div>
       ) : scanBannerText ? (
-        <div className="bg-emerald-950/80 border border-emerald-500/40 rounded-2xl p-3.5 px-4 text-white flex items-center justify-between shadow-md backdrop-blur-sm">
+        <div className="bg-slate-900 border border-emerald-600/60 rounded-2xl p-3.5 px-4 text-white flex items-center justify-between shadow-md">
           <div className="flex items-center gap-2.5">
             <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
             <span className="text-xs sm:text-sm font-semibold text-emerald-200">
@@ -465,7 +465,7 @@ export const HomePage: React.FC = () => {
         {/* Compact Layout */}
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="max-w-xl space-y-2.5">
-            <div className="inline-flex items-center gap-1.5 bg-blue-600/40 backdrop-blur-md text-blue-200 border border-blue-400/30 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
+            <div className="inline-flex items-center gap-1.5 bg-blue-950/80 text-blue-200 border border-blue-800 text-[11px] font-bold px-2.5 py-0.5 rounded-full shadow-xs">
               <Sparkles className="w-3 h-3 text-blue-300" />
               <span>JobNexa • Bengaluru IT Discovery & Engineering Intelligence</span>
             </div>
@@ -480,16 +480,16 @@ export const HomePage: React.FC = () => {
                 className="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold px-3 py-1.5 rounded-xl border border-blue-400/40 shadow-sm flex items-center gap-1.5 transition"
               >
                 <Compass className="w-3.5 h-3.5" />
-                <span>📘 Read Discovery Blueprint</span>
+                <span>Read Discovery Blueprint</span>
               </Link>
-              <span className="bg-slate-900/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200 shadow-2xs">📍 Koramangala & HSR</span>
-              <span className="bg-slate-900/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200 shadow-2xs">📍 Whitefield & Bellandur</span>
-              <span className="bg-slate-900/50 px-2.5 py-1 rounded-lg backdrop-blur-md border border-white/20 text-[11px] font-semibold text-slate-200 shadow-2xs">⚡ 100% Direct Apply</span>
+              <span className="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-[11px] font-semibold text-slate-200 shadow-2xs">Koramangala & HSR</span>
+              <span className="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-[11px] font-semibold text-slate-200 shadow-2xs">Whitefield & Bellandur</span>
+              <span className="bg-slate-900 px-2.5 py-1 rounded-lg border border-slate-700 text-[11px] font-semibold text-slate-200 shadow-2xs">100% Direct Apply</span>
             </div>
           </div>
 
           {/* Compact Scan Status Widget on the Right */}
-          <div className="w-full sm:w-[280px] md:w-[280px] shrink-0 bg-slate-900/60 backdrop-blur-xl border border-white/25 p-3.5 rounded-xl space-y-2.5 shadow-lg">
+          <div className="w-full sm:w-[280px] md:w-[280px] shrink-0 bg-slate-900 border border-slate-700/80 p-3.5 rounded-xl space-y-2.5 shadow-lg">
             <div className="flex items-center border-b border-white/20 pb-2 text-[11px]">
               <span className="font-bold text-emerald-400 flex items-center gap-1.5">
                 <span className={`w-2 h-2 rounded-full ${isLiveScanning ? 'bg-cyan-400 animate-ping' : 'bg-emerald-400 animate-pulse'}`}></span>
@@ -521,7 +521,7 @@ export const HomePage: React.FC = () => {
                 ) : (
                   <>
                     <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                    <span>⚡ Scan All Career Portals Now</span>
+                    <span>Scan All Career Portals Now</span>
                   </>
                 )}
               </button>
@@ -629,26 +629,25 @@ export const HomePage: React.FC = () => {
                 Tech Hubs:
               </span>
               {[
-                { id: 'all', label: 'All Bengaluru & Karnataka', icon: '🏢' },
-                { id: 'koramangala', label: 'Koramangala & HSR', icon: '📍' },
-                { id: 'whitefield', label: 'Whitefield & Bellandur', icon: '📍' },
-                { id: 'electronic_city', label: 'Electronic City', icon: '📍' },
-                { id: 'manyata', label: 'Manyata & North BLR', icon: '📍' },
-                { id: 'indiranagar', label: 'Indiranagar & Central', icon: '📍' },
-                { id: 'remote', label: 'Remote / Hybrid (BLR)', icon: '🏠' },
+                { id: 'all', label: 'All Bengaluru & Karnataka' },
+                { id: 'koramangala', label: 'Koramangala & HSR' },
+                { id: 'whitefield', label: 'Whitefield & Bellandur' },
+                { id: 'electronic_city', label: 'Electronic City' },
+                { id: 'manyata', label: 'Manyata & North BLR' },
+                { id: 'indiranagar', label: 'Indiranagar & Central' },
+                { id: 'remote', label: 'Remote / Hybrid (BLR)' },
               ].map((loc) => {
                 const isActive = activeLocation === loc.id;
                 return (
                   <button
                     key={loc.id}
                     onClick={() => handleSelectTechHub(loc.id)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer ${
+                    className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                       isActive
                         ? 'bg-blue-600 text-white shadow-xs'
                         : 'bg-slate-50 text-slate-600 hover:bg-slate-100 hover:text-slate-900 border border-slate-200/60'
                     }`}
                   >
-                    <span>{loc.icon}</span>
                     <span>{loc.label}</span>
                   </button>
                 );
@@ -918,22 +917,22 @@ export const HomePage: React.FC = () => {
                 <div>
                   <h2 className="text-lg font-black text-slate-900">
                     {activeLocation === 'koramangala'
-                      ? (activeExpTab === 'fresher' ? '🚀 Fresher Openings in Koramangala & HSR' : activeExpTab === 'experienced' ? '🚀 Experienced Openings in Koramangala & HSR' : '📍 Tech Jobs in Koramangala & HSR Layout')
+                      ? (activeExpTab === 'fresher' ? 'Fresher Openings in Koramangala & HSR' : activeExpTab === 'experienced' ? 'Experienced Openings in Koramangala & HSR' : 'Tech Jobs in Koramangala & HSR Layout')
                       : activeLocation === 'whitefield'
-                      ? (activeExpTab === 'fresher' ? '🏢 Fresher Openings in Whitefield & Bellandur' : activeExpTab === 'experienced' ? '🏢 Experienced Openings in Whitefield & Bellandur' : '📍 Tech Jobs in Whitefield & Bellandur (ORR)')
+                      ? (activeExpTab === 'fresher' ? 'Fresher Openings in Whitefield & Bellandur' : activeExpTab === 'experienced' ? 'Experienced Openings in Whitefield & Bellandur' : 'Tech Jobs in Whitefield & Bellandur (ORR)')
                       : activeLocation === 'electronic_city'
-                      ? (activeExpTab === 'fresher' ? '⚡ Fresher Openings in Electronic City' : activeExpTab === 'experienced' ? '⚡ Experienced Openings in Electronic City' : '📍 Tech Jobs in Electronic City Tech Parks')
+                      ? (activeExpTab === 'fresher' ? 'Fresher Openings in Electronic City' : activeExpTab === 'experienced' ? 'Experienced Openings in Electronic City' : 'Tech Jobs in Electronic City Tech Parks')
                       : activeLocation === 'manyata'
-                      ? (activeExpTab === 'fresher' ? '🌐 Fresher Openings in Manyata & North BLR' : activeExpTab === 'experienced' ? '🌐 Experienced Openings in Manyata & North BLR' : '📍 Tech Jobs in Manyata & North Bengaluru')
+                      ? (activeExpTab === 'fresher' ? 'Fresher Openings in Manyata & North BLR' : activeExpTab === 'experienced' ? 'Experienced Openings in Manyata & North BLR' : 'Tech Jobs in Manyata & North Bengaluru')
                       : activeLocation === 'indiranagar'
-                      ? (activeExpTab === 'fresher' ? '💼 Fresher Openings in Indiranagar & Central' : activeExpTab === 'experienced' ? '💼 Experienced Openings in Indiranagar & Central' : '📍 Tech Jobs in Indiranagar & Central Bengaluru')
+                      ? (activeExpTab === 'fresher' ? 'Fresher Openings in Indiranagar & Central' : activeExpTab === 'experienced' ? 'Experienced Openings in Indiranagar & Central' : 'Tech Jobs in Indiranagar & Central Bengaluru')
                       : activeLocation === 'remote'
-                      ? '🏠 Remote & Hybrid Tech Jobs in Karnataka'
+                      ? 'Remote & Hybrid Tech Jobs in Karnataka'
                       : activeExpTab === 'fresher' 
-                      ? '🎓 Fresher Openings in Bengaluru (0 - 1 Years)' 
+                      ? 'Fresher Openings in Bengaluru (0 - 1 Years)' 
                       : activeExpTab === 'experienced' 
-                      ? '💼 Experienced Openings in Bengaluru (1+ Years)' 
-                      : '🏢 Verified Jobs in Bengaluru & Karnataka'}
+                      ? 'Experienced Openings in Bengaluru (1+ Years)' 
+                      : 'Verified Jobs in Bengaluru & Karnataka'}
                   </h2>
                   <p className="text-xs text-slate-500 font-medium">
                     Showing {totalJobs === 0 ? 0 : (page - 1) * pageSize + 1}-{Math.min(page * pageSize, totalJobs)} of {totalJobs.toLocaleString()} jobs

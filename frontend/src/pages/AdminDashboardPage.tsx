@@ -1001,7 +1001,7 @@ export const AdminDashboardPage: React.FC = () => {
                               )}
                             </td>
                             <td className="py-3.5 px-4 font-semibold text-slate-800">
-                              {u.years_experience !== null && u.years_experience !== undefined ? `${u.years_experience} years` : '—'}
+                              {u.years_experience !== null && u.years_experience !== undefined ? `${u.years_experience} years` : '-'}
                             </td>
                             <td className="py-3.5 px-4">
                               {u.is_active ? (
@@ -1813,8 +1813,8 @@ export const AdminDashboardPage: React.FC = () => {
               </div>
               <div className="text-2xl font-black text-slate-900">{overview?.total_jobs.toLocaleString() || '472'}</div>
               <div className="text-[10px] font-semibold text-slate-500 mt-1 flex items-center justify-between">
-                <span className="text-indigo-600 font-bold">🏢 {overview?.career_portal_jobs ?? 393} Portals</span>
-                <span className="text-emerald-600 font-bold">🌐 {overview?.job_portal_jobs ?? 79} Platforms</span>
+                <span className="text-indigo-600 font-bold">{overview?.career_portal_jobs ?? 393} Portals</span>
+                <span className="text-emerald-600 font-bold">{overview?.job_portal_jobs ?? 79} Platforms</span>
               </div>
             </div>
 
@@ -2303,11 +2303,11 @@ export const AdminDashboardPage: React.FC = () => {
                           <td className="py-3 px-4">
                             {job.source_type === 'job_portal' ? (
                               <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-100 flex items-center gap-1 w-fit">
-                                🌐 {job.source_name || 'Job Platform'}
+                                {job.source_name || 'Job Platform'}
                               </span>
                             ) : (
                               <span className="bg-indigo-50 text-indigo-700 text-[10px] font-bold px-2 py-0.5 rounded border border-indigo-100 flex items-center gap-1 w-fit">
-                                🏢 {job.source_name || 'Career Portal'}
+                                {job.source_name || 'Career Portal'}
                               </span>
                             )}
                           </td>

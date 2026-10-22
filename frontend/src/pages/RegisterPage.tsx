@@ -172,7 +172,7 @@ export const RegisterPage: React.FC = () => {
       <div className="absolute inset-0 bg-slate-900/15" />
 
       {/* Registration Card with Frosted Glass Blur Background */}
-      <div className="relative z-10 max-w-md w-full bg-white/85 backdrop-blur-xl rounded-3xl border border-white/70 shadow-2xl shadow-slate-950/30 p-8 space-y-6">
+      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-8 space-y-6">
         
         {/* Back Link */}
         <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">

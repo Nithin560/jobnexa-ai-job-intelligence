@@ -47,15 +47,15 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
 
   const companyTypeOptions = [
     { label: 'All Categories', count: null, val: '' },
-    { label: '🚀 Product & Software', count: null, val: 'Product & Software' },
-    { label: '🏢 IT Services & Consulting', count: null, val: 'IT Services & Consulting' },
-    { label: '☁️ SaaS & Cloud', count: null, val: 'SaaS & Cloud' },
-    { label: '🔒 Cybersecurity', count: null, val: 'Cybersecurity' },
-    { label: '🤖 AI & Data Platforms', count: null, val: 'AI & Data' },
-    { label: '💳 Fintech Technology', count: null, val: 'Fintech Technology' },
-    { label: '🎮 Gaming & Media Tech', count: null, val: 'Gaming & Media Tech' },
-    { label: '⚡ Semiconductor & Hardware', count: null, val: 'Semiconductor & Hardware' },
-    { label: '🌐 GCC / Engineering Centre', count: null, val: 'GCC / Engineering Centre' },
+    { label: 'Product & Software', count: null, val: 'Product & Software' },
+    { label: 'IT Services & Consulting', count: null, val: 'IT Services & Consulting' },
+    { label: 'SaaS & Cloud', count: null, val: 'SaaS & Cloud' },
+    { label: 'Cybersecurity', count: null, val: 'Cybersecurity' },
+    { label: 'AI & Data Platforms', count: null, val: 'AI & Data' },
+    { label: 'Fintech Technology', count: null, val: 'Fintech Technology' },
+    { label: 'Gaming & Media Tech', count: null, val: 'Gaming & Media Tech' },
+    { label: 'Semiconductor & Hardware', count: null, val: 'Semiconductor & Hardware' },
+    { label: 'GCC / Engineering Centre', count: null, val: 'GCC / Engineering Centre' },
   ];
 
   const jobTypeOptions = [
@@ -88,8 +88,8 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         <div className="space-y-2 text-sm text-slate-600">
           {[
             { label: 'All Sources', val: '' },
-            { label: '🏢 Company Career Sites', val: 'career_portal' },
-            { label: '🌐 Job Platforms', val: 'job_portal' },
+            { label: 'Company Career Sites', val: 'career_portal' },
+            { label: 'Job Platforms', val: 'job_portal' },
           ].map((src) => (
             <label key={src.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
               <input

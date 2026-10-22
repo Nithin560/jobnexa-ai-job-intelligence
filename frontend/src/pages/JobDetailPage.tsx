@@ -59,7 +59,7 @@ export const JobDetailPage: React.FC = () => {
       {/* Expired Warning Banner if listing is expired */}
       {isExpired && (
         <div className="bg-amber-50 border border-amber-200 text-amber-900 p-4 rounded-2xl flex items-center gap-3.5 shadow-xs">
-          <div className="text-2xl shrink-0">⚠️</div>
+          <div className="text-sm font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-lg shrink-0">Expired</div>
           <div>
             <div className="font-bold text-sm text-amber-900">Position Expired / Application Closed</div>
             <div className="text-xs text-amber-700 font-medium mt-0.5">
@@ -124,11 +124,11 @@ export const JobDetailPage: React.FC = () => {
                 </span>
                 {job.source_type === 'job_portal' ? (
                   <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                    🌐 {job.source_name || 'Job Platform'}
+                    {job.source_name || 'Job Platform'}
                   </span>
                 ) : (
                   <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1">
-                    🏢 {job.source_name || 'Company Career Site'}
+                    {job.source_name || 'Company Career Site'}
                   </span>
                 )}
               </div>
@@ -145,7 +145,7 @@ export const JobDetailPage: React.FC = () => {
                   <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
                   <span className="text-slate-500">Location:</span>
                   <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
-                    📍 {job.location}
+                    {job.location}
                   </span>
                 </span>
               </div>

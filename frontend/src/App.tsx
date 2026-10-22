@@ -42,7 +42,7 @@ function PlatformLayout({ children }: { children: React.ReactNode }) {
       <footer className="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
         <div className="max-w-[1600px] mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
           <div>
-            © 2026 <strong>JobNexa</strong> — Bengaluru IT Company Discovery & Engineering Job Intelligence.
+            © 2026 <strong>JobNexa</strong> • Bengaluru IT Company Discovery & Engineering Job Intelligence.
           </div>
           <div className="flex items-center gap-4 flex-wrap justify-center">
             <Link to="/strategy" className="text-blue-600 font-semibold hover:underline">

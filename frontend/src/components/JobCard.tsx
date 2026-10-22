@@ -86,7 +86,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               </Link>
               {isExpired ? (
                 <span className="text-amber-700 bg-amber-50 border border-amber-200 text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 shrink-0">
-                  ⚠️ Expired on Career Portal
+                  Expired on Career Portal
                 </span>
               ) : job.is_new ? (
                 <span className="text-emerald-600 text-xs font-semibold flex items-center gap-1 shrink-0">
@@ -116,11 +116,11 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               </span>
               {job.source_type === 'job_portal' ? (
                 <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1 shrink-0">
-                  🌐 {job.source_name || 'Job Platform'}
+                  {job.source_name || 'Job Platform'}
                 </span>
               ) : (
                 <span className="border border-slate-200 text-slate-500 text-xs px-2 py-0.5 rounded-md font-medium flex items-center gap-1 shrink-0">
-                  🏢 {job.source_name || 'Company Career Site'}
+                  {job.source_name || 'Company Career Site'}
                 </span>
               )}
             </div>
@@ -137,7 +137,7 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                 <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
                 <span className="text-slate-500">Location:</span>
                 <span className="font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/80 px-2 py-0.5 rounded-md text-[11px] inline-flex items-center gap-1 shadow-2xs">
-                  📍 {job.location}
+                  {job.location}
                 </span>
               </span>
             </div>
@@ -148,19 +148,19 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                 <Clock className="w-3.5 h-3.5 text-slate-400" />
                 {job.experience_min === 0 && job.experience_max <= 1 ? (
                   <span className="font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded-md text-[11px]">
-                    🎓 Fresher ({job.experience_label})
+                    Fresher ({job.experience_label})
                   </span>
                 ) : job.experience_min >= 8 ? (
                   <span className="font-bold text-purple-700 bg-purple-50 border border-purple-200/80 px-2 py-0.5 rounded-md text-[11px]">
-                    💼 Lead / Senior ({job.experience_label})
+                    Lead / Senior ({job.experience_label})
                   </span>
                 ) : job.experience_min >= 5 ? (
                   <span className="font-bold text-violet-700 bg-violet-50 border border-violet-200/80 px-2 py-0.5 rounded-md text-[11px]">
-                    💼 Senior ({job.experience_label})
+                    Senior ({job.experience_label})
                   </span>
                 ) : (
                   <span className="font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-md text-[11px]">
-                    💼 {job.experience_label}
+                    {job.experience_label}
                   </span>
                 )}
               </span>

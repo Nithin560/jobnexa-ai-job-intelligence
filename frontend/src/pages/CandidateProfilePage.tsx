@@ -149,7 +149,7 @@ export const CandidateProfilePage: React.FC = () => {
                 <span className={`text-[10px] font-black px-2 py-0.5 rounded-full ${
                   exp <= 1 ? 'bg-blue-100 text-blue-700 border border-blue-200' : 'bg-indigo-100 text-indigo-700 border border-indigo-200'
                 }`}>
-                  {exp <= 1 ? '🎓 Fresher (0 - 1 Yrs)' : '💼 Experienced (1+ Yrs)'}
+                  {exp <= 1 ? 'Fresher (0 - 1 Yrs)' : 'Experienced (1+ Yrs)'}
                 </span>
               </div>
               <input
@@ -165,8 +165,8 @@ export const CandidateProfilePage: React.FC = () => {
               />
               <p className="text-[11px] text-slate-500 mt-1">
                 {exp <= 1 
-                  ? '✨ Saving will set your account to Fresher jobs (0 - 1 years, 54 roles).'
-                  : '✨ Saving will set your account to Experienced jobs (1+ years, 418 roles).'}
+                  ? 'Saving will set your account to Fresher jobs (0 - 1 years).'
+                  : 'Saving will set your account to Experienced jobs (1+ years).'}
               </p>
             </div>
             <div>
