@@ -44,6 +44,85 @@ router = APIRouter()
 
 
 
+class TechHubScanRequest(BaseModel):
+    hub_id: str
+
+
+TECH_HUB_CATALOG: Dict[str, Dict[str, Any]] = {
+    "whitefield": {
+        "name": "Whitefield & Bellandur",
+        "tech_parks": [
+            "ITPB (International Tech Park Bengaluru)",
+            "Prestige Tech Park (ORR)",
+            "EcoSpace Business Park (Bellandur)",
+            "Cessna Business Park (Kadubeesanahalli)",
+            "EPIP Zone (Whitefield)",
+            "Bagmane Constellation Tech Park"
+        ],
+        "match_terms": ["whitefield", "bellandur", "outer ring road", "orr", "kadubeesanahalli", "epip", "ecospace", "devarabeesanahalli", "mahadevapura", "hoodi"],
+    },
+    "koramangala": {
+        "name": "Koramangala & HSR",
+        "tech_parks": [
+            "Koramangala Tech Quarter",
+            "HSR Startup Corridor",
+            "Salarpuria Sattva Oasis",
+            "BHIVE Tech Workspace Hub",
+            "Sony World Signal Innovation Hub"
+        ],
+        "match_terms": ["koramangala", "hsr", "hsr layout"],
+    },
+    "electronic_city": {
+        "name": "Electronic City",
+        "tech_parks": [
+            "Infosys City (E-City Phase 1)",
+            "Wipro Campus (E-City Phase 1)",
+            "Cyber Park (Electronic City)",
+            "Velankani Tech Park",
+            "Siemens Tech Center",
+            "TCS Think Campus"
+        ],
+        "match_terms": ["electronic city", "electronics city", "e-city", "jigani", "hosur road"],
+    },
+    "manyata": {
+        "name": "Manyata & North BLR",
+        "tech_parks": [
+            "Manyata Embassy Business Park (Hebbal/Nagavara)",
+            "Kirloskar Business Park (Hebbal)",
+            "RMZ Galleria Tech Center",
+            "L&T Tech Park (North Bengaluru)"
+        ],
+        "match_terms": ["manyata", "hebbal", "nagavara", "north blr"],
+    },
+    "indiranagar": {
+        "name": "Indiranagar & Central",
+        "tech_parks": [
+            "Embassy GolfLinks Business Park (EGL / Domlur)",
+            "Bagmane Tech Park (CV Raman Nagar)",
+            "Divyasree Chambers (Central Bengaluru)",
+            "Domlur Tech Corridor"
+        ],
+        "match_terms": ["indiranagar", "domlur", "egl", "embassy golflinks", "cv raman nagar", "bagmane tech park", "cubbon"],
+    },
+    "remote": {
+        "name": "Remote / Hybrid (BLR)",
+        "tech_parks": [
+            "Bengaluru Remote-First Tech Hubs",
+            "Distributed Hybrid Engineering Centers",
+            "Karnataka Flexible Work Hubs"
+        ],
+        "match_terms": ["remote", "hybrid"],
+    },
+    "all": {
+        "name": "All Bengaluru & Karnataka",
+        "tech_parks": [
+            "120+ Verified Bengaluru IT Tech Parks, GCCs & Corporate Campuses"
+        ],
+        "match_terms": ["bengaluru", "bangalore", "blr", "karnataka"],
+    },
+}
+
+
 @router.get("", response_model=JobListPaginatedResponse)
 def list_jobs(
     q: Optional[str] = Query(None, description="Search query by title, company, or keyword"),
@@ -80,43 +159,19 @@ def list_jobs(
     # Location Filter (Bangalore Tech Hubs & Karnataka State)
     if location and location.lower() != "all":
         loc_low = location.lower().strip()
-        if loc_low in ["bengaluru", "bangalore", "blr", "karnataka"]:
+        if loc_low in TECH_HUB_CATALOG:
+            hub = TECH_HUB_CATALOG[loc_low]
+            if loc_low in ["remote", "hybrid"]:
+                query = query.filter(Job.work_mode.in_(["Remote", "Hybrid"]))
+            else:
+                query = query.filter(or_(*[Job.location.ilike(f"%{term}%") for term in hub["match_terms"]]))
+        elif loc_low in ["bengaluru", "bangalore", "blr", "karnataka"]:
             query = query.filter(or_(
                 Job.location.ilike("%bengaluru%"),
                 Job.location.ilike("%bangalore%"),
                 Job.location.ilike("%blr%"),
                 Job.location.ilike("%karnataka%")
             ))
-        elif loc_low in ["koramangala", "hsr", "hsr layout"]:
-            query = query.filter(or_(
-                Job.location.ilike("%koramangala%"),
-                Job.location.ilike("%hsr%")
-            ))
-        elif loc_low in ["whitefield", "bellandur", "outer ring road", "orr"]:
-            query = query.filter(or_(
-                Job.location.ilike("%whitefield%"),
-                Job.location.ilike("%bellandur%"),
-                Job.location.ilike("%outer ring road%"),
-                Job.location.ilike("%orr%")
-            ))
-        elif loc_low in ["electronic_city", "electronic city", "e-city"]:
-            query = query.filter(or_(
-                Job.location.ilike("%electronic city%"),
-                Job.location.ilike("%electonic city%")
-            ))
-        elif loc_low in ["manyata", "hebbal", "north_blr"]:
-            query = query.filter(or_(
-                Job.location.ilike("%manyata%"),
-                Job.location.ilike("%hebbal%")
-            ))
-        elif loc_low in ["indiranagar", "domlur", "egl", "central"]:
-            query = query.filter(or_(
-                Job.location.ilike("%indiranagar%"),
-                Job.location.ilike("%domlur%"),
-                Job.location.ilike("%egl%")
-            ))
-        elif loc_low in ["remote", "hybrid"]:
-            query = query.filter(Job.work_mode.in_(["Remote", "Hybrid"]))
         else:
             query = query.filter(Job.location.ilike(f"%{location}%"))
 
@@ -617,83 +672,6 @@ def trigger_auto_scan_on_site_open(force: bool = False):
 
 
 
-class TechHubScanRequest(BaseModel):
-    hub_id: str
-
-
-TECH_HUB_CATALOG: Dict[str, Dict[str, Any]] = {
-    "whitefield": {
-        "name": "Whitefield & Bellandur",
-        "tech_parks": [
-            "ITPB (International Tech Park Bengaluru)",
-            "Prestige Tech Park (ORR)",
-            "EcoSpace Business Park (Bellandur)",
-            "Cessna Business Park (Kadubeesanahalli)",
-            "EPIP Zone (Whitefield)",
-            "Bagmane Constellation Tech Park"
-        ],
-        "match_terms": ["whitefield", "bellandur", "outer ring road", "orr", "kadubeesanahalli", "epip", "ecospace", "devarabeesanahalli", "mahadevapura", "hoodi"],
-    },
-    "koramangala": {
-        "name": "Koramangala & HSR",
-        "tech_parks": [
-            "Koramangala Tech Quarter",
-            "HSR Startup Corridor",
-            "Salarpuria Sattva Oasis",
-            "BHIVE Tech Workspace Hub",
-            "Sony World Signal Innovation Hub"
-        ],
-        "match_terms": ["koramangala", "hsr", "hsr layout"],
-    },
-    "electronic_city": {
-        "name": "Electronic City",
-        "tech_parks": [
-            "Infosys City (E-City Phase 1)",
-            "Wipro Campus (E-City Phase 1)",
-            "Cyber Park (Electronic City)",
-            "Velankani Tech Park",
-            "Siemens Tech Center",
-            "TCS Think Campus"
-        ],
-        "match_terms": ["electronic city", "electronics city", "e-city", "jigani", "hosur road"],
-    },
-    "manyata": {
-        "name": "Manyata & North BLR",
-        "tech_parks": [
-            "Manyata Embassy Business Park (Hebbal/Nagavara)",
-            "Kirloskar Business Park (Hebbal)",
-            "RMZ Galleria Tech Center",
-            "L&T Tech Park (North Bengaluru)"
-        ],
-        "match_terms": ["manyata", "hebbal", "nagavara", "north blr"],
-    },
-    "indiranagar": {
-        "name": "Indiranagar & Central",
-        "tech_parks": [
-            "Embassy GolfLinks Business Park (EGL / Domlur)",
-            "Bagmane Tech Park (CV Raman Nagar)",
-            "Divyasree Chambers (Central Bengaluru)",
-            "Domlur Tech Corridor"
-        ],
-        "match_terms": ["indiranagar", "domlur", "egl", "embassy golflinks", "cv raman nagar", "bagmane tech park", "cubbon"],
-    },
-    "remote": {
-        "name": "Remote / Hybrid (BLR)",
-        "tech_parks": [
-            "Bengaluru Remote-First Tech Hubs",
-            "Distributed Hybrid Engineering Centers",
-            "Karnataka Flexible Work Hubs"
-        ],
-        "match_terms": ["remote", "hybrid"],
-    },
-    "all": {
-        "name": "All Bengaluru & Karnataka",
-        "tech_parks": [
-            "120+ Verified Bengaluru IT Tech Parks, GCCs & Corporate Campuses"
-        ],
-        "match_terms": ["bengaluru", "bangalore", "blr", "karnataka"],
-    },
-}
 
 
 @router.post("/scan-hub")
