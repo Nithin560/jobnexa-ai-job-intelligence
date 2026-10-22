@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
-import { TopLoadingBar } from '../components/TopLoadingBar';
+import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { AdminOverview, Job, AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse } from '../types';
 import { 
   Briefcase, Building2, Link2, MapPin, Sparkles, Clock, Shield, Play, Plus, Download, 
@@ -68,7 +68,13 @@ export const AdminDashboardPage: React.FC = () => {
   const [scanning, setScanning] = useState(false);
   const [loading, setLoading] = useState(true);
   const [scanMessage, setScanMessage] = useState('');
+  const { triggerLoading } = useLoadingBar();
   const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
+
+  const handleTabChange = (tabName: string) => {
+    triggerLoading(300);
+    setActiveTab(tabName);
+  };
 
   // User Intelligence State
   const [adminUsersData, setAdminUsersData] = useState<AdminUsersResponse | null>(null);
@@ -308,7 +314,7 @@ export const AdminDashboardPage: React.FC = () => {
             return (
               <button
                 key={item.label}
-                onClick={() => setActiveTab(item.label)}
+                onClick={() => handleTabChange(item.label)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition ${
                   isActive
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-500/20'
@@ -358,7 +364,7 @@ export const AdminDashboardPage: React.FC = () => {
 
             {/* 2. Add Job Source */}
             <button
-              onClick={() => setActiveTab('Job Sources')}
+              onClick={() => handleTabChange('Job Sources')}
               className="w-full py-2 px-3 bg-slate-800/80 hover:bg-slate-800 text-slate-300 hover:text-white font-semibold text-xs rounded-xl transition flex items-center gap-2 border border-slate-700/60"
               title="Add Job Source"
             >
@@ -436,8 +442,8 @@ export const AdminDashboardPage: React.FC = () => {
 
             {/* 2. Registered & Active Users Navigation Badge */}
             <button
-              onClick={() => setActiveTab('Users')}
-              className={`shrink-0 whitespace-nowrap hidden sm:inline-flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl border transition shadow-2xs ${
+              onClick={() => handleTabChange('Users')}
+              className={`shrink-0 whitespace-nowrap hidden sm:inline-flex items-center gap-2 text-xs px-3.5 py-2 rounded-xl border transition shadow-2xs cursor-pointer ${
                 activeTab === 'Users'
                   ? 'bg-blue-600 text-white border-blue-600 shadow-sm'
                   : 'bg-blue-50/80 hover:bg-blue-100 text-blue-900 border-blue-200'
@@ -691,8 +697,8 @@ export const AdminDashboardPage: React.FC = () => {
             <div className="flex items-center gap-2">
               {activeTab !== 'Dashboard' ? (
                 <button
-                  onClick={() => setActiveTab('Dashboard')}
-                  className="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition"
+                  onClick={() => handleTabChange('Dashboard')}
+                  className="flex items-center gap-2 px-3.5 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition cursor-pointer"
                 >
                   <LayoutDashboard className="w-3.5 h-3.5 text-blue-600" />
                   <span>Back to Dashboard</span>
@@ -700,15 +706,15 @@ export const AdminDashboardPage: React.FC = () => {
               ) : (
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setActiveTab('Analytics')}
-                    className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-xl text-xs font-bold text-blue-700 shadow-sm hover:bg-blue-100 transition"
+                    onClick={() => handleTabChange('Analytics')}
+                    className="flex items-center gap-2 px-3 py-2 bg-blue-50 border border-blue-200 rounded-xl text-xs font-bold text-blue-700 shadow-sm hover:bg-blue-100 transition cursor-pointer"
                   >
                     <BarChart3 className="w-3.5 h-3.5 text-blue-600" />
                     <span>Analytics</span>
                   </button>
                   <button
-                    onClick={() => setActiveTab('Users')}
-                    className="flex items-center gap-2 px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-200 transition"
+                    onClick={() => handleTabChange('Users')}
+                    className="flex items-center gap-2 px-3 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-200 transition cursor-pointer"
                   >
                     <Users className="w-3.5 h-3.5 text-slate-600" />
                     <span>Users</span>

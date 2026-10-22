@@ -7,10 +7,11 @@ import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
 import { formatJobRealTime } from '../components/JobCard';
 import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { JobDetailSkeleton } from '../components/Skeletons/JobDetailSkeleton';
-import { TopLoadingBar } from '../components/TopLoadingBar';
+import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
+  const { triggerLoading } = useLoadingBar();
   const [job, setJob] = useState<Job | null>(null);
   const [activeTab, setActiveTab] = useState<'details' | 'match' | 'company'>('match');
   const [loading, setLoading] = useState(true);
@@ -211,8 +212,11 @@ export const JobDetailPage: React.FC = () => {
           {['details', 'match', 'company'].map((tab) => (
             <button
               key={tab}
-              onClick={() => setActiveTab(tab as any)}
-              className={`font-bold text-sm pb-3 border-b-2 capitalize transition ${activeTab === tab ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-900'}`}
+              onClick={() => {
+                triggerLoading(300);
+                setActiveTab(tab as any);
+              }}
+              className={`font-bold text-sm pb-3 border-b-2 capitalize transition cursor-pointer ${activeTab === tab ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-900'}`}
             >
               {tab === 'match' ? 'Match Analysis' : tab === 'details' ? 'Job Details' : 'Company Info'}
             </button>

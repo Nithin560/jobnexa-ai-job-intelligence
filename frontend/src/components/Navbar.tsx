@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Briefcase, Search, MapPin, User, LogOut, Shield, Compass } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
+import { useLoadingBar } from './TopLoadingBar';
 
 interface NavbarProps {
   onOpenAuth: () => void;
@@ -10,6 +11,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { triggerLoading } = useLoadingBar();
   const authenticated = isUserAuthenticated();
   const userRole = sessionStorage.getItem('user_role');
   const userEmail = sessionStorage.getItem('user_email');
@@ -83,17 +85,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
         {/* Navigation Links - ONLY visible for authenticated users inside the platform */}
         {authenticated && !isAuthPage && (
           <nav className="hidden lg:flex items-center gap-4 xl:gap-5 text-sm font-medium text-slate-600 mr-4 xl:mr-6">
-            <Link to="/" className={`hover:text-blue-600 transition ${location.pathname === '/' ? 'text-blue-600 font-semibold' : ''}`}>Home</Link>
-            <Link to="/jobs" className={`hover:text-blue-600 transition ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
-            <Link to="/strategy" className={`hover:text-blue-600 transition flex items-center gap-1.5 ${location.pathname === '/strategy' ? 'text-blue-600 font-bold' : ''}`}>
+            <Link to="/" onClick={() => triggerLoading(450)} className={`hover:text-blue-600 transition ${location.pathname === '/' ? 'text-blue-600 font-semibold' : ''}`}>Home</Link>
+            <Link to="/jobs" onClick={() => triggerLoading(450)} className={`hover:text-blue-600 transition ${location.pathname === '/jobs' ? 'text-blue-600 font-semibold' : ''}`}>Jobs</Link>
+            <Link to="/strategy" onClick={() => triggerLoading(450)} className={`hover:text-blue-600 transition flex items-center gap-1.5 ${location.pathname === '/strategy' ? 'text-blue-600 font-bold' : ''}`}>
               <Compass className="w-4 h-4 text-blue-600" />
               <span>Blueprint</span>
             </Link>
-            <Link to="/dashboard" className={`hover:text-blue-600 transition ${location.pathname === '/dashboard' ? 'text-blue-600 font-semibold' : ''}`}>Dashboard</Link>
-            <Link to="/profile" className={`hover:text-blue-600 transition ${location.pathname === '/profile' ? 'text-blue-600 font-semibold' : ''}`}>My Profile</Link>
+            <Link to="/dashboard" onClick={() => triggerLoading(450)} className={`hover:text-blue-600 transition ${location.pathname === '/dashboard' ? 'text-blue-600 font-semibold' : ''}`}>Dashboard</Link>
+            <Link to="/profile" onClick={() => triggerLoading(450)} className={`hover:text-blue-600 transition ${location.pathname === '/profile' ? 'text-blue-600 font-semibold' : ''}`}>My Profile</Link>
             <Link 
               to="/admin?tab=Dashboard" 
               state={{ tab: 'Dashboard' }} 
+              onClick={() => triggerLoading(450)}
               className={`hover:text-blue-600 transition flex items-center gap-1 ${location.pathname === '/admin' ? 'text-blue-600 font-semibold' : ''}`}
             >
               <Shield className="w-4 h-4 text-amber-500" />

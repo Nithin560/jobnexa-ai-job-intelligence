@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, Sparkles, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
+import { TopLoadingBar } from '../components/TopLoadingBar';
 import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
 
 export const RegisterPage: React.FC = () => {
@@ -158,6 +159,7 @@ export const RegisterPage: React.FC = () => {
 
   return (
     <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 overflow-hidden">
+      <TopLoadingBar isLoading={loading} />
       {/* Original Crisp Landmark Background Image (Sharp & Clear, No Blur on Image) */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"

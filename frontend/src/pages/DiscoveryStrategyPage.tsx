@@ -6,9 +6,11 @@ import {
   ExternalLink, Sparkles, Building2, Globe, Code2, AlertTriangle,
   Search, BookOpen, Check, Copy, ChevronRight, Award, Zap, ArrowLeft
 } from 'lucide-react';
+import { useLoadingBar } from '../components/TopLoadingBar';
 
 export const DiscoveryStrategyPage: React.FC = () => {
   const navigate = useNavigate();
+  const { triggerLoading } = useLoadingBar();
   const [activeTab, setActiveTab] = useState<'strategy' | 'taxonomy' | 'ats' | 'stack' | 'schedule' | 'prep'>('strategy');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
@@ -95,7 +97,10 @@ export const DiscoveryStrategyPage: React.FC = () => {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => {
+                triggerLoading(300);
+                setActiveTab(tab.id as any);
+              }}
               className={`px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 whitespace-nowrap cursor-pointer ${
                 isActive 
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 

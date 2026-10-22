@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 import { JobCard } from '../components/JobCard';
 import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
-import { TopLoadingBar } from '../components/TopLoadingBar';
+import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { Job } from '../types';
 import { 
   LayoutDashboard, User, FileText, Sparkles, Bookmark, CheckCircle, Bell, Building2, 
@@ -12,6 +12,7 @@ import {
 
 export const UserDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const { triggerLoading } = useLoadingBar();
   const [recommended, setRecommended] = useState<Job[]>([]);
   const [saved, setSaved] = useState<Job[]>([]);
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
@@ -128,6 +129,7 @@ export const UserDashboard: React.FC = () => {
               <button
                 key={item.label}
                 onClick={() => {
+                  triggerLoading(350);
                   if (item.path) {
                     navigate(item.path);
                   } else if (item.label === 'Recommended' || item.label === 'Dashboard') {
@@ -211,8 +213,11 @@ export const UserDashboard: React.FC = () => {
         <div className="flex items-center justify-between border-b border-slate-200 pb-3">
           <div className="flex items-center gap-6">
             <button
-              onClick={() => setActiveTab('recommended')}
-              className={`font-extrabold text-sm pb-3 border-b-2 transition ${
+              onClick={() => {
+                triggerLoading(300);
+                setActiveTab('recommended');
+              }}
+              className={`font-extrabold text-sm pb-3 border-b-2 transition cursor-pointer ${
                 activeTab === 'recommended' 
                   ? 'border-blue-600 text-blue-600' 
                   : 'border-transparent text-slate-500 hover:text-slate-900'
@@ -221,8 +226,11 @@ export const UserDashboard: React.FC = () => {
               Recommended Jobs for You
             </button>
             <button
-              onClick={() => setActiveTab('saved')}
-              className={`font-extrabold text-sm pb-3 border-b-2 transition ${
+              onClick={() => {
+                triggerLoading(300);
+                setActiveTab('saved');
+              }}
+              className={`font-extrabold text-sm pb-3 border-b-2 transition cursor-pointer ${
                 activeTab === 'saved' 
                   ? 'border-blue-600 text-blue-600' 
                   : 'border-transparent text-slate-500 hover:text-slate-900'
