@@ -380,61 +380,61 @@ export const DiscoveryStrategyPage: React.FC = () => {
             <div className="space-y-4 pt-2">
               
               {/* Greenhouse */}
-              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-900 text-white space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span className="font-bold text-emerald-400">Greenhouse Public JSON API</span>
+              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50 space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-900">Greenhouse Public JSON API</span>
                   <button 
                     onClick={() => handleCopy('https://boards-api.greenhouse.io/v1/boards/{board_token}/jobs?content=true', 'gh')}
-                    className="flex items-center gap-1 hover:text-white transition cursor-pointer"
+                    className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition cursor-pointer font-medium"
                   >
-                    {copiedCode === 'gh' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedCode === 'gh' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedCode === 'gh' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-                <code className="text-xs font-mono text-cyan-300 block overflow-x-auto">
+                <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs font-mono text-blue-700 overflow-x-auto">
                   GET https://boards-api.greenhouse.io/v1/boards/{'{board_token}'}/jobs?content=true
-                </code>
-                <p className="text-xs text-slate-300">
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Returns title, location, full HTML/plain JD, departments, and canonical apply URLs for companies like Swiggy, Razorpay, Zepto.
                 </p>
               </div>
 
               {/* Lever */}
-              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-900 text-white space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span className="font-bold text-blue-400">Lever Postings API</span>
+              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50 space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-900">Lever Postings API</span>
                   <button 
                     onClick={() => handleCopy('https://api.lever.co/v0/postings/{company}?mode=json', 'lever')}
-                    className="flex items-center gap-1 hover:text-white transition cursor-pointer"
+                    className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition cursor-pointer font-medium"
                   >
-                    {copiedCode === 'lever' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedCode === 'lever' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedCode === 'lever' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-                <code className="text-xs font-mono text-cyan-300 block overflow-x-auto">
+                <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs font-mono text-blue-700 overflow-x-auto">
                   GET https://api.lever.co/v0/postings/{'{company}'}?mode=json
-                </code>
-                <p className="text-xs text-slate-300">
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Clean JSON containing workplaceType, categories, location (Bengaluru), and direct application URLs.
                 </p>
               </div>
 
               {/* Ashby HQ */}
-              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-900 text-white space-y-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
-                  <span className="font-bold text-purple-400">Ashby HQ Public Job Board API</span>
+              <div className="border border-slate-200 rounded-2xl p-4 bg-slate-50 space-y-2.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="font-bold text-slate-900">Ashby HQ Public Job Board API</span>
                   <button 
                     onClick={() => handleCopy('https://api.ashbyhq.com/posting-api/job-board/{organization}', 'ashby')}
-                    className="flex items-center gap-1 hover:text-white transition cursor-pointer"
+                    className="flex items-center gap-1 text-slate-500 hover:text-slate-800 transition cursor-pointer font-medium"
                   >
-                    {copiedCode === 'ashby' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                    {copiedCode === 'ashby' ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5" />}
                     <span>{copiedCode === 'ashby' ? 'Copied' : 'Copy'}</span>
                   </button>
                 </div>
-                <code className="text-xs font-mono text-cyan-300 block overflow-x-auto">
+                <div className="p-2.5 rounded-xl bg-white border border-slate-200 text-xs font-mono text-blue-700 overflow-x-auto">
                   POST https://api.ashbyhq.com/posting-api/job-board/{'{organization}'}
-                </code>
-                <p className="text-xs text-slate-300">
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed">
                   Widely adopted by modern AI and fintech startups in Bengaluru. High-fidelity location and compensation data.
                 </p>
               </div>
@@ -457,24 +457,33 @@ export const DiscoveryStrategyPage: React.FC = () => {
               The ₹0 Production Technology Stack
             </h2>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              <div className="border border-slate-200 rounded-2xl p-4 space-y-2 bg-slate-50">
-                <div className="text-xs font-bold text-blue-600">FastAPI & Python 3.11</div>
-                <div className="text-sm font-bold text-slate-800">Async Ingestion Engine</div>
-                <p className="text-xs text-slate-500">Non-blocking HTTPX async clients handle 100+ company endpoints concurrently in under 45 seconds.</p>
-              </div>
-
-              <div className="border border-slate-200 rounded-2xl p-4 space-y-2 bg-slate-50">
-                <div className="text-xs font-bold text-emerald-600">SQLite (WAL) / PostgreSQL</div>
-                <div className="text-sm font-bold text-slate-800">Zero-Overhead Storage</div>
-                <p className="text-xs text-slate-500">Write-Ahead Logging ensures zero database lock contention during concurrent daily scans and candidate queries.</p>
-              </div>
-
-              <div className="border border-slate-200 rounded-2xl p-4 space-y-2 bg-slate-50">
-                <div className="text-xs font-bold text-cyan-600">React + Vite + Tailwind</div>
-                <div className="text-sm font-bold text-slate-800">Instant Static UI</div>
-                <p className="text-xs text-slate-500">Ultra-fast single-page app with sub-second client-side filtering by tech hub, role, and experience tier.</p>
-              </div>
+            <div className="overflow-x-auto border border-slate-200 rounded-2xl">
+              <table className="w-full text-left text-xs">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 font-bold uppercase tracking-wider text-[11px]">
+                  <tr>
+                    <th className="py-3 px-4">Architecture Layer</th>
+                    <th className="py-3 px-4">Core Technology</th>
+                    <th className="py-3 px-4">Engineering Role & Performance</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-slate-700">
+                  <tr className="hover:bg-slate-50/60 transition">
+                    <td className="py-3.5 px-4 font-bold text-slate-900">Async Ingestion Engine</td>
+                    <td className="py-3.5 px-4 font-mono text-blue-700 font-medium">FastAPI & Python 3.11</td>
+                    <td className="py-3.5 px-4 text-slate-600">Non-blocking HTTPX async clients handle 100+ company endpoints concurrently in under 45 seconds.</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/60 transition">
+                    <td className="py-3.5 px-4 font-bold text-slate-900">Zero-Overhead Persistence</td>
+                    <td className="py-3.5 px-4 font-mono text-emerald-700 font-medium">SQLite (WAL) / PostgreSQL</td>
+                    <td className="py-3.5 px-4 text-slate-600">Write-Ahead Logging ensures zero database lock contention during concurrent daily scans and candidate queries.</td>
+                  </tr>
+                  <tr className="hover:bg-slate-50/60 transition">
+                    <td className="py-3.5 px-4 font-bold text-slate-900">Client-Side Presentation</td>
+                    <td className="py-3.5 px-4 font-mono text-cyan-700 font-medium">React + Vite + Tailwind CSS</td>
+                    <td className="py-3.5 px-4 text-slate-600">Ultra-fast single-page interface with sub-second filtering by tech hub, role, and experience tier.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             {/* Evidence & Confidence Score 0-100 */}
