@@ -2,7 +2,17 @@ from typing import Optional, List, Dict, Any
 from pydantic import BaseModel
 import math
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def to_ist(dt: Optional[datetime]) -> datetime:
+    """Convert UTC datetime to real-world Indian Standard Time (Asia/Kolkata, UTC+05:30)."""
+    if dt is None:
+        return datetime.now(IST)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(IST)
 from fastapi import APIRouter, Depends, Query, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import or_, and_, desc, func
@@ -597,6 +607,7 @@ def get_job_insights(db: Session = Depends(get_db)):
     )
     recent_scans = []
     latest_meta = {}
+    now_ist = datetime.now(IST)
     now = datetime.utcnow()
     for idx, run in enumerate(scan_runs):
         totals = run.totals_json or {}
@@ -608,10 +619,10 @@ def get_job_insights(db: Session = Depends(get_db)):
         if idx == 0:
             latest_meta = totals
 
-        dt = run.started_at
-        if dt.date() == now.date():
+        dt = to_ist(run.started_at)
+        if dt.date() == now_ist.date():
             time_str = f"Today, {dt.strftime('%I:%M %p')}"
-        elif (now.date() - dt.date()).days == 1:
+        elif (now_ist.date() - dt.date()).days == 1:
             time_str = f"Yesterday, {dt.strftime('%I:%M %p')}"
         else:
             time_str = dt.strftime("%b %d, %I:%M %p")

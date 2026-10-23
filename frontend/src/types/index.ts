@@ -166,6 +166,7 @@ export interface AdminNotificationsResponse {
 export interface ScanRunItem {
   id: string;
   scan_time: string;
+  started_at?: string;
   status: string;
   companies: number;
   jobs_found: number;

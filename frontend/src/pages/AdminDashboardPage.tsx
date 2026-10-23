@@ -49,6 +49,41 @@ const fallbackTopSkills = [
   { name: 'Node.js', count: 24, percent: 23 },
 ];
 
+export const formatScanDateTime = (scan: ScanRunItem): { datePart: string; timePart: string } => {
+  if (scan.started_at) {
+    try {
+      const isoStr = scan.started_at.endsWith('Z') || scan.started_at.includes('+')
+        ? scan.started_at
+        : `${scan.started_at}Z`;
+      const date = new Date(isoStr);
+      if (!isNaN(date.getTime())) {
+        const monthStr = date.toLocaleDateString([], { month: 'short' });
+        const day = date.getDate();
+        const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        return {
+          datePart: `${monthStr} ${day},`,
+          timePart: timeStr
+        };
+      }
+    } catch {
+      // fallback
+    }
+  }
+
+  if (scan.scan_time && scan.scan_time.includes(',')) {
+    const parts = scan.scan_time.split(',');
+    return {
+      datePart: `${parts[0].trim()},`,
+      timePart: parts.slice(1).join(',').trim()
+    };
+  }
+
+  return {
+    datePart: scan.scan_time || 'Recent',
+    timePart: ''
+  };
+};
+
 export const AdminDashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -1376,22 +1411,30 @@ export const AdminDashboardPage: React.FC = () => {
                           <td colSpan={8} className="py-6 text-center text-slate-400">No scans recorded yet.</td>
                         </tr>
                       ) : (
-                        recentScans.map((scan, idx) => (
-                          <tr key={scan.id} className="hover:bg-slate-50/50">
-                            <td className="py-3 px-4 font-bold text-slate-400">#{idx + 1}</td>
-                            <td className="py-3 px-4 font-semibold text-slate-800">{scan.scan_time}</td>
-                            <td className="py-3 px-4">
-                              <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
-                                {scan.status}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4 font-semibold">{scan.companies}</td>
-                            <td className="py-3 px-4 font-bold text-slate-900">{scan.jobs_found.toLocaleString()}</td>
-                            <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
-                            <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
-                            <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
-                          </tr>
-                        ))
+                        recentScans.map((scan, idx) => {
+                          const scanDt = formatScanDateTime(scan);
+                          return (
+                            <tr key={scan.id} className="hover:bg-slate-50/50">
+                              <td className="py-3 px-4 font-bold text-slate-400">#{idx + 1}</td>
+                              <td className="py-3 px-4 font-semibold text-slate-800 whitespace-nowrap">
+                                <div>{scanDt.datePart}</div>
+                                {scanDt.timePart && (
+                                  <div className="text-xs text-slate-500 font-medium">{scanDt.timePart}</div>
+                                )}
+                              </td>
+                              <td className="py-3 px-4">
+                                <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-200">
+                                  {scan.status}
+                                </span>
+                              </td>
+                              <td className="py-3 px-4 font-semibold">{scan.companies}</td>
+                              <td className="py-3 px-4 font-bold text-slate-900">{scan.jobs_found.toLocaleString()}</td>
+                              <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
+                              <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
+                              <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
+                            </tr>
+                          );
+                        })
                       )}
                     </tbody>
                   </table>
@@ -2247,22 +2290,30 @@ export const AdminDashboardPage: React.FC = () => {
                         <td colSpan={8} className="py-6 text-center text-slate-400">No scans recorded yet.</td>
                       </tr>
                     ) : (
-                      recentScans.map((scan, idx) => (
-                        <tr key={scan.id} className="hover:bg-slate-50/50">
-                          <td className="py-3 px-4 font-bold text-slate-400">#{idx + 1}</td>
-                          <td className="py-3 px-4 font-semibold text-slate-800">{scan.scan_time}</td>
-                          <td className="py-3 px-4">
-                            <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 w-fit border border-emerald-200">
-                              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> {scan.status}
-                            </span>
-                          </td>
-                          <td className="py-3 px-4 font-semibold">{scan.companies}</td>
-                          <td className="py-3 px-4 font-bold text-slate-900">{scan.jobs_found.toLocaleString()}</td>
-                          <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
-                          <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
-                          <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
-                        </tr>
-                      ))
+                      recentScans.map((scan, idx) => {
+                        const scanDt = formatScanDateTime(scan);
+                        return (
+                          <tr key={scan.id} className="hover:bg-slate-50/50">
+                            <td className="py-3 px-4 font-bold text-slate-400">#{idx + 1}</td>
+                            <td className="py-3 px-4 font-semibold text-slate-800 whitespace-nowrap">
+                              <div>{scanDt.datePart}</div>
+                              {scanDt.timePart && (
+                                <div className="text-xs text-slate-500 font-medium">{scanDt.timePart}</div>
+                              )}
+                            </td>
+                            <td className="py-3 px-4">
+                              <span className="bg-emerald-50 text-emerald-700 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 w-fit border border-emerald-200">
+                                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full"></span> {scan.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 font-semibold">{scan.companies}</td>
+                            <td className="py-3 px-4 font-bold text-slate-900">{scan.jobs_found.toLocaleString()}</td>
+                            <td className="py-3 px-4 font-bold text-emerald-600">{scan.new}</td>
+                            <td className="py-3 px-4 text-blue-600 font-semibold">{scan.updated}</td>
+                            <td className="py-3 px-4 text-rose-500 font-semibold">{scan.expired}</td>
+                          </tr>
+                        );
+                      })
                     )}
                   </tbody>
                 </table>

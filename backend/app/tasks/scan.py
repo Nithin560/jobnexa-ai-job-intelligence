@@ -1,7 +1,16 @@
 import sys
 import argparse
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def to_ist(dt: datetime) -> datetime:
+    if dt is None:
+        return datetime.now(IST)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(IST)
 import threading
 from typing import Dict, Any, List
 from sqlalchemy.orm import Session
@@ -908,7 +917,7 @@ def start_background_scan_task(trigger: str = "site_open", force: bool = False) 
                             "started": False,
                             "status": "fresh",
                             "message": f"Job catalog is up to date (scanned {int(elapsed_minutes)}m ago).",
-                            "last_scan_time": latest.started_at.strftime("%b %d, %I:%M %p"),
+                            "last_scan_time": to_ist(latest.started_at).strftime("%b %d, %I:%M %p"),
                             "totals": latest.totals_json or {}
                         }
             finally:

@@ -1,5 +1,15 @@
 from typing import List, Optional, Dict, Any
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
+
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def to_ist(dt: Optional[datetime]) -> datetime:
+    """Convert UTC datetime to real-world Indian Standard Time (Asia/Kolkata, UTC+05:30)."""
+    if dt is None:
+        return datetime.now(IST)
+    if dt.tzinfo is None:
+        dt = dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(IST)
 from pydantic import BaseModel, Field
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -182,8 +192,8 @@ def get_admin_overview(
     if latest_run:
         if latest_run.totals_json:
             success_rate = latest_run.totals_json.get("success_rate", 98.5)
-        # Format scan date & time
-        last_scan_str = latest_run.started_at.strftime("%b %d, %I:%M %p")
+        # Format scan date & time in real-world local time
+        last_scan_str = to_ist(latest_run.started_at).strftime("%b %d, %I:%M %p")
 
     # Real Top Hiring Skills from DB
     skill_counts = (
@@ -215,7 +225,7 @@ def get_admin_overview(
         "Startup": "#3b82f6",
         "Mid-size": "#10b981",
         "Large": "#f59e0b",
-        "Enterprise": "#8b5cf6",
+        "Enterprise": "#4f46e5",
         "Job Platform": "#06b6d4",
         "Other": "#64748b"
     }
@@ -319,8 +329,8 @@ def get_admin_notifications(
             "title": n.title,
             "message": n.message,
             "is_read": n.is_read,
-            "created_at": n.created_at.isoformat(),
-            "formatted_time": n.created_at.strftime("%b %d, %Y • %I:%M %p"),
+            "created_at": (n.created_at.isoformat() + "Z") if n.created_at else None,
+            "formatted_time": to_ist(n.created_at).strftime("%b %d, %Y • %I:%M %p"),
             "data": n.data_json or {}
         })
 
@@ -369,14 +379,22 @@ def list_scan_runs(
     results = []
     for r in runs:
         totals = r.totals_json or {}
+        if isinstance(totals, str):
+            try:
+                import json
+                totals = json.loads(totals)
+            except Exception:
+                totals = {}
+        dt_ist = to_ist(r.started_at)
         results.append({
             "id": r.id,
-            "scan_time": r.started_at.strftime("%b %d, %I:%M %p"),
+            "started_at": (r.started_at.isoformat() + "Z") if r.started_at else None,
+            "scan_time": dt_ist.strftime("%b %d, %I:%M %p"),
             "status": r.status.capitalize(),
-            "companies": totals.get("companies_scanned", 27),
+            "companies": totals.get("companies_scanned", totals.get("total_companies", totals.get("sources_scanned", 27))),
             "jobs_found": totals.get("jobs_found", 0),
-            "new": totals.get("new_jobs", 0),
-            "updated": totals.get("updated_jobs", 0),
+            "new": totals.get("new_jobs", totals.get("jobs_created", 0)),
+            "updated": totals.get("updated_jobs", totals.get("jobs_updated", 0)),
             "expired": totals.get("expired_jobs", 0),
             "duration": "14s" if r.finished_at else "running"
         })
