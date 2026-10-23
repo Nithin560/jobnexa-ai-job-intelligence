@@ -117,8 +117,14 @@ export const HomePage: React.FC = () => {
     loadInsights();
   }, []);
 
-  // Auto-scan verification when website opens: ensures career websites & job portals are fresh
+  // Auto-scan verification when website opens: only runs for administrator accounts
   useEffect(() => {
+    if (!isAdmin) {
+      setIsLiveScanning(false);
+      setScanBannerText(null);
+      return;
+    }
+
     let pollInterval: any = null;
 
     const checkAndTriggerScan = async () => {
@@ -161,7 +167,7 @@ export const HomePage: React.FC = () => {
     return () => {
       if (pollInterval) clearInterval(pollInterval);
     };
-  }, []);
+  }, [isAdmin]);
 
   const handleTriggerLiveScan = async () => {
     if (!isAdmin) {
@@ -406,49 +412,51 @@ export const HomePage: React.FC = () => {
         </div>
       )}
       
-      {/* Real-time Live Scanner Alert Banner */}
-      {isLiveScanning ? (
-        <div className="bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white flex items-center justify-between shadow-md">
-          <div className="flex items-center gap-3.5">
-            <span className="relative flex h-3.5 w-3.5 shrink-0">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-80"></span>
-              <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-cyan-500"></span>
-            </span>
-            <div>
-              <div className="text-sm font-black text-cyan-200 flex items-center gap-2">
-                <span>Real-Time Live Scanner Active</span>
-                <span className="bg-cyan-500/30 text-cyan-200 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-cyan-400/40">27+ Live Sources</span>
-              </div>
-              <div className="text-xs text-slate-300 mt-0.5">
-                Scanning live company career ATS boards (Databricks, Okta, Stripe, Razorpay, Meesho...) and job portals (Arbeitnow, Remotive, Jobicy) for real tech openings in Bengaluru & India. Feed will refresh automatically.
+      {/* Real-time Live Scanner Alert Banner - Only displayed for administrator accounts */}
+      {isAdmin && (
+        isLiveScanning ? (
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-3.5">
+              <span className="relative flex h-3.5 w-3.5 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-80"></span>
+                <span className="relative inline-flex rounded-full h-3.5 w-3.5 bg-cyan-500"></span>
+              </span>
+              <div>
+                <div className="text-sm font-black text-cyan-200 flex items-center gap-2">
+                  <span>Real-Time Live Scanner Active</span>
+                  <span className="bg-cyan-500/30 text-cyan-200 text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full border border-cyan-400/40">27+ Live Sources</span>
+                </div>
+                <div className="text-xs text-slate-300 mt-0.5">
+                  Scanning live company career ATS boards (Databricks, Okta, Stripe, Razorpay, Meesho...) and job portals (Arbeitnow, Remotive, Jobicy) for real tech openings in Bengaluru & India. Feed will refresh automatically.
+                </div>
               </div>
             </div>
+            <div className="shrink-0 pl-3">
+              <span className="inline-flex items-center gap-2 text-xs font-bold bg-cyan-500/25 text-cyan-200 px-3.5 py-1.5 rounded-xl border border-cyan-400/40 shadow-xs">
+                <RefreshCw className="w-3.5 h-3.5 animate-spin text-cyan-300" />
+                <span>Scanning...</span>
+              </span>
+            </div>
           </div>
-          <div className="shrink-0 pl-3">
-            <span className="inline-flex items-center gap-2 text-xs font-bold bg-cyan-500/25 text-cyan-200 px-3.5 py-1.5 rounded-xl border border-cyan-400/40 shadow-xs">
-              <RefreshCw className="w-3.5 h-3.5 animate-spin text-cyan-300" />
-              <span>Scanning...</span>
-            </span>
+        ) : scanBannerText ? (
+          <div className="bg-slate-900 border border-emerald-600/60 rounded-2xl p-3.5 px-4 text-white flex items-center justify-between shadow-md">
+            <div className="flex items-center gap-2.5">
+              <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
+              <span className="text-xs sm:text-sm font-semibold text-emerald-200">
+                {scanBannerText}
+              </span>
+            </div>
+            <button 
+              onClick={handleTriggerLiveScan}
+              disabled={isLiveScanning}
+              className="text-xs font-bold text-emerald-300 hover:text-white bg-emerald-800/60 hover:bg-emerald-700/80 border border-emerald-500/40 px-3 py-1 rounded-xl transition shrink-0 ml-3 flex items-center gap-1.5"
+            >
+              <RefreshCw className="w-3 h-3" />
+              <span>Re-scan Portals</span>
+            </button>
           </div>
-        </div>
-      ) : scanBannerText ? (
-        <div className="bg-slate-900 border border-emerald-600/60 rounded-2xl p-3.5 px-4 text-white flex items-center justify-between shadow-md">
-          <div className="flex items-center gap-2.5">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-            <span className="text-xs sm:text-sm font-semibold text-emerald-200">
-              {scanBannerText}
-            </span>
-          </div>
-          <button 
-            onClick={handleTriggerLiveScan}
-            disabled={isLiveScanning}
-            className="text-xs font-bold text-emerald-300 hover:text-white bg-emerald-800/60 hover:bg-emerald-700/80 border border-emerald-500/40 px-3 py-1 rounded-xl transition shrink-0 ml-3 flex items-center gap-1.5"
-          >
-            <RefreshCw className="w-3 h-3" />
-            <span>Re-scan Portals</span>
-          </button>
-        </div>
-      ) : null}
+        ) : null
+      )}
 
       {/* Sleek, Compact Hero Banner with Realistic Bengaluru Landmark (Vidhana Soudha) Background */}
       <div className="relative overflow-hidden rounded-2xl text-white p-5 md:p-6 shadow-md border border-slate-800/10">
