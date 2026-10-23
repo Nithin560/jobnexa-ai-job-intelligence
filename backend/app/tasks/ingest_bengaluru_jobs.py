@@ -252,6 +252,112 @@ IT_ROLE_TEMPLATES = [
             "- Proven authority in distributed databases, asynchronous event streaming (Kafka), and microservice fault tolerance patterns\n"
             "- Exceptional communication, cross-functional stakeholder leadership, and mentorship capabilities."
         )
+    },
+    {
+        "title": "Founding Full Stack Engineer (Next.js, TypeScript & PostgreSQL)",
+        "skills": ["React", "TypeScript", "Next.js", "Node.js", "PostgreSQL", "Docker", "Tailwind CSS"],
+        "exp_min": 1,
+        "exp_max": 5,
+        "sal_min": 20.0,
+        "sal_max": 45.0,
+        "work_mode": "Hybrid",
+        "desc_template": (
+            "We are looking for a high-velocity Founding Full Stack Engineer in Bengaluru to drive end-to-end user features from conceptualization to production. "
+            "You will work directly with founders and product leads, architecting responsive Next.js frontend interfaces, scalable Node/Python API services, "
+            "and robust relational schemas on PostgreSQL. "
+            "\n\nKey Responsibilities:\n"
+            "- Build clean, typed, high-performance web applications using React 19, Next.js App Router, TypeScript, and Tailwind CSS\n"
+            "- Design transactional database models, migrations, and optimized SQL queries on PostgreSQL and Supabase\n"
+            "- Deploy containerized microservices and edge functions with Docker, AWS/GCP, and Vercel infrastructure\n"
+            "- Ship customer-facing features weekly in a high-ownership, agile startup culture\n\n"
+            "Requirements:\n"
+            "- 1 to 5 years of full stack software engineering experience with React, TypeScript, and modern backend stacks\n"
+            "- Strong product intuition, obsession with UI craft, and pride in code quality and performance."
+        )
+    },
+    {
+        "title": "AI / Generative LLM Application Engineer (Python, PyTorch, RAG)",
+        "skills": ["Python", "Machine Learning", "PyTorch", "LangChain", "FastAPI", "Docker", "AWS"],
+        "exp_min": 1,
+        "exp_max": 4,
+        "sal_min": 22.0,
+        "sal_max": 48.0,
+        "work_mode": "Hybrid",
+        "desc_template": (
+            "Join our fast-growing Bengaluru AI engineering team building domain-specific LLM copilots, autonomous agents, and RAG pipelines. "
+            "You will develop cutting-edge generative AI workflows, evaluate embedding models, and deploy production inference microservices. "
+            "\n\nKey Responsibilities:\n"
+            "- Build robust Retrieval-Augmented Generation (RAG) pipelines using vector databases (pgvector, Qdrant, Pinecone) and LangChain/LlamaIndex\n"
+            "- Fine-tune open-source models (Llama 3, Mistral) with LoRA/QLoRA on specialized Indian enterprise datasets\n"
+            "- Construct low-latency FastAPI endpoints with streaming responses and token rate-limiting\n"
+            "- Implement continuous automated eval benchmarks for hallucination prevention, grounding, and recall\n\n"
+            "Requirements:\n"
+            "- 1 to 4 years of software/ML experience with Python, FastAPI, and foundational generative AI models\n"
+            "- Passion for cutting-edge AI breakthroughs and practical production engineering."
+        )
+    },
+    {
+        "title": "Golang Backend Systems Engineer (High Scale Distributed Services)",
+        "skills": ["Go", "Golang", "Microservices", "PostgreSQL", "Kafka", "Docker", "Kubernetes", "System Design"],
+        "exp_min": 2,
+        "exp_max": 6,
+        "sal_min": 25.0,
+        "sal_max": 52.0,
+        "work_mode": "Hybrid",
+        "desc_template": (
+            "We are seeking a Golang Backend Systems Engineer in Bengaluru to build fault-tolerant, high-concurrency microservices processing tens of thousands of requests per second. "
+            "You will write idiomatic Go, build event-driven data streaming pipelines with Apache Kafka, and scale distributed database clusters. "
+            "\n\nKey Responsibilities:\n"
+            "- Architect and deploy high-throughput microservices in Go (Golang) using gRPC and HTTP/2\n"
+            "- Build resilient consumer/producer event pipelines with Apache Kafka, RabbitMQ, and Redis\n"
+            "- Implement database sharding, connection pooling, and low-latency queries on PostgreSQL and DynamoDB\n"
+            "- Monitor microservice latency, CPU profiling, and memory allocation using OpenTelemetry and Grafana\n\n"
+            "Requirements:\n"
+            "- 2 to 6 years of backend engineering experience with strong Go (Golang) and distributed systems expertise\n"
+            "- Solid knowledge of concurrency primitives (goroutines, channels), mutex locks, and network socket programming."
+        )
+    },
+    {
+        "title": "Mobile Software Engineer (React Native & Flutter, iOS & Android)",
+        "skills": ["React Native", "Flutter", "TypeScript", "Mobile Apps", "iOS", "Android", "REST APIs"],
+        "exp_min": 2,
+        "exp_max": 5,
+        "sal_min": 18.0,
+        "sal_max": 38.0,
+        "work_mode": "Hybrid",
+        "desc_template": (
+            "Join our mobile platform squad in Bengaluru crafting buttery smooth mobile applications for millions of active users across India. "
+            "You will build cross-platform mobile apps using React Native or Flutter, write native bridge modules, and optimize startup latency and memory footprint. "
+            "\n\nKey Responsibilities:\n"
+            "- Develop fluid 60fps animations and accessible mobile UI flows using React Native, TypeScript, or Flutter\n"
+            "- Integrate native SDKs, biometric authentication, push notifications, and offline-first SQLite synchronization\n"
+            "- Profile bundle sizes, reduce cold start time, and maintain 99.9% crash-free user sessions\n"
+            "- Manage automated Google Play Console and Apple App Store release pipelines via Fastlane\n\n"
+            "Requirements:\n"
+            "- 2 to 5 years of mobile development experience with React Native or Flutter\n"
+            "- Strong understanding of mobile state management, network caching, and native Android (Kotlin) / iOS (Swift) bridges."
+        )
+    },
+    {
+        "title": "Growth & Core Product Software Engineer (React, Node.js & Rapid Experimentation)",
+        "skills": ["React", "JavaScript", "TypeScript", "Node.js", "SQL", "A/B Testing", "PostgreSQL"],
+        "exp_min": 1,
+        "exp_max": 4,
+        "sal_min": 18.0,
+        "sal_max": 36.0,
+        "work_mode": "Hybrid",
+        "desc_template": (
+            "We are hiring a Growth Software Engineer in Bengaluru who moves fast, loves metrics, and thrives on rapid product experimentation. "
+            "You will own onboarding funnels, viral referral loops, personalized engagement surfaces, and conversion rate optimization (CRO). "
+            "\n\nKey Responsibilities:\n"
+            "- Build and launch rapid A/B experiments across user onboarding, viral loops, and checkout conversion flows\n"
+            "- Instrument event tracking, funnel telemetry, and cohort analytics using PostHog, Segment, and Amplitude\n"
+            "- Collaborate directly with marketing, growth leads, and designers to identify product opportunities and test hypotheses\n"
+            "- Ship clean, reusable full stack features with React, TypeScript, Node.js, and PostgreSQL\n\n"
+            "Requirements:\n"
+            "- 1 to 4 years of software development experience with React and Node.js or Python\n"
+            "- Strong analytical mindset, curious about user psychology, and excited about data-driven product growth."
+        )
     }
 ]
 
@@ -349,8 +455,11 @@ def ingest_bengaluru_it_catalog(db: Session = None, roles_per_company: int = 3) 
                 source.enabled = True
 
             # Ingest current active hiring IT jobs for this company
-            # Select 2-4 varied IT roles
-            num_roles = random.randint(2, min(4, len(IT_ROLE_TEMPLATES)))
+            # For startups & scale-ups, provide 3 to 5 high-impact engineering vacancies
+            if real_type == "Startup":
+                num_roles = random.randint(3, 5)
+            else:
+                num_roles = random.randint(2, min(4, len(IT_ROLE_TEMPLATES)))
             sampled_templates = random.sample(IT_ROLE_TEMPLATES, num_roles)
 
             for idx, tmpl in enumerate(sampled_templates):

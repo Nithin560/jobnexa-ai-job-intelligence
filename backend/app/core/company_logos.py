@@ -134,6 +134,8 @@ COMPANY_TYPE_MAP = {
     "steuerberaterin nadine brandstätter": "Startup",
     "zepto": "Startup",
     "zeta": "Startup",
+    "razorpay": "Startup",
+    "inmobi": "Startup",
 
     # Mid-size (Scaleups, 200-3000 employees, series D+)
     "angeheuert gmbh": "Mid-size",
@@ -148,7 +150,6 @@ COMPANY_TYPE_MAP = {
     "harness": "Mid-size",
     "instrument": "Mid-size",
     "language services associates": "Mid-size",
-    "razorpay": "Mid-size",
     "vercel": "Mid-size",
     "who gives a crap": "Mid-size",
 
@@ -163,7 +164,6 @@ COMPANY_TYPE_MAP = {
     "flipkart": "Enterprise",
     "gitlab": "Enterprise",
     "google": "Enterprise",
-    "inmobi": "Enterprise",
     "microsoft": "Enterprise",
     "mongodb": "Enterprise",
     "mozilla": "Enterprise",

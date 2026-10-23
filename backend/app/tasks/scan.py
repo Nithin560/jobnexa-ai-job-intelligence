@@ -39,10 +39,70 @@ TARGET_SOURCES = [
         "name": "Razorpay",
         "domain": "razorpay.com",
         "careers_url": "https://razorpay.com/jobs",
-        "company_type": "Mid-size",
+        "company_type": "Startup",
         "logo_url": "https://www.google.com/s2/favicons?domain=razorpay.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "razorpaysoftwareprivatelimited",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Sarvam AI",
+        "domain": "sarvam.ai",
+        "careers_url": "https://www.sarvam.ai/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=sarvam.ai&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "sarvam",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "SigNoz",
+        "domain": "signoz.io",
+        "careers_url": "https://signoz.io/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=signoz.io&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "signoz",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Navi Technologies",
+        "domain": "navi.com",
+        "careers_url": "https://navi.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=navi.com&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "navi",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Bounce",
+        "domain": "bounceshare.com",
+        "careers_url": "https://bounceshare.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=bounceshare.com&sz=128",
+        "connector_key": "ashby_api",
+        "slug": "bounce",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "FamPay",
+        "domain": "fampay.in",
+        "careers_url": "https://fampay.in/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=fampay.in&sz=128",
+        "connector_key": "lever_api",
+        "slug": "fampay",
+        "source_type": "career_portal"
+    },
+    {
+        "name": "Glance",
+        "domain": "glance.com",
+        "careers_url": "https://www.glance.com/careers",
+        "company_type": "Startup",
+        "logo_url": "https://www.google.com/s2/favicons?domain=glance.com&sz=128",
+        "connector_key": "greenhouse_api",
+        "slug": "glance",
         "source_type": "career_portal"
     },
     {
@@ -79,7 +139,7 @@ TARGET_SOURCES = [
         "name": "InMobi",
         "domain": "inmobi.com",
         "careers_url": "https://www.inmobi.com/company/careers",
-        "company_type": "Large",
+        "company_type": "Startup",
         "logo_url": "https://www.google.com/s2/favicons?domain=inmobi.com&sz=128",
         "connector_key": "greenhouse_api",
         "slug": "inmobi",
@@ -464,9 +524,12 @@ def ensure_companies_and_sources(db: Session) -> Dict[str, JobSource]:
     """Ensure all real target companies and job sources exist in DB with robust logo URLs."""
     source_map = {}
     for item in TARGET_SOURCES:
-        comp = db.query(Company).filter(Company.name == item["name"]).first()
         canonical_dom = get_canonical_domain(item["name"], item["domain"])
         logo = get_company_logo(item["name"], item["logo_url"], canonical_dom)
+        
+        comp = db.query(Company).filter(Company.name == item["name"]).first()
+        if not comp and canonical_dom:
+            comp = db.query(Company).filter(Company.canonical_domain == canonical_dom).first()
 
         if not comp:
             comp = Company(
@@ -573,7 +636,19 @@ def is_bengaluru_or_karnataka_job(location_str: str, company_name: str = "", tit
     blr_companies = [
         'razorpay', 'meesho', 'cred', 'groww', 'inmobi', 'zeta', 'thoughtworks', 
         'clear', 'cleartax', 'slice', 'porter', 'hackerrank', 'swiggy', 'flipkart', 
-        'ather', 'atherenergy', 'postman', 'browserstack', 'zepto', 'phonepe'
+        'ather', 'atherenergy', 'postman', 'browserstack', 'zepto', 'phonepe',
+        'sarvam', 'signoz', 'navi', 'bounce', 'fampay', 'glance', 'pocketfm',
+        'rapido', 'khatabook', 'jupiter', 'fi', 'open', 'jar', 'smallcase',
+        'indmoney', 'acko', 'digit', 'godigit', 'udaan', 'dealshare', 'dukaan',
+        'wakefit', 'freshtohome', 'curefoods', 'eatfit', 'rebelfoods',
+        'ultraviolette', 'log9', 'simpleenergy', 'blackbuck', 'shadowfax',
+        'eulermotors', 'pixxel', 'bellatrix', 'scaler', 'masaischool', 'practo',
+        'healthifyme', 'medibuddy', 'mpl', 'gameskraft', 'winzo', 'livspace',
+        'homelane', 'mygate', 'apna', 'coindcx', 'coinswitch', 'polygon',
+        'biconomy', 'keploy', 'appsmith', 'hasura', 'yellowai', 'moengage',
+        'whatfix', 'darwinbox', 'leenaai', 'squadstack', 'dunzo', 'licious',
+        'cultfit', 'yulu', 'bluestone', 'captainfresh', 'ninjacart', 'pratilipi',
+        'eloelo', 'cashfree', 'dezerv', 'scripbox', 'plum'
     ]
     comp_lower = company_name.lower()
     if any(bc in comp_lower for bc in blr_companies):
