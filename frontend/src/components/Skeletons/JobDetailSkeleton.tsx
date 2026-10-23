@@ -7,7 +7,7 @@ export const JobDetailSkeleton: React.FC = () => {
       <div className="h-4 bg-slate-200 rounded w-24 animate-pulse" />
 
       {/* Hero Header Card */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-6">
         <div className="flex items-start justify-between flex-wrap gap-4">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-slate-200 animate-pulse shrink-0" />
@@ -38,7 +38,7 @@ export const JobDetailSkeleton: React.FC = () => {
       </div>
 
       {/* Content Placeholder */}
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 space-y-4 shadow-sm">
+      <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-4 shadow-sm">
         <div className="h-5 bg-slate-200 rounded w-1/3 animate-pulse" />
         <div className="space-y-2 pt-2">
           <div className="h-4 bg-slate-100 rounded w-full animate-pulse" />

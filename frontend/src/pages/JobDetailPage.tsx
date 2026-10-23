@@ -70,7 +70,7 @@ export const JobDetailPage: React.FC = () => {
       )}
 
       {/* Main Detail Header Box matching Image 2 */}
-      <div className={`bg-white rounded-3xl border p-8 shadow-sm space-y-6 ${isExpired ? 'border-amber-200 bg-slate-50/30' : 'border-slate-200'}`}>
+      <div className={`bg-white rounded-2xl border p-8 shadow-sm space-y-6 ${isExpired ? 'border-amber-200 bg-slate-50/30' : 'border-slate-200'}`}>
         <div className="flex items-start justify-between gap-6 flex-wrap">
           
           <div className="flex items-start gap-4">
@@ -233,7 +233,7 @@ export const JobDetailPage: React.FC = () => {
       )}
 
       {activeTab === 'details' && (
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-4">
           <h3 className="font-bold text-slate-900 text-lg">Job Description</h3>
           <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">
             {job.description}
@@ -242,9 +242,9 @@ export const JobDetailPage: React.FC = () => {
       )}
 
       {activeTab === 'company' && (
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-4">
           <h3 className="font-bold text-slate-900 text-lg">About {job.company_name}</h3>
-          <p className="text-sm text-slate-600">Official Careers Page: <a href={job.company_careers_url || '#'} target="_blank" className="text-blue-600 underline font-semibold">{job.company_careers_url || job.apply_url}</a></p>
+          <p className="text-sm text-slate-600">Official Careers Page: <a href={job.company_careers_url || job.apply_url || '/'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">{job.company_careers_url || job.apply_url}</a></p>
         </div>
       )}
 

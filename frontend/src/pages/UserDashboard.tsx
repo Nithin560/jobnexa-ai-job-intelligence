@@ -49,16 +49,10 @@ export const UserDashboard: React.FC = () => {
   }, []);
 
   const userNavItems = [
-    { label: 'Dashboard', icon: LayoutDashboard, active: true },
-    { label: 'My Profile', icon: User, active: false, path: '/profile' },
-    { label: 'Resume', icon: FileText, active: false },
-    { label: 'Recommended', icon: Compass, active: false },
-    { label: 'Saved Jobs', icon: Bookmark, active: false },
-    { label: 'Applied Jobs', icon: CheckCircle, active: false },
-    { label: 'Job Alerts', icon: Bell, active: false },
-    { label: 'Companies', icon: Building2, active: false },
-    { label: 'Skill Gap Analysis', icon: Target, active: false },
-    { label: 'Account Settings', icon: Settings, active: false },
+    { label: 'Recommended Jobs', icon: Compass, tab: 'recommended' },
+    { label: 'Saved Positions', icon: Bookmark, tab: 'saved' },
+    { label: 'Candidate Profile & Skills', icon: User, path: '/profile' },
+    { label: 'Discovery Blueprint', icon: Target, path: '/strategy' },
   ];
 
   return (
@@ -90,7 +84,7 @@ export const UserDashboard: React.FC = () => {
 
       {/* Admin Mode Informational Banner */}
       {isAdmin && (
-        <div className="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200/90 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900 shadow-2xs gap-3">
+        <div className="bg-amber-50/80 border border-amber-200/90 rounded-2xl p-4 flex items-center justify-between text-xs text-amber-900 shadow-2xs gap-3">
           <div className="flex items-center gap-2.5">
             <Shield className="w-4 h-4 text-amber-600 shrink-0" />
             <span>
@@ -110,20 +104,17 @@ export const UserDashboard: React.FC = () => {
       
       {/* Left Navigation Sidebar */}
       <div className="lg:col-span-3 space-y-6">
-        <div className="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm space-y-1">
+        <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm space-y-1">
           <Link
             to="/"
-            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition text-slate-700 hover:bg-blue-50 hover:text-blue-600 border border-slate-200/80 mb-2 shadow-2xs group"
+            className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition text-slate-700 hover:bg-blue-50 hover:text-blue-600 border border-slate-200/80 mb-2 shadow-2xs group"
           >
             <ArrowLeft className="w-4 h-4 text-blue-600 shrink-0 group-hover:-translate-x-0.5 transition-transform" />
             <span>← Back to Home</span>
           </Link>
           {userNavItems.map((item) => {
             const Icon = item.icon;
-            const isItemActive = 
-              (item.label === 'Dashboard' && activeTab === 'recommended') || 
-              (item.label === 'Recommended' && activeTab === 'recommended') || 
-              (item.label === 'Saved Jobs' && activeTab === 'saved');
+            const isItemActive = item.tab ? activeTab === item.tab : false;
 
             return (
               <button
@@ -132,13 +123,11 @@ export const UserDashboard: React.FC = () => {
                   triggerLoading(350);
                   if (item.path) {
                     navigate(item.path);
-                  } else if (item.label === 'Recommended' || item.label === 'Dashboard') {
-                    setActiveTab('recommended');
-                  } else if (item.label === 'Saved Jobs') {
-                    setActiveTab('saved');
+                  } else if (item.tab) {
+                    setActiveTab(item.tab as any);
                   }
                 }}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-2xl text-xs font-bold transition cursor-pointer ${
+                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                   isItemActive 
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
@@ -156,7 +145,7 @@ export const UserDashboard: React.FC = () => {
       <div className="lg:col-span-9 space-y-6">
         
         {/* Welcome Back Banner */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm flex items-center justify-between flex-wrap gap-4">
+        <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm flex items-center justify-between flex-wrap gap-4">
           <div>
             <h1 className="text-2xl font-black text-slate-900">
               Welcome Back, <span className="capitalize">{userName}</span>!

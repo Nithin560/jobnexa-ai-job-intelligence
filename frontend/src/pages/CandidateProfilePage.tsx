@@ -108,7 +108,7 @@ export const CandidateProfilePage: React.FC = () => {
         </Link>
       </div>
 
-      <div className="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm space-y-6">
+      <div className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm space-y-6">
         <div className="flex items-center gap-4 border-b border-slate-100 pb-6">
           <div className="w-14 h-14 bg-blue-600 text-white font-bold text-2xl rounded-2xl flex items-center justify-center">
             N

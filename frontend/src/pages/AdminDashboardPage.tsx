@@ -667,11 +667,11 @@ export const AdminDashboardPage: React.FC = () => {
 
             {/* Chart Area Skeleton */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-              <div className="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 animate-pulse">
+              <div className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 animate-pulse">
                 <div className="h-5 bg-slate-200 rounded w-48" />
                 <div className="h-64 bg-slate-100 rounded-2xl" />
               </div>
-              <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4 animate-pulse">
+              <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-xs space-y-4 animate-pulse">
                 <div className="h-5 bg-slate-200 rounded w-36" />
                 <div className="h-64 bg-slate-100 rounded-2xl" />
               </div>

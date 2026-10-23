@@ -47,7 +47,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
       </div>
 
       {/* Top Banner / Breadcrumb */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl border border-slate-800 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 sm:p-10 shadow-xl border border-slate-800 relative overflow-hidden">
 
         
         <div className="relative z-10 space-y-4">
@@ -118,7 +118,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
         <div className="space-y-6">
           
           {/* Core Design Decision */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 2</span>
               <span>•</span>
@@ -165,7 +165,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
           </div>
 
           {/* Four Expansion Rings */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-6">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 4</span>
               <span>•</span>
@@ -244,7 +244,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
         <div className="space-y-6">
           
           {/* 7 IT Role Families */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 3 & 7</span>
               <span>•</span>
@@ -328,7 +328,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
           </div>
 
           {/* 9 Company Categories */}
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 3</span>
               <span>•</span>
@@ -363,7 +363,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
       {/* Tab 3: Zero-Cost ATS Probing */}
       {activeTab === 'ats' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-4">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 5</span>
               <span>•</span>
@@ -446,7 +446,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
       {/* Tab 4: ₹0 Tech Stack & Evidence */}
       {activeTab === 'stack' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 8 & 10</span>
               <span>•</span>
@@ -510,7 +510,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
       {/* Tab 5: Daily 06:00 IST Schedule */}
       {activeTab === 'schedule' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 9 & 12</span>
               <span>•</span>
@@ -561,7 +561,7 @@ export const DiscoveryStrategyPage: React.FC = () => {
       {/* Tab 6: Interview & Resume Prep */}
       {activeTab === 'prep' && (
         <div className="space-y-6">
-          <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm space-y-5">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-sm space-y-5">
             <div className="flex items-center gap-2 text-blue-600 font-bold text-xs uppercase tracking-wider">
               <span>Section 18</span>
               <span>•</span>
