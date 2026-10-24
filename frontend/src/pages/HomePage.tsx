@@ -89,7 +89,18 @@ export const HomePage: React.FC = () => {
 
   const { triggerLoading } = useLoadingBar();
   const navigate = useNavigate();
-  const { showAlert, showSuccess, showError, showWarning, showInfo, closeAlert } = useAlertModal();
+  const { showAlert, showSuccess, showError, showWarning, showInfo, showComingSoonPlacesToVisitModal, closeAlert } = useAlertModal();
+
+  // Show Coming Soon popup for Experienced users on first visit
+  useEffect(() => {
+    if (activeExpTab === 'experienced' && !sessionStorage.getItem('seen_places_notice_exp')) {
+      sessionStorage.setItem('seen_places_notice_exp', 'true');
+      const timer = setTimeout(() => {
+        showComingSoonPlacesToVisitModal('candidate');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [activeExpTab, showComingSoonPlacesToVisitModal]);
   const [roleType, setRoleType] = useState<string>('all');
   const [activeLocation, setActiveLocation] = useState<string>('all');
   const [candidateProfile, setCandidateProfile] = useState<any | null>(null);
@@ -850,6 +861,7 @@ export const HomePage: React.FC = () => {
             </div>
           ) : isCandidateUser && activeExpTab === 'experienced' ? (
             /* Dedicated Header for Experienced Candidate Account */
+            <div className="space-y-4">
             <div className="bg-white p-4 rounded-2xl border border-indigo-200/80 shadow-xs flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
@@ -957,6 +969,56 @@ export const HomePage: React.FC = () => {
                   </button>
                 </div>
               </div>
+            </div>
+
+            {/* Weekend Places to Visit in Bengaluru (Coming Soon) Module for Experienced Accounts */}
+            <div className="bg-gradient-to-r from-indigo-50 via-blue-50 to-emerald-50 rounded-2xl border border-indigo-200/80 p-4 sm:p-5 shadow-2xs space-y-3.5">
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+                    <Compass className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="font-black text-slate-900 text-sm sm:text-base">Places to Visit in Bengaluru (Weekend Escapes)</h3>
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-indigo-600 text-white shadow-2xs">
+                        Coming Soon
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-0.5">
+                      Curated weekend getaways, nature trails, and leisure spots in and around Bengaluru for experienced tech professionals.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => showComingSoonPlacesToVisitModal('candidate')}
+                  className="px-3.5 py-1.5 rounded-xl bg-white hover:bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer ml-auto"
+                >
+                  <span>Preview Destinations</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+
+              {/* 4 Curated Sneak Peek Destination Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 pt-1">
+                {[
+                  { title: 'Nandi Hills & Skandagiri', tag: 'Sunrise Treks', dist: '60 km from ORR', desc: 'Misty sunrise cloud beds & fortress trails' },
+                  { title: 'Cubbon Park & MG Road', tag: 'Central Green', dist: 'Heart of Bengaluru', desc: '300-acre green canopy & heritage cafes' },
+                  { title: 'Bannerghatta National Park', tag: 'Wildlife Safari', dist: '22 km from E-City', desc: 'Grand tiger safari & butterfly reserve' },
+                  { title: 'Coorg & Mysore Escapes', tag: 'Weekend Road Trip', dist: 'Scenic Getaways', desc: 'Coffee estates, waterfalls & palaces' },
+                ].map((spot, i) => (
+                  <div key={i} className="p-3 rounded-xl bg-white border border-indigo-100 hover:border-indigo-300 hover:shadow-xs transition text-left">
+                    <div className="flex items-center justify-between gap-1 mb-1">
+                      <span className="font-bold text-xs text-slate-900 truncate">{spot.title}</span>
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-indigo-50 text-indigo-700 border border-indigo-200 shrink-0">{spot.tag}</span>
+                    </div>
+                    <div className="text-[11px] text-slate-500 leading-snug">{spot.desc}</div>
+                    <div className="text-[10px] text-indigo-600 font-semibold mt-1.5">{spot.dist}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
             </div>
           ) : (
             /* Guest / Public Mode with 3 Exploration Tabs */

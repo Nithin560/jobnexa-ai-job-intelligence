@@ -7,7 +7,7 @@ import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { useAlertModal } from '../components/Modals/AlertModal';
 import { Job } from '../types';
 import { 
-  LayoutDashboard, User, FileText, Compass, Bookmark, CheckCircle, Bell, Building2, 
+  LayoutDashboard, User, FileText, Compass, Bookmark, CheckCircle, Bell, Building2, MapPin, 
   Target, Settings, Edit3, ArrowUpRight, ArrowLeft, Shield, Loader2
 } from 'lucide-react';
 
@@ -19,7 +19,7 @@ export const UserDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
   const [loading, setLoading] = useState(true);
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
-  const { showSuccess, showInfo, showError } = useAlertModal();
+  const { showSuccess, showInfo, showError, showComingSoonPlacesToVisitModal } = useAlertModal();
 
   const handleToggleSave = async (jobId: string) => {
     try {
@@ -71,6 +71,7 @@ export const UserDashboard: React.FC = () => {
     { label: 'Saved Positions', icon: Bookmark, tab: 'saved' },
     { label: 'Candidate Profile & Skills', icon: User, path: '/profile' },
     { label: 'Discovery Blueprint', icon: Target, path: '/strategy' },
+    { label: 'Weekend Places to Visit', icon: MapPin, tab: 'places', badge: 'Coming Soon' },
   ];
 
   return (
@@ -139,20 +140,31 @@ export const UserDashboard: React.FC = () => {
                 key={item.label}
                 onClick={() => {
                   triggerLoading(350);
+                  if (item.tab === 'places') {
+                    showComingSoonPlacesToVisitModal('candidate');
+                    return;
+                  }
                   if (item.path) {
                     navigate(item.path);
                   } else if (item.tab) {
                     setActiveTab(item.tab as any);
                   }
                 }}
-                className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-bold transition cursor-pointer ${
                   isItemActive 
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-200' 
                     : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                 }`}
               >
-                <Icon className="w-4 h-4 shrink-0" />
-                <span>{item.label}</span>
+                <div className="flex items-center gap-3">
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
+                </div>
+                {item.badge && (
+                  <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-blue-100 text-blue-700">
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}

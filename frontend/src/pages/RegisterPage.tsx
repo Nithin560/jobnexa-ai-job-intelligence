@@ -3,11 +3,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
 import { TopLoadingBar } from '../components/TopLoadingBar';
+import { useAlertModal } from '../components/Modals/AlertModal';
+import { Compass } from 'lucide-react';
 import vidhanaSoudhaBg from '../assets/vidhana_soudha_bg.jpg';
 
 export const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState<'details' | 'otp'>('details');
+  const { showComingSoonPlacesToVisitModal } = useAlertModal();
+
+  React.useEffect(() => {
+    if (!sessionStorage.getItem('seen_places_notice_register')) {
+      sessionStorage.setItem('seen_places_notice_register', 'true');
+      const timer = setTimeout(() => {
+        showComingSoonPlacesToVisitModal('guest');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [showComingSoonPlacesToVisitModal]);
 
   React.useEffect(() => {
     if (isUserAuthenticated()) {
@@ -175,9 +188,20 @@ export const RegisterPage: React.FC = () => {
       <div className="relative z-10 max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-8 space-y-6">
         
         {/* Back Link */}
-        <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
-          <ChevronLeft className="w-4 h-4" /> Back to Bengaluru Jobs
-        </Link>
+        <div className="flex items-center justify-between">
+          <Link to="/" className="inline-flex items-center gap-1 text-xs font-bold text-slate-500 hover:text-blue-600 transition">
+            <ChevronLeft className="w-4 h-4" /> Back to Jobs
+          </Link>
+          <button
+            type="button"
+            onClick={() => showComingSoonPlacesToVisitModal('guest')}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-[11px] font-bold transition shadow-2xs cursor-pointer group"
+          >
+            <Compass className="w-3.5 h-3.5 text-blue-600" />
+            <span>Weekend Escapes</span>
+            <span className="text-[9px] bg-blue-600 text-white px-1.5 py-0.2 rounded-full font-black uppercase">Soon</span>
+          </button>
+        </div>
 
         {/* Header */}
         <div className="text-center space-y-2">

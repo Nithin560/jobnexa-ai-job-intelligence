@@ -9,7 +9,7 @@ import {
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
   FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Settings, LogOut,
-  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft, Trash2
+  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft, Trash2, Compass
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
@@ -105,7 +105,17 @@ export const AdminDashboardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [scanMessage, setScanMessage] = useState('');
   const { triggerLoading } = useLoadingBar();
-  const { showAlert, showSuccess, showError, showWarning, showInfo, showConfirm, closeAlert } = useAlertModal();
+  const { showAlert, showSuccess, showError, showWarning, showInfo, showConfirm, showComingSoonPlacesToVisitModal, closeAlert } = useAlertModal();
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('seen_places_notice_admin')) {
+      sessionStorage.setItem('seen_places_notice_admin', 'true');
+      const timer = setTimeout(() => {
+        showComingSoonPlacesToVisitModal('admin');
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [showComingSoonPlacesToVisitModal]);
   const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
 
   const handleTabChange = (tabName: string) => {
@@ -284,6 +294,7 @@ export const AdminDashboardPage: React.FC = () => {
     { label: 'Analytics', icon: BarChart3, badge: 'Live' },
     { label: 'Job Alerts', icon: BellRing },
     { label: 'Settings', icon: Settings },
+    { label: 'Places to Visit', icon: Compass, badge: 'Coming Soon' },
   ];
 
   const displaySkills = overview?.top_skills && overview.top_skills.length > 0 
@@ -757,6 +768,7 @@ export const AdminDashboardPage: React.FC = () => {
                 {activeTab === 'Data Quality' && 'Data Quality & Posting Verification'}
                 {activeTab === 'Job Alerts' && 'Job Alerts & Notification Dispatcher'}
                 {activeTab === 'Settings' && 'Admin Platform Settings'}
+                {activeTab === 'Places to Visit' && 'Places to Visit in Bengaluru (Coming Soon)'}
               </h1>
               <p className="text-xs font-medium text-slate-500 mt-0.5">
                 {activeTab === 'Dashboard' && 'Monitor real Bengaluru job discovery, portal scanning, and system health'}
@@ -771,6 +783,7 @@ export const AdminDashboardPage: React.FC = () => {
                 {activeTab === 'Data Quality' && 'Automated verification ensuring only non-expired, verified postings are published'}
                 {activeTab === 'Job Alerts' && 'Candidate alert dispatch triggers and notification subscriptions'}
                 {activeTab === 'Settings' && 'Configure automated crawler schedules, API parameters, and platform preferences'}
+                {activeTab === 'Places to Visit' && 'Preview and manage curated weekend destinations, trekking trails, and leisure spots for experienced accounts'}
               </p>
             </div>
 
@@ -1873,6 +1886,93 @@ export const AdminDashboardPage: React.FC = () => {
                       Save Settings
                     </button>
                   </div>
+                </div>
+              </div>
+            </div>
+          ) : activeTab === 'Places to Visit' ? (
+            /* Places to Visit Admin Module (Coming Soon) */
+            <div className="space-y-6">
+              {/* Feature Banner */}
+              <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
+                <div className="relative z-10 space-y-3">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                      Module in Development • Beta Q4 2026
+                    </span>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                      Experienced Accounts Exclusive
+                    </span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
+                    Bengaluru Weekend Escapes & Places to Visit Planner
+                  </h2>
+                  <p className="text-slate-300 text-xs sm:text-sm max-w-3xl leading-relaxed">
+                    This administrative preview allows curating weekend destinations, hiking trails, nature sanctuaries, and relaxation spots for experienced engineers in Bengaluru. Full itinerary management, member discounts, and transit integrations will go live in the upcoming release.
+                  </p>
+                  <div className="pt-2 flex items-center gap-3">
+                    <button
+                      onClick={() => showComingSoonPlacesToVisitModal('admin')}
+                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-blue-500/30 cursor-pointer"
+                    >
+                      <Compass className="w-4 h-4" />
+                      <span>Preview User Modal Dialog</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Metric Overview */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                {[
+                  { label: 'Planned Spots', val: '12 Destinations', sub: 'Nature, Treks & Culture' },
+                  { label: 'Target Audience', val: '1+ Yrs Experienced', sub: 'Bengaluru Tech Workforce' },
+                  { label: 'Travel Radius', val: '0 - 250 km', sub: 'From ORR & Whitefield' },
+                  { label: 'Release Stage', val: 'Beta Q4 2026', sub: 'In Active Development' },
+                ].map((stat, i) => (
+                  <div key={i} className="bg-white p-4 rounded-2xl border border-slate-200 shadow-xs">
+                    <div className="text-xs text-slate-500 font-medium">{stat.label}</div>
+                    <div className="text-lg font-black text-slate-900 mt-1">{stat.val}</div>
+                    <div className="text-[11px] text-blue-600 font-semibold mt-0.5">{stat.sub}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Destination Catalog Preview */}
+              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="font-bold text-slate-900 text-base">Curated Weekend Destinations (Preview)</h3>
+                    <p className="text-xs text-slate-500">Destination cards that will appear inside Experienced Candidate Accounts</p>
+                  </div>
+                  <span className="px-3 py-1 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold border border-slate-200">
+                    6 Active In Preview
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2">
+                  {[
+                    { title: 'Nandi Hills & Skandagiri', category: 'Sunrise & Trekking', dist: '60 km from ORR', time: 'Early Morning (05:00 - 08:30)', desc: 'Iconic fortress hill offering panoramic sunrise cloud beds, ancient temples, and cycling trails.' },
+                    { title: 'Cubbon Park & Central BLR', category: 'City Green & Heritage', dist: 'Heart of Bengaluru', time: 'Morning & Sunset', desc: '300-acre green canopy surrounded by Vidhana Soudha, High Court, colonial avenues, and tech cafes.' },
+                    { title: 'Bannerghatta National Park', category: 'Wildlife Safari', dist: '22 km from Electronic City', time: 'Weekend Daytime', desc: 'Grand safari with lions, Bengal tigers, bears, a butterfly conservatory, and rescue sanctuary.' },
+                    { title: 'Ramanagara Silk City & Hills', category: 'Adventure & Bouldering', dist: '45 km from Mysore Rd', time: 'Winter / Mornings', desc: 'Famous rocky terrain for technical trekking, bouldering, camping, and rappelling retreats.' },
+                    { title: 'Commercial Street & MG Road', category: 'Shopping & Nightlife', dist: 'Central Bengaluru', time: 'Evenings & Weekends', desc: 'Vibrant retail streets, artisanal coffee houses, bookstores, and premier cosmopolitan dining.' },
+                    { title: 'Coorg & Mysore Escapes', category: '2-Day Road Trip', dist: '150 - 250 km from BLR', time: 'Long Weekends', desc: 'Lush Western Ghats coffee estates, Abbey waterfalls, and majestic Mysore Palace heritage.' }
+                  ].map((dest, idx) => (
+                    <div key={idx} className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-blue-300 hover:shadow-sm transition space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200">
+                          {dest.category}
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-medium">{dest.dist}</span>
+                      </div>
+                      <h4 className="font-bold text-slate-900 text-sm">{dest.title}</h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">{dest.desc}</p>
+                      <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-500 font-medium">
+                        <span>Best: {dest.time}</span>
+                        <span className="text-blue-600 font-bold">Planned Q4</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>

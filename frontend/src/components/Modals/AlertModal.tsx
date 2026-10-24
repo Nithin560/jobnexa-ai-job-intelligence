@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { X, ShieldAlert, AlertCircle, CheckCircle, Info, UserCheck, ArrowRight, Sparkles, HelpCircle } from 'lucide-react';
+import { X, ShieldAlert, AlertCircle, CheckCircle, Info, UserCheck, ArrowRight, Sparkles, HelpCircle, Compass, MapPin } from 'lucide-react';
 import { api } from '../../api/client';
 
 export type AlertType = 'warning' | 'info' | 'error' | 'success';
@@ -8,6 +8,12 @@ export interface AlertModalAction {
   label: string;
   onClick: () => void;
   variant?: 'primary' | 'secondary' | 'amber';
+}
+
+export interface PreviewSpot {
+  title: string;
+  tag: string;
+  description: string;
 }
 
 export interface AlertModalOptions {
@@ -22,6 +28,7 @@ export interface AlertModalOptions {
   onCancel?: () => void;
   actionButton?: AlertModalAction;
   details?: string;
+  previewSpots?: PreviewSpot[];
 }
 
 export interface ConfirmModalOptions {
@@ -50,6 +57,7 @@ interface AlertModalContextType {
     experienceYears: number;
     onContinue?: () => void;
   }) => void;
+  showComingSoonPlacesToVisitModal: (role?: 'candidate' | 'admin' | 'guest') => void;
   closeAlert: () => void;
   isOpen: boolean;
 }
@@ -63,6 +71,7 @@ const AlertModalContext = createContext<AlertModalContextType>({
   showConfirm: () => {},
   showAdminRestrictedModal: () => {},
   showProfileUpdatedModal: () => {},
+  showComingSoonPlacesToVisitModal: () => {},
   closeAlert: () => {},
   isOpen: false,
 });
@@ -110,6 +119,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         onCancel: opts.onCancel,
         actionButton: opts.actionButton,
         details: opts.details,
+        previewSpots: opts.previewSpots,
       });
     }
     setIsOpen(true);
@@ -235,6 +245,33 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setIsOpen(true);
   }, []);
 
+  const showComingSoonPlacesToVisitModal = useCallback((role: 'candidate' | 'admin' | 'guest' = 'candidate') => {
+    setOptions({
+      title: 'Places to Visit in Bengaluru (Coming Soon!)',
+      badge: role === 'admin' ? 'Admin Preview • Module In Planning' : 'Upcoming Feature • Experienced Accounts',
+      message: 'We are introducing an exclusive "Places to Visit" weekend discovery guide for experienced tech professionals in Bengaluru! Rejuvenate outside work hours with curated weekend getaways, nature trails, tech hangouts, and relaxation spots across the city.',
+      type: 'info',
+      previewSpots: [
+        { title: 'Nandi Hills & Skandagiri', tag: 'Sunrise & Treks', description: 'Breathtaking sunrise viewpoints, cycling routes, and cloud-walk trails (60 km from ORR tech corridor).' },
+        { title: 'Cubbon Park & MG Road', tag: 'City Green & Cafes', description: '300-acre green canopy, colonial heritage avenues, bookstores, and tech cafes in the city center.' },
+        { title: 'Bannerghatta National Park', tag: 'Wildlife Safari', description: 'Tiger & lion safaris, butterfly conservatory, and nature reserve (22 km from Electronic City).' },
+        { title: 'Coorg & Mysore Escapes', tag: 'Weekend Road Trips', description: 'Lush coffee plantations, heritage palaces, and waterfalls for scenic 2-day weekend retreats.' }
+      ],
+      details: role === 'admin'
+        ? 'Admin curation tools for managing weekend destinations, travel distances from tech parks, and member perks are launching in the upcoming release.'
+        : 'This feature will be accessible directly inside your Experienced Account navigation to provide personalized weekend work-life balance escapes.',
+      confirmText: 'Got It',
+      actionButton: {
+        label: role === 'admin' ? 'View Admin Console' : 'Explore Tech Jobs',
+        variant: 'primary',
+        onClick: () => {
+          setIsOpen(false);
+        }
+      }
+    });
+    setIsOpen(true);
+  }, []);
+
   // Intercept native window.alert so no unhandled alert creates an ugly browser popup
   useEffect(() => {
     const originalAlert = window.alert;
@@ -286,6 +323,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         showConfirm,
         showAdminRestrictedModal,
         showProfileUpdatedModal,
+        showComingSoonPlacesToVisitModal,
         closeAlert,
         isOpen,
       }}
@@ -304,7 +342,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             }
           }}
         >
-          <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all animate-modal-content">
+          <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all animate-modal-content">
             {/* Top Color Accent Line */}
             <div
               className={`h-1.5 w-full ${
@@ -349,13 +387,13 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                   ) : options.type === 'success' ? (
                     <CheckCircle className="w-6 h-6" />
                   ) : (
-                    <Info className="w-6 h-6" />
+                    <Compass className="w-6 h-6" />
                   )}
                 </div>
 
                 <div className="flex-1 pr-6">
                   {options.badge && (
-                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide uppercase bg-slate-100 text-slate-600 border border-slate-200 mb-1.5">
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-blue-50 text-blue-700 border border-blue-200 mb-1.5 shadow-2xs">
                       {options.badge}
                     </span>
                   )}
@@ -374,11 +412,32 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                   {options.message}
                 </p>
 
+                {/* Optional Preview Spots */}
+                {options.previewSpots && options.previewSpots.length > 0 && (
+                  <div className="space-y-2 mt-3 pt-1">
+                    <div className="text-[11px] font-bold text-slate-600 uppercase tracking-wider flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-blue-600" />
+                      <span>Curated Weekend Spots Preview</span>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                      {options.previewSpots.map((spot, idx) => (
+                        <div key={idx} className="p-2.5 rounded-xl bg-slate-50 border border-slate-200/80 hover:border-blue-300 transition text-left">
+                          <div className="flex items-center justify-between gap-1 mb-1">
+                            <span className="font-bold text-xs text-slate-800 truncate">{spot.title}</span>
+                            <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-blue-100/70 text-blue-700 border border-blue-200 shrink-0">{spot.tag}</span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 leading-snug line-clamp-2">{spot.description}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {options.details && (
                   <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs text-slate-600 space-y-1.5 leading-relaxed">
                     <div className="flex items-center gap-1.5 font-semibold text-slate-800">
                       <UserCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                      <span>Intelligence Policy</span>
+                      <span>Feature Blueprint & Release Status</span>
                     </div>
                     <p className="text-slate-500">
                       {options.details}
