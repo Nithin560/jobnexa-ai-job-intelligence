@@ -88,8 +88,11 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
         <div className="space-y-2 text-sm text-slate-600">
           {[
             { label: 'All Sources', val: '' },
-            { label: 'Company Career Sites', val: 'career_portal' },
-            { label: 'Job Platforms', val: 'job_portal' },
+            { label: 'Company Career Sites (Direct ATS)', val: 'career_portal' },
+            { label: 'Wellfound (AngelList Startups)', val: 'wellfound' },
+            { label: 'LinkedIn Tech Jobs', val: 'linkedin' },
+            { label: 'Glassdoor Verified Jobs', val: 'glassdoor' },
+            { label: 'Job Platforms & Aggregators', val: 'job_portal' },
           ].map((src) => (
             <label key={src.val} className="flex items-center gap-2.5 cursor-pointer hover:text-slate-900">
               <input

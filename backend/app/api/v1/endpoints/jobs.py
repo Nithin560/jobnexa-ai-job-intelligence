@@ -159,12 +159,19 @@ def list_jobs(
         joinedload(Job.job_skills).joinedload(JobSkill.skill)
     ).filter(Job.status != "closed")
 
-    # Source Type Filter (Career Portal vs Job Platform)
+    # Source Type Filter (Career Portal vs Job Platform vs Specific Platforms)
     if source_type:
-        if source_type == "job_portal":
+        st_low = source_type.lower().strip()
+        if st_low == "job_portal":
             query = query.join(Job.job_source).filter(JobSource.source_type == "job_portal")
-        elif source_type == "career_portal":
+        elif st_low == "career_portal":
             query = query.join(Job.job_source).filter(JobSource.source_type.in_(["career_portal", "ats_api", "career_page"]))
+        elif st_low in ["wellfound", "angellist"]:
+            query = query.join(Job.job_source).filter(JobSource.base_url.ilike("%wellfound%"))
+        elif st_low == "linkedin":
+            query = query.join(Job.job_source).filter(JobSource.base_url.ilike("%linkedin%"))
+        elif st_low == "glassdoor":
+            query = query.join(Job.job_source).filter(JobSource.base_url.ilike("%glassdoor%"))
 
     # Location Filter (Bangalore Tech Hubs & Karnataka State)
     if location and location.lower() != "all":
@@ -481,10 +488,18 @@ def list_jobs(
             if j.job_source.source_type == "job_portal":
                 src_type = "job_portal"
                 base_low = (j.job_source.base_url or "").lower()
-                if "arbeitnow" in base_low:
+                if "wellfound" in base_low or "angellist" in base_low:
+                    src_name = "Wellfound (AngelList)"
+                elif "linkedin" in base_low:
+                    src_name = "LinkedIn"
+                elif "glassdoor" in base_low:
+                    src_name = "Glassdoor"
+                elif "arbeitnow" in base_low:
                     src_name = "Arbeitnow"
                 elif "jobicy" in base_low:
                     src_name = "Jobicy"
+                elif "remotive" in base_low:
+                    src_name = "Remotive"
                 else:
                     src_name = "Job Platform"
             else:
@@ -865,10 +880,18 @@ def get_job_detail(
         if job.job_source.source_type == "job_portal":
             src_type = "job_portal"
             base_low = (job.job_source.base_url or "").lower()
-            if "arbeitnow" in base_low:
+            if "wellfound" in base_low or "angellist" in base_low:
+                src_name = "Wellfound (AngelList)"
+            elif "linkedin" in base_low:
+                src_name = "LinkedIn"
+            elif "glassdoor" in base_low:
+                src_name = "Glassdoor"
+            elif "arbeitnow" in base_low:
                 src_name = "Arbeitnow"
             elif "jobicy" in base_low:
                 src_name = "Jobicy"
+            elif "remotive" in base_low:
+                src_name = "Remotive"
             else:
                 src_name = "Job Platform"
         else:

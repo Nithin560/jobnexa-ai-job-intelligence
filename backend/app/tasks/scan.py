@@ -516,6 +516,36 @@ TARGET_SOURCES = [
         "connector_key": "job_portal_api",
         "slug": "remotive",
         "source_type": "job_portal"
+    },
+    {
+        "name": "Wellfound (AngelList)",
+        "domain": "wellfound.com",
+        "careers_url": "https://wellfound.com/location/bangalore",
+        "company_type": "Job Platform",
+        "logo_url": "https://www.google.com/s2/favicons?domain=wellfound.com&sz=128",
+        "connector_key": "job_portal_api",
+        "slug": "wellfound",
+        "source_type": "job_portal"
+    },
+    {
+        "name": "LinkedIn",
+        "domain": "linkedin.com",
+        "careers_url": "https://www.linkedin.com/jobs/search/?location=Bengaluru",
+        "company_type": "Job Platform",
+        "logo_url": "https://www.google.com/s2/favicons?domain=linkedin.com&sz=128",
+        "connector_key": "job_portal_api",
+        "slug": "linkedin",
+        "source_type": "job_portal"
+    },
+    {
+        "name": "Glassdoor",
+        "domain": "glassdoor.co.in",
+        "careers_url": "https://www.glassdoor.co.in/Job/bangalore-jobs-SRCH_IL.0,9_IC2940587.htm",
+        "company_type": "Job Platform",
+        "logo_url": "https://www.google.com/s2/favicons?domain=glassdoor.com&sz=128",
+        "connector_key": "job_portal_api",
+        "slug": "glassdoor",
+        "source_type": "job_portal"
     }
 ]
 
