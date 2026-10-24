@@ -25,7 +25,7 @@ class Settings(BaseSettings):
 
     # Admin Credentials
     ADMIN_EMAIL_ID: str = "nithinvandana26@gmail.com"
-    ADMIN_PASSWORD: str = "9347388372pandu@"
+    ADMIN_PASSWORD: str = "22H71A0560pandu@"
 
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = [

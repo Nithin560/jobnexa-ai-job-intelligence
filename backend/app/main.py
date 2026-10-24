@@ -75,7 +75,7 @@ def init_default_accounts():
                 if not existing:
                     new_admin = User(
                         email=email,
-                        password_hash=get_password_hash("9347388372pandu@"),
+                        password_hash=get_password_hash("22H71A0560pandu@"),
                         full_name="Nithin Vandana (Admin)",
                         role="admin",
                         is_verified=True
