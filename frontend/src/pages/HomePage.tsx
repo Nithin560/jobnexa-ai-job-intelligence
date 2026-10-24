@@ -223,10 +223,14 @@ export const HomePage: React.FC = () => {
   const handleReloadFresherJobs = async () => {
     setIsReloadingFresher(true);
     try {
+      setSortBy('Recent');
       setPage(1);
-      await Promise.all([fetchJobs(), loadInsights()]);
-      setFresherReloadFeedback('Fresh jobs & recommendations updated!');
-      setTimeout(() => setFresherReloadFeedback(null), 3500);
+      await Promise.all([
+        fetchJobs({ sortBy: 'Recent', page: 1 }),
+        loadInsights()
+      ]);
+      setFresherReloadFeedback('Fresh jobs reloaded • Newest postings first!');
+      setTimeout(() => setFresherReloadFeedback(null), 4000);
     } catch (e) {
       console.error(e);
     } finally {
@@ -237,10 +241,14 @@ export const HomePage: React.FC = () => {
   const handleReloadExperiencedJobs = async () => {
     setIsReloadingExperienced(true);
     try {
+      setSortBy('Recent');
       setPage(1);
-      await Promise.all([fetchJobs(), loadInsights()]);
-      setExperiencedReloadFeedback('Fresh openings & recommendations updated!');
-      setTimeout(() => setExperiencedReloadFeedback(null), 3500);
+      await Promise.all([
+        fetchJobs({ sortBy: 'Recent', page: 1 }),
+        loadInsights()
+      ]);
+      setExperiencedReloadFeedback('Fresh openings reloaded • Newest postings first!');
+      setTimeout(() => setExperiencedReloadFeedback(null), 4000);
     } catch (e) {
       console.error(e);
     } finally {
@@ -291,7 +299,9 @@ export const HomePage: React.FC = () => {
     };
   }, []);
 
-  const fetchJobs = async () => {
+  const fetchJobs = async (overrides?: { sortBy?: string; page?: number }) => {
+    const effectiveSortBy = overrides?.sortBy ?? sortBy;
+    const effectivePage = overrides?.page ?? page;
     setLoading(true);
     try {
       let exp_min: number | undefined = undefined;
@@ -335,8 +345,8 @@ export const HomePage: React.FC = () => {
         exp_max: exp_max,
         exp_tier: exp_tier,
         role_type: roleType !== 'all' ? roleType : undefined,
-        sort_by: sortBy === 'Recent' ? 'date' : 'relevance',
-        page: page,
+        sort_by: effectiveSortBy === 'Recent' ? 'date' : (effectiveSortBy === 'Match' ? 'match' : 'relevance'),
+        page: effectivePage,
         page_size: pageSize,
       });
       setJobs(data.items);
@@ -801,8 +811,8 @@ export const HomePage: React.FC = () => {
                     onChange={(e) => setSortBy(e.target.value)}
                     className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-blue-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
                   >
+                    <option value="Recent">Fresh Jobs (Most Recent)</option>
                     <option value="Relevance">Relevance</option>
-                    <option value="Recent">Most Recent</option>
                     <option value="Match">Highest Match Score</option>
                   </select>
                 </div>
@@ -911,8 +921,8 @@ export const HomePage: React.FC = () => {
                     onChange={(e) => setSortBy(e.target.value)}
                     className="bg-slate-50 border border-slate-200 text-xs font-bold text-slate-800 rounded-xl px-2.5 py-1.5 outline-none focus:border-indigo-500 shadow-2xs cursor-pointer transition hover:border-slate-300"
                   >
+                    <option value="Recent">Fresh Jobs (Most Recent)</option>
                     <option value="Relevance">Relevance</option>
-                    <option value="Recent">Most Recent</option>
                     <option value="Match">Highest Match Score</option>
                   </select>
                 </div>

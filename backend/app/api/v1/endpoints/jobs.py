@@ -160,7 +160,7 @@ def list_jobs(
     ).filter(Job.status != "closed")
 
     # Source Type Filter (Career Portal vs Job Platform vs Specific Platforms)
-    if source_type:
+    if source_type and isinstance(source_type, str) and source_type.strip():
         st_low = source_type.lower().strip()
         if st_low == "job_portal":
             query = query.join(Job.job_source).filter(JobSource.source_type == "job_portal")
@@ -424,35 +424,49 @@ def list_jobs(
         saved_objs = db.query(SavedJob.job_id).filter(SavedJob.user_id == current_user.id).all()
         saved_job_ids = {s.job_id for s in saved_objs}
 
-    # Sorting & Pagination: If candidate user views feed with 'relevance' sort, rank by transparent candidate match score!
-    is_candidate_relevance = (sort_by == "relevance" and candidate_profile is not None and (candidate_profile.target_titles or candidate_skills))
+    # Sorting & Pagination: Candidate-aware ranking
+    has_candidate_profile = (candidate_profile is not None and (candidate_profile.target_titles or candidate_skills))
     
-    if is_candidate_relevance:
+    if has_candidate_profile:
         all_candidate_jobs = query.distinct().all()
         scored_jobs = []
         for cj in all_candidate_jobs:
             m_breakdown = calculate_job_match(cj, candidate_profile, candidate_skills)
-            scored_jobs.append((m_breakdown, cj))
+            dt = cj.posted_at or cj.last_seen_at
+            date_key = dt.strftime('%Y%m%d') if dt else '19700101'
+            ts = dt.timestamp() if dt else 0
+            scored_jobs.append((m_breakdown, cj, date_key, ts))
 
-        # Sort descending by match score, then by posted_at recency
-        scored_jobs.sort(
-            key=lambda x: (
-                x[0].score,
-                x[1].posted_at.timestamp() if x[1].posted_at else 0
-            ),
-            reverse=True
-        )
+        if sort_by == "date":
+            # Fresh jobs first: Most recently posted jobs first (by calendar day), then by match score, then timestamp
+            scored_jobs.sort(
+                key=lambda x: (
+                    x[2],
+                    x[0].score,
+                    x[3]
+                ),
+                reverse=True
+            )
+        else:
+            # Relevance: Best candidate fit match score first, then by recency
+            scored_jobs.sort(
+                key=lambda x: (
+                    x[0].score,
+                    x[3]
+                ),
+                reverse=True
+            )
 
         total_items = len(scored_jobs)
         total_pages = math.ceil(total_items / page_size) if total_items > 0 else 1
-        page_slice = scored_jobs[(page - 1) * page_size : page * page_size]
+        page_slice = [(item[0], item[1]) for item in scored_jobs[(page - 1) * page_size : page * page_size]]
         jobs_with_match = page_slice
     else:
         # Standard sorting by date or last seen
         if sort_by == "date":
-            query = query.order_by(desc(Job.posted_at), desc(Job.last_seen_at))
+            query = query.order_by(desc(Job.posted_at).nullslast(), desc(Job.last_seen_at).nullslast())
         else:
-            query = query.order_by(desc(Job.last_seen_at))
+            query = query.order_by(desc(Job.last_seen_at).nullslast())
 
         total_items = query.distinct().count()
         total_pages = math.ceil(total_items / page_size) if total_items > 0 else 1
