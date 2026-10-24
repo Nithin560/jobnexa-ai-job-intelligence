@@ -44,9 +44,9 @@ class Settings(BaseSettings):
     # SMTP / Email Configuration for OTP Authentication
     SMTP_HOST: str = "smtp.gmail.com"
     SMTP_PORT: int = 587
-    SMTP_USER: Optional[str] = None
-    SMTP_PASSWORD: Optional[str] = None
-    EMAILS_FROM_EMAIL: Optional[str] = None
+    SMTP_USER: Optional[str] = "jobnexaaiplatform@gmail.com"
+    SMTP_PASSWORD: Optional[str] = "rtunkeubohmrzeya"
+    EMAILS_FROM_EMAIL: Optional[str] = "jobnexaaiplatform@gmail.com"
     EMAILS_FROM_NAME: str = "JobNexa Intelligence"
 
     # AI / Embedding Settings

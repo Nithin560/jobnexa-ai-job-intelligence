@@ -11,7 +11,8 @@ def get_smtp_credentials():
     # Reload from .env if present
     load_dotenv(override=True)
     user = os.getenv("SMTP_USER") or settings.SMTP_USER
-    password = os.getenv("SMTP_PASSWORD") or settings.SMTP_PASSWORD
+    raw_pass = os.getenv("SMTP_PASSWORD") or settings.SMTP_PASSWORD or ""
+    password = raw_pass.replace(" ", "") if raw_pass else None
     host = os.getenv("SMTP_HOST") or settings.SMTP_HOST or "smtp.gmail.com"
     port_val = os.getenv("SMTP_PORT") or settings.SMTP_PORT or 587
     port = int(port_val)
