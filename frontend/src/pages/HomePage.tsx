@@ -699,16 +699,19 @@ export const HomePage: React.FC = () => {
                   </div>
                   <div className="text-xs text-slate-500 font-medium mt-0.5">
                     {candidateProfile?.target_titles?.[0] ? (
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        <span>Personalized for</span>
-                        <span className="font-extrabold text-blue-800 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md text-[11px] shadow-2xs">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-extrabold text-blue-800 bg-blue-50 border border-blue-200 px-2.5 py-0.5 rounded-md text-[11px] shadow-2xs shrink-0">
                           {candidateProfile.target_titles[0]}
                         </span>
-                        <span>• Matching Skills:</span>
-                        <span className="font-bold text-slate-800">
-                          {candidateProfile.skills?.slice(0, 4).join(', ')}
-                          {candidateProfile.skills && candidateProfile.skills.length > 4 && ` (+${candidateProfile.skills.length - 4} more)`}
-                        </span>
+                        {candidateProfile.skills && candidateProfile.skills.length > 0 && (
+                          <>
+                            <span className="text-slate-400 shrink-0">•</span>
+                            <span className="text-slate-500 text-[11px] font-medium shrink-0">Skills:</span>
+                            <span className="font-bold text-slate-800 text-[11px]">
+                              {candidateProfile.skills.join(', ')}
+                            </span>
+                          </>
+                        )}
                       </div>
                     ) : (
                       <span>Curated exclusively for entry-level and fresh graduate candidates across Bengaluru and Karnataka</span>
@@ -804,9 +807,26 @@ export const HomePage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Curated exclusively for experienced software engineers and industry specialists across Bengaluru and Karnataka
-                  </p>
+                  <div className="text-xs text-slate-500 font-medium mt-0.5">
+                    {candidateProfile?.target_titles?.[0] ? (
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-extrabold text-indigo-800 bg-indigo-50 border border-indigo-200 px-2.5 py-0.5 rounded-md text-[11px] shadow-2xs shrink-0">
+                          {candidateProfile.target_titles[0]}
+                        </span>
+                        {candidateProfile.skills && candidateProfile.skills.length > 0 && (
+                          <>
+                            <span className="text-slate-400 shrink-0">•</span>
+                            <span className="text-slate-500 text-[11px] font-medium shrink-0">Skills:</span>
+                            <span className="font-bold text-slate-800 text-[11px]">
+                              {candidateProfile.skills.join(', ')}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <span>Curated exclusively for experienced software engineers and industry specialists across Bengaluru and Karnataka</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
