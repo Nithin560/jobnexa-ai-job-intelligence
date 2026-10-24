@@ -16,6 +16,7 @@ from app.schemas.user import (
     VerifyRegisterRequest,
     VerifyOTPLoginRequest
 )
+from app.core.config import settings
 from app.core.security import get_password_hash, verify_password, create_access_token
 from app.services.email_service import send_otp_email, is_smtp_configured
 from app.api.deps import get_current_user
