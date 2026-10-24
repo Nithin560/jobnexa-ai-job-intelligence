@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
+import placesToVisitBg from '../assets/places_to_visit_bg.jpg';
 import { useAlertModal } from '../components/Modals/AlertModal';
 import { AdminOverview, Job, AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse } from '../types';
 import { 
@@ -415,8 +416,14 @@ export const AdminDashboardPage: React.FC = () => {
           })}
 
           {/* Spotlight Widget Card: Places to Visit (Weekend Escapes in BLR) */}
-          <div className="mx-0.5 mt-3 mb-1 p-3 rounded-2xl bg-gradient-to-br from-emerald-950/70 via-slate-900 to-teal-950/50 border border-emerald-500/30 text-left shadow-lg shadow-emerald-950/30">
-            <div className="flex items-center gap-2 mb-1.5">
+          <div className="mx-0.5 mt-3 mb-1 p-3 rounded-2xl border border-emerald-500/30 text-left shadow-lg shadow-emerald-950/30 relative overflow-hidden group">
+            <div 
+              className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"
+              style={{ backgroundImage: `url(${placesToVisitBg})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/85 via-slate-900/90 to-teal-950/80" />
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-1.5">
               <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
                 <Compass className="w-4 h-4 animate-spin-slow" />
               </div>
@@ -448,6 +455,7 @@ export const AdminDashboardPage: React.FC = () => {
               >
                 View Popup
               </button>
+            </div>
             </div>
           </div>
 
@@ -1927,31 +1935,56 @@ export const AdminDashboardPage: React.FC = () => {
           ) : activeTab === 'Places to Visit' ? (
             /* Places to Visit Admin Module (Coming Soon) */
             <div className="space-y-6">
-              {/* Feature Banner */}
-              <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-6 sm:p-8 border border-slate-800 shadow-xl relative overflow-hidden">
-                <div className="relative z-10 space-y-3">
+              {/* Feature Banner with Unique Places to Visit Background */}
+              <div className="relative text-white rounded-2xl p-6 sm:p-10 border border-emerald-500/40 shadow-2xl overflow-hidden group">
+                {/* Photorealistic Panoramic Background Image */}
+                <div 
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-700 ease-out group-hover:scale-105"
+                  style={{
+                    backgroundImage: `url(${placesToVisitBg})`,
+                  }}
+                />
+
+                {/* Multi-layered Atmospheric Backdrop Overlays for Optimal Text Readability & Contrast */}
+                <div className="absolute inset-0 bg-gradient-to-r from-slate-950/95 via-slate-950/80 to-slate-900/50" />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
+                <div className="absolute inset-0 bg-emerald-950/20 mix-blend-overlay" />
+
+                {/* Banner Content */}
+                <div className="relative z-10 space-y-3.5 max-w-3xl">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/20 text-blue-300 border border-blue-400/30">
+                    <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-emerald-500/25 text-emerald-300 border border-emerald-400/40 backdrop-blur-md shadow-xs">
                       Module in Development • Beta Q4 2026
                     </span>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                    <span className="px-3 py-1 rounded-full text-xs font-extrabold uppercase tracking-wider bg-amber-500/25 text-amber-300 border border-amber-400/40 backdrop-blur-md shadow-xs">
                       Experienced Accounts Exclusive
                     </span>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/25 text-blue-300 border border-blue-400/40 backdrop-blur-md shadow-xs flex items-center gap-1">
+                      <MapPin className="w-3 h-3 text-blue-300" />
+                      <span>Bengaluru Weekend Escapes</span>
+                    </span>
                   </div>
-                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
+
+                  <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white drop-shadow-md">
                     Bengaluru Weekend Escapes & Places to Visit Planner
                   </h2>
-                  <p className="text-slate-300 text-xs sm:text-sm max-w-3xl leading-relaxed">
+
+                  <p className="text-slate-200 text-xs sm:text-sm leading-relaxed drop-shadow-sm font-medium">
                     This administrative preview allows curating weekend destinations, hiking trails, nature sanctuaries, and relaxation spots for experienced engineers in Bengaluru. Full itinerary management, member discounts, and transit integrations will go live in the upcoming release.
                   </p>
-                  <div className="pt-2 flex items-center gap-3">
+
+                  <div className="pt-2 flex items-center gap-3 flex-wrap">
                     <button
                       onClick={() => showComingSoonPlacesToVisitModal('admin')}
-                      className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-md shadow-blue-500/30 cursor-pointer"
+                      className="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-lg shadow-blue-600/30 cursor-pointer backdrop-blur-sm active:scale-95"
                     >
                       <Compass className="w-4 h-4" />
                       <span>Preview User Modal Dialog</span>
                     </button>
+                    <div className="inline-flex items-center gap-2 text-xs font-semibold text-emerald-300 bg-emerald-950/70 border border-emerald-500/40 px-3 py-2 rounded-xl backdrop-blur-md">
+                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>12 Curated Escapes: Nandi Hills, Cubbon Park, Savandurga & Wildlife Safaris</span>
+                    </div>
                   </div>
                 </div>
               </div>
