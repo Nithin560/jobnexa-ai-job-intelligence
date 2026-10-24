@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
-  Briefcase, Search, MapPin, User, LogOut, Shield, Compass, 
+  Briefcase, MapPin, User, LogOut, Shield, Compass, 
   Rocket, LayoutDashboard, Menu, X, Building2 
 } from 'lucide-react';
 import { api, isUserAuthenticated } from '../api/client';
@@ -51,8 +51,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs">
       <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
         
-        {/* Brand Identity & Spanned Project Title - Human-Crafted Architecture */}
-        <div className="flex items-center gap-3 shrink-0">
+        {/* Left Side: Brand Identity & Nav Sections Grouped Together */}
+        <div className="flex items-center gap-4 lg:gap-6 shrink-0">
           <Link
             to={authenticated ? "/" : "/login"}
             className="flex items-center gap-3 group"
@@ -86,111 +86,91 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               </div>
             </div>
           </Link>
+
+          {/* Navigation Tabs - Moved directly to left side next to brand */}
+          {authenticated && !isAuthPage && (
+            <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80 text-xs font-semibold">
+              <Link
+                to="/"
+                onClick={() => triggerLoading(450)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/' && !location.search.includes('Startup')
+                    ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <Briefcase className="w-3.5 h-3.5 text-blue-600" />
+                <span>Jobs Feed</span>
+              </Link>
+
+              <Link
+                to="/jobs?company_type=Startup"
+                onClick={() => triggerLoading(450)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.search.includes('Startup') 
+                    ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <Rocket className="w-3.5 h-3.5 text-amber-500" />
+                <span>Startups</span>
+              </Link>
+
+              <Link
+                to="/dashboard"
+                onClick={() => triggerLoading(450)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/dashboard' 
+                    ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <LayoutDashboard className="w-3.5 h-3.5 text-indigo-500" />
+                <span>Dashboard</span>
+              </Link>
+
+              <Link
+                to="/strategy"
+                onClick={() => triggerLoading(450)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/strategy' 
+                    ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <Compass className="w-3.5 h-3.5 text-slate-500" />
+                <span>Blueprint</span>
+              </Link>
+
+              <Link
+                to="/profile"
+                onClick={() => triggerLoading(450)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/profile' 
+                    ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
+                }`}
+              >
+                <User className="w-3.5 h-3.5 text-slate-500" />
+                <span>Profile</span>
+              </Link>
+
+              <Link
+                to="/admin?tab=Dashboard"
+                state={{ tab: 'Dashboard' }}
+                onClick={() => triggerLoading(450)}
+                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                  location.pathname === '/admin' 
+                    ? 'bg-white text-amber-800 shadow-2xs font-bold border border-amber-200/80' 
+                    : 'text-slate-600 hover:text-amber-800 hover:bg-white/60'
+                }`}
+              >
+                <Shield className="w-3.5 h-3.5 text-amber-600" />
+                <span>Admin</span>
+              </Link>
+            </nav>
+          )}
         </div>
-
-        {/* Global Search Header - Professional Human-Crafted Search Element */}
-        {authenticated && !isAuthPage && (
-          <div className="hidden xl:flex items-center bg-slate-50 hover:bg-slate-100/90 focus-within:bg-white rounded-xl px-3 py-1.5 w-64 2xl:w-80 border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 transition shadow-2xs shrink-0">
-            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search 1,600+ Bengaluru jobs, ATS feeds..."
-              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  navigate(`/?q=${encodeURIComponent(e.currentTarget.value)}`);
-                }
-              }}
-            />
-            <kbd className="inline-flex items-center text-[10px] font-mono text-slate-400 bg-white border border-slate-200 px-1.5 py-0.5 rounded shadow-2xs ml-1 shrink-0">
-              ↵
-            </kbd>
-          </div>
-        )}
-
-        {/* Navigation Tabs - High-Craft Segmented Group */}
-        {authenticated && !isAuthPage && (
-          <nav className="hidden lg:flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80 text-xs font-semibold">
-            <Link
-              to="/"
-              onClick={() => triggerLoading(450)}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                location.pathname === '/' && !location.search.includes('Startup')
-                  ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-              }`}
-            >
-              <Briefcase className="w-3.5 h-3.5 text-blue-600" />
-              <span>Jobs Feed</span>
-            </Link>
-
-            <Link
-              to="/jobs?company_type=Startup"
-              onClick={() => triggerLoading(450)}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                location.search.includes('Startup') 
-                  ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-              }`}
-            >
-              <Rocket className="w-3.5 h-3.5 text-amber-500" />
-              <span>Startups</span>
-            </Link>
-
-            <Link
-              to="/dashboard"
-              onClick={() => triggerLoading(450)}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                location.pathname === '/dashboard' 
-                  ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-              }`}
-            >
-              <LayoutDashboard className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Dashboard</span>
-            </Link>
-
-            <Link
-              to="/strategy"
-              onClick={() => triggerLoading(450)}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                location.pathname === '/strategy' 
-                  ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-              }`}
-            >
-              <Compass className="w-3.5 h-3.5 text-slate-500" />
-              <span>Blueprint</span>
-            </Link>
-
-            <Link
-              to="/profile"
-              onClick={() => triggerLoading(450)}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                location.pathname === '/profile' 
-                  ? 'bg-white text-blue-700 shadow-2xs font-bold border border-slate-200/80' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
-              }`}
-            >
-              <User className="w-3.5 h-3.5 text-slate-500" />
-              <span>Profile</span>
-            </Link>
-
-            <Link
-              to="/admin?tab=Dashboard"
-              state={{ tab: 'Dashboard' }}
-              onClick={() => triggerLoading(450)}
-              className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                location.pathname === '/admin' 
-                  ? 'bg-white text-amber-800 shadow-2xs font-bold border border-amber-200/80' 
-                  : 'text-slate-600 hover:text-amber-800 hover:bg-white/60'
-              }`}
-            >
-              <Shield className="w-3.5 h-3.5 text-amber-600" />
-              <span>Admin</span>
-            </Link>
-          </nav>
-        )}
 
         {/* Right Actions & Account Controls */}
         <div className="flex items-center gap-2.5 shrink-0 ml-auto">
@@ -298,22 +278,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
       {/* Mobile Collapsible Navigation Drawer */}
       {isMobileMenuOpen && authenticated && !isAuthPage && (
         <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-4 space-y-2 shadow-md">
-          {/* Mobile Search */}
-          <div className="flex items-center bg-slate-100 rounded-xl px-3 py-2 border border-slate-200 mb-3">
-            <Search className="w-4 h-4 text-slate-400 mr-2 shrink-0" />
-            <input
-              type="text"
-              placeholder="Search Bengaluru jobs..."
-              className="bg-transparent text-xs w-full outline-none text-slate-800 placeholder-slate-400 font-medium"
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  navigate(`/?q=${encodeURIComponent(e.currentTarget.value)}`);
-                  setIsMobileMenuOpen(false);
-                }
-              }}
-            />
-          </div>
-
           <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
             <Link
               to="/"
