@@ -2,6 +2,7 @@ from typing import List, Optional
 from pydantic import BaseModel, Field
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session, joinedload
+from sqlalchemy import or_, and_
 from app.db.session import get_db
 from app.models.user import User
 from app.models.candidate import CandidateProfile, CandidateSkill
@@ -124,15 +125,54 @@ def get_job_matches(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    """Get candidate job recommendations ranked by match breakdown score."""
+    """Get candidate job recommendations strictly ranked by transparent match breakdown score."""
     profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == current_user.id).first()
     cand_skills_objs = db.query(CandidateSkill).options(joinedload(CandidateSkill.skill)).filter(CandidateSkill.profile_id == profile.id).all() if profile else []
     candidate_skills = [cs.skill.canonical_name for cs in cand_skills_objs if cs.skill]
 
-    jobs = db.query(Job).options(
+    query = db.query(Job).options(
         joinedload(Job.company),
         joinedload(Job.job_skills).joinedload(JobSkill.skill)
-    ).filter(Job.status == "active").all()
+    ).filter(Job.status == "active")
+
+    # Respect candidate experience tier
+    if profile:
+        if profile.years_experience <= 1:
+            fresher_cond = and_(
+                ~Job.title.ilike("%senior%"),
+                ~Job.title.ilike("%sr.%"),
+                ~Job.title.ilike("%lead%"),
+                ~Job.title.ilike("%principal%"),
+                ~Job.title.ilike("%staff%"),
+                ~Job.title.ilike("%manager%"),
+                ~Job.title.ilike("%director%"),
+                ~Job.title.ilike("%architect%"),
+                or_(
+                    and_(Job.experience_min == 0, Job.experience_max <= 1),
+                    Job.experience_max <= 1,
+                    and_(Job.experience_min <= 1, Job.experience_max <= 2),
+                    and_(
+                        Job.experience_min == 0,
+                        or_(
+                            Job.title.ilike("%intern%"),
+                            Job.title.ilike("%trainee%"),
+                            Job.title.ilike("%graduate%"),
+                            Job.title.ilike("%fresher%"),
+                            Job.title.ilike("%junior%"),
+                            Job.title.ilike("%associate engineer%"),
+                            Job.title.ilike("%associate software%"),
+                            Job.title.ilike("%associate developer%"),
+                            Job.title.ilike("%associate backend%"),
+                            Job.title.ilike("%associate frontend%")
+                        )
+                    )
+                )
+            )
+            query = query.filter(fresher_cond)
+        else:
+            query = query.filter(or_(Job.experience_min >= 1, Job.experience_max > 1))
+
+    jobs = query.all()
 
     matched_items = []
     saved_objs = db.query(SavedJob.job_id).filter(SavedJob.user_id == current_user.id).all()

@@ -93,6 +93,21 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> New
                 </span>
               ) : null}
+              {job.match && job.match.score >= 70 && !isExpired && (
+                <span 
+                  className={`text-[11px] font-extrabold px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 shadow-2xs shrink-0 ${
+                    job.match.score >= 90
+                      ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                      : job.match.score >= 80
+                      ? 'bg-blue-50 text-blue-800 border-blue-200'
+                      : 'bg-indigo-50 text-indigo-800 border-indigo-200'
+                  }`}
+                  title={`Match Breakdown: ${job.match.skills_match_percent}% Skills, ${job.match.role_match_percent}% Title, ${job.match.experience_match_percent}% Experience`}
+                >
+                  <span className={`w-1.5 h-1.5 rounded-full ${job.match.score >= 90 ? 'bg-emerald-500 animate-pulse' : 'bg-blue-500'}`}></span>
+                  <span>{Math.round(job.match.score)}% Profile Fit</span>
+                </span>
+              )}
             </div>
 
             {/* Row 2: Company Name, Category & IT Role Family */}
@@ -174,16 +189,30 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
               </span>
             </div>
 
-            {/* Skill Tags */}
+            {/* Skill Tags with Candidate Profile Match Highlight */}
             {job.skills && job.skills.length > 0 && (
               <div className="flex items-center gap-1.5 mt-3.5 flex-wrap">
-                {job.skills.slice(0, 5).map((skill, idx) => (
-                  <span key={idx} className="bg-slate-100 text-slate-700 text-xs px-2.5 py-1 rounded-lg border border-slate-200 font-medium">
-                    {skill}
-                  </span>
-                ))}
-                {job.skills.length > 5 && (
-                  <span className="text-xs text-slate-400 font-medium pl-1">+{job.skills.length - 5} more</span>
+                {job.skills.slice(0, 6).map((skill, idx) => {
+                  const isMatched = job.match?.matched_skills?.some(
+                    (ms) => ms.toLowerCase() === skill.toLowerCase()
+                  );
+                  return (
+                    <span 
+                      key={idx} 
+                      className={`text-xs px-2.5 py-1 rounded-lg border transition ${
+                        isMatched 
+                          ? 'bg-blue-50 text-blue-700 border-blue-300 font-bold shadow-2xs' 
+                          : 'bg-slate-100 text-slate-700 border-slate-200 font-medium'
+                      }`}
+                      title={isMatched ? `Verified Skill Match from your Candidate Profile: ${skill}` : undefined}
+                    >
+                      {isMatched && <span className="mr-1 text-blue-600 font-black">✓</span>}
+                      {skill}
+                    </span>
+                  );
+                })}
+                {job.skills.length > 6 && (
+                  <span className="text-xs text-slate-400 font-medium pl-1">+{job.skills.length - 6} more</span>
                 )}
               </div>
             )}

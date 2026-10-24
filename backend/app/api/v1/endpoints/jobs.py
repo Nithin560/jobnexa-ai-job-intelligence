@@ -341,16 +341,36 @@ def list_jobs(
     # Authenticated candidate profile is authoritative; otherwise use exp_tier for guests
     effective_tier = candidate_tier if candidate_tier else exp_tier
 
-    # Experience Filter (Strict Fresher vs Experienced Account Separation)
-    fresher_filter_condition = or_(
-        and_(Job.experience_min == 0, Job.experience_max <= 1),
-        Job.experience_max <= 1,
-        and_(Job.experience_min <= 1, Job.experience_max <= 2),
-        Job.title.ilike("%intern%"),
-        Job.title.ilike("%trainee%"),
-        Job.title.ilike("%graduate%"),
-        Job.title.ilike("%junior%"),
-        Job.title.ilike("%associate%")
+    # Experience Filter (Strict Fresher vs Experienced Account Separation with Senior/Lead exclusion)
+    fresher_filter_condition = and_(
+        ~Job.title.ilike("%senior%"),
+        ~Job.title.ilike("%sr.%"),
+        ~Job.title.ilike("%lead%"),
+        ~Job.title.ilike("%principal%"),
+        ~Job.title.ilike("%staff%"),
+        ~Job.title.ilike("%manager%"),
+        ~Job.title.ilike("%director%"),
+        ~Job.title.ilike("%architect%"),
+        or_(
+            and_(Job.experience_min == 0, Job.experience_max <= 1),
+            Job.experience_max <= 1,
+            and_(Job.experience_min <= 1, Job.experience_max <= 2),
+            and_(
+                Job.experience_min == 0,
+                or_(
+                    Job.title.ilike("%intern%"),
+                    Job.title.ilike("%trainee%"),
+                    Job.title.ilike("%graduate%"),
+                    Job.title.ilike("%fresher%"),
+                    Job.title.ilike("%junior%"),
+                    Job.title.ilike("%associate engineer%"),
+                    Job.title.ilike("%associate software%"),
+                    Job.title.ilike("%associate developer%"),
+                    Job.title.ilike("%associate backend%"),
+                    Job.title.ilike("%associate frontend%")
+                )
+            )
+        )
     )
 
     if effective_tier == "fresher":
@@ -383,19 +403,6 @@ def list_jobs(
                 Skill.canonical_name.ilike(f"%{skill_list[0]}%")
             )
 
-    # Count Total Items
-    total_items = query.distinct().count()
-    total_pages = math.ceil(total_items / page_size) if total_items > 0 else 1
-
-    # Sorting
-    if sort_by == "date":
-        query = query.order_by(desc(Job.last_seen_at))
-    else:
-        query = query.order_by(desc(Job.last_seen_at))
-
-    # Pagination
-    jobs = query.distinct().offset((page - 1) * page_size).limit(page_size).all()
-
     # Load candidate profile if logged in
     candidate_profile = None
     candidate_skills = []
@@ -410,9 +417,44 @@ def list_jobs(
         saved_objs = db.query(SavedJob.job_id).filter(SavedJob.user_id == current_user.id).all()
         saved_job_ids = {s.job_id for s in saved_objs}
 
+    # Sorting & Pagination: If candidate user views feed with 'relevance' sort, rank by transparent candidate match score!
+    is_candidate_relevance = (sort_by == "relevance" and candidate_profile is not None and (candidate_profile.target_titles or candidate_skills))
+    
+    if is_candidate_relevance:
+        all_candidate_jobs = query.distinct().all()
+        scored_jobs = []
+        for cj in all_candidate_jobs:
+            m_breakdown = calculate_job_match(cj, candidate_profile, candidate_skills)
+            scored_jobs.append((m_breakdown, cj))
+
+        # Sort descending by match score, then by posted_at recency
+        scored_jobs.sort(
+            key=lambda x: (
+                x[0].score,
+                x[1].posted_at.timestamp() if x[1].posted_at else 0
+            ),
+            reverse=True
+        )
+
+        total_items = len(scored_jobs)
+        total_pages = math.ceil(total_items / page_size) if total_items > 0 else 1
+        page_slice = scored_jobs[(page - 1) * page_size : page * page_size]
+        jobs_with_match = page_slice
+    else:
+        # Standard sorting by date or last seen
+        if sort_by == "date":
+            query = query.order_by(desc(Job.posted_at), desc(Job.last_seen_at))
+        else:
+            query = query.order_by(desc(Job.last_seen_at))
+
+        total_items = query.distinct().count()
+        total_pages = math.ceil(total_items / page_size) if total_items > 0 else 1
+        standard_jobs = query.distinct().offset((page - 1) * page_size).limit(page_size).all()
+        jobs_with_match = [(calculate_job_match(j, candidate_profile, candidate_skills), j) for j in standard_jobs]
+
     now = datetime.utcnow()
     items = []
-    for j in jobs:
+    for match_breakdown, j in jobs_with_match:
         comp_name = j.company.name if j.company else "Direct Employer"
         comp_type = j.company.company_type if j.company else "Mid-size"
         raw_logo = j.company.logo_url if j.company else None
@@ -420,7 +462,6 @@ def list_jobs(
         comp_logo = get_company_logo(comp_name, raw_logo, comp_dom)
         
         extracted_skills = [js.skill.canonical_name for js in j.job_skills if js.skill]
-        match_breakdown = calculate_job_match(j, candidate_profile, candidate_skills)
 
         if j.experience_min == 0 and j.experience_max <= 1:
             exp_label = "0 - 1 yrs"

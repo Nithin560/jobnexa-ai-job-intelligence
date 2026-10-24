@@ -309,41 +309,94 @@ def extract_hiring_role(title: str) -> str:
 
 def is_it_engineering_job(title: str, description: str = "") -> Tuple[bool, str]:
     """
-    JobNexa Blueprint Section 2: Exclude non-IT roles (Sales, BD, HR, recruiter, finance, legal, admin, facilities, non-technical support).
+    JobNexa Blueprint Section 2: Strict IT & Software Engineering Ingestion Filter.
+    Strictly excludes non-IT and non-engineering role families:
+      - Marketing, Growth, Brand, SEO, Content, Social Media, PR
+      - Finance, FP&A, Accounting, Audit, Tax, Treasury, Billing
+      - Sales, BD, Account Executives, Commercial Sales, Inside Sales, Telecaller, BPO
+      - Non-coding Design (UX Design, UI Design, Product Design, Visual/Graphic Designer, Illustrator)
+      - HR, Talent Acquisition, People Operations, Recruiter
+      - Legal, Compliance, Facilities, Admin, Customer Support (Non-tech)
+    
     Returns (is_it, reason)
     """
-    t_lower = (title or "").lower()
-    d_snippet = (description or "")[:1500].lower()
+    t_lower = (title or "").lower().strip()
 
-    # Clear non-IT exclusion keywords in title
-    non_it_title_keywords = [
-        "sales representative", "sales executive", "account executive", "business development", "inside sales",
-        "recruiter", "talent acquisition", "human resources", "hr executive", "hr manager", "hr generalist", "people operations",
-        "finance manager", "accountant", "accounting", "accounts payable", "accounts receivable", "financial analyst", "tax consultant", "auditor",
-        "legal counsel", "paralegal", "attorney", "legal associate",
-        "office manager", "receptionist", "facilities executive", "admin executive", "executive assistant",
-        "warehouse", "delivery partner", "telecaller", "bpo executive", "call center"
+    # Core engineering titles (developer, engineer, programmer, etc.)
+    core_eng_patterns = [
+        r"\bsoftware engineer\b", r"\bbackend engineer\b", r"\bfrontend engineer\b", r"\bfull stack engineer\b",
+        r"\bfullstack engineer\b", r"\bdata engineer\b", r"\bmachine learning engineer\b", r"\bml engineer\b",
+        r"\bdevops engineer\b", r"\bsre\b", r"\bsite reliability engineer\b", r"\bqa engineer\b", r"\bsdet\b",
+        r"\bsecurity engineer\b", r"\bcloud engineer\b", r"\bplatform engineer\b", r"\bsystems engineer\b",
+        r"\bfirmware engineer\b", r"\bembedded engineer\b", r"\bengineering manager\b", r"\btech lead\b",
+        r"\btechnical lead\b", r"\bsoftware developer\b", r"\bdeveloper\b", r"\bprogrammer\b"
     ]
-    for non_it in non_it_title_keywords:
-        if non_it in t_lower:
-            return False, f"Excluded: Non-IT role family ({non_it})"
+    has_core_eng = any(re.search(pat, t_lower) for pat in core_eng_patterns)
 
-    # Positive IT engineering indicators
+    # 1. Non-IT Role Exclusions (checked with word boundaries)
+    non_it_patterns = [
+        # Marketing & Growth
+        r"\bmarketing\b", r"\bmarket research\b", r"\bgrowth marketing\b", r"\bcontent marketing\b", r"\bsocial media\b",
+        r"\bcopywriter\b", r"\bseo\b", r"\bsem\b", r"\bbrand marketing\b", r"\bbrand manager\b", r"\bpublic relations\b",
+        r"\bcommunications specialist\b", r"\bcommunications manager\b", r"\bcommunity manager\b", r"\bevent manager\b",
+        
+        # Finance, FP&A, Accounting & Audit
+        r"\bfp&a\b", r"\bfp & a\b", r"\bfinancial planning\b", r"\bfinance\b", r"\bfinancial analyst\b",
+        r"\baccountant\b", r"\baccounting\b", r"\baccounts payable\b", r"\baccounts receivable\b",
+        r"\btax\b", r"\btaxation\b", r"\bauditor\b", r"\baudit\b", r"\btreasury\b", r"\bpayroll\b",
+        
+        # Sales, Account Management, BD
+        r"\bsales\b", r"\bbusiness development\b", r"\baccount executive\b", r"\baccount management\b",
+        r"\baccount manager\b", r"\binside sales\b", r"\bcommercial sales\b", r"\brevenue operations\b",
+        r"\bsponsorship\b", r"\btelecaller\b", r"\blead generation\b", r"\bbpo\b",
+        
+        # HR, Talent Acquisition & Recruiting
+        r"\bhuman resources\b", r"\bhr\b", r"\bhrbp\b", r"\brecruiter\b", r"\brecruiting\b",
+        r"\btalent acquisition\b", r"\bpeople operations\b", r"\bpeople partner\b", r"\bpeople team\b",
+        
+        # Non-coding Design (Designers, UX Design, Product Design)
+        r"\bux design\b", r"\bui design\b", r"\bui/ux design\b", r"\bproduct design\b", r"\bgraphic design\b",
+        r"\bvisual design\b", r"\bmotion design\b", r"\bbrand designer\b", r"\bux designer\b", r"\bui designer\b",
+        r"\bproduct designer\b", r"\bvisual designer\b", r"\bmotion designer\b", r"\bux researcher\b", r"\billustrator\b",
+        
+        # Legal & Corporate Administration
+        r"\blegal\b", r"\battorney\b", r"\bcounsel\b", r"\bparalegal\b", r"\bcompliance\b",
+        r"\boffice manager\b", r"\breceptionist\b", r"\bfacilities\b", r"\badmin executive\b", r"\bcorporate secretary\b",
+        
+        # Non-tech customer support & operations
+        r"\bcustomer support\b", r"\bcustomer success\b", r"\bcustomer care\b", r"\bwarehouse\b",
+        r"\blogistics\b", r"\bprocurement\b"
+    ]
+
+    for pat in non_it_patterns:
+        if re.search(pat, t_lower):
+            # If it has core engineering title (e.g. "Salesforce Developer", "Engineering Manager, Supply Chain")
+            if has_core_eng:
+                # Disallow purely non-tech fields even if they have engineer suffix e.g. "sales representative", "financial analyst"
+                if any(re.search(r"\b" + k + r"\b", t_lower) for k in ["marketing", "finance", "fp&a", "accounting", "recruiter", "talent acquisition", "hr", "legal", "sales representative"]):
+                    return False, f"Excluded: Non-IT domain role ({pat})"
+                return True, "Included: Verified core software engineering role"
+            return False, f"Excluded: Non-IT role family ({pat})"
+
+    # 2. Positive IT engineering indicators (using strict word boundaries)
     it_indicators = [
-        "software", "developer", "engineer", "sde", "frontend", "backend", "full stack", "fullstack",
-        "devops", "sre", "cloud", "infrastructure", "systems", "network", "linux", "database", "dba",
-        "data", "machine learning", "ml", "ai", "artificial intelligence", "nlp", "computer vision", "llm",
-        "qa", "test", "sdet", "quality assurance", "automation",
-        "security", "infosec", "cyber", "soc", "penetration", "appsec",
-        "embedded", "firmware", "vlsi", "hardware", "fpga", "robotics",
-        "product manager", "architect", "tech lead", "technical lead", "engineering manager", "scrum master"
+        r"\bsoftware\b", r"\bdeveloper\b", r"\bengineer\b", r"\bsde\b", r"\bfrontend\b", r"\bbackend\b",
+        r"\bfull stack\b", r"\bfullstack\b", r"\bdevops\b", r"\bsre\b", r"\bcloud\b", r"\binfrastructure\b",
+        r"\bsystems\b", r"\bnetwork\b", r"\blinux\b", r"\bdatabase\b", r"\bdba\b", r"\bdata\b",
+        r"\bmachine learning\b", r"\bml\b", r"\bai\b", r"\bnlp\b", r"\bcomputer vision\b", r"\bllm\b",
+        r"\bqa\b", r"\btest\b", r"\bsdet\b", r"\bquality assurance\b", r"\bautomation\b",
+        r"\bsecurity\b", r"\binfosec\b", r"\bcyber\b", r"\bsoc\b", r"\bappsec\b",
+        r"\bembedded\b", r"\bfirmware\b", r"\bvlsi\b", r"\bhardware\b", r"\bfpga\b", r"\brobotics\b",
+        r"\bproduct manager\b", r"\barchitect\b", r"\btech lead\b", r"\btechnical lead\b", r"\bengineering manager\b"
     ]
-    if any(k in t_lower for k in it_indicators):
+    if any(re.search(pat, t_lower) for pat in it_indicators):
         return True, "Included: Verified IT/Engineering role"
 
-    # Check description snippet if title is generic
-    if any(k in d_snippet for k in ["python", "java", "react", "golang", "c++", "aws", "kubernetes", "sql", "api", "git", "ci/cd", "microservices"]):
-        return True, "Included: Technical IT engineering duties verified in description"
+    # 3. Description snippet fallback ONLY if title has generic intern/trainee/associate signals
+    if any(k in t_lower for k in ["intern", "trainee", "associate", "graduate", "fellow", "mts"]):
+        d_snippet = (description or "")[:1000].lower()
+        if any(re.search(r"\b" + k + r"\b", d_snippet) for k in ["python", "java", "golang", "c\+\+", "react", "fastapi", "docker", "kubernetes", "sql", "aws"]):
+            return True, "Included: Technical IT engineering duties verified in description"
 
     # Default to non-IT if no engineering signals
     return False, "Excluded: No explicit technology or engineering duties identified"

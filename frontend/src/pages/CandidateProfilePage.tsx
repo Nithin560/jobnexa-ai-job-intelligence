@@ -74,8 +74,9 @@ export const CandidateProfilePage: React.FC = () => {
       sessionStorage.setItem('years_experience', String(parsedExp));
       localStorage.setItem('years_experience', String(parsedExp));
 
-      // Broadcast tier change event to active listeners
+      // Broadcast tier change and profile update event to active listeners
       window.dispatchEvent(new CustomEvent('userTierChanged', { detail: { tier: newTier, years: parsedExp } }));
+      window.dispatchEvent(new CustomEvent('candidateProfileUpdated', { detail: { targetTitle, skills, years: parsedExp } }));
 
       setSaved(true);
       // Give brief feedback then smoothly redirect to Home page

@@ -89,6 +89,7 @@ export const HomePage: React.FC = () => {
   const { triggerLoading } = useLoadingBar();
   const [roleType, setRoleType] = useState<string>('all');
   const [activeLocation, setActiveLocation] = useState<string>('all');
+  const [candidateProfile, setCandidateProfile] = useState<any | null>(null);
 
   const [filters, setFilters] = useState<{ [key: string]: string }>({
     source_type: '',
@@ -241,13 +242,16 @@ export const HomePage: React.FC = () => {
       if (token && role === 'candidate') {
         try {
           const prof = await api.getProfile();
-          if (prof && typeof prof.years_experience === 'number') {
-            const resolvedTier: 'fresher' | 'experienced' = prof.years_experience <= 1 ? 'fresher' : 'experienced';
-            sessionStorage.setItem('user_experience_tier', resolvedTier);
-            localStorage.setItem('user_experience_tier', resolvedTier);
-            sessionStorage.setItem('years_experience', String(prof.years_experience));
-            localStorage.setItem('years_experience', String(prof.years_experience));
-            setActiveExpTab((prev) => (prev !== resolvedTier ? resolvedTier : prev));
+          if (prof) {
+            setCandidateProfile(prof);
+            if (typeof prof.years_experience === 'number') {
+              const resolvedTier: 'fresher' | 'experienced' = prof.years_experience <= 1 ? 'fresher' : 'experienced';
+              sessionStorage.setItem('user_experience_tier', resolvedTier);
+              localStorage.setItem('user_experience_tier', resolvedTier);
+              sessionStorage.setItem('years_experience', String(prof.years_experience));
+              localStorage.setItem('years_experience', String(prof.years_experience));
+              setActiveExpTab((prev) => (prev !== resolvedTier ? resolvedTier : prev));
+            }
           }
         } catch (e) {
           // Keep storage fallback if offline
@@ -261,8 +265,16 @@ export const HomePage: React.FC = () => {
         setActiveExpTab(e.detail.tier);
       }
     };
+    const handleProfileUpdate = () => {
+      syncProfileTier();
+      fetchJobs();
+    };
     window.addEventListener('userTierChanged', handleTierChange);
-    return () => window.removeEventListener('userTierChanged', handleTierChange);
+    window.addEventListener('candidateProfileUpdated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('userTierChanged', handleTierChange);
+      window.removeEventListener('candidateProfileUpdated', handleProfileUpdate);
+    };
   }, []);
 
   const fetchJobs = async () => {
@@ -309,6 +321,7 @@ export const HomePage: React.FC = () => {
         exp_max: exp_max,
         exp_tier: exp_tier,
         role_type: roleType !== 'all' ? roleType : undefined,
+        sort_by: sortBy === 'Recent' ? 'date' : 'relevance',
         page: page,
         page_size: pageSize,
       });
@@ -329,11 +342,11 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     setPage(1);
-  }, [searchParams, filters, activeExpTab, roleType, activeLocation]);
+  }, [searchParams, filters, activeExpTab, roleType, activeLocation, sortBy]);
 
   useEffect(() => {
     fetchJobs();
-  }, [searchParams, filters, page, activeExpTab, roleType, activeLocation]);
+  }, [searchParams, filters, page, activeExpTab, roleType, activeLocation, sortBy]);
 
   const handleFilterChange = (key: string, value: string) => {
     if (key === 'experience_level') {
@@ -684,9 +697,23 @@ export const HomePage: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 font-medium mt-0.5">
-                    Curated exclusively for entry-level and fresh graduate candidates across Bengaluru and Karnataka
-                  </p>
+                  <div className="text-xs text-slate-500 font-medium mt-0.5">
+                    {candidateProfile?.target_titles?.[0] ? (
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span>Personalized for</span>
+                        <span className="font-extrabold text-blue-800 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md text-[11px] shadow-2xs">
+                          {candidateProfile.target_titles[0]}
+                        </span>
+                        <span>• Matching Skills:</span>
+                        <span className="font-bold text-slate-800">
+                          {candidateProfile.skills?.slice(0, 4).join(', ')}
+                          {candidateProfile.skills && candidateProfile.skills.length > 4 && ` (+${candidateProfile.skills.length - 4} more)`}
+                        </span>
+                      </div>
+                    ) : (
+                      <span>Curated exclusively for entry-level and fresh graduate candidates across Bengaluru and Karnataka</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
