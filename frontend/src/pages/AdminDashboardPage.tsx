@@ -1148,13 +1148,13 @@ export const AdminDashboardPage: React.FC = () => {
                             <td className="py-3.5 px-4 text-right">
                               <button
                                 onClick={() => handleToggleUser(u.id)}
-                                disabled={togglingUserId === u.id || u.email === 'nithinvandana560@gmail.com'}
+                                disabled={togglingUserId === u.id || (u.email === 'nithinvandana26@gmail.com' || u.email === 'nithinvandana560@gmail.com')}
                                 className={`px-3 py-1 rounded-xl text-xs font-bold border transition disabled:opacity-40 ${
                                   u.is_active
                                     ? 'border-rose-200 text-rose-700 bg-rose-50 hover:bg-rose-100'
                                     : 'border-emerald-200 text-emerald-700 bg-emerald-50 hover:bg-emerald-100'
                                 }`}
-                                title={u.email === 'nithinvandana560@gmail.com' ? 'Primary admin account cannot be disabled' : 'Toggle account active/disabled status'}
+                                title={(u.email === 'nithinvandana26@gmail.com' || u.email === 'nithinvandana560@gmail.com') ? 'Primary admin account cannot be disabled' : 'Toggle account active/disabled status'}
                               >
                                 {togglingUserId === u.id ? (
                                   <RefreshCw className="w-3 h-3 animate-spin inline" />

@@ -60,8 +60,57 @@ async def daily_8am_scan_scheduler():
             print(f"[Scheduler] Error during scheduled scan dispatch: {e}")
 
 
+
+def init_default_accounts():
+    """Ensure primary admin accounts and demo users always exist on startup."""
+    try:
+        from app.models.user import User
+        from app.core.security import get_password_hash
+        from app.db.session import SessionLocal
+        db = SessionLocal()
+        try:
+            admin_emails = ["nithinvandana26@gmail.com", "nithinvandana560@gmail.com", settings.ADMIN_EMAIL_ID.lower()]
+            for email in admin_emails:
+                existing = db.query(User).filter(User.email == email).first()
+                if not existing:
+                    new_admin = User(
+                        email=email,
+                        password_hash=get_password_hash("9347388372pandu@"),
+                        full_name="Nithin Vandana (Admin)",
+                        role="admin",
+                        is_verified=True
+                    )
+                    db.add(new_admin)
+                    db.commit()
+                    print(f"[Init] Created Admin Account: {email}")
+                else:
+                    if existing.role != "admin" or not existing.is_verified:
+                        existing.role = "admin"
+                        existing.is_verified = True
+                        db.commit()
+            
+            cand = db.query(User).filter(User.email == "nithin@example.com").first()
+            if not cand:
+                new_cand = User(
+                    email="nithin@example.com",
+                    password_hash=get_password_hash("NithinPass123!"),
+                    full_name="Nithin (Demo Candidate)",
+                    role="candidate",
+                    is_verified=True
+                )
+                db.add(new_cand)
+                db.commit()
+        finally:
+            db.close()
+    except Exception as e:
+        print(f"[Init] Admin account check note: {e}")
+
+# Run account check on import/startup
+init_default_accounts()
+
 @app.on_event("startup")
 async def start_background_scheduler():
+    init_default_accounts()
     import asyncio
     asyncio.create_task(daily_8am_scan_scheduler())
 

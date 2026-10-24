@@ -114,7 +114,7 @@ export const api = {
   },
 
   quickLoginAsAdmin: async () => {
-    return await api.login('nithinvandana560@gmail.com', '9347388372pandu@');
+    return await api.login('nithinvandana26@gmail.com', '9347388372pandu@');
   },
 
   logout: () => {
