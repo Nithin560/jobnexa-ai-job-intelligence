@@ -26,13 +26,11 @@ export const LoginPage: React.FC = () => {
   const { showComingSoonPlacesToVisitModal } = useAlertModal();
 
   useEffect(() => {
-    if (!sessionStorage.getItem('seen_places_notice_login')) {
-      sessionStorage.setItem('seen_places_notice_login', 'true');
-      const timer = setTimeout(() => {
-        showComingSoonPlacesToVisitModal('guest');
-      }, 500);
-      return () => clearTimeout(timer);
-    }
+    // Reliably show Places to Visit in Bengaluru popup modal whenever Login Page loads
+    const timer = setTimeout(() => {
+      showComingSoonPlacesToVisitModal('guest');
+    }, 350);
+    return () => clearTimeout(timer);
   }, [showComingSoonPlacesToVisitModal]);
 
   useEffect(() => {
@@ -98,6 +96,7 @@ export const LoginPage: React.FC = () => {
     try {
       const data = await api.login(email.trim(), password);
       if (data.role === 'admin') {
+        sessionStorage.setItem('trigger_admin_places_popup', 'true');
         navigate('/admin', { replace: true });
       } else {
         navigate('/', { replace: true });
@@ -206,6 +205,7 @@ export const LoginPage: React.FC = () => {
     try {
       const data = await api.verifyOTPLogin(email.trim(), code);
       if (data.role === 'admin') {
+        sessionStorage.setItem('trigger_admin_places_popup', 'true');
         navigate('/admin', { replace: true });
       } else {
         navigate('/', { replace: true });
@@ -223,6 +223,7 @@ export const LoginPage: React.FC = () => {
     setError(null);
     try {
       if (targetRole === 'admin') {
+        sessionStorage.setItem('trigger_admin_places_popup', 'true');
         await api.quickLoginAsAdmin();
         navigate('/admin', { replace: true });
       } else {

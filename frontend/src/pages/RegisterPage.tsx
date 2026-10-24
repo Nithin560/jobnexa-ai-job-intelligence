@@ -13,13 +13,11 @@ export const RegisterPage: React.FC = () => {
   const { showComingSoonPlacesToVisitModal } = useAlertModal();
 
   React.useEffect(() => {
-    if (!sessionStorage.getItem('seen_places_notice_register')) {
-      sessionStorage.setItem('seen_places_notice_register', 'true');
-      const timer = setTimeout(() => {
-        showComingSoonPlacesToVisitModal('guest');
-      }, 500);
-      return () => clearTimeout(timer);
-    }
+    // Reliably show Places to Visit in Bengaluru popup modal whenever Register Page loads
+    const timer = setTimeout(() => {
+      showComingSoonPlacesToVisitModal('guest');
+    }, 350);
+    return () => clearTimeout(timer);
   }, [showComingSoonPlacesToVisitModal]);
 
   React.useEffect(() => {
@@ -141,6 +139,7 @@ export const RegisterPage: React.FC = () => {
         localStorage.setItem('user_experience_tier', experienceTier);
       }
       if (data.role === 'admin') {
+        sessionStorage.setItem('trigger_admin_places_popup', 'true');
         navigate('/admin', { replace: true });
       } else {
         navigate('/', { replace: true });

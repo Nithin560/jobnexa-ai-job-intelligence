@@ -29,10 +29,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
 
   const handleSwitchToAdmin = async () => {
     try {
+      sessionStorage.setItem('trigger_admin_places_popup', 'true');
       await api.quickLoginAsAdmin();
       navigate('/admin', { replace: true });
       window.location.reload();
     } catch (e) {
+      sessionStorage.setItem('trigger_admin_places_popup', 'true');
       navigate('/admin', { replace: true });
     }
   };
