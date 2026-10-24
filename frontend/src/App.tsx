@@ -12,6 +12,7 @@ import { RegisterPage } from './pages/RegisterPage';
 import { DiscoveryStrategyPage } from './pages/DiscoveryStrategyPage';
 import { isUserAuthenticated } from './api/client';
 import { LoadingBarProvider } from './components/TopLoadingBar';
+import { AlertModalProvider } from './components/Modals/AlertModal';
 
 // Route Guard: Ensures visitor is authenticated in an active session, otherwise redirects to /login
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -54,7 +55,8 @@ export function App() {
   return (
     <Router>
       <LoadingBarProvider>
-        <Routes>
+        <AlertModalProvider>
+          <Routes>
         {/* Dedicated Full-Width Login & Register Routes with Landmark Background */}
         <Route
           path="/login"
@@ -161,8 +163,9 @@ export function App() {
           element={<Navigate to={isUserAuthenticated() ? "/" : "/login"} replace />}
         />
       </Routes>
-    </LoadingBarProvider>
-  </Router>
+        </AlertModalProvider>
+      </LoadingBarProvider>
+    </Router>
 );
 }
 

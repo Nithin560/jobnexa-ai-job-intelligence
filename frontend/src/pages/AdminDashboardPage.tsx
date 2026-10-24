@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { api } from '../api/client';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
+import { useAlertModal } from '../components/Modals/AlertModal';
 import { AdminOverview, Job, AdminNotificationItem, ScanRunItem, AdminUsersResponse, DayWiseJobsResponse } from '../types';
 import { 
   Briefcase, Building2, Link2, MapPin, Clock, Shield, Play, Plus, Download, 
@@ -104,6 +105,7 @@ export const AdminDashboardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [scanMessage, setScanMessage] = useState('');
   const { triggerLoading } = useLoadingBar();
+  const { showAlert } = useAlertModal();
   const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
 
   const handleTabChange = (tabName: string) => {
@@ -173,7 +175,7 @@ export const AdminDashboardPage: React.FC = () => {
       setAdminUsersData(updated);
     } catch (err) {
       console.error(err);
-      alert('Error updating user status.');
+      showAlert({ title: 'User Status Error', message: 'Error updating user status.', type: 'error' });
     } finally {
       setTogglingUserId(null);
     }
@@ -1853,7 +1855,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <input type="text" readOnly value="30 Days" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold" />
                   </div>
                   <div className="pt-2">
-                    <button onClick={() => alert('Settings saved successfully.')} className="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
+                    <button onClick={() => showAlert({ title: 'Settings Saved', message: 'Settings saved successfully.', type: 'success' })} className="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
                       Save Settings
                     </button>
                   </div>

@@ -4,6 +4,7 @@ import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
 import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
+import { useAlertModal } from '../components/Modals/AlertModal';
 import { Job, MarketInsights } from '../types';
 import { api } from '../api/client';
 import { 
@@ -87,6 +88,7 @@ export const HomePage: React.FC = () => {
   const [experiencedReloadFeedback, setExperiencedReloadFeedback] = useState<string | null>(null);
 
   const { triggerLoading } = useLoadingBar();
+  const { showAlert } = useAlertModal();
   const [roleType, setRoleType] = useState<string>('all');
   const [activeLocation, setActiveLocation] = useState<string>('all');
   const [candidateProfile, setCandidateProfile] = useState<any | null>(null);
@@ -172,7 +174,7 @@ export const HomePage: React.FC = () => {
 
   const handleTriggerLiveScan = async () => {
     if (!isAdmin) {
-      alert('Scanning career portals is restricted to administrator accounts.');
+      showAlert({ title: 'Admin Access Required', message: 'Scanning career portals is restricted to administrator accounts.', type: 'warning', badge: 'Privilege Required' });
       return;
     }
     if (isLiveScanning) return;
@@ -398,7 +400,7 @@ export const HomePage: React.FC = () => {
       await api.toggleSaveJob(jobId);
       fetchJobs();
     } catch (err) {
-      alert('Please log in to save jobs.');
+      showAlert({ title: 'Authentication Required', message: 'Please log in to save jobs.', type: 'info' });
     }
   };
 

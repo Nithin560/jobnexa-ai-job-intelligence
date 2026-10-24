@@ -4,9 +4,11 @@ import { api } from '../api/client';
 import { CandidateProfile } from '../types';
 import { User, Briefcase, MapPin, Award, Check, Loader2, ArrowLeft } from 'lucide-react';
 import { TopLoadingBar } from '../components/TopLoadingBar';
+import { useAlertModal } from '../components/Modals/AlertModal';
 
 export const CandidateProfilePage: React.FC = () => {
   const navigate = useNavigate();
+  const { showAlert } = useAlertModal();
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [targetTitle, setTargetTitle] = useState('Backend Software Engineer');
   const [exp, setExp] = useState(0);
@@ -85,7 +87,7 @@ export const CandidateProfilePage: React.FC = () => {
       }, 700);
     } catch (err) {
       console.error(err);
-      alert('Error updating profile. Please check your connection and retry.');
+      showAlert({ title: 'Profile Update Error', message: 'Error updating profile. Please check your connection and retry.', type: 'error' });
     } finally {
       setSaving(false);
     }

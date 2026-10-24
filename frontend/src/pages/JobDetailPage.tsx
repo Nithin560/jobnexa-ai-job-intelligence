@@ -8,6 +8,7 @@ import { formatJobRealTime } from '../components/JobCard';
 import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { JobDetailSkeleton } from '../components/Skeletons/JobDetailSkeleton';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
+import { useAlertModal } from '../components/Modals/AlertModal';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,7 @@ export const JobDetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'details' | 'match' | 'company'>('match');
   const [loading, setLoading] = useState(true);
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
+  const { showAdminRestrictedModal } = useAlertModal();
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -179,9 +181,7 @@ export const JobDetailPage: React.FC = () => {
             ) : isAdmin ? (
               <button
                 type="button"
-                onClick={() => {
-                  alert("Application restricted: Admin accounts are not allowed to apply for jobs. Please use a candidate account to apply.");
-                }}
+                onClick={showAdminRestrictedModal}
                 className="px-6 py-3 bg-slate-100 hover:bg-amber-50 text-slate-600 hover:text-amber-800 font-bold text-sm rounded-2xl border border-slate-200 hover:border-amber-300 cursor-not-allowed flex items-center gap-2 transition shadow-2xs"
                 title="Admins cannot apply for jobs. Please log in with a candidate account to apply."
               >
