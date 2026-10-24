@@ -278,7 +278,6 @@ export const AdminDashboardPage: React.FC = () => {
 
   const menuItems = [
     { label: 'Dashboard', icon: LayoutDashboard },
-    { label: 'Places to Visit', icon: Compass, badge: 'Coming Soon' },
     { 
       label: 'Users', 
       icon: Users, 
@@ -415,49 +414,7 @@ export const AdminDashboardPage: React.FC = () => {
             );
           })}
 
-          {/* Spotlight Widget Card: Places to Visit (Weekend Escapes in BLR) */}
-          <div className="mx-0.5 mt-3 mb-1 p-3 rounded-2xl border border-emerald-500/30 text-left shadow-lg shadow-emerald-950/30 relative overflow-hidden group">
-            <div 
-              className="absolute inset-0 bg-cover bg-center opacity-20 group-hover:opacity-30 transition-opacity"
-              style={{ backgroundImage: `url(${placesToVisitBg})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/85 via-slate-900/90 to-teal-950/80" />
-            <div className="relative z-10">
-              <div className="flex items-center gap-2 mb-1.5">
-              <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400 shrink-0">
-                <Compass className="w-4 h-4 animate-spin-slow" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-1">
-                  <p className="text-xs font-bold text-white tracking-tight">Places to Visit</p>
-                  <span className="text-[9px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                    Coming Soon
-                  </span>
-                </div>
-                <p className="text-[10px] text-slate-400 truncate">Weekend Escapes in BLR</p>
-              </div>
-            </div>
-            <p className="text-[11px] text-slate-300 leading-snug mb-2.5">
-              Curated getaways for experienced techies. Nandi Hills, Cubbon Park, safari & more.
-            </p>
-            <div className="grid grid-cols-2 gap-1.5">
-              <button
-                type="button"
-                onClick={() => handleTabChange('Places to Visit')}
-                className="py-1.5 px-2 text-[10px] font-bold text-white bg-emerald-600 hover:bg-emerald-500 rounded-lg text-center transition shadow-xs cursor-pointer"
-              >
-                Open Tab
-              </button>
-              <button
-                type="button"
-                onClick={() => showComingSoonPlacesToVisitModal('admin')}
-                className="py-1.5 px-2 text-[10px] font-bold text-emerald-300 hover:text-white bg-emerald-900/40 hover:bg-emerald-800/60 border border-emerald-600/40 rounded-lg text-center transition cursor-pointer"
-              >
-                View Popup
-              </button>
-            </div>
-            </div>
-          </div>
+
 
           {/* Action Buttons in Sidebar (Placed directly after Settings) */}
           <div className="pt-3 mt-2 border-t border-slate-800 space-y-2">
@@ -597,6 +554,25 @@ export const AdminDashboardPage: React.FC = () => {
                 )}
               </button>
             </div>
+
+            {/* Places to Visit Section in Nav Bar (after Scan section, matching Fourth Image) */}
+            <button
+              onClick={() => handleTabChange('Places to Visit')}
+              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-xs cursor-pointer shrink-0 ${
+                activeTab === 'Places to Visit'
+                  ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 ring-2 ring-blue-400/60'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs'
+              }`}
+              title="Explore Places to Visit (Weekend Escapes Planner)"
+            >
+              <div className="w-5 h-5 rounded-full border border-white/80 bg-white/20 flex items-center justify-center shrink-0">
+                <Compass className="w-3.5 h-3.5 text-white" />
+              </div>
+              <span className="whitespace-nowrap font-bold text-white text-xs sm:text-sm">Places to Visit</span>
+              <span className="text-[10px] font-black tracking-wide px-2 py-0.5 rounded-lg bg-blue-700 text-white shrink-0">
+                Coming Soon
+              </span>
+            </button>
           </div>
 
           {/* 4. Notifications & Admin Profile */}

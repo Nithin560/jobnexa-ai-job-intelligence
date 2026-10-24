@@ -247,7 +247,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const showComingSoonPlacesToVisitModal = useCallback((role: 'candidate' | 'admin' | 'guest' = 'candidate') => {
     setOptions({
-      title: 'Places to Visit in Bengaluru (Coming Soon!)',
+      title: 'Places to Visit (Coming Soon)',
       badge: role === 'admin' ? 'Admin Preview • Module In Planning' : 'Upcoming Feature • Experienced Accounts',
       message: 'We are introducing an exclusive "Places to Visit" weekend discovery guide for experienced tech professionals in Bengaluru! Rejuvenate outside work hours with curated weekend getaways, nature trails, tech hangouts, and relaxation spots across the city.',
       type: 'info',
@@ -342,7 +342,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             }
           }}
         >
-          <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all animate-modal-content">
+          <div className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl border border-slate-100 overflow-hidden transform transition-all animate-modal-content">
             {/* Top Color Accent Line */}
             <div
               className={`h-1.5 w-full ${
@@ -391,23 +391,52 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                   )}
                 </div>
 
-                <div className="flex-1 pr-6">
+                <div className="flex-1 min-w-0 pr-6">
                   {options.badge && (
                     <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-blue-50 text-blue-700 border border-blue-200 mb-1.5 shadow-2xs">
                       {options.badge}
                     </span>
                   )}
-                  <h3
-                    id="alert-modal-title"
-                    className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug"
-                  >
-                    {options.title}
-                  </h3>
+                  {options.title.includes('Places to Visit') ? (
+                    <div className="flex items-center gap-2 whitespace-nowrap overflow-x-auto py-0.5">
+                      <h3
+                        id="alert-modal-title"
+                        className="text-lg sm:text-2xl font-black text-slate-900 tracking-tight whitespace-nowrap"
+                      >
+                        Places to Visit
+                      </h3>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-lg text-xs font-black uppercase tracking-wider bg-blue-600 text-white shadow-xs whitespace-nowrap">
+                        Coming Soon
+                      </span>
+                    </div>
+                  ) : (
+                    <h3
+                      id="alert-modal-title"
+                      className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug"
+                    >
+                      {options.title}
+                    </h3>
+                  )}
                 </div>
               </div>
 
               {/* Message Body */}
               <div className="mt-4 space-y-3">
+                {/* Professional Highlighted Sentence Bar (One Line) */}
+                {options.title.includes('Places to Visit') && (
+                  <div className="p-3 rounded-xl bg-gradient-to-r from-blue-50 via-indigo-50/70 to-blue-50 border border-blue-200/90 shadow-2xs flex items-center justify-between gap-2 overflow-hidden">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0" />
+                      <span className="text-xs sm:text-sm font-bold text-blue-950 tracking-tight whitespace-nowrap truncate">
+                        <strong className="text-blue-700 font-black">Places to Visit (Coming Soon)</strong> — Curated Bengaluru Weekend Escapes
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md bg-blue-600 text-white shrink-0 hidden sm:inline-block">
+                      Upcoming
+                    </span>
+                  </div>
+                )}
+
                 <p className="text-slate-700 text-sm font-medium leading-relaxed">
                   {options.message}
                 </p>
