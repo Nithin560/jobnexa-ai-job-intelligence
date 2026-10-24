@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useLocation, Link } from 'react-router-dom';
+import { useSearchParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import { SearchFilters } from '../components/SearchFilters';
 import { JobCard } from '../components/JobCard';
 import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
@@ -88,7 +88,8 @@ export const HomePage: React.FC = () => {
   const [experiencedReloadFeedback, setExperiencedReloadFeedback] = useState<string | null>(null);
 
   const { triggerLoading } = useLoadingBar();
-  const { showAlert } = useAlertModal();
+  const navigate = useNavigate();
+  const { showAlert, showSuccess, showError, showWarning, showInfo, closeAlert } = useAlertModal();
   const [roleType, setRoleType] = useState<string>('all');
   const [activeLocation, setActiveLocation] = useState<string>('all');
   const [candidateProfile, setCandidateProfile] = useState<any | null>(null);
@@ -196,6 +197,17 @@ export const HomePage: React.FC = () => {
             fetchJobs();
             loadInsights();
             setTimeout(() => setScanBannerText(null), 8000);
+            showSuccess(
+              'Live Scan Completed!',
+              `Verified ${status.totals?.jobs_found || totalJobs} active tech jobs across all Company Career Websites (Greenhouse, Lever, Ashby, Workday) and Startup Portals (Wellfound, LinkedIn, Glassdoor).`,
+              {
+                label: 'View Updated Jobs',
+                onClick: () => {
+                  closeAlert();
+                  fetchJobs();
+                }
+              }
+            );
           }
         } catch (err) {
           clearInterval(pollInterval);
@@ -396,11 +408,48 @@ export const HomePage: React.FC = () => {
   };
 
   const handleToggleSave = async (jobId: string) => {
+    const userRole = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
+    if (!userRole) {
+      showAlert({
+        title: 'Authentication Required',
+        badge: 'Candidate Sign-In',
+        message: 'Please log in with a candidate account to save jobs, bookmark positions, and track applications.',
+        type: 'info',
+        actionButton: {
+          label: 'Log In Now',
+          onClick: () => {
+            closeAlert();
+            navigate('/login');
+          }
+        }
+      });
+      return;
+    }
+    if (userRole === 'admin') {
+      showWarning('Admin Role Active', 'Admin accounts cannot bookmark candidate job listings. Please use a candidate profile to save positions.');
+      return;
+    }
     try {
-      await api.toggleSaveJob(jobId);
+      const res = await api.toggleSaveJob(jobId);
       fetchJobs();
+      const isSaved = res?.saved ?? true;
+      if (isSaved) {
+        showSuccess(
+          'Job Saved to Bookmarks',
+          'This position has been saved to your profile bookmarks. You can review and apply anytime from your Saved Positions tab.',
+          {
+            label: 'View Saved Jobs',
+            onClick: () => {
+              closeAlert();
+              navigate('/dashboard');
+            }
+          }
+        );
+      } else {
+        showInfo('Bookmark Removed', 'This position was removed from your saved positions.');
+      }
     } catch (err) {
-      showAlert({ title: 'Authentication Required', message: 'Please log in to save jobs.', type: 'info' });
+      showError('Bookmark Error', 'Failed to update saved job status. Please retry.');
     }
   };
 

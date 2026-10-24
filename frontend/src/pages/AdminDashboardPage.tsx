@@ -105,7 +105,7 @@ export const AdminDashboardPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [scanMessage, setScanMessage] = useState('');
   const { triggerLoading } = useLoadingBar();
-  const { showAlert } = useAlertModal();
+  const { showAlert, showSuccess, showError, showWarning, showInfo, showConfirm, closeAlert } = useAlertModal();
   const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
 
   const handleTabChange = (tabName: string) => {
@@ -173,9 +173,10 @@ export const AdminDashboardPage: React.FC = () => {
       await api.toggleUserStatus(userId);
       const updated = await api.getAdminUsers();
       setAdminUsersData(updated);
+      showSuccess('User Status Updated', 'Candidate account access status has been updated successfully.');
     } catch (err) {
       console.error(err);
-      showAlert({ title: 'User Status Error', message: 'Error updating user status.', type: 'error' });
+      showError('User Status Error', 'Error updating candidate user account status.');
     } finally {
       setTogglingUserId(null);
     }
@@ -206,10 +207,13 @@ export const AdminDashboardPage: React.FC = () => {
     setScanMessage('');
     try {
       const res = await api.triggerScan();
-      setScanMessage(`Scan Completed! Scanned ${res.companies_scanned} sources. Found ${res.jobs_found} jobs (${res.new_jobs} new).`);
+      const msg = `Scan Completed! Scanned ${res.companies_scanned} sources. Found ${res.jobs_found} jobs (${res.new_jobs} new).`;
+      setScanMessage(msg);
       await fetchOverview();
+      showSuccess('Scan Completed Successfully!', msg);
     } catch (err) {
       setScanMessage('Error executing crawler run.');
+      showError('Scanner Run Failed', 'Failed to execute crawler run across configured job sources.');
     } finally {
       setScanning(false);
     }
@@ -217,20 +221,28 @@ export const AdminDashboardPage: React.FC = () => {
 
   const [clearingScans, setClearingScans] = useState(false);
 
-  const handleClearScans = async () => {
-    if (!window.confirm('Are you sure you want to delete all scan history? This action cannot be undone.')) {
-      return;
-    }
-    try {
-      setClearingScans(true);
-      await api.clearScanHistory();
-      setRecentScans([]);
-    } catch (err) {
-      console.error('Failed to clear scan history:', err);
-      setRecentScans([]);
-    } finally {
-      setClearingScans(false);
-    }
+  const handleClearScans = () => {
+    showConfirm({
+      title: 'Delete Scan History?',
+      badge: 'Irreversible Action',
+      message: 'Are you sure you want to delete all historical scan records and crawler logs? This action cannot be undone.',
+      confirmText: 'Yes, Clear History',
+      cancelText: 'Keep History',
+      onConfirm: async () => {
+        try {
+          setClearingScans(true);
+          await api.clearScanHistory();
+          setRecentScans([]);
+          showSuccess('Scan History Cleared', 'All crawler historical scan records have been successfully reset.');
+        } catch (err) {
+          console.error('Failed to clear scan history:', err);
+          setRecentScans([]);
+          showError('Clear Error', 'Failed to reset scan history.');
+        } finally {
+          setClearingScans(false);
+        }
+      }
+    });
   };
 
   const handleMarkAllRead = async () => {
@@ -238,8 +250,10 @@ export const AdminDashboardPage: React.FC = () => {
       await api.markAllNotificationsRead();
       setUnreadNotifsCount(0);
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+      showSuccess('Notifications Updated', 'All admin alerts and scanner reports marked as read.');
     } catch (err) {
       console.error(err);
+      showError('Notification Error', 'Could not mark notifications as read.');
     }
   };
 
@@ -1855,7 +1869,7 @@ export const AdminDashboardPage: React.FC = () => {
                     <input type="text" readOnly value="30 Days" className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-800 font-semibold" />
                   </div>
                   <div className="pt-2">
-                    <button onClick={() => showAlert({ title: 'Settings Saved', message: 'Settings saved successfully.', type: 'success' })} className="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
+                    <button onClick={() => showSuccess('Settings Saved Successfully', 'Platform crawler intervals, deduplication thresholds, and alert notifications have been updated.')} className="px-5 py-2.5 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 transition">
                       Save Settings
                     </button>
                   </div>

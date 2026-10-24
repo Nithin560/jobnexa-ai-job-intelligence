@@ -4,6 +4,7 @@ import { api } from '../api/client';
 import { JobCard } from '../components/JobCard';
 import { JobCardSkeleton } from '../components/Skeletons/JobCardSkeleton';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
+import { useAlertModal } from '../components/Modals/AlertModal';
 import { Job } from '../types';
 import { 
   LayoutDashboard, User, FileText, Compass, Bookmark, CheckCircle, Bell, Building2, 
@@ -18,6 +19,23 @@ export const UserDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
   const [loading, setLoading] = useState(true);
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
+  const { showSuccess, showInfo, showError } = useAlertModal();
+
+  const handleToggleSave = async (jobId: string) => {
+    try {
+      const res = await api.toggleSaveJob(jobId);
+      const isSaved = res?.saved ?? false;
+      const updatedSaved = await api.getSavedJobs();
+      setSaved(updatedSaved);
+      if (isSaved) {
+        showSuccess('Job Saved to Bookmarks', 'This position has been saved to your profile bookmarks.');
+      } else {
+        showInfo('Bookmark Removed', 'This position was removed from your saved positions.');
+      }
+    } catch {
+      showError('Bookmark Error', 'Failed to update saved job status. Please retry.');
+    }
+  };
 
   // Ensure that pressing browser Back button reliably returns directly to Home
   useEffect(() => {
@@ -254,7 +272,7 @@ export const UserDashboard: React.FC = () => {
         ) : (
           <div className="space-y-4">
             {(activeTab === 'recommended' ? recommended : saved).map((job) => (
-              <JobCard key={job.id} job={job} />
+              <JobCard key={job.id} job={job} onToggleSave={handleToggleSave} />
             ))}
           </div>
         )}

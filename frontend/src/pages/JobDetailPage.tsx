@@ -17,7 +17,61 @@ export const JobDetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'details' | 'match' | 'company'>('match');
   const [loading, setLoading] = useState(true);
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
-  const { showAdminRestrictedModal } = useAlertModal();
+  const { showAdminRestrictedModal, showAlert, showSuccess, showError, showWarning, showInfo, closeAlert } = useAlertModal();
+  const [isSaved, setIsSaved] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (job?.is_saved) {
+      setIsSaved(true);
+    }
+  }, [job]);
+
+  const handleToggleSave = async () => {
+    if (!job) return;
+    const role = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
+    if (!role) {
+      showAlert({
+        title: 'Authentication Required',
+        badge: 'Candidate Sign-In',
+        message: 'Please log in with a candidate account to save jobs, bookmark positions, and track applications.',
+        type: 'info',
+        actionButton: {
+          label: 'Log In Now',
+          onClick: () => {
+            closeAlert();
+            window.location.href = '/login';
+          }
+        }
+      });
+      return;
+    }
+    if (role === 'admin') {
+      showWarning('Admin Role Active', 'Admin accounts cannot bookmark candidate job listings. Please use a candidate profile to save positions.');
+      return;
+    }
+    try {
+      const res = await api.toggleSaveJob(job.id);
+      const savedState = res?.saved ?? !isSaved;
+      setIsSaved(savedState);
+      if (savedState) {
+        showSuccess(
+          'Job Saved to Bookmarks',
+          `"${job.title}" at ${job.company_name} has been added to your profile bookmarks. You can review and apply anytime from your Saved Positions tab.`,
+          {
+            label: 'View Saved Jobs',
+            onClick: () => {
+              closeAlert();
+              window.location.href = '/dashboard';
+            }
+          }
+        );
+      } else {
+        showInfo('Bookmark Removed', `"${job.title}" was removed from your saved positions.`);
+      }
+    } catch {
+      showError('Bookmark Error', 'Failed to update saved job status. Please retry.');
+    }
+  };
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -199,7 +253,14 @@ export const JobDetailPage: React.FC = () => {
                 <ExternalLink className="w-4 h-4" />
               </a>
             )}
-            <button className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-400 hover:text-slate-600">
+            <button
+              type="button"
+              onClick={handleToggleSave}
+              className={`p-3 rounded-2xl border transition cursor-pointer ${
+                isSaved ? 'bg-blue-50 text-blue-600 border-blue-200 shadow-2xs' : 'bg-white border-slate-200 text-slate-400 hover:text-slate-600'
+              }`}
+              title={isSaved ? "Saved to your bookmarks" : "Save this job to your bookmarks"}
+            >
               <Bookmark className="w-5 h-5" />
             </button>
           </div>

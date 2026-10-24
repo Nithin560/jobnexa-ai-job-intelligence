@@ -1,8 +1,14 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { X, ShieldAlert, AlertCircle, CheckCircle, Info, UserCheck, ArrowRight } from 'lucide-react';
+import { X, ShieldAlert, AlertCircle, CheckCircle, Info, UserCheck, ArrowRight, Sparkles, HelpCircle } from 'lucide-react';
 import { api } from '../../api/client';
 
 export type AlertType = 'warning' | 'info' | 'error' | 'success';
+
+export interface AlertModalAction {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'amber';
+}
 
 export interface AlertModalOptions {
   title?: string;
@@ -14,24 +20,49 @@ export interface AlertModalOptions {
   showCancel?: boolean;
   onConfirm?: () => void;
   onCancel?: () => void;
-  actionButton?: {
-    label: string;
-    onClick: () => void;
-    variant?: 'primary' | 'secondary' | 'amber';
-  };
+  actionButton?: AlertModalAction;
+  details?: string;
+}
+
+export interface ConfirmModalOptions {
+  title: string;
+  message: string;
+  badge?: string;
+  confirmText?: string;
+  cancelText?: string;
+  onConfirm: () => void;
+  onCancel?: () => void;
+  type?: AlertType;
   details?: string;
 }
 
 interface AlertModalContextType {
   showAlert: (options: AlertModalOptions | string) => void;
+  showSuccess: (title: string, message: string, action?: AlertModalAction, details?: string) => void;
+  showError: (title: string, message: string, details?: string) => void;
+  showWarning: (title: string, message: string, details?: string) => void;
+  showInfo: (title: string, message: string, action?: AlertModalAction) => void;
+  showConfirm: (options: ConfirmModalOptions) => void;
   showAdminRestrictedModal: () => void;
+  showProfileUpdatedModal: (options: {
+    targetTitle: string;
+    skillsCount: number;
+    experienceYears: number;
+    onContinue?: () => void;
+  }) => void;
   closeAlert: () => void;
   isOpen: boolean;
 }
 
 const AlertModalContext = createContext<AlertModalContextType>({
   showAlert: () => {},
+  showSuccess: () => {},
+  showError: () => {},
+  showWarning: () => {},
+  showInfo: () => {},
+  showConfirm: () => {},
   showAdminRestrictedModal: () => {},
+  showProfileUpdatedModal: () => {},
   closeAlert: () => {},
   isOpen: false,
 });
@@ -56,7 +87,6 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
 
   const showAlert = useCallback((opts: AlertModalOptions | string) => {
     if (typeof opts === 'string') {
-      // Check if message is the admin restriction message
       if (opts.toLowerCase().includes('admin accounts are not allowed to apply') || opts.toLowerCase().includes('application restricted')) {
         showAdminRestrictedModal();
         return;
@@ -85,6 +115,71 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setIsOpen(true);
   }, []);
 
+  const showSuccess = useCallback((title: string, message: string, action?: AlertModalAction, details?: string) => {
+    setOptions({
+      title,
+      message,
+      type: 'success',
+      badge: 'Action Completed',
+      confirmText: 'Got It',
+      actionButton: action,
+      details,
+    });
+    setIsOpen(true);
+  }, []);
+
+  const showError = useCallback((title: string, message: string, details?: string) => {
+    setOptions({
+      title,
+      message,
+      type: 'error',
+      badge: 'Attention Needed',
+      confirmText: 'Dismiss',
+      details,
+    });
+    setIsOpen(true);
+  }, []);
+
+  const showWarning = useCallback((title: string, message: string, details?: string) => {
+    setOptions({
+      title,
+      message,
+      type: 'warning',
+      badge: 'System Notice',
+      confirmText: 'Understood',
+      details,
+    });
+    setIsOpen(true);
+  }, []);
+
+  const showInfo = useCallback((title: string, message: string, action?: AlertModalAction) => {
+    setOptions({
+      title,
+      message,
+      type: 'info',
+      badge: 'Notification',
+      confirmText: 'Got It',
+      actionButton: action,
+    });
+    setIsOpen(true);
+  }, []);
+
+  const showConfirm = useCallback((opts: ConfirmModalOptions) => {
+    setOptions({
+      title: opts.title,
+      message: opts.message,
+      type: opts.type || 'warning',
+      badge: opts.badge || 'Confirmation Required',
+      confirmText: opts.confirmText || 'Confirm',
+      cancelText: opts.cancelText || 'Cancel',
+      showCancel: true,
+      onConfirm: opts.onConfirm,
+      onCancel: opts.onCancel,
+      details: opts.details,
+    });
+    setIsOpen(true);
+  }, []);
+
   const showAdminRestrictedModal = useCallback(() => {
     setOptions({
       title: 'Application Restricted',
@@ -104,6 +199,35 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
           } catch {
             setIsOpen(false);
             window.location.href = '/login';
+          }
+        },
+      },
+    });
+    setIsOpen(true);
+  }, []);
+
+  const showProfileUpdatedModal = useCallback((opts: {
+    targetTitle: string;
+    skillsCount: number;
+    experienceYears: number;
+    onContinue?: () => void;
+  }) => {
+    setOptions({
+      title: 'Profile Updated Successfully!',
+      badge: 'Candidate Profile Saved',
+      message: `Your career profile for "${opts.targetTitle}" with ${opts.skillsCount} skills and ${opts.experienceYears}y experience has been updated. Personalized matching is now active for Bengaluru tech jobs!`,
+      type: 'success',
+      details: 'Our semantic skill matching engine automatically recalculates fit vectors across direct company ATS portals (Greenhouse, Lever, Ashby, Workday) and startup sources (Wellfound, LinkedIn, Glassdoor).',
+      confirmText: 'Stay on Profile',
+      actionButton: {
+        label: 'Explore Matching Jobs',
+        variant: 'primary',
+        onClick: () => {
+          setIsOpen(false);
+          if (opts.onContinue) {
+            opts.onContinue();
+          } else {
+            window.location.href = '/';
           }
         },
       },
@@ -152,7 +276,20 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   return (
-    <AlertModalContext.Provider value={{ showAlert, showAdminRestrictedModal, closeAlert, isOpen }}>
+    <AlertModalContext.Provider
+      value={{
+        showAlert,
+        showSuccess,
+        showError,
+        showWarning,
+        showInfo,
+        showConfirm,
+        showAdminRestrictedModal,
+        showProfileUpdatedModal,
+        closeAlert,
+        isOpen,
+      }}
+    >
       {children}
 
       {isOpen && (
@@ -186,7 +323,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
               type="button"
               onClick={closeAlert}
               aria-label="Close modal"
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-300"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-300 cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -241,7 +378,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                   <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-3.5 text-xs text-slate-600 space-y-1.5 leading-relaxed">
                     <div className="flex items-center gap-1.5 font-semibold text-slate-800">
                       <UserCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-                      <span>Role & Application Policy</span>
+                      <span>Intelligence Policy</span>
                     </div>
                     <p className="text-slate-500">
                       {options.details}
@@ -256,7 +393,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                   <button
                     type="button"
                     onClick={closeAlert}
-                    className="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition shadow-2xs"
+                    className="px-4 py-2.5 text-xs font-semibold text-slate-600 hover:text-slate-800 bg-white hover:bg-slate-50 border border-slate-200 rounded-xl transition shadow-2xs cursor-pointer"
                   >
                     {options.cancelText || 'Cancel'}
                   </button>
@@ -265,7 +402,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                 <button
                   type="button"
                   onClick={handleConfirm}
-                  className="px-4 py-2.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200/80 rounded-xl transition shadow-2xs"
+                  className="px-4 py-2.5 text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 border border-slate-200/80 rounded-xl transition shadow-2xs cursor-pointer"
                 >
                   {options.confirmText || 'Got It'}
                 </button>
@@ -278,7 +415,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                         options.actionButton.onClick();
                       }
                     }}
-                    className={`px-4 py-2.5 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm ${
+                    className={`px-4 py-2.5 text-xs font-semibold rounded-xl transition flex items-center justify-center gap-1.5 shadow-sm cursor-pointer ${
                       options.actionButton.variant === 'amber'
                         ? 'bg-amber-600 hover:bg-amber-700 text-white shadow-amber-200'
                         : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-200'

@@ -8,7 +8,7 @@ import { useAlertModal } from '../components/Modals/AlertModal';
 
 export const CandidateProfilePage: React.FC = () => {
   const navigate = useNavigate();
-  const { showAlert } = useAlertModal();
+  const { showAlert, showProfileUpdatedModal, showError } = useAlertModal();
   const [profile, setProfile] = useState<CandidateProfile | null>(null);
   const [targetTitle, setTargetTitle] = useState('Backend Software Engineer');
   const [exp, setExp] = useState(0);
@@ -81,13 +81,17 @@ export const CandidateProfilePage: React.FC = () => {
       window.dispatchEvent(new CustomEvent('candidateProfileUpdated', { detail: { targetTitle, skills, years: parsedExp } }));
 
       setSaved(true);
-      // Give brief feedback then smoothly redirect to Home page
-      setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 700);
+      showProfileUpdatedModal({
+        targetTitle,
+        skillsCount: skills.length,
+        experienceYears: parsedExp,
+        onContinue: () => {
+          navigate('/', { replace: true });
+        }
+      });
     } catch (err) {
       console.error(err);
-      showAlert({ title: 'Profile Update Error', message: 'Error updating profile. Please check your connection and retry.', type: 'error' });
+      showError('Profile Update Failed', 'Error updating profile. Please check your connection and retry.');
     } finally {
       setSaving(false);
     }
