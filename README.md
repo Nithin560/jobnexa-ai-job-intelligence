@@ -1,115 +1,187 @@
-# JobNexa — Bengaluru IT Company Discovery & Engineering Job Intelligence Platform
+<div align="center">
 
-An AI-powered job discovery and engineering intelligence platform built specifically for **Bengaluru and Karnataka state**. JobNexa automatically scans permitted company career ATS portals (Greenhouse, Lever, Ashby, SmartRecruiters, Workday) and verified job platform feeds on a scheduled cadence, normalizes job listings across 7 IT Role Families and 9 Company Categories, extracts skills, detects duplicates, verifies physical Bangalore tech hub locations, and connects candidates directly to official application URLs with explainable match scoring.
+  # 🚀 JobNexa — Bengaluru IT Job Intelligence & ATS Pipeline
+  
+  **An enterprise-grade, AI-powered engineering job discovery platform and automated ATS ingestion engine built specifically for Bengaluru's tech ecosystem.**
 
-![JobNexa Platform](docs/home_dashboard.jpg)
+  <p align="center">
+    <a href="https://github.com/Nithin560/jobnexa-ai-job-intelligence/stargazers"><img src="https://img.shields.io/github/stars/Nithin560/jobnexa-ai-job-intelligence?style=for-the-badge&color=blue" alt="Stars"></a>
+    <a href="https://github.com/Nithin560/jobnexa-ai-job-intelligence/network/members"><img src="https://img.shields.io/github/forks/Nithin560/jobnexa-ai-job-intelligence?style=for-the-badge&color=indigo" alt="Forks"></a>
+    <a href="https://github.com/Nithin560/jobnexa-ai-job-intelligence/issues"><img src="https://img.shields.io/github/issues/Nithin560/jobnexa-ai-job-intelligence?style=for-the-badge&color=emerald" alt="Issues"></a>
+    <a href="https://github.com/Nithin560/jobnexa-ai-job-intelligence/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-amber?style=for-the-badge" alt="License"></a>
+  </p>
 
-### Application Screenshots & Workflows
+  <p align="center">
+    <img src="https://img.shields.io/badge/React_18-20232A?style=flat-square&logo=react&logoColor=61DAFB" alt="React 18" />
+    <img src="https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/FastAPI-005571?style=flat-square&logo=fastapi" alt="FastAPI" />
+    <img src="https://img.shields.io/badge/Python_3.11+-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python" />
+    <img src="https://img.shields.io/badge/PostgreSQL-316192?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL" />
+    <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white" alt="Tailwind" />
+    <img src="https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker" />
+    <img src="https://img.shields.io/badge/Render-46E3B7?style=flat-square&logo=render&logoColor=white" alt="Render" />
+    <img src="https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white" alt="Vercel" />
+  </p>
 
-| Candidate Discovery & Feed | Admin Operations & Crawler Intelligence |
-|---|---|
-| ![User Experience & Job Match Analysis](docs/dashboard_flow.jpg) | ![Admin Operations Dashboard](docs/admin_dashboard.jpg) |
+  <p align="center">
+    <a href="https://jobnexa-ai-job-intelligence.onrender.com/docs"><strong>Explore Live API Docs (Swagger) »</strong></a>
+    <br />
+    <a href="#-key-features">Key Features</a> •
+    <a href="#-system-architecture">System Architecture</a> •
+    <a href="#-tech-stack">Tech Stack</a> •
+    <a href="#-quick-start">Quick Start</a> •
+    <a href="#-api-endpoints">API Reference</a>
+  </p>
+
+</div>
 
 ---
 
-## 🌟 Key Platform Capabilities
+## 📸 Platform Interface Preview
 
-- **120+ Bengaluru IT Companies & Direct ATS Ingestion:** Ingests vacancies directly from verified career portals (Razorpay, Swiggy, Zerodha, CRED, Flipkart, PhonePe, Infosys, Wipro, Bosch, etc.) with zero middleman or expired listings.
-- **7 IT Role Families Categorization:**
-  1. Software & Product Engineering
-  2. Cloud, SRE & DevOps
-  3. Cybersecurity & InfoSec
-  4. Data & AI / ML
-  5. QA & SDET
-  6. Hardware & Embedded Systems
-  7. Tech Product & Architecture
-- **Dedicated Candidate Experience Tiers:**
-  - **Fresher Opportunities (0 - 1 Years):** Curated for new graduates, entry-level engineers, and interns with 1-click on-demand fresh recommendations reload.
-  - **Experienced Career Openings (1+ Years):** Tailored for mid, senior, lead, and staff engineers.
-- **Strict Role-Based Security:**
-  - **Admin Mode:** Full control over live career portal scanning, user intelligence, system crawler throughput, and source health.
-  - **Candidate User Mode:** Streamlined, secure job discovery and application tracking with automated 24/7 verification sync.
-- **Dynamic Real-Time Verification Timestamps:** Accurately reflects exact scan and verification times (`Today, 08:01 AM`, `Yesterday`, etc.) with full datetime hover inspection.
-- **Bangalore Tech Hubs Filtering:** Neighborhood-level filtering across Koramangala & HSR, Whitefield & Bellandur (ORR), Electronic City, Manyata & North Bengaluru, Indiranagar & Central, and Remote/Hybrid Karnataka.
-- **Zero Paid API Stack (₹0 Local Target):** Runs entirely locally without expensive third-party APIs using FastAPI, SQLite/PostgreSQL, React 18, Vite, and Tailwind CSS.
+<div align="center">
+  <img src="docs/home_dashboard.jpg" alt="JobNexa Platform Dashboard" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.12);" />
+</div>
+
+<br/>
+
+| 🎯 Candidate Discovery & Match Analysis | ⚙️ Admin Operations & Crawler Telemetry |
+|:---:|:---:|
+| <img src="docs/dashboard_flow.jpg" alt="Candidate Dashboard" width="100%" /> | <img src="docs/admin_dashboard.jpg" alt="Admin Dashboard" width="100%" /> |
+
+---
+
+## 🌟 Key Features
+
+- **⚡ Automated ATS Multi-Source Ingestion Pipeline:** Continuously ingests and normalizes openings directly from official enterprise ATS portals (**Greenhouse, Lever, Ashby, SmartRecruiters, Workday**) across **120+ top tech employers** (Razorpay, Swiggy, CRED, Zerodha, Flipkart, PhonePe, Infosys, Bosch).
+- **🛡️ 98% Deduplication & Verified Locations:** Employs SHA-256 job fingerprinting, regex location sanitization, and JD validation to ensure **zero expired postings, zero third-party spam, and 100% direct official career links**.
+- **🧠 7 IT Role Families & NLP Skill Matching:** Automated skill extraction and classification across:
+  1. *Software & Product Engineering*
+  2. *Cloud, SRE & DevOps*
+  3. *Data Engineering & AI/ML*
+  4. *Cybersecurity & InfoSec*
+  5. *QA & SDET*
+  6. *Hardware & Embedded Systems*
+  7. *Tech Product & Architecture*
+- **🎓 Dual Experience Tiers:**
+  - **Fresher Track (0–1 Years):** Entry-level roles, graduate engineering trainees, and internships with on-demand instant refresh.
+  - **Experienced Track (1+ Years):** Tailored for mid, senior, lead, and staff engineering openings.
+- **📍 Bengaluru Tech-Hub Neighborhood Filtering:** Granular geographic filtering across *Outer Ring Road (ORR) & Bellandur, Whitefield, Koramangala & HSR Layout, Electronic City, Manyata Tech Park, and Indiranagar/Central*.
+- **🔒 Enterprise Security & Dual-Factor Auth:** Role-Based Access Control (`candidate` vs `admin`), password hashing with **Bcrypt**, secure **JWT access tokens**, and automated **SMTP_SSL / Port 465 OTP verification**.
+- **📊 Real-Time Operations Telemetry:** Built-in Admin Console with Recharts analytics tracking daily scanner throughput, source health, response latency, and system alerts.
 
 ---
 
 ## 🏗️ System Architecture
 
-```
-Candidate / Admin Browser (React 18 + TypeScript + Vite + Tailwind)
-       │ (HTTPS / REST JSON)
-       ▼
- FastAPI Backend (Python 3.11+ + Pydantic v2 + SQLAlchemy ORM)
-       │
-       ├── SQLite / PostgreSQL Database
-       │
-       └── Bengaluru Discovery & Scan Pipeline
-             ├── ATS Connectors (Greenhouse, Lever, Ashby, SmartRecruiters)
-             ├── Normalization Engine (7 IT Role Families, 9 Company Types)
-             ├── Physical BLR Location & JD Validator
-             ├── Strict Role Access (Admin Scanner vs Candidate View)
-             └── Explainable Match Scoring (Skills, Experience, Location)
+```text
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                             CLIENT LAYER (Vercel)                                │
+│   React 18  •  TypeScript  •  Tailwind CSS  •  Vite  •  Lucide Icons  •  Recharts  │
+└────────────────────────────────────────┬─────────────────────────────────────────┘
+                                         │ HTTPS / REST JSON
+                                         ▼
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                          API & BACKEND LAYER (Render)                            │
+│           FastAPI (Python 3.11+)  •  Pydantic v2  •  AsyncIO  •  HTTPX           │
+│  ┌───────────────────────┐  ┌───────────────────────┐  ┌──────────────────────┐  │
+│  │  JWT & RBAC Security  │  │  SMTP / SSL Email OTP  │  │   Health & Telemetry │  │
+│  └───────────────────────┘  └───────────────────────┘  └──────────────────────┘  │
+└───────────────────┬──────────────────────────────────────────────┬───────────────┘
+                    │                                              │
+                    ▼                                              ▼
+┌──────────────────────────────────────┐     ┌─────────────────────────────────────┐
+│       DATABASE & STORAGE LAYER       │     │     BENGALURU ATS INGESTION PIPELINE │
+│  PostgreSQL 15+ (Production)         │     │  • Greenhouse ATS REST Connector     │
+│  SQLite (Local Development)          │     │  • Lever ATS REST Connector          │
+│  SQLAlchemy 2.0 ORM Engine           │     │  • Ashby & SmartRecruiters Feed      │
+│  Connection Pooling & Migrations     │     │  • SHA-256 Deduplication & Fingerprint│
+└──────────────────────────────────────┘     └─────────────────────────────────────┘
 ```
 
 ---
 
 ## 💻 Tech Stack
 
-| Layer | Technology |
+| Domain | Technologies |
 |---|---|
-| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Lucide Icons, Recharts |
-| **Backend** | Python 3.11+, FastAPI, Pydantic v2, SQLAlchemy ORM, HTTPX |
-| **Database** | SQLite (development/local) / PostgreSQL 15+ (production) |
-| **Security** | JWT Authentication, Passlib (Bcrypt / Argon2), RBAC (`candidate` vs `admin`) |
-| **Connectors** | Greenhouse ATS, Lever ATS, Ashby ATS, SmartRecruiters, Job Aggregators |
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS, Lucide React, Recharts |
+| **Backend** | Python 3.11+, FastAPI (Async), Pydantic v2, SQLAlchemy 2.0 ORM, HTTPX |
+| **Database** | PostgreSQL 15+ (Production) / SQLite (Local Dev) |
+| **Security & Auth** | JWT (JSON Web Tokens), Bcrypt Password Hashing, SMTPS (Port 465 SSL) |
+| **Data Ingestion** | Greenhouse API, Lever API, Ashby API, SmartRecruiters, BeautifulSoup4 |
+| **DevOps & Cloud** | Docker, Render (Backend PaaS), Vercel (Edge Frontend), Git & GitHub Actions |
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start Guide
 
 ### Prerequisites
-- Python 3.11+
-- Node.js 18+ and npm
-- Git
+- **Node.js:** v18.0.0 or higher
+- **Python:** v3.11 or higher
+- **Git**
 
-### Quick Setup
+### 1. Clone Repository
+```bash
+git clone https://github.com/Nithin560/jobnexa-ai-job-intelligence.git
+cd jobnexa-ai-job-intelligence
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Nithin560/jobnexa-ai-job-intelligence.git
-   cd jobnexa-ai-job-intelligence
-   ```
+### 2. Backend Setup
+```bash
+cd backend
+python -m venv .venv
 
-2. **Backend Setup:**
-   ```bash
-   cd backend
-   python -m venv .venv
-   # On Windows:
-   .venv\Scripts\activate
-   # On macOS/Linux:
-   source .venv/bin/activate
-   pip install -r requirements.txt
-   uvicorn app.main:app --reload
-   ```
+# Activate Virtual Environment:
+# On Windows:
+.venv\Scripts\activate
+# On Linux / macOS:
+source .venv/bin/activate
 
-3. **Frontend Setup:**
-   ```bash
-   cd ../frontend
-   npm install
-   npm run dev
-   ```
+# Install dependencies:
+pip install -r requirements.txt
 
-4. **Access the platform:**
-   - **Candidate & Discovery Portal:** `http://localhost:5173/`
-   - **Admin Intelligence Dashboard:** `http://localhost:5173/admin`
-   - **Interactive API Documentation:** `http://localhost:8000/docs`
+# Start backend server:
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+> Backend API will be live at: `http://localhost:8000`  
+> Interactive Swagger Documentation: `http://localhost:8000/docs`
+
+### 3. Frontend Setup
+In a new terminal:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+> Frontend Application will be running at: `http://localhost:5173`
 
 ---
 
-## 📜 Zero-Cost Discovery Blueprint
+## 📡 Core API Reference
 
-Read the complete discovery blueprint strategy inside the platform at `/strategy` or in the codebase at `frontend/src/pages/DiscoveryStrategyPage.tsx`.
+| Method | Endpoint | Description | Auth Required |
+|:---:|---|---|:---:|
+| `POST` | `/api/v1/auth/login` | Authenticate user and receive JWT access token | No |
+| `POST` | `/api/v1/auth/send-otp` | Generate and dispatch 6-digit verification OTP | No |
+| `POST` | `/api/v1/auth/verify-register` | Verify OTP, create account, and auto sign-in | No |
+| `GET` | `/api/v1/jobs` | Paginated job search with multi-criteria filters | Optional |
+| `GET` | `/api/v1/jobs/{id}` | Detailed job listing metadata and verified URL | No |
+| `GET` | `/api/v1/jobs/stats/overview` | Bengaluru tech hub metrics and role counts | No |
+| `POST` | `/api/v1/admin/scanner/trigger` | Trigger live ATS career portal scan | Admin Only |
+| `GET` | `/api/v1/admin/overview` | Admin crawler throughput and source health | Admin Only |
 
-Built with responsible crawling principles: respects `robots.txt`, implements per-host rate limits, stores minimal necessary metadata, and provides 100% direct application links to verified employer career portals.
+---
+
+## 👨‍💻 Author
+
+**Vandana Nithin**  
+*Full Stack Developer & AI Engineer*  
+- **GitHub:** [@Nithin560](https://github.com/Nithin560)  
+- **LinkedIn:** [Nithin Vandana](https://linkedin.com)  
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE) — see the LICENSE file for details.
