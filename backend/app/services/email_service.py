@@ -100,31 +100,43 @@ def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> b
     # If SMTP is configured, attempt sending real email
     creds = get_smtp_credentials()
     if creds["user"] and creds["password"]:
+        from_addr = creds["from_email"]
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = subject
+        msg["From"] = f"{creds['from_name']} <{from_addr}>"
+        msg["To"] = to_email
+
+        part1 = MIMEText(plain_content, "plain")
+        part2 = MIMEText(html_content, "html")
+        msg.attach(part1)
+        msg.attach(part2)
+
+        # 1. First attempt: Direct SSL via Port 465 (SMTPS)
         try:
-            from_addr = creds["from_email"]
-            msg = MIMEMultipart("alternative")
-            msg["Subject"] = subject
-            msg["From"] = f"{creds['from_name']} <{from_addr}>"
-            msg["To"] = to_email
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=4) as server:
+                server.login(creds["user"], creds["password"])
+                server.sendmail(from_addr, [to_email], msg.as_string())
+            print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via SMTP_SSL (port 465)")
+            return True
+        except Exception as e_ssl:
+            print(f"[EMAIL SERVICE] Port 465 SSL failed/timed out: {e_ssl}")
 
-            part1 = MIMEText(plain_content, "plain")
-            part2 = MIMEText(html_content, "html")
-            msg.attach(part1)
-            msg.attach(part2)
-
-            with smtplib.SMTP(creds["host"], creds["port"], timeout=10) as server:
+        # 2. Second attempt: STARTTLS via Port 587
+        try:
+            target_port = creds["port"] if creds["port"] != 465 else 587
+            with smtplib.SMTP(creds["host"], target_port, timeout=4) as server:
                 server.starttls()
                 server.login(creds["user"], creds["password"])
                 server.sendmail(from_addr, [to_email], msg.as_string())
+            print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via SMTP (port {target_port})")
+            return True
+        except Exception as e_tls:
+            print(f"[EMAIL SERVICE] Port {target_port} STARTTLS failed/timed out: {e_tls}")
 
-            print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via SMTP")
-            return True
-        except Exception as e:
-            print(f"[EMAIL SERVICE] SMTP delivery failed to {to_email}: {e}")
-            # Fallback to local logging so registration is not blocked during setup
-            print(f"[EMAIL SERVICE DEV LOG] OTP for {to_email}: {otp_code}")
-            return True
+        # If direct SMTP attempts failed (e.g. Render cloud firewall blocks outbound SMTP ports):
+        print(f"[EMAIL SERVICE DEV LOG] [Outbound SMTP blocked by host] OTP for {to_email}: {otp_code}")
+        return False
     else:
         # Development / Waiting for User SMTP credentials
-        print(f"[EMAIL SERVICE DEV LOG] [SMTP pending configuration] To: {to_email} | OTP: {otp_code} | Purpose: {purpose}")
-        return True
+        print(f"[EMAIL SERVICE DEV LOG] [SMTP not configured] To: {to_email} | OTP: {otp_code} | Purpose: {purpose}")
+        return False

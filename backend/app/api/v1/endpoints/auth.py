@@ -81,13 +81,18 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
     db.commit()
 
     # Send email (via SMTP or dev logger)
-    send_otp_email(clean_email, otp_code, purpose=req.purpose)
+    email_delivered = send_otp_email(clean_email, otp_code, purpose=req.purpose)
 
-    dev_otp_val = otp_code if not is_smtp_configured() else None
+    dev_otp_val = None if email_delivered else otp_code
+    message_text = (
+        f"A 6-digit verification code has been sent to {clean_email}."
+        if email_delivered
+        else f"A 6-digit verification code has been generated for {clean_email}."
+    )
 
     return SendOTPResponse(
         status="success",
-        message=f"A 6-digit verification code has been sent to {clean_email}.",
+        message=message_text,
         email=clean_email,
         expires_in_seconds=600,
         dev_otp=dev_otp_val
