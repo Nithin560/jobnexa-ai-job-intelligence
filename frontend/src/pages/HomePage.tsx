@@ -10,7 +10,7 @@ import { api } from '../api/client';
 import { 
   Briefcase, Building2, Rocket, Building, CheckCircle2, ArrowRight, Play, MapPin, 
   Search, ShieldCheck, ChevronDown, Check, Clock, TrendingUp, BarChart2, ChevronLeft, ChevronRight,
-  GraduationCap, RefreshCw, Globe, Compass, ArrowLeft
+  GraduationCap, RefreshCw, Globe, Compass, ArrowLeft, Filter, SlidersHorizontal
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 import bengaluruBanner from '../assets/bengaluru_landmark.webp';
@@ -59,6 +59,7 @@ export const HomePage: React.FC = () => {
   const [liveScanInfo, setLiveScanInfo] = useState<any>(null);
 
   // User's experience tier (auto-initialized from registered user profile or toggleable)
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [activeExpTab, setActiveExpTab] = useState<'all' | 'fresher' | 'experienced'>(() => {
     const isCand = Boolean(
       (sessionStorage.getItem('access_token') || localStorage.getItem('access_token')) &&
@@ -696,11 +697,36 @@ export const HomePage: React.FC = () => {
 
       </div>
 
-      {/* Main 3-Column Layout Grid matching Image 2 */}
+      {/* Mobile/Minimized Screen Filter Bar (Visible on Minimized/Tablet/Mobile Windows Only) */}
+      <div className="lg:hidden bg-white p-3 rounded-2xl border border-slate-200 shadow-2xs flex items-center justify-between gap-3">
+        <button
+          onClick={() => setShowMobileFilters(!showMobileFilters)}
+          className={`flex items-center gap-2 text-xs font-bold px-3.5 py-2 rounded-xl transition cursor-pointer ${
+            showMobileFilters
+              ? 'bg-blue-600 text-white shadow-xs'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200/80'
+          }`}
+        >
+          <Filter className="w-3.5 h-3.5" />
+          <span>{showMobileFilters ? 'Hide Search Filters' : 'Filter Opportunities'}</span>
+          {[filters.source_type, filters.work_mode, filters.company_type, filters.employment_type, filters.experience_level].filter(Boolean).length > 0 && (
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+              showMobileFilters ? 'bg-white text-blue-700' : 'bg-blue-600 text-white'
+            }`}>
+              {[filters.source_type, filters.work_mode, filters.company_type, filters.employment_type, filters.experience_level].filter(Boolean).length}
+            </span>
+          )}
+        </button>
+        <span className="text-xs font-semibold text-slate-500">
+          {(insights?.total_jobs ?? totalJobs).toLocaleString()} Jobs Available
+        </span>
+      </div>
+
+      {/* Main 3-Column Layout Grid matching Image 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         
-        {/* Left Column: Filters Sidebar (3 cols) */}
-        <div className="lg:col-span-3 space-y-6">
+        {/* Left Column: Filters Sidebar (3 cols on desktop full screen, toggleable on minimized screen) */}
+        <div className={`lg:col-span-3 space-y-6 ${showMobileFilters ? 'block' : 'hidden lg:block'}`}>
           <SearchFilters
             filters={filters}
             insights={insights}

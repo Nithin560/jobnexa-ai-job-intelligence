@@ -80,8 +80,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                 <span className="text-[11px] font-bold text-slate-600 tracking-tight">
                   Bengaluru IT Intelligence
                 </span>
-                <span className="hidden xl:inline-block w-1 h-1 rounded-full bg-slate-300"></span>
-                <span className="hidden xl:inline-flex items-center gap-1 text-[11px] font-medium text-slate-500">
+                <span className="hidden md:inline-block w-1 h-1 rounded-full bg-slate-300"></span>
+                <span className="hidden md:inline-flex items-center gap-1 text-[11px] font-medium text-slate-500 shrink-0">
                   <MapPin className="w-3 h-3 text-blue-600 shrink-0" />
                   198+ Verified Tech Units
                 </span>
@@ -181,7 +181,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
           {authenticated && !isAuthPage ? (
             <div className="flex items-center gap-2">
               {/* Telemetry pill */}
-              <div className="hidden 2xl:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-semibold shadow-2xs">
+              <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200/80 text-emerald-800 text-xs font-semibold shadow-2xs shrink-0">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                 <span>Direct Apply Sync Active</span>
               </div>
@@ -224,22 +224,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               </button>
             </div>
           ) : (
-            /* Logged Out / Auth Page Navigation */
+            /* Logged Out / Auth Page Navigation (Normal layout on full screen, compact on minimized) */
             <div className="flex items-center gap-2 shrink-0">
-              <div className="hidden xl:flex items-center gap-2 mr-1">
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200">
-                  <MapPin className="w-3 h-3 text-blue-600" /> Bengaluru Only
+              <div className="hidden lg:flex items-center gap-2 mr-1 shrink-0">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-semibold border border-slate-200 shrink-0">
+                  <MapPin className="w-3 h-3 text-blue-600 shrink-0" /> Bengaluru Only
                 </span>
-                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-semibold border border-emerald-200 shrink-0">
                   100% Direct Apply
                 </span>
               </div>
               <button
                 onClick={handleSwitchToCandidate}
-                className="hidden lg:inline-flex text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-xl transition items-center gap-1 cursor-pointer"
+                className="hidden sm:inline-flex text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-xl transition items-center gap-1 cursor-pointer shrink-0"
                 title="1-Click Candidate Login"
               >
-                <User className="w-3.5 h-3.5" /> Candidate Demo
+                <User className="w-3.5 h-3.5 shrink-0" /> Candidate Demo
               </button>
               {location.pathname === '/login' ? (
                 <Link
