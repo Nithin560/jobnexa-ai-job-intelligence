@@ -34,9 +34,9 @@ function PlatformLayout({ children }: { children: React.ReactNode }) {
   const [isAuthOpen, setIsAuthOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 flex flex-col font-sans overflow-x-hidden max-w-full">
       <Navbar onOpenAuth={() => setIsAuthOpen(true)} />
-      <main className="flex-1 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+      <main className="flex-1 max-w-[1600px] w-full mx-auto px-3 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         {children}
       </main>
 
@@ -62,9 +62,9 @@ export function App() {
           path="/login"
           element={
             <GuestOnlyRoute>
-              <div className="min-h-screen flex flex-col font-sans">
+              <div className="min-h-screen flex flex-col font-sans overflow-x-hidden max-w-full">
                 <Navbar onOpenAuth={() => {}} />
-                <main className="flex-1 flex flex-col">
+                <main className="flex-1 flex flex-col overflow-x-hidden max-w-full">
                   <LoginPage />
                 </main>
               </div>
@@ -75,9 +75,9 @@ export function App() {
           path="/register"
           element={
             <GuestOnlyRoute>
-              <div className="min-h-screen flex flex-col font-sans">
+              <div className="min-h-screen flex flex-col font-sans overflow-x-hidden max-w-full">
                 <Navbar onOpenAuth={() => {}} />
-                <main className="flex-1 flex flex-col">
+                <main className="flex-1 flex flex-col overflow-x-hidden max-w-full">
                   <RegisterPage />
                 </main>
               </div>

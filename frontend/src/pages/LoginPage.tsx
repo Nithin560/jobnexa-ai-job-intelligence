@@ -254,7 +254,7 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 overflow-hidden">
+    <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-6 sm:py-10 px-3 sm:px-6 overflow-x-hidden">
       <TopLoadingBar isLoading={loading} />
       {/* Original Crisp Landmark Background Image (Sharp & Clear, No Blur on Image) */}
       <div
@@ -268,7 +268,7 @@ export const LoginPage: React.FC = () => {
       <div className="absolute inset-0 bg-slate-900/15" />
 
       {/* Login Card with Frosted Glass Blur Background */}
-      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-8 space-y-6">
+      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6">
         
         {/* Back Link */}
         <div className="flex items-center justify-between">

@@ -10,7 +10,7 @@ import {
   CheckCircle2, Server, Database, Cpu, Layers, HardDrive, AlertCircle, RefreshCw, Search,
   Bell, User, ChevronDown, Check, ArrowUpRight, ArrowRight, Eye, LayoutDashboard, Globe,
   FileText, Activity, Brain, CopyCheck, ShieldCheck, Users, BarChart3, BellRing, Settings, LogOut,
-  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft, Trash2, Compass
+  UserCheck, CheckCheck, X, GraduationCap, ArrowLeft, Trash2, Compass, Menu
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell,
@@ -116,10 +116,12 @@ export const AdminDashboardPage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [showComingSoonPlacesToVisitModal]);
   const [activeTab, setActiveTab] = useState<string>(() => (location.state as any)?.tab || 'Dashboard');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const handleTabChange = (tabName: string) => {
     triggerLoading(300);
     setActiveTab(tabName);
+    setIsSidebarOpen(false);
   };
 
   // User Intelligence State
@@ -332,8 +334,21 @@ export const AdminDashboardPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-100 flex font-sans text-slate-800">
       
-      {/* 1. Dark Left Navigation Sidebar */}
-      <aside className="w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800">
+      {/* Mobile backdrop overlay for responsive sidebar */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-40 lg:hidden transition-opacity"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      {/* 1. Dark Left Navigation Sidebar (Responsive drawer on mobile/minimized screens, static on desktop) */}
+      <aside className={`
+        fixed lg:static top-0 bottom-0 left-0 z-50
+        w-64 bg-slate-900 text-slate-300 flex flex-col shrink-0 border-r border-slate-800
+        transition-transform duration-300 ease-in-out
+        ${isSidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:translate-x-0'}
+      `}>
         
         {/* Brand Header */}
         <div className="p-5 border-b border-slate-800 flex items-center justify-between">
@@ -346,9 +361,18 @@ export const AdminDashboardPage: React.FC = () => {
               <div className="text-[11px] font-semibold text-slate-400">Admin Intelligence</div>
             </div>
           </Link>
-          <span className="bg-blue-600/30 text-blue-400 border border-blue-500/30 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
-            ADMIN
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="bg-blue-600/30 text-blue-400 border border-blue-500/30 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+              ADMIN
+            </span>
+            <button
+              onClick={() => setIsSidebarOpen(false)}
+              className="lg:hidden p-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 cursor-pointer"
+              title="Close Menu"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Back to Home Platform Link */}
@@ -483,37 +507,47 @@ export const AdminDashboardPage: React.FC = () => {
         <TopLoadingBar isLoading={loading || scanning} />
         
         {/* Top Header Bar */}
-        <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm gap-4 min-w-0">
+        <header className="bg-white border-b border-slate-200 px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between sticky top-0 z-30 shadow-xs gap-2 sm:gap-4 min-w-0">
           
-          {/* Left Navigation & Status Sections (Grouped on the Left Side Direction) */}
-          <div className="flex items-center gap-3 shrink-0 min-w-0">
+          {/* Left Navigation & Status Sections */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+            {/* Mobile Sidebar Hamburger Toggle */}
+            <button
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="lg:hidden p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 transition shrink-0 cursor-pointer"
+              title="Toggle Admin Menu"
+              aria-label="Toggle menu"
+            >
+              <Menu className="w-4 h-4" />
+            </button>
+
             {/* User Dashboard Button */}
             <Link
               to="/dashboard"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 px-3 py-2 rounded-xl transition shadow-2xs shrink-0 group"
+              className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 hover:text-blue-600 bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-xl transition shadow-2xs shrink-0 group"
               title="Open User Dashboard"
             >
               <LayoutDashboard className="w-3.5 h-3.5 text-cyan-600 group-hover:text-blue-600 transition-colors" />
-              <span className="hidden md:inline">User Dashboard</span>
+              <span className="hidden sm:inline">User Dashboard</span>
             </Link>
 
-            {/* Live System Telemetry & Engine Ops Widget - Professional & Unique */}
-            <div className="flex items-center gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-3 py-1.5 shadow-2xs">
+            {/* Live System Telemetry & Engine Ops Widget */}
+            <div className="flex items-center gap-1.5 sm:gap-2.5 bg-slate-50 border border-slate-200/90 rounded-xl px-2 sm:px-3 py-1 sm:py-1.5 shadow-2xs shrink-0">
               {/* Engine Status Beacon */}
               <div className="flex items-center gap-1.5 text-xs font-semibold">
                 <span className="relative flex h-2 w-2 shrink-0">
                   <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${scanning ? 'animate-ping bg-blue-400' : 'animate-ping bg-emerald-400'}`}></span>
                   <span className={`relative inline-flex rounded-full h-2 w-2 ${scanning ? 'bg-blue-600' : 'bg-emerald-500'}`}></span>
                 </span>
-                <span className="text-slate-800 font-bold hidden sm:inline">
-                  {scanning ? 'Live Crawler Active' : 'ATS Engine Online'}
+                <span className="text-slate-800 font-bold hidden sm:inline text-xs">
+                  {scanning ? 'Scanning' : 'ATS Online'}
                 </span>
               </div>
 
-              <span className="h-3.5 w-px bg-slate-200 hidden md:inline-block"></span>
+              <span className="h-3.5 w-px bg-slate-200 hidden 2xl:inline-block"></span>
 
-              {/* Real-Time Live Counts */}
-              <div className="hidden md:flex items-center gap-2 text-xs">
+              {/* Real-Time Live Counts - Visible on extra large viewports */}
+              <div className="hidden 2xl:flex items-center gap-2 text-xs">
                 <span className="inline-flex items-center gap-1 text-slate-600">
                   <span className="text-slate-400 font-normal">Active Jobs:</span>
                   <strong className="text-slate-900 font-bold font-mono">{(overview?.total_jobs ?? 1667).toLocaleString()}</strong>
@@ -525,13 +559,13 @@ export const AdminDashboardPage: React.FC = () => {
                 </span>
               </div>
 
-              <span className="h-3.5 w-px bg-slate-200"></span>
+              <span className="h-3.5 w-px bg-slate-200 hidden sm:inline-block"></span>
 
               {/* Instant 1-Click Scan Quick Trigger */}
               <button
                 onClick={handleManualScan}
                 disabled={scanning}
-                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer ${
+                className={`inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-bold transition shadow-2xs cursor-pointer ${
                   scanning 
                     ? 'bg-blue-100 text-blue-700 border border-blue-200 cursor-not-allowed'
                     : 'bg-white hover:bg-slate-100 text-slate-700 hover:text-blue-600 border border-slate-200 hover:border-blue-300'
@@ -541,7 +575,7 @@ export const AdminDashboardPage: React.FC = () => {
                 {scanning ? (
                   <>
                     <RefreshCw className="w-3 h-3 animate-spin text-blue-600" />
-                    <span className="hidden lg:inline">Scanning...</span>
+                    <span className="hidden md:inline">Scanning...</span>
                   </>
                 ) : (
                   <>
@@ -552,28 +586,28 @@ export const AdminDashboardPage: React.FC = () => {
               </button>
             </div>
 
-            {/* Places to Visit Section in Nav Bar (after Scan section, matching Fourth Image) */}
+            {/* Places to Visit Section in Nav Bar */}
             <button
               onClick={() => handleTabChange('Places to Visit')}
-              className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold transition shadow-xs cursor-pointer shrink-0 ${
+              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl text-xs font-bold transition shadow-xs cursor-pointer shrink-0 ${
                 activeTab === 'Places to Visit'
                   ? 'bg-blue-600 text-white shadow-md shadow-blue-500/30 ring-2 ring-blue-400/60'
                   : 'bg-blue-600 hover:bg-blue-700 text-white shadow-xs'
               }`}
               title="Explore Places to Visit (Weekend Escapes Planner)"
             >
-              <div className="w-5 h-5 rounded-full border border-white/80 bg-white/20 flex items-center justify-center shrink-0">
-                <Compass className="w-3.5 h-3.5 text-white" />
+              <div className="w-4 h-4 rounded-full border border-white/80 bg-white/20 flex items-center justify-center shrink-0">
+                <Compass className="w-3 h-3 text-white" />
               </div>
-              <span className="whitespace-nowrap font-bold text-white text-xs sm:text-sm">Places to Visit</span>
-              <span className="text-[10px] font-black tracking-wide px-2 py-0.5 rounded-lg bg-blue-700 text-white shrink-0">
+              <span className="whitespace-nowrap font-bold text-white text-xs">Places to Visit</span>
+              <span className="hidden xl:inline text-[9px] font-black tracking-wide px-1.5 py-0.2 rounded bg-blue-700 text-white shrink-0">
                 Coming Soon
               </span>
             </button>
           </div>
 
           {/* 4. Notifications & Admin Profile */}
-          <div className="flex items-center gap-3 shrink-0 ml-auto">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
 
             {/* Notification Bell with interactive popover */}
             <div className="relative">
@@ -730,7 +764,7 @@ export const AdminDashboardPage: React.FC = () => {
 
         {/* Dashboard Main Content Body */}
         {loading && !overview ? (
-          <main className="p-8 space-y-6 animate-shimmer relative overflow-hidden">
+          <main className="p-4 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 animate-shimmer relative overflow-hidden max-w-full">
             <div className="flex items-center justify-between bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 text-xs text-blue-900 shadow-2xs">
               <div className="flex items-center gap-3">
                 <RefreshCw className="w-4 h-4 text-blue-600 animate-spin shrink-0" />
@@ -766,10 +800,10 @@ export const AdminDashboardPage: React.FC = () => {
             </div>
           </main>
         ) : (
-          <main className="p-8 space-y-6">
+          <main className="p-4 sm:p-6 lg:p-8 space-y-5 sm:space-y-6 max-w-full overflow-x-hidden">
           
           {/* Header Title Bar */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
               <h1 className="text-2xl font-black text-slate-900 tracking-tight">
                 {activeTab === 'Dashboard' && 'Admin Dashboard'}
@@ -2027,7 +2061,7 @@ export const AdminDashboardPage: React.FC = () => {
               )}
 
               {/* 6 Real Stat Cards Row based on actual scanning database */}
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3 sm:gap-4">
             
             <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
               <div className="flex items-center justify-between text-slate-500 mb-2">

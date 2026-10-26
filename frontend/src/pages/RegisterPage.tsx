@@ -186,7 +186,7 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-10 px-4 sm:px-6 overflow-hidden">
+    <div className="relative flex-1 min-h-[calc(100vh-64px)] w-full flex items-center justify-center py-6 sm:py-10 px-3 sm:px-6 overflow-x-hidden">
       <TopLoadingBar isLoading={loading} />
       {/* Original Crisp Landmark Background Image (Sharp & Clear, No Blur on Image) */}
       <div
@@ -200,7 +200,7 @@ export const RegisterPage: React.FC = () => {
       <div className="absolute inset-0 bg-slate-900/15" />
 
       {/* Registration Card with Frosted Glass Blur Background */}
-      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-8 space-y-6">
+      <div className="relative z-10 max-w-md w-full bg-white rounded-2xl border border-slate-200 shadow-xl p-5 sm:p-7 md:p-8 space-y-5 sm:space-y-6">
         
         {/* Back Link */}
         <div className="flex items-center justify-between">
@@ -235,13 +235,13 @@ export const RegisterPage: React.FC = () => {
         </div>
 
         {/* 2-Step Progress Indicator */}
-        <div className="flex items-center justify-center gap-2 text-xs font-bold">
-          <span className={`flex items-center gap-1 px-3 py-1 rounded-full ${step === 'details' ? 'bg-blue-600 text-white' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
+        <div className="flex items-center justify-center gap-1.5 sm:gap-2 text-xs font-bold">
+          <span className={`flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs ${step === 'details' ? 'bg-blue-600 text-white' : 'bg-emerald-50 text-emerald-700 border border-emerald-200'}`}>
             <span>1</span> Account Details
           </span>
           <span className="text-slate-300">→</span>
-          <span className={`flex items-center gap-1 px-3 py-1 rounded-full ${step === 'otp' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
-            <span>2</span> Email OTP Verification
+          <span className={`flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs ${step === 'otp' ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-400'}`}>
+            <span>2</span> Email OTP<span className="hidden sm:inline"> Verification</span>
           </span>
         </div>
 
