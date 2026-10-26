@@ -39,11 +39,10 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
     elif req.purpose == "login":
         existing_user = db.query(User).filter(User.email == clean_email).first()
         if not existing_user:
-            # Auto-provision primary admin if attempting login
-            if clean_email in ["nithinvandana26@gmail.com", "nithinvandana560@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
+            if clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
                 existing_user = User(
                     email=clean_email,
-                    password_hash=get_password_hash("9347388372pandu@"),
+                    password_hash=get_password_hash("22H71A0560pandu@"),
                     full_name="Nithin Vandana (Admin)",
                     role="admin",
                     is_verified=True
@@ -52,10 +51,27 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
                 db.commit()
                 db.refresh(existing_user)
             else:
-                raise HTTPException(
-                    status_code=status.HTTP_404_NOT_FOUND,
-                    detail="No account found with this email. Please register first."
+                # User logging in with a new email via OTP on user portal: auto-create as candidate
+                existing_user = User(
+                    email=clean_email,
+                    password_hash=get_password_hash("JobNexaUser2026!"),
+                    full_name=clean_email.split('@')[0],
+                    role="candidate",
+                    is_verified=True
                 )
+                db.add(existing_user)
+                db.commit()
+                db.refresh(existing_user)
+                
+                profile = CandidateProfile(
+                    user_id=existing_user.id,
+                    target_titles=["Software Engineer", "Backend Engineer"],
+                    location_preferences=["Bengaluru"],
+                    years_experience=0,
+                    work_mode="Hybrid"
+                )
+                db.add(profile)
+                db.commit()
 
     # Invalidate any prior unverified OTPs for this email and purpose
     db.query(EmailOTP).filter(
@@ -211,23 +227,38 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
     clean_email = req.email.strip().lower()
 
     user = db.query(User).filter(User.email == clean_email).first()
-    if not user and clean_email in ["nithinvandana26@gmail.com", "nithinvandana560@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
-        user = User(
-            email=clean_email,
-            password_hash=get_password_hash("9347388372pandu@"),
-            full_name="Nithin Vandana (Admin)",
-            role="admin",
-            is_verified=True
-        )
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-
     if not user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Account not found. Please register first."
-        )
+        if clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
+            user = User(
+                email=clean_email,
+                password_hash=get_password_hash("22H71A0560pandu@"),
+                full_name="Nithin Vandana (Admin)",
+                role="admin",
+                is_verified=True
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+        else:
+            user = User(
+                email=clean_email,
+                password_hash=get_password_hash("JobNexaUser2026!"),
+                full_name=clean_email.split('@')[0],
+                role="candidate",
+                is_verified=True
+            )
+            db.add(user)
+            db.commit()
+            db.refresh(user)
+            profile = CandidateProfile(
+                user_id=user.id,
+                target_titles=["Software Engineer", "Backend Engineer"],
+                location_preferences=["Bengaluru"],
+                years_experience=0,
+                work_mode="Hybrid"
+            )
+            db.add(profile)
+            db.commit()
 
     if user.disabled_at is not None:
         raise HTTPException(
@@ -355,10 +386,10 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == clean_email).first()
     
     # Auto-provision admin if missing on fresh deployment
-    if not user and clean_email in ["nithinvandana26@gmail.com", "nithinvandana560@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
+    if not user and clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
         user = User(
             email=clean_email,
-            password_hash=get_password_hash("9347388372pandu@"),
+            password_hash=get_password_hash("22H71A0560pandu@"),
             full_name="Nithin Vandana (Admin)",
             role="admin",
             is_verified=True
@@ -367,7 +398,7 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(user)
 
-    is_admin = clean_email in ["nithinvandana26@gmail.com", "nithinvandana560@gmail.com", settings.ADMIN_EMAIL_ID.lower()]
+    is_admin = clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]
     valid_password = False
     if user:
         if verify_password(credentials.password, user.password_hash):

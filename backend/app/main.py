@@ -69,7 +69,7 @@ def init_default_accounts():
         from app.db.session import SessionLocal
         db = SessionLocal()
         try:
-            admin_emails = ["nithinvandana26@gmail.com", "nithinvandana560@gmail.com", settings.ADMIN_EMAIL_ID.lower()]
+            admin_emails = list(set(["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]))
             for email in admin_emails:
                 existing = db.query(User).filter(User.email == email).first()
                 if not existing:
@@ -88,6 +88,13 @@ def init_default_accounts():
                         existing.role = "admin"
                         existing.is_verified = True
                         db.commit()
+
+            # Ensure candidate testing accounts have candidate role (never redirect to admin)
+            secondary_user = db.query(User).filter(User.email == "nithinvandana560@gmail.com").first()
+            if secondary_user and secondary_user.role != "candidate":
+                secondary_user.role = "candidate"
+                db.commit()
+                print("[Init] Set nithinvandana560@gmail.com to candidate role")
             
             cand = db.query(User).filter(User.email == "nithin@example.com").first()
             if not cand:

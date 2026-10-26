@@ -146,28 +146,25 @@ export const AdminDashboardPage: React.FC = () => {
   const fetchOverview = async () => {
     try {
       setLoading(true);
-      const data = await api.getAdminOverview();
-      setOverview(data);
+      // Run all admin dashboard queries in parallel using Promise.all for sub-second loading
+      const [data, notifsData, scansData, jobsRes, usersData, dayWiseData] = await Promise.all([
+        api.getAdminOverview(),
+        api.getAdminNotifications(),
+        api.getScanRuns(),
+        api.getJobs({ page_size: 6, sort_by: 'date' }),
+        api.getAdminUsers(),
+        api.getDayWiseJobs()
+      ]);
 
-      const notifsData = await api.getAdminNotifications();
+      setOverview(data);
       setNotifications(notifsData.notifications);
       setUnreadNotifsCount(notifsData.unread_count);
       setLiveMetrics(notifsData.live_metrics);
-
-      const scansData = await api.getScanRuns();
       setRecentScans(scansData);
-
-      const jobsRes = await api.getJobs({ page_size: 6, sort_by: 'date' });
-      if (jobsRes.items) {
+      if (jobsRes && jobsRes.items) {
         setLatestJobs(jobsRes.items);
       }
-
-      // Fetch User Intelligence Data
-      const usersData = await api.getAdminUsers();
       setAdminUsersData(usersData);
-
-      // Fetch Day-Wise Jobs Data
-      const dayWiseData = await api.getDayWiseJobs();
       setDayWiseJobsData(dayWiseData);
     } catch (err) {
       console.error(err);

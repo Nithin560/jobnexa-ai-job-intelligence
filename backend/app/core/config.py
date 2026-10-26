@@ -48,6 +48,9 @@ class Settings(BaseSettings):
     SMTP_PASSWORD: Optional[str] = "rtunkeubohmrzeya"
     EMAILS_FROM_EMAIL: Optional[str] = "jobnexaaiplatform@gmail.com"
     EMAILS_FROM_NAME: str = "JobNexa Intelligence"
+    RESEND_API_KEY: Optional[str] = None
+    BREVO_API_KEY: Optional[str] = None
+    EMAIL_WEBHOOK_URL: Optional[str] = None
 
     # AI / Embedding Settings
     ENABLE_EMBEDDINGS: bool = False
