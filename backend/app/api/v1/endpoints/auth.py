@@ -165,7 +165,7 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
         email=clean_email,
         password_hash=get_password_hash(req.password),
         full_name=req.full_name,
-        role=req.role if req.role in ["candidate", "admin"] else "candidate",
+        role="candidate",  # Admin is predefined; all registrations are candidates
         is_verified=True,
         created_at=now
     )

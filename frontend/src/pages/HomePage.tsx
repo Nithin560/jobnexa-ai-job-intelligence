@@ -1279,7 +1279,7 @@ export const HomePage: React.FC = () => {
 
             <div className="space-y-3">
               <div className="text-xs font-bold text-slate-800">Top Hiring Skills</div>
-              {(insights?.top_skills || defaultTopSkillsList).map((sk) => (
+              {(insights?.top_skills && insights.top_skills.length > 0 ? insights.top_skills : defaultTopSkillsList).map((sk) => (
                 <div key={sk.name} className="space-y-1">
                   <div className="flex justify-between text-xs font-semibold text-slate-700">
                     <span>{sk.name}</span>
@@ -1301,13 +1301,13 @@ export const HomePage: React.FC = () => {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie 
-                    data={insights?.experience_breakdown || defaultExpDonutData} 
+                    data={insights?.experience_breakdown && insights.experience_breakdown.length > 0 ? insights.experience_breakdown : defaultExpDonutData} 
                     innerRadius={40} 
                     outerRadius={60} 
                     paddingAngle={4} 
                     dataKey="value"
                   >
-                    {(insights?.experience_breakdown || defaultExpDonutData).map((entry, index) => (
+                    {(insights?.experience_breakdown && insights.experience_breakdown.length > 0 ? insights.experience_breakdown : defaultExpDonutData).map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -1317,7 +1317,7 @@ export const HomePage: React.FC = () => {
             </div>
 
             <div className="space-y-1.5 text-xs">
-              {(insights?.experience_breakdown || defaultExpDonutData).map((item) => (
+              {(insights?.experience_breakdown && insights.experience_breakdown.length > 0 ? insights.experience_breakdown : defaultExpDonutData).map((item) => (
                 <div key={item.name} className="flex items-center justify-between text-slate-600 font-medium">
                   <span className="flex items-center gap-2">
                     <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }}></span>
@@ -1345,7 +1345,7 @@ export const HomePage: React.FC = () => {
                 <span>Everything automated</span>
               </div>
 
-              {(insights?.recent_scans || defaultRecentScans).map((sc, idx) => (
+              {(insights?.recent_scans && insights.recent_scans.length > 0 ? insights.recent_scans : defaultRecentScans).map((sc, idx) => (
                 <div key={idx} className="flex items-center justify-between text-slate-600 py-1 border-b border-slate-50 last:border-0">
                   <span className="flex items-center gap-2 font-medium">
                     <span className="w-2 h-2 rounded-full border border-emerald-500 bg-emerald-50"></span>

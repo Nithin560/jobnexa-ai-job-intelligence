@@ -264,40 +264,8 @@ export const RegisterPage: React.FC = () => {
         {step === 'details' && (
           <form onSubmit={handleProceedToOTP} className="space-y-4">
             
-            {/* Account Role Selector */}
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">I am registering as:</label>
-              <div className="grid grid-cols-2 gap-2.5">
-                <div
-                  onClick={() => setRole('candidate')}
-                  className={`p-3 rounded-2xl border cursor-pointer transition flex items-center gap-2.5 ${
-                    role === 'candidate' ? 'border-blue-600 bg-blue-50/50 text-blue-900 ring-2 ring-blue-100' : 'border-slate-200 hover:border-slate-300 text-slate-700'
-                  }`}
-                >
-                  <Briefcase className="w-4 h-4 text-blue-600 shrink-0" />
-                  <div>
-                    <div className="text-xs font-bold">User</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Professional / Candidate</div>
-                  </div>
-                </div>
-
-                <div
-                  onClick={() => setRole('admin')}
-                  className={`p-3 rounded-2xl border cursor-pointer transition flex items-center gap-2.5 ${
-                    role === 'admin' ? 'border-blue-600 bg-blue-50/50 text-blue-900 ring-2 ring-blue-100' : 'border-slate-200 hover:border-slate-300 text-slate-700'
-                  }`}
-                >
-                  <Building2 className="w-4 h-4 text-slate-800 shrink-0" />
-                  <div>
-                    <div className="text-xs font-bold">Admin</div>
-                    <div className="text-[10px] text-slate-400 font-medium">Recruiter / Employer</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Experience Level Selector for Normal User */}
-            {role === 'candidate' && (
+            {/* Experience Level Selector */}
+            {true && (
               <div className="space-y-2 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80">
                 <div className="flex items-center justify-between">
                   <label className="block text-xs font-bold text-slate-800">

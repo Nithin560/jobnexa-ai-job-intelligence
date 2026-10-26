@@ -157,19 +157,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                 <span>Profile</span>
               </Link>
 
-              <Link
-                to="/admin?tab=Dashboard"
-                state={{ tab: 'Dashboard' }}
-                onClick={() => triggerLoading(450)}
-                className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
-                  location.pathname === '/admin' 
-                    ? 'bg-white text-amber-800 shadow-2xs font-bold border border-amber-200/80' 
-                    : 'text-slate-600 hover:text-amber-800 hover:bg-white/60'
-                }`}
-              >
-                <Shield className="w-3.5 h-3.5 text-amber-600" />
-                <span>Admin</span>
-              </Link>
+              {userRole === 'admin' && (
+                <Link
+                  to="/admin?tab=Dashboard"
+                  state={{ tab: 'Dashboard' }}
+                  onClick={() => triggerLoading(450)}
+                  className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 ${
+                    location.pathname === '/admin' 
+                      ? 'bg-white text-amber-800 shadow-2xs font-bold border border-amber-200/80' 
+                      : 'text-slate-600 hover:text-amber-800 hover:bg-white/60'
+                  }`}
+                >
+                  <Shield className="w-3.5 h-3.5 text-amber-600" />
+                  <span>Admin</span>
+                </Link>
+              )}
             </nav>
           )}
         </div>
@@ -184,25 +186,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                 <span>Direct Apply Sync Active</span>
               </div>
 
-              {/* Role Indicator & 1-Click Switcher */}
+              {/* Role Indicator (Strictly view only - no unauthorized role switching) */}
               {userRole === 'admin' ? (
                 <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs">
                   <Shield className="w-3.5 h-3.5 text-amber-600" /> Admin Mode
                 </span>
               ) : (
-                <div className="flex items-center gap-1.5">
-                  <span className="hidden sm:inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs">
-                    <User className="w-3.5 h-3.5 text-blue-600" /> Candidate
-                  </span>
-                  <button
-                    onClick={handleSwitchToAdmin}
-                    className="text-xs font-bold text-amber-800 hover:text-amber-900 bg-amber-50 hover:bg-amber-100 border border-amber-200 px-2.5 py-1 rounded-xl transition flex items-center gap-1 shadow-2xs cursor-pointer"
-                    title="Switch to Admin Panel"
-                  >
-                    <Shield className="w-3.5 h-3.5 text-amber-600" />
-                    <span>Admin</span>
-                  </button>
-                </div>
+                <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs">
+                  <User className="w-3.5 h-3.5 text-blue-600" /> Candidate
+                </span>
               )}
 
               {/* User Avatar & Logout */}
@@ -346,19 +338,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               <span>Profile</span>
             </Link>
 
-            <Link
-              to="/admin?tab=Dashboard"
-              state={{ tab: 'Dashboard' }}
-              onClick={() => { triggerLoading(450); setIsMobileMenuOpen(false); }}
-              className={`p-2.5 rounded-xl flex items-center gap-2 border ${
-                location.pathname === '/admin'
-                  ? 'bg-amber-50 text-amber-800 border-amber-200 font-bold'
-                  : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-              }`}
-            >
-              <Shield className="w-4 h-4 text-amber-600" />
-              <span>Admin Panel</span>
-            </Link>
+            {userRole === 'admin' && (
+              <Link
+                to="/admin?tab=Dashboard"
+                state={{ tab: 'Dashboard' }}
+                onClick={() => { triggerLoading(450); setIsMobileMenuOpen(false); }}
+                className={`p-2.5 rounded-xl flex items-center gap-2 border ${
+                  location.pathname === '/admin'
+                    ? 'bg-amber-50 text-amber-800 border-amber-200 font-bold'
+                    : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                }`}
+              >
+                <Shield className="w-4 h-4 text-amber-600" />
+                <span>Admin Panel</span>
+              </Link>
+            )}
           </div>
         </div>
       )}
