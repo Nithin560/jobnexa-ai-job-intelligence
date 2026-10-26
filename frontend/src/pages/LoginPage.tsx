@@ -123,7 +123,15 @@ export const LoginPage: React.FC = () => {
       setCountdown(60);
       setSuccessMsg(res.message);
       if (res.dev_otp) {
-        setDevOtpHint(res.dev_otp);
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
+          });
+        } catch (e) {
+          console.error('Email dispatch error:', e);
+        }
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to send OTP. Please ensure this email is registered.');
@@ -150,7 +158,15 @@ export const LoginPage: React.FC = () => {
       setCountdown(60);
       setSuccessMsg('Step 1 verified! 6-digit OTP has been dispatched to ' + email.trim());
       if (res.dev_otp) {
-        setDevOtpHint(res.dev_otp);
+        try {
+          await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
+          });
+        } catch (e) {
+          console.error('Email dispatch error:', e);
+        }
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Password verification failed. Please try again.');
@@ -367,25 +383,7 @@ export const LoginPage: React.FC = () => {
           </div>
         )}
 
-        {/* Dev OTP Helper Notification (shown if SMTP pending) */}
-        {devOtpHint && (
-          <div className="bg-blue-50 border border-blue-200 text-blue-800 p-3 rounded-2xl text-xs flex items-center justify-between">
-            <div>
-              <span className="font-bold">Test OTP Code: </span>
-              <strong className="font-mono text-sm tracking-widest text-blue-900">{devOtpHint}</strong>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                const digits = devOtpHint.split('');
-                setOtpDigits(digits);
-              }}
-              className="text-xs font-bold text-blue-600 hover:underline px-2 py-1 bg-white rounded-lg border border-blue-200"
-            >
-              Auto-fill
-            </button>
-          </div>
-        )}
+
 
         {/* METHOD 1: Password Login */}
         {authMethod === 'password' && (

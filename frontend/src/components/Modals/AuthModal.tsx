@@ -32,7 +32,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         if (role === 'admin' && adminAuthType === 'otp') {
           // Admin OTP Login flow
           const res = await api.sendOTP(loginEmail, 'login');
-          if (res.dev_otp) setDevOtpHint(res.dev_otp);
+          if (res.dev_otp) {
+          try {
+            await fetch('/api/send-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
+            });
+          } catch (e) {
+            console.error('Email dispatch error:', e);
+          }
+        }
           setEmail(loginEmail);
           setMode('otp');
           return;
@@ -49,7 +59,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
         }
       } else if (mode === 'signup') {
         const res = await api.sendOTP(email.trim(), 'register');
-        if (res.dev_otp) setDevOtpHint(res.dev_otp);
+        if (res.dev_otp) {
+          try {
+            await fetch('/api/send-email', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
+            });
+          } catch (e) {
+            console.error('Email dispatch error:', e);
+          }
+        }
         setMode('otp');
       } else if (mode === 'otp') {
         const code = otp.join('');
@@ -133,18 +153,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose }) => {
               <p className="text-xs text-slate-500 mt-1">We've dispatched a 6-digit OTP code to <strong className="text-slate-800">{email || 'your email'}</strong></p>
             </div>
 
-            {devOtpHint && (
-              <div className="bg-blue-50 border border-blue-200 text-blue-800 p-2.5 rounded-xl text-xs flex items-center justify-between">
-                <span>Test OTP Code: <strong>{devOtpHint}</strong></span>
-                <button
-                  type="button"
-                  onClick={() => setOtp(devOtpHint.split(''))}
-                  className="font-bold text-blue-600 underline text-xs"
-                >
-                  Auto-fill
-                </button>
-              </div>
-            )}
+
 
             {error && (
               <div className="bg-rose-50 text-rose-700 p-3 rounded-xl text-xs font-medium border border-rose-200">

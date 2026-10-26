@@ -97,6 +97,30 @@ def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> b
 
     plain_content = f"Your JobNexa verification code is: {otp_code}. It is valid for 10 minutes."
 
+    # 0. Send via Vercel HTTPS Bridge (Uses your Gmail & App Password over Port 443 HTTPS, bypassing Render's cloud firewall)
+    try:
+        import urllib.request, json
+        vercel_api_url = "https://jobnexa-ai-job-intelligence.vercel.app/api/send-email"
+        payload = json.dumps({
+            "to": to_email,
+            "otp": otp_code,
+            "subject": subject,
+            "html": html_content,
+            "text": plain_content
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            vercel_api_url,
+            data=payload,
+            headers={"Content-Type": "application/json", "User-Agent": "JobNexa-Backend/1.0"},
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=8) as resp:
+            if resp.status == 200:
+                print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via Vercel Gmail HTTPS Bridge!")
+                return True
+    except Exception as e_bridge:
+        print(f"[EMAIL SERVICE] Vercel Gmail Bridge attempt: {e_bridge}")
+
     # 0. Check for HTTPS Transactional API (Bypasses Render cloud firewall on Port 443)
     resend_key = os.getenv("RESEND_API_KEY") or getattr(settings, "RESEND_API_KEY", None)
     if resend_key:
