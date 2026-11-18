@@ -378,6 +378,10 @@ export const LoginPage: React.FC = () => {
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
+            <div className="flex items-center gap-1.5 text-[10.5px] text-slate-500 font-medium pt-1.5 border-t border-blue-100/80">
+              <Lock className="w-3 h-3 text-purple-600 shrink-0" />
+              <span>Job discovery & AI match scoring enabled • Direct applications restricted in demo</span>
+            </div>
           </div>
         )}
 

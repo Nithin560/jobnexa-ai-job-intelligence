@@ -4,15 +4,18 @@ import {
   Compass, ShieldCheck, CheckCircle2, XCircle, Terminal, 
   Layers, Database, Clock, Cpu, Server, FileText, ArrowRight, 
   ExternalLink, Building2, Globe, Code2, AlertTriangle,
-  Search, BookOpen, Check, Copy, ChevronRight, Award, Zap, ArrowLeft
+  Search, BookOpen, Check, Copy, ChevronRight, Award, Zap, ArrowLeft,
+  Sparkles, Lock
 } from 'lucide-react';
 import { useLoadingBar } from '../components/TopLoadingBar';
+import { isDemoCandidateUser } from '../api/client';
 
 export const DiscoveryStrategyPage: React.FC = () => {
   const navigate = useNavigate();
   const { triggerLoading } = useLoadingBar();
   const [activeTab, setActiveTab] = useState<'strategy' | 'taxonomy' | 'ats' | 'stack' | 'schedule' | 'prep'>('strategy');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const isDemo = isDemoCandidateUser();
 
   // Ensure that pressing browser Back button reliably returns directly to Home
   useEffect(() => {
@@ -80,6 +83,24 @@ export const DiscoveryStrategyPage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Candidate Demo Notice Banner */}
+      {isDemo && (
+        <div className="bg-purple-50 border border-purple-200 rounded-2xl p-4 flex items-center justify-between text-xs text-purple-900 shadow-2xs gap-3">
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-4 h-4 text-purple-600 shrink-0" />
+            <span>
+              <strong>Candidate Demo Mode Active:</strong> You are exploring the complete architectural blueprint and engineering job taxonomy. All platform intelligence is active. To apply directly on official employer career portals, please create a free verified candidate account.
+            </span>
+          </div>
+          <Link
+            to="/register"
+            className="font-bold text-purple-800 hover:text-purple-950 underline shrink-0 whitespace-nowrap"
+          >
+            Create Free Account →
+          </Link>
+        </div>
+      )}
 
       {/* Navigation Tabs */}
       <div className="bg-white p-2 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-1.5 overflow-x-auto">
