@@ -51,6 +51,19 @@ export const RegisterPage: React.FC = () => {
     }
   }, [countdown]);
 
+  const handleQuickCandidateDemo = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await api.quickLoginAsCandidate();
+      navigate('/', { replace: true });
+    } catch (err) {
+      setError('Candidate demo login failed. Please retry.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Step 1: Submit details and send OTP
   const handleProceedToOTP = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -257,6 +270,37 @@ export const RegisterPage: React.FC = () => {
 
 
 
+        {/* Instant Candidate Demo Direct Access Banner (Guest Account / 1-Click Access) */}
+        {step === 'details' && (
+          <div className="bg-gradient-to-r from-blue-50 via-indigo-50/70 to-blue-50 border border-blue-200 rounded-2xl p-3.5 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+                  <User className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">Candidate Demo Mode</span>
+                    <span className="text-[9px] bg-blue-600 text-white font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-wider">No Signup</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    Skip registration and enter instantly as a candidate demo
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={handleQuickCandidateDemo}
+                disabled={loading}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <span>Enter Demo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Step 1: Details Form */}
         {step === 'details' && (
           <form onSubmit={handleProceedToOTP} className="space-y-4">
@@ -453,12 +497,24 @@ export const RegisterPage: React.FC = () => {
           </form>
         )}
 
-        {/* Sign In Link */}
-        <div className="text-center text-xs text-slate-500 border-t border-slate-100 pt-5">
-          Already have an account?{' '}
-          <Link to="/login" className="font-bold text-blue-600 hover:underline">
-            Sign In Here
-          </Link>
+        {/* Sign In Link & Quick Demo Button */}
+        <div className="text-center text-xs text-slate-500 border-t border-slate-100 pt-5 space-y-3">
+          <div>
+            Already have an account?{' '}
+            <Link to="/login" className="font-bold text-blue-600 hover:underline">
+              Sign In Here
+            </Link>
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={handleQuickCandidateDemo}
+              className="w-full py-2.5 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-xs font-bold text-blue-800 transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
+            >
+              <User className="w-3.5 h-3.5 text-blue-600" />
+              <span>Explore as Candidate Demo (1-Click Guest Access)</span>
+            </button>
+          </div>
         </div>
 
       </div>

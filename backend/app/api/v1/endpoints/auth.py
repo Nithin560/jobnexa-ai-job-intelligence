@@ -480,3 +480,71 @@ def get_me(current_user: User = Depends(get_current_user), db: Session = Depends
         db.commit()
         db.refresh(current_user)
     return current_user
+
+
+@router.post("/demo-candidate", response_model=TokenResponse)
+def login_demo_candidate(db: Session = Depends(get_db)):
+    """Instant 1-Click Candidate Demo login: auto-provisions a rich candidate account without registration."""
+    from app.models.candidate import CandidateSkill
+    from app.models.skill import Skill
+
+    demo_email = "candidate.demo@jobnexa.ai"
+    user = db.query(User).filter(User.email == demo_email).first()
+
+    if not user:
+        user = User(
+            email=demo_email,
+            password_hash=get_password_hash("DemoCandidatePass2026!"),
+            full_name="Nithin (Demo Candidate)",
+            role="candidate",
+            is_verified=True,
+            created_at=datetime.utcnow()
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    # Guarantee CandidateProfile exists with rich Bengaluru tech target titles
+    profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == user.id).first()
+    if not profile:
+        profile = CandidateProfile(
+            user_id=user.id,
+            target_titles=["Software Engineer", "Backend Developer", "Full Stack Engineer"],
+            location_preferences=["Bengaluru", "Hybrid"],
+            years_experience=0,
+            work_mode="Hybrid"
+        )
+        db.add(profile)
+        db.commit()
+        db.refresh(profile)
+
+    # Attach core Bengaluru tech skills so match recommendations work immediately
+    demo_skill_names = ["Python", "FastAPI", "React", "PostgreSQL", "Docker", "SQL", "JavaScript", "AWS"]
+    for sname in demo_skill_names:
+        sk = db.query(Skill).filter(Skill.canonical_name == sname).first()
+        if sk:
+            existing_cs = db.query(CandidateSkill).filter(
+                CandidateSkill.profile_id == profile.id,
+                CandidateSkill.skill_id == sk.id
+            ).first()
+            if not existing_cs:
+                cs = CandidateSkill(
+                    profile_id=profile.id,
+                    skill_id=sk.id,
+                    proficiency="Expert",
+                    years_used=1
+                )
+                db.add(cs)
+    db.commit()
+
+    access_token = create_access_token(subject=user.id)
+    return TokenResponse(
+        access_token=access_token,
+        token_type="bearer",
+        role="candidate",
+        user_id=user.id,
+        email=user.email,
+        experience_tier="fresher" if profile.years_experience <= 1 else "experienced",
+        years_experience=profile.years_experience
+    )
+

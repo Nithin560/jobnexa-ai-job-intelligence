@@ -350,6 +350,37 @@ export const LoginPage: React.FC = () => {
           )}
         </div>
 
+        {/* Instant Candidate Demo Direct Access Banner (Guest Account / 1-Click Access) */}
+        {portalRole === 'candidate' && (
+          <div className="bg-gradient-to-r from-blue-50 via-indigo-50/70 to-blue-50 border border-blue-200 rounded-2xl p-3.5 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-xs shadow-xs shrink-0">
+                  <User className="w-4 h-4" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-bold text-slate-900">Candidate Demo Mode</span>
+                    <span className="text-[9px] bg-blue-600 text-white font-extrabold px-1.5 py-0.2 rounded-full uppercase tracking-wider">No Signup</span>
+                  </div>
+                  <p className="text-[11px] text-slate-500 font-medium">
+                    1-Click instant access with real candidate features & AI matching
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => handleQuickLogin('candidate')}
+                disabled={loading}
+                className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-xl transition shadow-xs flex items-center gap-1 cursor-pointer shrink-0"
+              >
+                <span>Enter Demo</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Method Toggle: Password vs OTP vs 2FA for Admin */}
         <div className="bg-slate-100 p-1 rounded-2xl flex text-xs font-bold">
           <button
@@ -678,14 +709,15 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={() => handleQuickLogin('candidate')}
-              className="px-3 py-2 bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 transition"
+              className="px-3 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-xs font-bold text-blue-800 transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
             >
-              User Demo
+              <User className="w-3.5 h-3.5 text-blue-600" />
+              Candidate Demo
             </button>
             <button
               type="button"
               onClick={() => handleQuickLogin('admin')}
-              className="px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl text-xs font-bold text-amber-800 transition flex items-center justify-center gap-1.5"
+              className="px-3 py-2 bg-amber-50 hover:bg-amber-100 border border-amber-200 rounded-xl text-xs font-bold text-amber-800 transition flex items-center justify-center gap-1.5 cursor-pointer shadow-2xs"
             >
               <Shield className="w-3.5 h-3.5 text-amber-600" />
               1-Click Admin

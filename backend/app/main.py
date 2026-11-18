@@ -96,16 +96,55 @@ def init_default_accounts():
                 db.commit()
                 print("[Init] Set nithinvandana560@gmail.com to candidate role")
             
+            from app.models.candidate import CandidateProfile
             cand = db.query(User).filter(User.email == "nithin@example.com").first()
             if not cand:
-                new_cand = User(
+                cand = User(
                     email="nithin@example.com",
                     password_hash=get_password_hash("NithinPass123!"),
                     full_name="Nithin (Demo Candidate)",
                     role="candidate",
                     is_verified=True
                 )
-                db.add(new_cand)
+                db.add(cand)
+                db.commit()
+                db.refresh(cand)
+
+            cand_prof = db.query(CandidateProfile).filter(CandidateProfile.user_id == cand.id).first()
+            if not cand_prof:
+                cand_prof = CandidateProfile(
+                    user_id=cand.id,
+                    target_titles=["Software Engineer", "Backend Developer"],
+                    location_preferences=["Bengaluru"],
+                    years_experience=0,
+                    work_mode="Hybrid"
+                )
+                db.add(cand_prof)
+                db.commit()
+
+            demo_user = db.query(User).filter(User.email == "candidate.demo@jobnexa.ai").first()
+            if not demo_user:
+                demo_user = User(
+                    email="candidate.demo@jobnexa.ai",
+                    password_hash=get_password_hash("DemoCandidatePass2026!"),
+                    full_name="Nithin (Demo Candidate)",
+                    role="candidate",
+                    is_verified=True
+                )
+                db.add(demo_user)
+                db.commit()
+                db.refresh(demo_user)
+
+            demo_prof = db.query(CandidateProfile).filter(CandidateProfile.user_id == demo_user.id).first()
+            if not demo_prof:
+                demo_prof = CandidateProfile(
+                    user_id=demo_user.id,
+                    target_titles=["Software Engineer", "Backend Developer", "Full Stack Developer"],
+                    location_preferences=["Bengaluru", "Hybrid"],
+                    years_experience=0,
+                    work_mode="Hybrid"
+                )
+                db.add(demo_prof)
                 db.commit()
         finally:
             db.close()

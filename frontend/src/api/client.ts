@@ -145,6 +145,22 @@ export const api = {
   },
 
   quickLoginAsCandidate: async () => {
+    try {
+      const response = await apiClient.post('/auth/demo-candidate');
+      if (response.data && response.data.access_token) {
+        sessionStorage.setItem('access_token', response.data.access_token);
+        sessionStorage.setItem('user_role', 'candidate');
+        sessionStorage.setItem('user_email', response.data.email || 'candidate.demo@jobnexa.ai');
+        const tier = response.data.experience_tier || 'fresher';
+        sessionStorage.setItem('user_experience_tier', tier);
+        localStorage.setItem('user_experience_tier', tier);
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('user_email');
+        return response.data;
+      }
+    } catch (err) {
+      console.warn('[Demo Candidate Endpoint Fallback to Password Login]', err);
+    }
     return api.login('nithin@example.com', 'NithinPass123!');
   },
 

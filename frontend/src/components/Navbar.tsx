@@ -243,11 +243,14 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                 </span>
               </div>
               <button
+                type="button"
                 onClick={handleSwitchToCandidate}
-                className="hidden sm:inline-flex text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-xl transition items-center gap-1 cursor-pointer shrink-0"
-                title="1-Click Candidate Login"
+                className="inline-flex text-xs font-bold text-blue-700 bg-blue-50 hover:bg-blue-100 border border-blue-200 px-3 py-1.5 rounded-xl transition items-center gap-1.5 cursor-pointer shrink-0 shadow-2xs"
+                title="1-Click Instant Candidate Demo Access"
               >
-                <User className="w-3.5 h-3.5 shrink-0" /> Candidate Demo
+                <User className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <span>Candidate Demo</span>
+                <span className="hidden sm:inline text-[9px] bg-blue-600 text-white font-extrabold px-1.5 py-0.2 rounded-full uppercase">Instant</span>
               </button>
               {location.pathname === '/login' ? (
                 <Link
