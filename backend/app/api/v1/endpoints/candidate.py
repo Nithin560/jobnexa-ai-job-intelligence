@@ -172,7 +172,8 @@ def get_job_matches(
         else:
             query = query.filter(or_(Job.experience_min >= 1, Job.experience_max > 1))
 
-    jobs = query.all()
+    # Optimize match scoring by prioritizing most recently active and verified postings
+    jobs = query.order_by(Job.last_seen_at.desc(), Job.posted_at.desc()).limit(150).all()
 
     matched_items = []
     saved_objs = db.query(SavedJob.job_id).filter(SavedJob.user_id == current_user.id).all()
@@ -236,7 +237,7 @@ def get_saved_jobs(
     saved_objs = db.query(SavedJob).options(
         joinedload(SavedJob.job).joinedload(Job.company),
         joinedload(SavedJob.job).joinedload(Job.job_skills).joinedload(JobSkill.skill)
-    ).filter(SavedJob.user_id == current_user.id).all()
+    ).filter(SavedJob.user_id == current_user.id).order_by(SavedJob.created_at.desc()).all()
 
     profile = db.query(CandidateProfile).filter(CandidateProfile.user_id == current_user.id).first()
     cand_skills_objs = db.query(CandidateSkill).options(joinedload(CandidateSkill.skill)).filter(CandidateSkill.profile_id == profile.id).all() if profile else []
