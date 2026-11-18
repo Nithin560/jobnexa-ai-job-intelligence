@@ -1,0 +1,6382 @@
+%PDF-1.4
+%����
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R 31 0 R 33 0 R 35 0 R 37 0 R 39 0 R 41 0 R 43 0 R 45 0 R] /Count 22 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 5941 >>
+stream
+BT
+/TB 24 Tf
+0.08 0.18 0.36 rg
+54.0 767.89 Td
+(JobNexa: System Architecture & Technical Specification) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 619.39 487.28 116.5 re f
+0.2 0.45 0.85 RG 2 w
+54.0 619.39 m 54.0 735.89 l S
+0.8 0.85 0.9 RG 0.5 w
+54.0 619.39 487.28 116.5 re s
+Q
+BT
+/TB 13 Tf
+0.1 0.25 0.6 rg
+68.0 719.89 Td
+(Project Overview & Engineering Manual) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 703.89 Td
+(JobNexa is a production-grade, real-time AI job intelligence and automated career discovery) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 687.39 Td
+(platform built specifically for Bengaluru's technology ecosystem. It crawls 120+ direct) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 670.89 Td
+(company ATS portals and tech job platforms concurrently using AsyncIO, HTTPX, and) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 654.39 Td
+(BeautifulSoup4, processing over 1,000 verified daily vacancies with a 98% content-hash) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 637.89 Td
+(deduplication rate and 95% NLP profile-matching accuracy.) Tj
+ET
+q
+0.93 0.95 0.98 rg
+54.0 559.39 487.28 48 re f
+0.12 0.35 0.75 RG 1.5 w
+54.0 559.39 487.28 48 re s
+Q
+BT
+/TB 16 Tf
+0.1 0.2 0.45 rg
+69.0 587.39 Td
+(JobNexa Engineering Blueprint) Tj
+ET
+BT
+/TI 11 Tf
+0.3 0.35 0.4 rg
+69.0 571.39 Td
+(Architecture • Data Pipelines • API Catalog • ATS Scanners • Classification Algorithms • Workflow Diagrams) Tj
+ET
+q
+0.15 0.3 0.6 rg
+54.0 519.39 487.28 26.0 re f
+Q
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+60.0 528.39 Td
+(Specification Attribute) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+230.0 528.39 Td
+(System Value & Architecture Detail) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 495.39 m 541.28 495.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 503.39 Td
+(Platform Name) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 503.39 Td
+(JobNexa • Bengaluru IT Discovery & Engineering Job Intelligence) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 471.39 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 471.39 m 541.28 471.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 479.39 Td
+(Production Web URL) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 479.39 Td
+(https://jobnexa-ai-job-intelligence.vercel.app) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 447.39 m 541.28 447.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 455.39 Td
+(Source Code Repository) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 455.39 Td
+(https://github.com/Nithin560/jobnexa-ai-job-intelligence) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 423.39 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 423.39 m 541.28 423.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 431.39 Td
+(Core Backend Stack) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 431.39 Td
+(Python 3.11, FastAPI, AsyncIO, HTTPX, SQLAlchemy ORM, Pydantic v2) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 399.39 m 541.28 399.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 407.39 Td
+(Database System) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 407.39 Td
+(PostgreSQL \(Production Relational DB with B-Tree & GIN Indexes\)) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 375.39 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 375.39 m 541.28 375.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 383.39 Td
+(Frontend Stack) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 383.39 Td
+(React 18, TypeScript, Tailwind CSS, Recharts, Vite) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 351.39 m 541.28 351.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 359.39 Td
+(Authentication Architecture) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 359.39 Td
+(Dual-Role JWT RBAC \(Candidate vs Admin\) + 6-Digit Email OTP) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 327.39 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 327.39 m 541.28 327.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 335.39 Td
+(Daily Ingestion Throughput) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 335.39 Td
+(1,000+ Verified Postings / 120+ Direct Corporate ATS Endpoints) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 303.39 m 541.28 303.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 311.39 Td
+(Deduplication Efficiency) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 311.39 Td
+(98.2% via 4-Layer SHA-256 Fingerprinting & Canonical URL Matching) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 279.39 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 279.39 m 541.28 279.39 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 287.39 Td
+(Document Revision) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+230.0 287.39 Td
+(Version 2.5 \(Complete Specification + Architecture & Workflow Diagrams\)) Tj
+ET
+q
+0.2 0.35 0.65 RG 1 w
+54.0 279.39 487.28 266.0 re s
+Q
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 257.39 Td
+(1. Executive Summary & Problem Statement) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 253.39 m 541.28 253.39 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 229.39 Td
+(1.1 The Job Discovery Crisis in Bengaluru's Tech Ecosystem) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 210.39 Td
+(Bengaluru is India's premier technology capital, hosting over 120+ unicorn tech) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 192.39 Td
+(companies, global capability centers \(GCCs\), multinational enterprises, and thousands of) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 174.39 Td
+(high-growth venture-backed startups. Despite tens of thousands of engineering vacancies) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 156.39 Td
+(opening every month, candidates and employers face massive discovery friction caused) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 138.39 Td
+(by outdated, noisy, and fragmented hiring portals.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 116.38999999999999 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 116.38999999999999 Td
+(The 'Fresher Paradox': Over 78% of job listings advertised under 'Entry-Level' or) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 98.38999999999999 Td
+('Fresher' search filters on traditional job boards actually demand 2 to 5 years of) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 1 of 22) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 4167 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 767.89 Td
+(professional software engineering experience inside the job description body text.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 749.89 Td
+(Recent university graduates and junior engineers waste hundreds of hours applying to) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 731.89 Td
+(roles where automated ATS screeners immediately reject them based on minimum) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 713.89 Td
+(experience filters.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 692.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 692.89 Td
+(Ghost Postings & Stale Aggregator Feeds: Third-party job platforms continuously) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 674.89 Td
+(index and syndicate expired or filled roles to inflate their visible inventory. Over 40%) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 656.89 Td
+(of external job board links lead to 404 error pages, closed applications, or spam) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 638.89 Td
+(recruitment marketing funnels rather than genuine, direct company application portals.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 617.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 617.89 Td
+(Siloed Direct ATS Ecosystems: The most lucrative tech employers—such as Razorpay,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 599.89 Td
+(Cred, Swiggy, Meesho, Groww, and Sarvam AI—host their official career portals) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 581.89 Td
+(directly on specialized Applicant Tracking Systems \(ATS\) including Greenhouse,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 563.89 Td
+(Lever, Ashby, and SmartRecruiters. These high-priority direct listings are often) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 545.89 Td
+(delayed or completely omitted on commercial job aggregators.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 524.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 524.89 Td
+(Company Tier Ambiguity: Candidates cannot easily distinguish whether an employer) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 506.89 Td
+(is an early-stage venture startup \(where equity, speed, and full-stack autonomy) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 488.89 Td
+(dominate\) or an established Mid-Market enterprise or global MNC. This leads to) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 470.89 Td
+(misaligned career applications and sub-optimal compensation negotiations.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 443.89 Td
+(1.2 The JobNexa Solution) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 424.89 Td
+(JobNexa eliminates these structural failures by connecting directly to the root source:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 406.89 Td
+(querying official company career APIs and ATS endpoints. It strips out commercial) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 388.89 Td
+(recruiter middlemen, eliminates ghost postings through automated 24/7 verification) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 370.89 Td
+(sweeps, and strictly partitions opportunities into authentic Fresher \(0 - 1 Years\) and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 352.89 Td
+(Experienced \(> 1 Years\) intelligence feeds.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 322.89 Td
+(2. System Architecture & Project Workflow) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 318.89 m 541.28 318.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 294.89 Td
+(2.1 High-Level Multi-Tier Architectural Topology) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 275.89 Td
+(JobNexa is built on a high-throughput, decoupled micro-modular architecture designed) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 257.89 Td
+(for horizontal scalability, sub-second API latencies, and fault-tolerant asynchronous data) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 239.89 Td
+(collection.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 2 of 22) Tj
+ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 5282 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+q
+0.96 0.97 0.99 rg
+54.0 618.39 487.28 149.5 re f
+0.2 0.45 0.85 RG 2 w
+54.0 618.39 m 54.0 767.89 l S
+0.8 0.85 0.9 RG 0.5 w
+54.0 618.39 487.28 149.5 re s
+Q
+BT
+/TB 13 Tf
+0.1 0.25 0.6 rg
+68.0 751.89 Td
+(High-Level Data Flow Architecture) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 735.89 Td
+([120+ Corporate ATS & Portals] --> \(Async HTTPX Ingestion Layer\)
+           | 
+          ) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 719.39 Td
+(v
+[Raw Payload Queue] --> \(Normalizer & NLP Extraction Pipeline\)
+           | 
+          ) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 702.89 Td
+(v
+[Normalized Job Objects] --> \(4-Layer Content-Hash Deduplicator\)
+           | 
+          ) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 686.39 Td
+(v
+[PostgreSQL Relational DB] <--> \(SQLAlchemy ORM & Pydantic v2 Models\)
+           |) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 669.89 Td
+(
+           v
+[FastAPI RESTful Service] <--> \(JWT Security, RBAC, Serverless Email) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 653.39 Td
+(Bridge\)
+           | 
+           v
+[React 18 & TypeScript SPA] \(Full Desktop 3-Column Layout) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 636.89 Td
+(vs Minimized Drawer Layout\)) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 600.39 Td
+(2.2 Step-by-Step Execution Sequence) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 581.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 581.39 Td
+(Step 1: Automated Crawler Dispatch: A scheduled background daemon or) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 563.39 Td
+(administrator manual trigger executes the scanning pipeline across 120+ registered) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 545.39 Td
+(corporate ATS endpoints and job aggregators.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 524.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 524.39 Td
+(Step 2: Concurrent Asynchronous Fetching: The Ingestion Engine utilizes AsyncIO) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 506.39 Td
+(and HTTPX to issue concurrent, non-blocking HTTP requests with custom headers,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 488.39 Td
+(rate-limiting, and an exponential backoff retry mechanism.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 467.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 467.39 Td
+(Step 3: HTML Parsing & Content Normalization: BeautifulSoup4 sanitizes raw) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 449.39 Td
+(HTML job postings into clean plain text. The Normalizer extracts standardized) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 431.39 Td
+(locations, maps local tech hubs, and categorizes IT role families.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 410.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 410.39 Td
+(Step 4: NLP Skill & Experience Range Extraction: Deterministic regular expressions) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 392.39 Td
+(and rule-based NLP dictionaries extract required technical skills and parse exact) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 374.39 Td
+(minimum and maximum experience requirements.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 353.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 353.39 Td
+(Step 5: 4-Layer Deduplication Check: Every candidate job posting is run against) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 335.39 Td
+(existing database records using SHA-256 fingerprint hashing, canonical URL checks,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 317.39 Td
+(and title similarity algorithms.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 296.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 296.39 Td
+(Step 6: Relational Persistence & Indexing: Verified unique postings are committed) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 278.39 Td
+(into PostgreSQL with foreign key relationships linking Companies, Job Sources, and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 260.39 Td
+(Skill associations.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 239.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 239.39 Td
+(Step 7: REST API Exposure: FastAPI endpoints serve paginated, indexed responses) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 221.39 Td
+(supporting multi-parameter filtering, full-text search, and real-time candidate profile) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 203.39 Td
+(matching.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 182.39 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 182.39 Td
+(Step 8: Interactive Client Presentation: The React 18 client renders verified jobs, live) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 164.39 Td
+(telemetry beacons, and Recharts interactive analytics with dynamic desktop and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 146.39 Td
+(mobile viewport adaptation.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 117.38999999999999 Td
+(3. The Scanner & Career Portal Communication Engine) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 113.38999999999999 m 541.28 113.38999999999999 l S
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 3 of 22) Tj
+ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 10 0 R >>
+endobj
+10 0 obj
+<< /Length 5002 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 761.89 Td
+(3.1 Asynchronous Concurrency Architecture) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 742.89 Td
+(Sequential scraping of 120+ enterprise career boards would require upwards of 15 to 20) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 724.89 Td
+(minutes due to network latencies and external server response times. JobNexa achieves) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 706.89 Td
+(sub-60-second full-catalog sweeps by leveraging Python's AsyncIO event loop combined) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 688.89 Td
+(with HTTPX connection pooling.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 666.89 Td
+(Each target company is treated as an isolated asynchronous task. If an external company) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 648.89 Td
+(API experiences downtime, DNS timeout, or rate-limiting \(HTTP 429\), the error is) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 630.89 Td
+(isolated inside that specific connector run. The main scanning pipeline continues) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 612.89 Td
+(uninterrupted, logging the incident into the SourceRunResult audit table.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 584.89 Td
+(3.2 Protocol-Based Connector Architecture) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 565.89 Td
+(All ingestion connectors implement the formal JobSourceConnector protocol defined in) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 547.89 Td
+(app/connectors/base.py, requiring fetch_jobs\(\) and health_check\(\) methods. Connectors) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 529.89 Td
+(are instantiated dynamically via the ConnectorRegistry factory pattern using unique) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 511.89 Td
+(connector keys.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 483.89 Td
+(3.3 Direct ATS Board Ingestion Protocols) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 464.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 464.89 Td
+(Greenhouse Board API Connector: Directly queries) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 446.89 Td
+(https://boards-api.greenhouse.io/v1/boards/{company_slug}/jobs?content=true.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 428.89 Td
+(Ingests raw JSON payloads containing job titles, location structures, unique posting) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 410.89 Td
+(IDs, and full HTML descriptions. Strips HTML markup to plain text using) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 392.89 Td
+(BeautifulSoup4 and parses updated_at timestamps to determine posting recency.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 371.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 371.89 Td
+(Lever Postings API Connector: Directly queries) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 353.89 Td
+(https://api.lever.co/v0/postings/{company_slug}?mode=json. Parses structured) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 335.89 Td
+(department categories, workplace type \(On-site, Hybrid, Remote\), application URLs,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 317.89 Td
+(and millisecond-based createdAt timestamps.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 296.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 296.89 Td
+(Ashby HQ API Connector: Communicates with Ashby's public posting API) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 278.89 Td
+(\(https://api.ashbyhq.com/posting-api/job-board/{company_slug}\). Extracts detailed) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 260.89 Td
+(compensation tiers, employment classification, and custom location parameters.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 239.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 239.89 Td
+(Job Aggregator & Platform Connectors: Connects to public developer APIs including) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 221.89 Td
+(Arbeitnow, Jobicy, and Remotive. Enforces strict geographic filtering so only roles) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 203.89 Td
+(with verified presence in Bengaluru, Karnataka, or India-wide remote eligibility are) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 185.89 Td
+(accepted into the ingestion pipeline.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 158.89 Td
+(3.4 Request Headers, Security & Politeness Controls) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 139.89 Td
+(Our system communicates with external websites using an enterprise-grade User-Agent) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 121.88999999999999 Td
+(header: 'JobNexaAI-JobIntelligence/1.0) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 103.88999999999999 Td
+(\(+https://github.com/Nithin560/jobnexa-ai-job-intelligence\)'. Connectors enforce a strict) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 4 of 22) Tj
+ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 12 0 R >>
+endobj
+12 0 obj
+<< /Length 5746 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(10-second timeout, honor HTTP 301/302 redirects, and set Accept: application/json to) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(prevent unnecessary HTML bandwidth overhead.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 721.89 Td
+(3.5 Targeted Dynamic Tech Hub Scans) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 702.89 Td
+(In addition to full-system sweeps, JobNexa features targeted Tech Hub scans via the) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 684.89 Td
+(POST /api/v1/jobs/scan-hub endpoint. When a candidate or admin filters for) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 666.89 Td
+('Koramangala & HSR' or 'Whitefield & Bellandur', the engine dynamically triggers) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 648.89 Td
+(crawler passes focused exclusively on employers headquartered within those specific) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 630.89 Td
+(industrial tech corridors.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 600.89 Td
+(4. Deduplication Engine: Achieving 98% Efficiency) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 596.89 m 541.28 596.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 572.89 Td
+(4.1 Why Deduplication is Critical) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 553.89 Td
+(Because JobNexa scans both direct ATS career portals \(Greenhouse, Lever\) and public) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 535.89 Td
+(job platforms \(Arbeitnow, Jobicy, LinkedIn Tech\), the exact same job opening is) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 517.89 Td
+(frequently encountered multiple times across different URLs and aggregator platforms.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 499.89 Td
+(Without intelligent deduplication, candidate feeds would be cluttered with identical job) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 481.89 Td
+(cards, degrading the user experience.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 453.89 Td
+(4.2 The 4-Layer Deduplication Algorithm) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 434.89 Td
+(JobNexa implements a multi-tier deduplication pipeline inside) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 416.89 Td
+(app/pipeline/deduplicator.py, combining cryptographic hashing with relational fuzzy) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 398.89 Td
+(matching:) Tj
+ET
+q
+0.15 0.3 0.6 rg
+54.0 350.89 487.28 26.0 re f
+Q
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+60.0 359.89 Td
+(Deduplication Layer) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+210.0 359.89 Td
+(Matching Technique) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+397.28 359.89 Td
+(Engine Action Taken) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 326.89 m 541.28 326.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 334.89 Td
+(Layer 1: SHA-256 Hash) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+210.0 334.89 Td
+(Cryptographic fingerprint hash of normalized company name, job title, and description prefix.) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+397.28 334.89 Td
+(Identifies exact duplicate. Updates existing job timestamp; suppresses duplicate insertion.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 302.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 302.89 m 541.28 302.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 310.89 Td
+(Layer 2: Canonical URL) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+210.0 310.89 Td
+(Direct string comparison of destination application URL \(apply_url\).) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+397.28 310.89 Td
+(Detects cross-posted vacancies sharing identical destination tracking links.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 278.89 m 541.28 278.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 286.89 Td
+(Layer 3: Title & Company Match) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+210.0 286.89 Td
+(Case-insensitive SQL ILIKE search scoped strictly within the same Company ID.) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+397.28 286.89 Td
+(Identifies title variations \(e.g. 'Software Engineer II' vs 'Software Engineer - Level 2'\). Flags candidate pair.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 254.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 254.89 m 541.28 254.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 262.89 Td
+(Layer 4: Unique Insertion) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+210.0 262.89 Td
+(Job passes Layers 1 through 3 without matching existing active database records.) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+397.28 262.89 Td
+(Committed as verified new posting; increments scan run 'new_jobs' telemetry counter.) Tj
+ET
+q
+0.2 0.35 0.65 RG 1 w
+54.0 254.89 487.28 122.0 re s
+Q
+q
+0.96 0.97 0.99 rg
+54.0 157.39 487.28 83.5 re f
+0.2 0.45 0.85 RG 2 w
+54.0 157.39 m 54.0 240.89 l S
+0.8 0.85 0.9 RG 0.5 w
+54.0 157.39 487.28 83.5 re s
+Q
+BT
+/TB 13 Tf
+0.1 0.25 0.6 rg
+68.0 224.89 Td
+(Cryptographic Fingerprint Implementation) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 208.89 Td
+(def generate_job_fingerprint\(company_name: str, title: str, description: str\) -> str:
+    raw =) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 192.39 Td
+(f"{company_name.strip\(\).lower\(\)}|{title.strip\(\).lower\(\)}|{description.strip\(\).lower\(\)[:200]}"
+) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 175.89 Td
+(   return hashlib.sha256\(raw.encode\('utf-8'\)\).hexdigest\(\)) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 137.39 Td
+(5. Job Partitioning: Fresher vs. Experienced Stream) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 133.39 m 541.28 133.39 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 109.38999999999999 Td
+(5.1 Overcoming the Fresher Discovery Barrier) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 5 of 22) Tj
+ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 14 0 R >>
+endobj
+14 0 obj
+<< /Length 5171 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(JobNexa's hallmark feature is its dual-stream job partitioning architecture. Candidates) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(registering as 'Fresher \(0 - 1 Years\)' receive an exclusively curated feed completely) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 731.89 Td
+(isolated from mid-level and senior roles. Conversely, industry professionals receive) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 713.89 Td
+(openings demanding specialized, multi-year architecture and leadership experience.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 685.89 Td
+(5.2 Deterministic Regular Expression Experience Parser) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 666.89 Td
+(The engine applies four distinct regular expression patterns against both the job) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 648.89 Td
+(description text and the title in app/pipeline/normalizer.py:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 626.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 626.89 Td
+(Pattern A \(Plus Matches\): r'\(?:•|\\*|-|\\b\)\\s*\(\\d+\)\\+\\s*years?' captures bullet points such) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 608.89 Td
+(as '• 8+ years writing highly performant frontend code' or '5+ years experience'. Sets) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 590.89 Td
+(minimum experience to 8, maximum to 11.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 569.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 569.89 Td
+(Pattern B \(Range Matches\): r'\\b\(\\d+\)\\s*\(?:[-to–]+\)\\s*\(\\d+\)\\s*years?' extracts explicit) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 551.89 Td
+(ranges like '3-5 years', '2 to 4 years', or '0-1 years'. Correctly extracts min_exp = 3,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 533.89 Td
+(max_exp = 5.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 512.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 512.89 Td
+(Pattern C \(Threshold Matches\): r'\(?:minimum|at least|minimum of\)\\s*\(\\d+\)\\s*years?') Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 494.89 Td
+(extracts strict criteria such as 'minimum 5 years of engineering experience'.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 473.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 473.89 Td
+(Pattern D \(Contextual Verb Matches\):) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 455.89 Td
+(r'\\b\(\\d+\)\\s*years?\(?:\\s+of\)?\(?:\\s+relevant|hands-on\)?\\s*\(?:experience|writing|building\)') Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 437.89 Td
+(captures conversational phrasing in job briefs.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 410.89 Td
+(5.3 Title Heuristics & Boundary Protection) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 391.89 Td
+(To prevent junior roles from being mislabeled due to mentions of senior teammates \(e.g.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 373.89 Td
+('You will report to a Senior Engineering Manager with 10 years experience'\), JobNexa) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 355.89 Td
+(applies title heuristic prioritization:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 333.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 333.89 Td
+(Senior Title Override: If the job title contains senior keywords \('senior', 'sr', 'lead',) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 315.89 Td
+('staff', 'principal', 'director', 'vp', 'head', 'architect', 'manager'\), the parser strictly) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 297.89 Td
+(discards any low experience numbers extracted from the description body and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 279.89 Td
+(enforces experienced categorization.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 258.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 258.89 Td
+(Fresher Title Priority: If the title contains genuine entry-level keywords \('intern',) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 240.89 Td
+('internship', 'fresher', 'trainee', 'graduate trainee', 'campus', 'entry level'\), the job is) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 222.89 Td
+(immediately assigned min_exp = 0, max_exp = 1.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 201.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 201.89 Td
+(Word Boundary Enforcement: Keywords such as 'intern' are evaluated with strict) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 183.89 Td
+(regex word boundaries \(\\b\) to eliminate false positives on common words like) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 165.89 Td
+('internal' or 'international'.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 136.89 Td
+(6. Company Classification: Startup vs. Mid-Cap vs. Enterprise) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 132.89 m 541.28 132.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 108.88999999999999 Td
+(6.1 Classification Criteria & Taxonomy) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 6 of 22) Tj
+ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 16 0 R >>
+endobj
+16 0 obj
+<< /Length 7303 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(JobNexa categorizes all 120+ tracked tech employers into three distinct organizational) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(tiers, allowing candidates to filter opportunities based on work culture, risk tolerance, and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 731.89 Td
+(growth environment:) Tj
+ET
+q
+0.15 0.3 0.6 rg
+54.0 683.89 487.28 26.0 re f
+Q
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+60.0 692.89 Td
+(Company Category) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+190.0 692.89 Td
+(Organizational Criteria) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+377.28 692.89 Td
+(Representative Bengaluru Employers) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 659.89 m 541.28 659.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 667.89 Td
+(Startup / Scale-up) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+190.0 667.89 Td
+(High growth, venture-backed, early to growth stage, founded < 10 years or rapid unicorn status \(< 1,000 employees\).) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+377.28 667.89 Td
+(Razorpay, Meesho, CRED, Groww, Zepto, Zeta, Sarvam AI, SigNoz, Postman, Navi.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 635.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 635.89 m 541.28 635.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 643.89 Td
+(Mid-Market / Mid-Cap) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+190.0 643.89 Td
+(Scaled tech operations, 200 to 3,000 employees, Series D+ funding or established domestic market footprint.) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+377.28 643.89 Td
+(Vercel, Grafana Labs, Harness, Camunda, DuckDuckGo, ThoughtWorks, HackerRank.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 611.89 m 541.28 611.89 l S
+Q
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+60.0 619.89 Td
+(Enterprise / MNC) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+190.0 619.89 Td
+(Publicly traded corporations, Fortune 500, Global Capability Centers \(GCCs\), 3,000+ global workforce.) Tj
+ET
+BT
+/TR 11.5 Tf
+0.18 0.18 0.2 rg
+377.28 619.89 Td
+(Google, Microsoft, Amazon, Cisco, Adobe, Walmart Global Tech, Flipkart, PhonePe, Swiggy, Infosys, Wipro, TCS.) Tj
+ET
+q
+0.2 0.35 0.65 RG 1 w
+54.0 611.89 487.28 98.0 re s
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 591.89 Td
+(6.2 Technical Implementation of Company Classification) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 572.89 Td
+(Company categorization is implemented in app/core/company_logos.py and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 554.89 Td
+(app/core/bengaluru_companies.py using a canonical mapping dictionary) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 536.89 Td
+(\(COMPANY_TYPE_MAP\) and domain resolver \(COMPANY_DOMAIN_MAP\). When) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 518.89 Td
+(a job is ingested from an external source, its employer name is normalized and evaluated) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 500.89 Td
+(against the verified canonical registry.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 478.89 Td
+(If a newly crawled employer is not present in the static catalog, get_company_type\(\)) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 460.89 Td
+(performs a partial keyword match. If no match is found, it safely defaults to 'Mid-size') Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 442.89 Td
+(while queuing the company for administrative review. Concurrently, get_company_logo\(\)) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 424.89 Td
+(resolves the company's verified domain to supply a crisp Google 128px favicon) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 406.89 Td
+(\(https://www.google.com/s2/favicons?domain={domain}&sz=128\), falling back to) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 388.89 Td
+(branded UI-Avatars initials.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 358.89 Td
+(7. Bengaluru Geographic Tech Hubs & Neighborhood Filter) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 354.89 m 541.28 354.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 330.89 Td
+(7.1 The Bengaluru Commute Problem) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 311.89 Td
+(In Bengaluru, geographic location within the city dictates a candidate's daily commute) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 293.89 Td
+(and quality of life. An engineer residing in Koramangala or HSR Layout faces significant) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 275.89 Td
+(transit hurdles traveling to Whitefield or North Bengaluru. JobNexa features a granular) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 257.89 Td
+(Tech Hub Selector grouping vacancies into six canonical technology corridors:) Tj
+ET
+q
+0.15 0.3 0.6 rg
+54.0 209.89 487.28 26.0 re f
+Q
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+60.0 218.89 Td
+(Tech Hub Corridor) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+190.0 218.89 Td
+(Major Tech Parks & Industrial Landmarks) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+377.28 218.89 Td
+(Matched Search Keywords) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 185.89 m 541.28 185.89 l S
+Q
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+60.0 193.89 Td
+(Koramangala & HSR) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+190.0 193.89 Td
+(Koramangala Tech Quarter, HSR Startup Corridor, BHIVE Workspace, Sony World Signal.) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+377.28 193.89 Td
+(koramangala, hsr, hsr layout, btm, jayanagar, jp nagar) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 161.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 161.89 m 541.28 161.89 l S
+Q
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+60.0 169.89 Td
+(Whitefield & Bellandur) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+190.0 169.89 Td
+(ITPB, Prestige Tech Park, EcoSpace Business Park, Cessna Business Park, EPIP Zone, ORR.) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+377.28 169.89 Td
+(whitefield, bellandur, outer ring road, orr, kadubeesanahalli, epip, ecospace) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 137.89 m 541.28 137.89 l S
+Q
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+60.0 145.89 Td
+(Electronic City) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+190.0 145.89 Td
+(Infosys City, Wipro Campus, Cyber Park, Velankani Tech Park, Siemens Tech Center.) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+377.28 145.89 Td
+(electronic city, electronics city, e-city, hosur road, jigani) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 113.88999999999999 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 113.88999999999999 m 541.28 113.88999999999999 l S
+Q
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+60.0 121.88999999999999 Td
+(Manyata & North BLR) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+190.0 121.88999999999999 Td
+(Manyata Embassy Business Park \(Hebbal/Nagavara\), Kirloskar Business Park, RMZ Galleria.) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+377.28 121.88999999999999 Td
+(manyata, hebbal, nagavara, north blr, kirloskar) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 89.88999999999999 m 541.28 89.88999999999999 l S
+Q
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+60.0 97.88999999999999 Td
+(Indiranagar & Central) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+190.0 97.88999999999999 Td
+(Embassy GolfLinks \(EGL / Domlur\), Bagmane Tech Park \(CV Raman Nagar\), Divyasree Chambers.) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+377.28 97.88999999999999 Td
+(indiranagar, domlur, egl, embassy golflinks, bagmane, cv raman nagar) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 7 of 22) Tj
+ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 18 0 R >>
+endobj
+18 0 obj
+<< /Length 5044 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+q
+0.96 0.97 0.99 rg
+54.0 743.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 743.89 m 541.28 743.89 l S
+Q
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+60.0 751.89 Td
+(Remote / Hybrid \(BLR\)) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+190.0 751.89 Td
+(Bengaluru Remote-First Centers, Distributed Engineering Hubs, Karnataka Hybrid Teams.) Tj
+ET
+BT
+/TR 11.0 Tf
+0.18 0.18 0.2 rg
+377.28 751.89 Td
+(remote, hybrid, work from home, flexible) Tj
+ET
+q
+0.2 0.35 0.65 RG 1 w
+54.0 743.89 487.28 24.0 re s
+Q
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 721.89 Td
+(8. NLP Skill Extraction & Candidate Profile Matching) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 717.89 m 541.28 717.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 693.89 Td
+(8.1 Skill Dictionary Normalization) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 674.89 Td
+(Job descriptions use diverse colloquial aliases for identical technical competencies.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 656.89 Td
+(JobNexa normalizes terms using a canonical dictionary mapping: 'py' maps to 'Python',) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 638.89 Td
+('k8s' maps to 'Kubernetes', 'reactjs' maps to 'React', 'postgres' maps to 'PostgreSQL',) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 620.89 Td
+(and 'aws' maps to 'AWS'. Regular expressions enforce strict boundary matching so) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 602.89 Td
+(common words are not falsely extracted.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 574.89 Td
+(8.2 IT Role Family Classification) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 555.89 Td
+(Every job is automatically mapped into one of seven normalized IT Role Families using) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 537.89 Td
+(classify_it_role_family\(\) in app/pipeline/normalizer.py:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 515.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 515.89 Td
+(1. Software & Product Engineering: Full-Stack, Backend, Frontend, Mobile, Systems,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 497.89 Td
+(Firmware, Embedded Software.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 476.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 476.89 Td
+(2. Cloud, SRE & DevOps: DevOps, SRE, Cloud Infrastructure, Platform Engineering,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 458.89 Td
+(Kubernetes, Terraform.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 437.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 437.89 Td
+(3. Cybersecurity & InfoSec: Security Operations, Penetration Testing, Threat) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 419.89 Td
+(Intelligence, Application Security.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 398.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 398.89 Td
+(4. Data, Analytics & AI/ML: Data Engineering, Data Science, Machine Learning,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 380.89 Td
+(NLP, AI Research, LLMs.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 359.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 359.89 Td
+(5. QA & SDET: Quality Assurance, Automation Testing, SDET, Performance & Load) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 341.89 Td
+(Engineering.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 320.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 320.89 Td
+(6. Hardware & Embedded: VLSI, ASIC, Hardware Architecture, Board Design, IoT) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 302.89 Td
+(Engineering.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 281.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 281.89 Td
+(7. Technical Product & Architecture: Technical Product Management, Solutions) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 263.89 Td
+(Architecture, Enterprise Systems.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 236.89 Td
+(8.3 Profile-Matching Scoring Algorithm) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 217.89 Td
+(When an authenticated candidate views a job listing, app/services/match_service.py) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 199.89 Td
+(dynamically calculates a real-time Profile Fit Score \(0 to 100%\). The algorithm weighs) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 181.89 Td
+(skill overlap \(70% weight\) calculated via Jaccard similarity between candidate skills and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 163.89 Td
+(required job skills, plus experience alignment \(30% weight\) verifying whether the) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 145.89 Td
+(candidate's verified experience falls within the job's min_exp and max_exp range.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 115.88999999999999 Td
+(9. Exhaustive REST API Catalog \(All 24 Endpoints\)) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 111.88999999999999 m 541.28 111.88999999999999 l S
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 8 of 22) Tj
+ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 20 0 R >>
+endobj
+20 0 obj
+<< /Length 10145 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(JobNexa exposes 24 production RESTful API endpoints organized into five distinct) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(domain routers under the /api/v1 prefix:) Tj
+ET
+q
+0.15 0.3 0.6 rg
+54.0 701.89 487.28 26.0 re f
+Q
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+60.0 710.89 Td
+(HTTP Method & Endpoint Path) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+220.0 710.89 Td
+(Auth Scope) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+295.0 710.89 Td
+(Primary Function & Response Payload) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 677.89 m 541.28 677.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 685.89 Td
+(GET /api/v1/health) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 685.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 685.89 Td
+(Performs health probe across PostgreSQL database, crawler queue, and system uptime.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 653.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 653.89 m 541.28 653.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 661.89 Td
+(POST /api/v1/auth/send-otp) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 661.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 661.89 Td
+(Dispatches 6-digit verification code to user email via serverless SMTP bridge.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 629.89 m 541.28 629.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 637.89 Td
+(POST /api/v1/auth/verify-register) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 637.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 637.89 Td
+(Verifies email OTP and registers a new Candidate account \(role strictly 'candidate'\).) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 605.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 605.89 m 541.28 605.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 613.89 Td
+(POST /api/v1/auth/verify-otp-login) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 613.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 613.89 Td
+(Validates 6-digit OTP for passwordless login; issues signed JWT access token.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 581.89 m 541.28 581.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 589.89 Td
+(POST /api/v1/auth/register) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 589.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 589.89 Td
+(Direct candidate registration with password hashing \(bcrypt\).) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 557.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 557.89 m 541.28 557.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 565.89 Td
+(POST /api/v1/auth/login) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 565.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 565.89 Td
+(Standard email/password authentication; returns bearer JWT token and role.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 533.89 m 541.28 533.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 541.89 Td
+(GET /api/v1/auth/me) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 541.89 Td
+(Bearer JWT) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 541.89 Td
+(Returns authenticated user session details, verified role, and profile metadata.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 509.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 509.89 m 541.28 509.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 517.89 Td
+(GET /api/v1/jobs) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 517.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 517.89 Td
+(Primary paginated job feed supporting filters for hub, exp_tier, skills, and sorting.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 485.89 m 541.28 485.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 493.89 Td
+(GET /api/v1/jobs/{job_id}) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 493.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 493.89 Td
+(Fetches complete job details, sanitized description, required skills, and match %.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 461.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 461.89 m 541.28 461.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 469.89 Td
+(GET /api/v1/jobs/insights) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 469.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 469.89 Td
+(Computes market analytics: top 10 skills, experience breakdown, and recent scans.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 437.89 m 541.28 437.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 445.89 Td
+(GET /api/v1/jobs/scan-status) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 445.89 Td
+(Public) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 445.89 Td
+(Telemetry endpoint returning live crawler state, total active jobs, and scan health.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 413.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 413.89 m 541.28 413.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 421.89 Td
+(POST /api/v1/jobs/auto-scan-check) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 421.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 421.89 Td
+(Verifies whether daily automated scan is overdue; triggers background sweep.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 389.89 m 541.28 389.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 397.89 Td
+(POST /api/v1/jobs/scan-hub) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 397.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 397.89 Td
+(Triggers immediate targeted scan for a specific geographic tech corridor.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 365.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 365.89 m 541.28 365.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 373.89 Td
+(GET /api/v1/candidate/profile) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 373.89 Td
+(Candidate) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 373.89 Td
+(Retrieves candidate profile, target job titles, verified skills, and experience tier.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 341.89 m 541.28 341.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 349.89 Td
+(POST /api/v1/candidate/profile) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 349.89 Td
+(Candidate) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 349.89 Td
+(Updates candidate skills, experience years, resume metadata, and preferences.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 317.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 317.89 m 541.28 317.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 325.89 Td
+(GET /api/v1/candidate/matches) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 325.89 Td
+(Candidate) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 325.89 Td
+(Returns personalized recommended jobs ranked by profile match percentage.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 293.89 m 541.28 293.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 301.89 Td
+(GET /api/v1/candidate/saved-jobs) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 301.89 Td
+(Candidate) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 301.89 Td
+(Fetches list of bookmarked vacancies saved by the candidate.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 269.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 269.89 m 541.28 269.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 277.89 Td
+(POST /api/v1/candidate/saved-jobs/{id}) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 277.89 Td
+(Candidate) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 277.89 Td
+(Toggles bookmark status \(save/unsave\) for a specific job listing.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 245.89 m 541.28 245.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 253.89 Td
+(GET /api/v1/admin/overview) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 253.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 253.89 Td
+(Command Center overview metrics: total jobs, active sources, success rate, units.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 221.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 221.89 m 541.28 221.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 229.89 Td
+(GET /api/v1/admin/notifications) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 229.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 229.89 Td
+(Fetches administrative security alerts, crawler updates, and system events.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 197.89 m 541.28 197.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 205.89 Td
+(POST /api/v1/admin/notifications/{id}/read) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 205.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 205.89 Td
+(Marks an individual admin notification as read.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 173.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 173.89 m 541.28 173.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 181.89 Td
+(POST /api/v1/admin/notifications/mark-all-read) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 181.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 181.89 Td
+(Bulk updates all unread administrative alerts to read status.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 149.89 m 541.28 149.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 157.89 Td
+(GET /api/v1/admin/scans) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 157.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 157.89 Td
+(Returns 14-day crawler audit trail with jobs found, updated, and expired counts.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 125.88999999999999 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 125.88999999999999 m 541.28 125.88999999999999 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 133.89 Td
+(DELETE /api/v1/admin/scans) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 133.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 133.89 Td
+(Deletes historical crawler execution logs \(with confirmation modal protection\).) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 101.88999999999999 m 541.28 101.88999999999999 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 109.88999999999999 Td
+(POST /api/v1/admin/scans/trigger) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 109.88999999999999 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 109.88999999999999 Td
+(Triggers immediate full-system sweep across all 120+ company career boards.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 9 of 22) Tj
+ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 22 0 R >>
+endobj
+22 0 obj
+<< /Length 8053 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+q
+0.96 0.97 0.99 rg
+54.0 743.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 743.89 m 541.28 743.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 751.89 Td
+(GET /api/v1/admin/users) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 751.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 751.89 Td
+(Returns directory of registered candidates, experience tiers, and security accounts.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 719.89 m 541.28 719.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 727.89 Td
+(POST /api/v1/admin/users/{id}/toggle-status) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 727.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 727.89 Td
+(Enables or disables a user account \(primary admin account protected\).) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 695.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 695.89 m 541.28 695.89 l S
+Q
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+60.0 703.89 Td
+(GET /api/v1/admin/jobs/day-wise-breakdown) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+220.0 703.89 Td
+(Admin Only) Tj
+ET
+BT
+/TR 10.5 Tf
+0.18 0.18 0.2 rg
+295.0 703.89 Td
+(Aggregates 14-day daily hiring trends comparing Fresher vs Experienced roles.) Tj
+ET
+q
+0.2 0.35 0.65 RG 1 w
+54.0 695.89 487.28 72.0 re s
+Q
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 673.89 Td
+(10. Tech Stack Comparative Analysis & Rationale) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 669.89 m 541.28 669.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 645.89 Td
+(10.1 Complete Technology Matrix) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 626.89 Td
+(JobNexa was engineered using a deliberately selected, modern technology stack) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 608.89 Td
+(optimized for high-concurrency asynchronous I/O, strict type safety, computational NLP) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 590.89 Td
+(efficiency, and low-latency client rendering:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 568.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 568.89 Td
+(Backend Framework: FastAPI \(Python 3.11\) with Uvicorn ASGI server.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 547.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 547.89 Td
+(Data Validation & Schemas: Pydantic v2 \(Rust-accelerated validation core\).) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 526.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 526.89 Td
+(Relational Database & ORM: PostgreSQL with SQLAlchemy 2.0 ORM and Alembic) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 508.89 Td
+(migrations.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 487.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 487.89 Td
+(Asynchronous I/O & HTTP Engine: AsyncIO + HTTPX + urllib connection pooling.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 466.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 466.89 Td
+(HTML Parsing & Scraping: BeautifulSoup4 with lxml high-speed C parser.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 445.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 445.89 Td
+(Frontend SPA Architecture: React 18 + TypeScript + Vite.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 424.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 424.89 Td
+(Styling & Design System: Tailwind CSS with custom typography, frosted glass, and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 406.89 Td
+(responsive breakpoints.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 385.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 385.89 Td
+(Data Visualization: Recharts \(interactive SVG charts: BarChart, PieChart, AreaChart\).) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 364.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 364.89 Td
+(Authentication & Security: PyJWT \(HS256\) + bcrypt + Nodemailer serverless SMTP) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 346.89 Td
+(bridge over SSL port 465.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 325.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 325.89 Td
+(DevOps & Deployment: Docker containerization + Vercel Edge \(Frontend\) + Render) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 307.89 Td
+(Cloud \(Backend\).) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 280.89 Td
+(10.2 Backend Comparison: Why FastAPI Outperformed Alternatives) Tj
+ET
+q
+0.15 0.3 0.6 rg
+54.0 235.89 487.28 26.0 re f
+Q
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+60.0 244.89 Td
+(Evaluation Dimension) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+160.0 244.89 Td
+(FastAPI \(Python 3.11\)) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+265.0 244.89 Td
+(Node.js \(Express\)) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+360.0 244.89 Td
+(Java \(Spring Boot\)) Tj
+ET
+BT
+/TB 11 Tf
+1.0 1.0 1.0 rg
+455.0 244.89 Td
+(Go \(Gin / Fiber\)) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 211.89 m 541.28 211.89 l S
+Q
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+60.0 219.89 Td
+(Concurrency & I/O) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+160.0 219.89 Td
+(Native async/await syntax over asyncio event loop.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+265.0 219.89 Td
+(Asynchronous event loop via libuv.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+360.0 219.89 Td
+(Multi-threaded \(thread-per-request / virtual threads\).) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+455.0 219.89 Td
+(Goroutines with lightweight channels.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 187.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 187.89 m 541.28 187.89 l S
+Q
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+60.0 195.89 Td
+(Type Safety & Validation) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+160.0 195.89 Td
+(Pydantic v2 compile-time & runtime validation.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+265.0 195.89 Td
+(Requires external libraries \(Joi, Zod\).) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+360.0 195.89 Td
+(Strong compile-time types with Hibernate validation.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+455.0 195.89 Td
+(Compile-time structs with manual validation tags.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 163.89 m 541.28 163.89 l S
+Q
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+60.0 171.89 Td
+(OpenAPI & Docs) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+160.0 171.89 Td
+(Automatic interactive Swagger UI \(/docs\) & ReDoc.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+265.0 171.89 Td
+(Requires manual swagger-jsdoc annotations.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+360.0 171.89 Td
+(Requires Springdoc OpenAPI dependency.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+455.0 171.89 Td
+(Requires Swag / third-party generators.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 139.89 487.28 24.0 re f
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 139.89 m 541.28 139.89 l S
+Q
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+60.0 147.89 Td
+(AI & NLP Integration) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+160.0 147.89 Td
+(Native access to spaCy, NLTK, PyTorch, Transformers.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+265.0 147.89 Td
+(Limited NLP libraries; requires Python sidecar.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+360.0 147.89 Td
+(Java NLP engines \(Stanford CoreNLP\) are heavy.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+455.0 147.89 Td
+(Minimal NLP ecosystem; requires external gRPC calls.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 115.88999999999999 m 541.28 115.88999999999999 l S
+Q
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+60.0 123.88999999999999 Td
+(Development Speed) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+160.0 123.88999999999999 Td
+(Extremely high; concise Pythonic syntax.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+265.0 123.88999999999999 Td
+(High; extensive NPM ecosystem.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+360.0 123.88999999999999 Td
+(Moderate; high boilerplate code.) Tj
+ET
+BT
+/TR 10.0 Tf
+0.18 0.18 0.2 rg
+455.0 123.88999999999999 Td
+(High execution speed; moderate boilerplate.) Tj
+ET
+q
+0.2 0.35 0.65 RG 1 w
+54.0 115.88999999999999 487.28 146.0 re s
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 101.88999999999999 Td
+(Rationale for FastAPI: While Node.js and Go offer excellent raw I/O throughput,) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 10 of 22) Tj
+ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 24 0 R >>
+endobj
+24 0 obj
+<< /Length 5067 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(JobNexa requires continuous NLP tokenization, regex skill extraction, and linguistic text) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(normalization on every ingested job description. In Node or Go, NLP processing would) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 731.89 Td
+(require maintaining a separate Python microservice, introducing network serialization) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 713.89 Td
+(latency and operational complexity. FastAPI provides the performance of modern) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 695.89 Td
+(asynchronous I/O while executing NLP directly in-memory within the same Python) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 677.89 Td
+(process.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 649.89 Td
+(10.3 Database Comparison: Why PostgreSQL Was Selected Over MongoDB) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 630.89 Td
+(Although job descriptions are semi-structured text \(making document databases like) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 612.89 Td
+(MongoDB tempting\), JobNexa's core value proposition relies heavily on strict relational) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 594.89 Td
+(integrity: Companies possess multiple Job Sources; Jobs maintain foreign key relations) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 576.89 Td
+(with Companies; and Skills form many-to-many associations via associative tables) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 558.89 Td
+(\(JobSkill\). PostgreSQL was chosen because:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 536.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 536.89 Td
+(Relational Integrity & Foreign Keys: Prevents orphaned job postings when a company) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 518.89 Td
+(domain or ATS slug is modified.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 497.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 497.89 Td
+(JSONB Hybrid Support: Allows storing raw, unmodified ATS JSON payloads directly) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 479.89 Td
+(in JSONB columns while indexing normalized relational fields.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 458.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 458.89 Td
+(Advanced B-Tree & GIN Indexing: Provides sub-10ms query execution across 1,000+) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 440.89 Td
+(active records when filtering by experience_tier, location, and company_type.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 419.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 419.89 Td
+(ACID Transactions: Ensures scan run transactions cleanly commit or rollback during) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 401.89 Td
+(batch ingestion sweeps.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 374.89 Td
+(10.4 Frontend Comparison: Why React + Vite Was Selected Over Next.js) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 355.89 Td
+(JobNexa is built as a dynamic Single Page Application \(SPA\) using React 18 and Vite.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 337.89 Td
+(While Next.js provides Server-Side Rendering \(SSR\), an interactive candidate dashboard) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 319.89 Td
+(and real-time telemetry console require continuous client-side state transitions, live timer) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 301.89 Td
+(countdowns, and dynamic Recharts SVG updates. Vite delivers near-instant Hot Module) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 283.89 Td
+(Replacement \(HMR, <50ms\), a clean static distribution bundle, and zero server hydration) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 265.89 Td
+(mismatches.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 235.89 Td
+(11. Database Schemas & Relational Models) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 231.89 m 541.28 231.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 207.89 Td
+(11.1 Key Database Entities) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 188.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 188.89 Td
+(users Table: Stores user accounts with id \(UUID\), email \(unique indexed\),) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 170.89 Td
+(hashed_password, role \('candidate' or 'admin'\), experience_tier \('fresher' or) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 152.89 Td
+('experienced'\), is_active, and created_at.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 131.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 131.89 Td
+(candidate_profiles Table: Maintains candidate intelligence: user_id \(FK\), full_name,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 113.88999999999999 Td
+(target_titles \(JSON array\), years_experience, current_company, resume_url, and bio.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 11 of 22) Tj
+ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 26 0 R >>
+endobj
+26 0 obj
+<< /Length 5320 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 767.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 767.89 Td
+(companies Table: Stores verified employers: id, name, domain, slug, company_type) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 749.89 Td
+(\('Startup', 'Mid-size', 'Enterprise'\), logo_url, careers_url, and tech_hub.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 728.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 728.89 Td
+(job_sources Table: Defines crawling sources: id, company_id \(FK\), connector_key) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 710.89 Td
+(\('greenhouse_api', 'lever_api', 'ashby_api'\), base_url, is_active, and last_scanned_at.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 689.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 689.89 Td
+(jobs Table: Core catalog entity: id, company_id \(FK\), source_id \(FK\), title, location,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 671.89 Td
+(description, apply_url, min_experience, max_experience, experience_tier \('fresher' vs) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 653.89 Td
+('experienced'\), fingerprint \(SHA-256 unique indexed\), is_active, posted_at, and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 635.89 Td
+(fetched_at.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 614.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 614.89 Td
+(skills & job_skills Tables: Normalized skill dictionary and many-to-many junction) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 596.89 Td
+(table mapping jobs to required technical skills with confidence weights.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 575.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 575.89 Td
+(scan_runs & source_run_results Tables: Telemetry audit trail recording timestamp,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 557.89 Td
+(jobs_found, new_jobs, updated_jobs, expired_jobs, and per-source crawler execution) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 539.89 Td
+(status.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 518.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 518.89 Td
+(admin_notifications Table: Stores administrative alerts: id, category \('security',) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 500.89 Td
+('scan_update', 'job_metrics'\), title, message, is_read, and timestamp.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 471.89 Td
+(12. Administrative Command Center & Telemetry) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 467.89 m 541.28 467.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 443.89 Td
+(12.1 Real-Time ATS Engine Monitoring) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 424.89 Td
+(JobNexa includes a dedicated Administrative Command Center restricted exclusively to) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 406.89 Td
+(verified administrator accounts \(primary admin: nithinvandana26@gmail.com\). The) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 388.89 Td
+(dashboard features:) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 366.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 366.89 Td
+(Live Crawler Status Beacon: Visual pulse indicator showing whether the ATS) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 348.89 Td
+(crawling queue is idle or actively sweeping company career portals.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 327.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 327.89 Td
+(Real-Time KPI Cards: Live database counters displaying Total Companies \(208\),) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 309.89 Td
+(Active Sources \(208\), Total Jobs \(1,035+\), Bengaluru Jobs \(1,026\), New Jobs Today) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 291.89 Td
+(\(365\), and Auto-Verified Expired Jobs \(0\).) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 270.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 270.89 Td
+(14-Day Day-Wise Breakdown Chart: Recharts grouped bar chart analyzing daily) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 252.89 Td
+(hiring velocity comparing Fresher roles \(0 - 1 Yrs\) against Experienced openings \(> 1) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 234.89 Td
+(Yrs\).) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 213.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 213.89 Td
+(User Accounts & Security Intelligence: Donut chart and searchable table displaying) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 195.89 Td
+(registered candidates, experience demographics, active account status, and platform) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 177.89 Td
+(administrators.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.18 0.42 0.82 rg
+56.0 156.89 Td
+(•) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 156.89 Td
+(1-Click Manual Crawler Sweep: Allows administrators to trigger an immediate live) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+72.0 138.89 Td
+(scan across all 120+ career portals on demand.) Tj
+ET
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 109.88999999999999 Td
+(13. Conclusion & Engineering Assessment) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 105.88999999999999 m 541.28 105.88999999999999 l S
+Q
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 12 of 22) Tj
+ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 28 0 R >>
+endobj
+28 0 obj
+<< /Length 1731 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(JobNexa represents an end-to-end full-stack software engineering achievement solving a) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(critical real-world problem in Bengaluru's technology ecosystem. By uniting) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 731.89 Td
+(high-concurrency asynchronous scraping, cryptographic deduplication, NLP skill) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 713.89 Td
+(extraction, deterministic experience parsing, and a responsive React client, JobNexa) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 695.89 Td
+(demonstrates production-grade system architecture, database design, and API excellence.) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 590.39 487.28 83.5 re f
+0.2 0.45 0.85 RG 2 w
+54.0 590.39 m 54.0 673.89 l S
+0.8 0.85 0.9 RG 0.5 w
+54.0 590.39 487.28 83.5 re s
+Q
+BT
+/TB 13 Tf
+0.1 0.25 0.6 rg
+68.0 657.89 Td
+(Document Verification & Engineering Approval) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 641.89 Td
+(Document: JobNexa Comprehensive Architecture & Workflow Specification \(v2.5\)
+Lead) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 625.39 Td
+(Architect & Developer: Nithin Vandana
+Contact: nithinvandana26@gmail.com | +91 -) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 608.89 Td
+(9347388372 | Bangalore, India
+All systems verified live and operational in production.) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 13 of 22) Tj
+ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 30 0 R >>
+endobj
+30 0 obj
+<< /Length 7357 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 18 Tf
+0.1 0.25 0.55 rg
+54.0 759.89 Td
+(14. System Architecture & Visual Workflow Diagrams \(For Interviews\)) Tj
+ET
+q
+0.18 0.42 0.82 RG 1.2 w
+54.0 755.89 m 541.28 755.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 737.89 Td
+(The following visual architecture diagrams and workflow traces have been designed) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 719.89 Td
+(specifically for technical interviews, system design rounds, and engineering walkthroughs) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 701.89 Td
+(to explain how data moves from external ATS boards to the user's screen.) Tj
+ET
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 673.89 Td
+(14.1 Diagram 1: High-Level End-to-End System Architecture) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 654.89 Td
+(This diagram outlines the complete multi-tier topology of JobNexa, demonstrating how) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 636.89 Td
+(120+ external ATS endpoints connect through asynchronous ingestion, relational storage,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 618.89 Td
+(FastAPI REST routes, and responsive client interfaces:) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 -95.11000000000001 487.28 692.0 re f
+0.15 0.3 0.65 RG 1.5 w
+54.0 -95.11000000000001 487.28 692.0 re s
+0.9 0.93 0.97 rg
+54.0 564.89 487.28 32.0 re f
+0.75 0.8 0.88 RG 0.8 w
+54.0 564.89 m 541.28 564.89 l S
+Q
+BT
+/TB 12 Tf
+0.08 0.2 0.45 rg
+66.0 580.89 Td
+(System Architecture Topology \(High-Level End-to-End\)) Tj
+ET
+BT
+/TI 9.5 Tf
+0.35 0.4 0.48 rg
+66.0 568.89 Td
+(Figure 1: Architectural blueprint illustrating asynchronous data flow across all 5 tiers.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 552.89 Td
+(+-------------------------------------------------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 541.39 Td
+(|                 1. EXTERNAL CORPORATE ATS & PORTALS \(120+ ENDPOINTS\)          |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 529.89 Td
+(|  +--------------------+  +--------------------+  +-------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 518.39 Td
+(|  | Greenhouse Board   |  | Lever Postings API |  | Ashby HQ Career Boards  |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 506.89 Td
+(|  | \(JSON + HTML Body\) |  | \(JSON Categories\)  |  | \(GraphQL/REST Payloads\) |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 495.39 Td
+(|  +--------------------+  +--------------------+  +-------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 483.89 Td
+(|  +-------------------------------------------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 472.39 Td
+(|  | Partner Aggregators \(Arbeitnow, Jobicy, Remotive, LinkedIn Tech Feed\)   |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 460.89 Td
+(|  +-------------------------------------------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 449.39 Td
+(+---------------------------------------+---------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 437.89 Td
+(                                        | \(Async Non-Blocking HTTP GET\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 426.39 Td
+(                                        v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 414.89 Td
+(+-------------------------------------------------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 403.39 Td
+(|                 2. ASYNCHRONOUS INGESTION & PROCESSING ENGINE                 |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 391.89 Td
+(|  +-------------------------------------------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 380.39 Td
+(|  | AsyncIO & HTTPX Worker Pool \(Connection Pooling, 10s Timeout, Retries\)  |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 368.89 Td
+(|  +------------------------------------+------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 357.39 Td
+(|                                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 345.89 Td
+(|                                       v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 334.39 Td
+(|  +-------------------------------------------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 322.89 Td
+(|  | HTML Sanitizer \(BeautifulSoup4\) --> Normalizer \(Location & Role Family\) |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 311.39 Td
+(|  +------------------------------------+------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 299.89 Td
+(|                                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 288.39 Td
+(|                                       v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 276.89 Td
+(|  +-------------------------------------------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 265.39 Td
+(|  | 4-Layer Deduplicator: SHA-256 Fingerprint Hash & Apply URL Comparator   |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 253.89 Td
+(|  | \(98.2% Duplicate Suppression -> Emits Verified Unique Postings\)         |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 242.39 Td
+(|  +------------------------------------+------------------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 230.89 Td
+(+---------------------------------------+---------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 219.39 Td
+(                                        | \(SQLAlchemy 2.0 ORM Session\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 207.89 Td
+(                                        v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 196.39 Td
+(+-------------------------------------------------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 184.89 Td
+(|                 3. POSTGRESQL 15 PERSISTENT DATABASE LAYER                    |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 173.39 Td
+(|  +------------------+  +------------------+  +-----------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 161.89 Td
+(|  | jobs & skills    |  | companies & tiers|  | scan_runs & source_results  |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 150.39 Td
+(|  | \(Indexed Exp/Loc\)|  | \(Domain Registry\)|  | \(14-Day Audit Trail\)        |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 138.89 Td
+(|  +------------------+  +------------------+  +-----------------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 127.38999999999999 Td
+(+---------------------------------------+---------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 115.88999999999999 Td
+(                                        | \(Async DB Read/Write Pool\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 104.38999999999999 Td
+(                                        v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 92.88999999999999 Td
+(+-------------------------------------------------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 81.38999999999999 Td
+(|                 4. FASTAPI BACKEND API & SECURITY SERVICES                    |) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 14 of 22) Tj
+ET
+endstream
+endobj
+31 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 32 0 R >>
+endobj
+32 0 obj
+<< /Length 2197 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 747.89 Td
+(|  +-----------------------+ +-----------------------+ +---------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 736.39 Td
+(|  | RESTful Route Engine  | | Dual-Role JWT RBAC    | | Jaccard Matching    |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 724.89 Td
+(|  | \(/jobs, /admin, /me\)  | | + Serverless SMTP OTP | | \(Skill Fit % Score\) |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 713.39 Td
+(|  +-----------------------+ +-----------------------+ +---------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 701.89 Td
+(+---------------------------------------+---------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 690.39 Td
+(                                        | \(JSON over HTTPS\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 678.89 Td
+(                                        v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 667.39 Td
+(+-------------------------------------------------------------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 655.89 Td
+(|                 5. CLIENT PRESENTATION LAYER \(REACT 18 + TYPESCRIPT\)          |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 644.39 Td
+(|  +-----------------------+ +-----------------------+ +---------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 632.89 Td
+(|  | Desktop 3-Column View | | Responsive Mobile UI  | | Admin Command Center|  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 621.39 Td
+(|  | \(Filters, Feed, Stats\)| | \(Collapsible Drawer\)  | | \(Telemetry Beacons\) |  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 609.89 Td
+(|  +-----------------------+ +-----------------------+ +---------------------+  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 598.39 Td
+(+-------------------------------------------------------------------------------+) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 15 of 22) Tj
+ET
+endstream
+endobj
+33 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 34 0 R >>
+endobj
+34 0 obj
+<< /Length 1455 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(How to Explain Diagram 1 in Interviews: 'I designed JobNexa as a decoupled, multi-tier) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(system. The ingestion tier uses Python's AsyncIO and HTTPX to crawl over 120 ATS) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 731.89 Td
+(boards concurrently in under a minute without blocking the server. Raw payloads pass) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 713.89 Td
+(through BeautifulSoup sanitization and deterministic NLP normalization, followed by a) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 695.89 Td
+(4-layer SHA-256 deduplicator that suppresses 98% of redundant postings. Clean records) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 677.89 Td
+(persist into PostgreSQL, which serves our FastAPI REST endpoints. The frontend is a) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 659.89 Td
+(React 18 SPA styled with Tailwind CSS, supporting both desktop 3-column views and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 641.89 Td
+(mobile drawers with zero horizontal overflow.') Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 16 of 22) Tj
+ET
+endstream
+endobj
+35 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 36 0 R >>
+endobj
+36 0 obj
+<< /Length 7494 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 761.89 Td
+(14.2 Diagram 2: ATS Ingestion, Parsing & Deduplication Workflow) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 742.89 Td
+(This sequence diagram illustrates the step-by-step lifecycle of a scraping job—from) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 724.89 Td
+(automated trigger to HTML sanitization, experience parsing, and 4-layer deduplication:) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 194.89 487.28 508.0 re f
+0.15 0.3 0.65 RG 1.5 w
+54.0 194.89 487.28 508.0 re s
+0.9 0.93 0.97 rg
+54.0 670.89 487.28 32.0 re f
+0.75 0.8 0.88 RG 0.8 w
+54.0 670.89 m 541.28 670.89 l S
+Q
+BT
+/TB 12 Tf
+0.08 0.2 0.45 rg
+66.0 686.89 Td
+(Ingestion & Deduplication Sequence Flow) Tj
+ET
+BT
+/TI 9.5 Tf
+0.35 0.4 0.48 rg
+66.0 674.89 Td
+(Figure 2: Execution sequence tracing raw payload ingestion through the 4-layer deduplication engine.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 658.89 Td
+(SCHEDULER / ADMIN          CRAWLER \(HTTPX\)            NORMALIZER & NLP       DEDUPLICATOR & DB) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 647.39 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 635.89 Td
+(       | 1. Trigger Scan \(Cron\)   |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 624.39 Td
+(       |------------------------->|                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 612.89 Td
+(       |                          | 2. GET /v1/boards/{slug} |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 601.39 Td
+(       |                          |------------------------->| \(External ATS Board\)  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 589.89 Td
+(       |                          | 3. Raw JSON + HTML Payloads                      |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 578.39 Td
+(       |                          |<-------------------------|                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 566.89 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 555.39 Td
+(       |                          | 4. Pass Raw Job Brief    |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 543.89 Td
+(       |                          |------------------------->|                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 532.39 Td
+(       |                          |                          | 5. BS4 HTML Strip     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 520.89 Td
+(       |                          |                          | 6. NLP Skill Extraction) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 509.39 Td
+(       |                          |                          | 7. Regex Exp Parsing  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 497.89 Td
+(       |                          |                          | 8. Tech Hub Resolver  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 486.39 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 474.89 Td
+(       |                          |                          | 9. Submit Normalized  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 463.39 Td
+(       |                          |                          |---------------------->|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 451.89 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 440.39 Td
+(       |                          |                          | [LAYER 1: SHA-256]    |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 428.89 Td
+(       |                          |                          | Exact Fingerprint?    |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 417.39 Td
+(       |                          |                          | -- YES: Update seen   |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 405.89 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 394.39 Td
+(       |                          |                          | [LAYER 2: URL MATCH]  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 382.89 Td
+(       |                          |                          | Canonical URL match?  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 371.39 Td
+(       |                          |                          | -- YES: Suppress copy |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 359.89 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 348.39 Td
+(       |                          |                          | [LAYER 3: TITLE FUZZY]|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 336.89 Td
+(       |                          |                          | Company+Title match?  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 325.39 Td
+(       |                          |                          | -- YES: Link duplicate|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 313.89 Td
+(       |                          |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 302.39 Td
+(       |                          |                          | [LAYER 4: UNIQUE]     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 290.89 Td
+(       |                          |                          | -- INSERT into jobs   |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 279.39 Td
+(       |                          |                          |    & job_skills       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 267.89 Td
+(       |                          |                          |<----------------------|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 256.39 Td
+(       |                          | 10. Log Telemetry Run    |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 244.89 Td
+(       |                          |------------------------------------------------->|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 233.39 Td
+(       | 11. Return Scan Summary  |                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 221.89 Td
+(       |<-------------------------|                          |                       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 210.39 Td
+(       v                          v                          v                       v) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 182.89 Td
+(How to Explain Diagram 2 in Interviews: 'When the scan runs, our AsyncIO worker) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 164.89 Td
+(fetches raw JSON from ATS endpoints. The normalizer strips HTML tags with) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 146.89 Td
+(BeautifulSoup, maps skills to canonical names, parses experience requirements, and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 128.89 Td
+(resolves tech corridors. Next, the deduplicator computes an SHA-256 hash across) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 110.88999999999999 Td
+(company, title, and the first 200 characters of the description. If an exact hash or) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 17 of 22) Tj
+ET
+endstream
+endobj
+37 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 38 0 R >>
+endobj
+38 0 obj
+<< /Length 731 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 767.89 Td
+(canonical apply_url exists in PostgreSQL, the record is flagged and duplicate insertion is) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 749.89 Td
+(suppressed. Only verified unique vacancies increment our new_jobs counter and commit) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 731.89 Td
+(to the database.') Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 18 of 22) Tj
+ET
+endstream
+endobj
+39 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 40 0 R >>
+endobj
+40 0 obj
+<< /Length 6500 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 761.89 Td
+(14.3 Diagram 3: Intelligent Job & Company Classification Pipeline) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 742.89 Td
+(This flowchart demonstrates the decision tree that partitions jobs into Fresher vs) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 724.89 Td
+(Experienced streams and categorizes companies into Startups, Mid-Market, and) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 706.89 Td
+(Enterprise tiers:) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 291.89 487.28 393.0 re f
+0.15 0.3 0.65 RG 1.5 w
+54.0 291.89 487.28 393.0 re s
+0.9 0.93 0.97 rg
+54.0 652.89 487.28 32.0 re f
+0.75 0.8 0.88 RG 0.8 w
+54.0 652.89 m 541.28 652.89 l S
+Q
+BT
+/TB 12 Tf
+0.08 0.2 0.45 rg
+66.0 668.89 Td
+(Job & Company Classification Decision Tree) Tj
+ET
+BT
+/TI 9.5 Tf
+0.35 0.4 0.48 rg
+66.0 656.89 Td
+(Figure 3: Dual-branch classification architecture partitioning candidate feeds and employer categories.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 640.89 Td
+(                      RAW INGESTED JOB BRIEF \(Title, Description, Company\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 629.39 Td
+(                                                |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 617.89 Td
+(                   +----------------------------+----------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 606.39 Td
+(                   |                                                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 594.89 Td
+(                   v                                                         v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 583.39 Td
+(    [BRANCH A: EXPERIENCE PARTITIONING]                      [BRANCH B: COMPANY CLASSIFICATION]) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 571.89 Td
+(                   |                                                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 560.39 Td
+(        Title Heuristic Check?                                    Canonical Domain Map?) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 548.89 Td
+(        - Senior, Lead, Staff, Principal,                         - razorpay.com, cred.club, etc.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 537.39 Td
+(          Architect, Director, Manager?                                      |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 525.89 Td
+(         /                          \\                                        v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 514.39 Td
+(       YES                           NO                           Resolve Company Category:) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 502.89 Td
+(        |                             |                                      |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 491.39 Td
+(        v                             v                           +----------+----------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 479.89 Td
+(Enforce Experienced          Apply 4 Regex Patterns:              |          |          |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 468.39 Td
+(\(min_exp >= 2, max = 15+\)    - Pattern A: '\(\\d+\)\\+\\s*yrs'          v          v          v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 456.89 Td
+(                             - Pattern B: '\(\\d+\)-\(\\d+\)\\s*yrs'    STARTUP   MID-MARKET  ENTERPRISE) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 445.39 Td
+(                             - Pattern C: 'minimum \(\\d+\) yrs'     \(Early/VC\) \(200-3000\)  \(MNC/GCC\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 433.89 Td
+(                             - Pattern D: '\(\\d+\) yrs hands-on'      |          |          |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 422.39 Td
+(                                              |                   +----------+----------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 410.89 Td
+(                                              v                                      |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 399.39 Td
+(                                   Boundary: min_exp <= 1?                           v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 387.89 Td
+(                                    /                  \\                 Logo & Favicon Resolver:) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 376.39 Td
+(                                  YES                   NO               - Google 128px Favicon) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 364.89 Td
+(                                   |                     |               - Fallback: UI-Avatar) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 353.39 Td
+(                                   v                     v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 341.89 Td
+(                          FRESHER STREAM         EXPERIENCED STREAM) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 330.39 Td
+(                          \(0 to 1 Years\)          \(> 1 Years Opening\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 318.89 Td
+(                          - Campus/Graduates      - Mid, Senior, Lead) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 307.39 Td
+(                          - Isolated Feed         - High Comp/Equity) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 279.89 Td
+(How to Explain Diagram 3 in Interviews: 'To eliminate the Fresher Paradox, we run) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 261.89 Td
+(dual-branch processing. In Branch A, we evaluate title heuristics first—if a title says) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 243.89 Td
+('Senior', 'Lead', or 'Architect', it automatically overrides any misleading junior text.) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 225.89 Td
+(Otherwise, four regex patterns extract exact numerical ranges. Roles with minimum) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 207.89 Td
+(experience $\\le 1$ year enter an isolated Fresher feed, while roles $> 1$ year go to) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 189.89 Td
+(Experienced engineers. In Branch B, company names map against our verified domain) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 171.89 Td
+(registry to classify employers into Startups, Mid-Market scale-ups, or Enterprise MNCs,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 153.89 Td
+(dynamically pairing each with official 128px Google branding.') Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 19 of 22) Tj
+ET
+endstream
+endobj
+41 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 42 0 R >>
+endobj
+42 0 obj
+<< /Length 5393 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 761.89 Td
+(14.4 Diagram 4: Candidate & Admin User Journey Sequence) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 742.89 Td
+(This sequence diagram outlines how user requests flow between the React 18 client,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 724.89 Td
+(FastAPI backend, serverless email bridge, and database during authentication and job) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 706.89 Td
+(discovery:) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 303.39 487.28 381.5 re f
+0.15 0.3 0.65 RG 1.5 w
+54.0 303.39 487.28 381.5 re s
+0.9 0.93 0.97 rg
+54.0 652.89 487.28 32.0 re f
+0.75 0.8 0.88 RG 0.8 w
+54.0 652.89 m 541.28 652.89 l S
+Q
+BT
+/TB 12 Tf
+0.08 0.2 0.45 rg
+66.0 668.89 Td
+(End-to-End User Journey Sequence Diagram) Tj
+ET
+BT
+/TI 9.5 Tf
+0.35 0.4 0.48 rg
+66.0 656.89 Td
+(Figure 4: Sequence diagram capturing authentication, serverless email OTP, filtered search, and match scoring.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 640.89 Td
+(CANDIDATE / ADMIN        REACT 18 CLIENT            FASTAPI BACKEND          SMTP BRIDGE / DB) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 629.39 Td
+(       |                        |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 617.89 Td
+(       | 1. Enters Email        |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 606.39 Td
+(       |----------------------->| 2. POST /auth/send-otp   |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 594.89 Td
+(       |                        |------------------------->| 3. Dispatch OTP Code    |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 583.39 Td
+(       |                        |                          |------------------------>| \(SSL:465 Nodemailer\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 571.89 Td
+(       | 4. Receives 6-Digit Code in Real Mailbox         |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 560.39 Td
+(       |<----------------------------------------------------------------------------|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 548.89 Td
+(       | 5. Submits OTP + Pass  |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 537.39 Td
+(       |----------------------->| 6. POST /verify-register |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 525.89 Td
+(       |                        |------------------------->| 7. Commit User & Hash   |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 514.39 Td
+(       |                        |                          |------------------------>| \(PostgreSQL\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 502.89 Td
+(       |                        | 8. Returns Signed JWT    |<------------------------|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 491.39 Td
+(       |                        |<-------------------------|                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 479.89 Td
+(       |                        |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 468.39 Td
+(       | 9. Selects Filters     |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 456.89 Td
+(       | \(Koramangala, Startup\) |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 445.39 Td
+(       |----------------------->| 10. GET /api/v1/jobs     |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 433.89 Td
+(       |                        | \(with query parameters\)  |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 422.39 Td
+(       |                        |------------------------->| 11. Indexed Query       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 410.89 Td
+(       |                        |                          |------------------------>| \(B-Tree Indexes\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 399.39 Td
+(       |                        |                          | 12. Return Postings     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 387.89 Td
+(       |                        |                          |<------------------------|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 376.39 Td
+(       |                        | 13. Compute Match %      |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 364.89 Td
+(       |                        | \(Jaccard + Exp Alignment\)|                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 353.39 Td
+(       | 14. Renders Feed & Card|<-------------------------|                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 341.89 Td
+(       | \(Direct Apply Link\)    |                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 330.39 Td
+(       |<-----------------------|                          |                         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 318.89 Td
+(       v                        v                          v                         v) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 20 of 22) Tj
+ET
+endstream
+endobj
+43 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 44 0 R >>
+endobj
+44 0 obj
+<< /Length 6577 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 761.89 Td
+(14.5 Diagram 5: Database Entity-Relationship \(ER\) Schema) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 742.89 Td
+(This relational diagram displays all core PostgreSQL database tables, primary keys,) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 724.89 Td
+(foreign key constraints, and relational associations:) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 125.88999999999999 487.28 577.0 re f
+0.15 0.3 0.65 RG 1.5 w
+54.0 125.88999999999999 487.28 577.0 re s
+0.9 0.93 0.97 rg
+54.0 670.89 487.28 32.0 re f
+0.75 0.8 0.88 RG 0.8 w
+54.0 670.89 m 541.28 670.89 l S
+Q
+BT
+/TB 12 Tf
+0.08 0.2 0.45 rg
+66.0 686.89 Td
+(PostgreSQL Relational Schema \(ER Diagram\)) Tj
+ET
+BT
+/TI 9.5 Tf
+0.35 0.4 0.48 rg
+66.0 674.89 Td
+(Figure 5: Entity-relationship diagram illustrating primary keys, foreign keys, and normalized associative tables.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 658.89 Td
+(  +----------------------+             +-----------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 647.39 Td
+(  |        USERS         |             |     CANDIDATE_PROFILES      |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 635.89 Td
+(  +----------------------+             +-----------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 624.39 Td
+(  | PK  id \(UUID\)        |<----------1-| PK  id \(UUID\)               |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 612.89 Td
+(  |     email \(Indexed\)  |             | FK  user_id \(UUID\)          |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 601.39 Td
+(  |     hashed_password  |             |     full_name               |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 589.89 Td
+(  |     role \(cand/admin\)|             |     target_titles \(JSON\)    |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 578.39 Td
+(  |     experience_tier  |             |     years_experience        |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 566.89 Td
+(  |     is_active        |             |     resume_url              |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 555.39 Td
+(  +----------+-----------+             +-----------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 543.89 Td
+(             |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 532.39 Td
+(             | 1:N \(bookmarks\)) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 520.89 Td
+(             v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 509.39 Td
+(  +----------------------+             +-----------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 497.89 Td
+(  |      SAVED_JOBS      |             |         COMPANIES           |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 486.39 Td
+(  +----------------------+             +-----------------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 474.89 Td
+(  | PK  id \(UUID\)        |             | PK  id \(UUID\)               |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 463.39 Td
+(  | FK  user_id \(UUID\)   |             |     name                    |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 451.89 Td
+(  | FK  job_id \(UUID\)    |---+         |     domain \(Unique\)         |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 440.39 Td
+(  +----------------------+   |         |     slug \(Unique\)           |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 428.89 Td
+(                             |         |     company_type \(Tier\)     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 417.39 Td
+(                             |         |     logo_url / tech_hub     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 405.89 Td
+(                             |         +--------------+--------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 394.39 Td
+(                             |                        | 1:N) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 382.89 Td
+(                             v                        v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 371.39 Td
+(  +------------------------------------+       +---------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 359.89 Td
+(  |                JOBS                |       |     JOB_SOURCES     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 348.39 Td
+(  +------------------------------------+       +---------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 336.89 Td
+(  | PK  id \(UUID\)                      |       | PK  id \(UUID\)       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 325.39 Td
+(  | FK  company_id \(UUID\) <------------+-------| FK  company_id\(UUID\)|) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 313.89 Td
+(  | FK  source_id \(UUID\)  <------------+-------|     connector_key   |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 302.39 Td
+(  |     title / location / apply_url   |       |     base_url        |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 290.89 Td
+(  |     min_exp / max_exp / exp_tier   |       |     last_scanned_at |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 279.39 Td
+(  |     fingerprint \(SHA-256 Unique\)   |       +---------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 267.89 Td
+(  |     is_active / posted_at          |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 256.39 Td
+(  +------------------+-----------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 244.89 Td
+(                     | 1:N) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 233.39 Td
+(                     v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 221.89 Td
+(  +------------------------------------+       +---------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 210.39 Td
+(  |             JOB_SKILLS             |       |       SKILLS        |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 198.89 Td
+(  +------------------------------------+       +---------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 187.39 Td
+(  | PK  id \(UUID\)                      |       | PK  id \(UUID\)       |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 175.89 Td
+(  | FK  job_id \(UUID\)                  |   +---|     name \(Unique\)   |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 164.39 Td
+(  | FK  skill_id \(UUID\) <--------------+---+   |     category        |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 152.89 Td
+(  |     confidence \(0.0 to 1.0\)        |       +---------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 141.39 Td
+(  +------------------------------------+) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 21 of 22) Tj
+ET
+endstream
+endobj
+45 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /TR 47 0 R /TB 48 0 R /TI 49 0 R /CR 50 0 R /CB 51 0 R >> >> /Contents 46 0 R >>
+endobj
+46 0 obj
+<< /Length 4550 >>
+stream
+BT
+/TI 9 Tf
+0.45 0.45 0.5 rg
+54.0 799.89 Td
+(JobNexa Engineering Intelligence Platform • Bengaluru IT Ecosystem) Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 793.89 m 541.28 793.89 l S
+Q
+BT
+/TB 15 Tf
+0.12 0.22 0.38 rg
+54.0 761.89 Td
+(14.6 Whiteboard Architecture Sketch & Interview Soundbites) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 742.89 Td
+(When an interviewer asks you to sketch JobNexa on a whiteboard or virtual canvas, use) Tj
+ET
+BT
+/TR 13.5 Tf
+0.15 0.15 0.15 rg
+54.0 724.89 Td
+(this concise 4-block diagram:) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 482.39 487.28 220.5 re f
+0.15 0.3 0.65 RG 1.5 w
+54.0 482.39 487.28 220.5 re s
+0.9 0.93 0.97 rg
+54.0 670.89 487.28 32.0 re f
+0.75 0.8 0.88 RG 0.8 w
+54.0 670.89 m 541.28 670.89 l S
+Q
+BT
+/TB 12 Tf
+0.08 0.2 0.45 rg
+66.0 686.89 Td
+(Whiteboard Architecture Sketch \(4-Block Model\)) Tj
+ET
+BT
+/TI 9.5 Tf
+0.35 0.4 0.48 rg
+66.0 674.89 Td
+(Figure 6: Simplified 4-block diagram ideal for live whiteboard coding interviews and architectural screens.) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 658.89 Td
+(+-----------------------+       +------------------------+       +-----------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 647.39 Td
+(|    120+ ATS BOARDS    |       | FASTAPI INGESTION CORE |       |  POSTGRESQL DATABASE  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 635.89 Td
+(|  - Greenhouse Board   |       | - AsyncIO / HTTPX Pool |       | - jobs \(B-Tree index\) |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 624.39 Td
+(|  - Lever Postings     |------>| - HTML Sanitizer \(BS4\) |------>| - companies, sources  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 612.89 Td
+(|  - Ashby HQ APIs      | HTTP  | - Regex Exp Parser     |  SQL  | - skills, job_skills  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 601.39 Td
+(|  - Partner Platforms  |       | - 4-Layer SHA-256 Dedup|       | - scan_runs audit     |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 589.89 Td
+(+-----------------------+       +------------------------+       +-----------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 578.39 Td
+(                                            |                                |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 566.89 Td
+(                                            v                                v) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 555.39 Td
+(                               +------------------------+       +-----------------------+) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 543.89 Td
+(                               |   FASTAPI REST LAYER   |<------| REACT 18 + TS CLIENT  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 532.39 Td
+(                               | - JWT / RBAC Auth      | JSON  | - Fresher / Exp feeds |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 520.89 Td
+(                               | - Real SMTP OTP Bridge |       | - Tech Hubs Selector  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 509.39 Td
+(                               | - Jaccard Skill Match  |       | - Recharts Analytics  |) Tj
+ET
+BT
+/CR 9 Tf
+0.1 0.15 0.25 rg
+66.0 497.89 Td
+(                               +------------------------+       +-----------------------+) Tj
+ET
+q
+0.96 0.97 0.99 rg
+54.0 320.89 487.28 149.5 re f
+0.2 0.45 0.85 RG 2 w
+54.0 320.89 m 54.0 470.39 l S
+0.8 0.85 0.9 RG 0.5 w
+54.0 320.89 487.28 149.5 re s
+Q
+BT
+/TB 13 Tf
+0.1 0.25 0.6 rg
+68.0 454.39 Td
+(3 Core Interview Soundbites \(Memorize for System Design Rounds\)) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 438.39 Td
+(1. Concurrency: 'We used Python's AsyncIO and HTTPX to crawl 120+ career portals) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 421.89 Td
+(concurrently in under 60 seconds, with isolated error boundaries so one failing ATS never) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 405.39 Td
+(blocks the batch.'
+2. Data Quality: 'Our 4-layer deduplication engine uses cryptographic) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 388.89 Td
+(SHA-256 fingerprinting of normalized company, title, and description text to eliminate 98%) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 372.39 Td
+(of cross-platform duplicates.'
+3. Business Logic: 'We solved the Fresher Paradox using) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 355.89 Td
+(deterministic regex range parsing and senior title overrides, strictly partitioning postings) Tj
+ET
+BT
+/TR 12.5 Tf
+0.2 0.22 0.25 rg
+68.0 339.39 Td
+(into Fresher \(0-1 Yrs\) and Experienced \(>1 Yrs\) streams.') Tj
+ET
+q
+0.85 0.88 0.92 RG 0.5 w
+54.0 72.0 m 541.28 72.0 l S
+Q
+BT
+/TR 10 Tf
+0.45 0.45 0.5 rg
+54.0 58.0 Td
+(JobNexa: System Architecture & Technical Specification Report   |   Page 22 of 22) Tj
+ET
+endstream
+endobj
+47 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>
+endobj
+48 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Bold /Encoding /WinAnsiEncoding >>
+endobj
+49 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Times-Italic /Encoding /WinAnsiEncoding >>
+endobj
+50 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>
+endobj
+51 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier-Bold /Encoding /WinAnsiEncoding >>
+endobj
+xref
+0 52
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000266 00000 n 
+0000000443 00000 n 
+0000006436 00000 n 
+0000006613 00000 n 
+0000010832 00000 n 
+0000011009 00000 n 
+0000016343 00000 n 
+0000016521 00000 n 
+0000021576 00000 n 
+0000021755 00000 n 
+0000027554 00000 n 
+0000027733 00000 n 
+0000032957 00000 n 
+0000033136 00000 n 
+0000040492 00000 n 
+0000040671 00000 n 
+0000045768 00000 n 
+0000045947 00000 n 
+0000056146 00000 n 
+0000056325 00000 n 
+0000064431 00000 n 
+0000064610 00000 n 
+0000069730 00000 n 
+0000069909 00000 n 
+0000075282 00000 n 
+0000075461 00000 n 
+0000077245 00000 n 
+0000077424 00000 n 
+0000084834 00000 n 
+0000085013 00000 n 
+0000087263 00000 n 
+0000087442 00000 n 
+0000088950 00000 n 
+0000089129 00000 n 
+0000096676 00000 n 
+0000096855 00000 n 
+0000097638 00000 n 
+0000097817 00000 n 
+0000104370 00000 n 
+0000104549 00000 n 
+0000109995 00000 n 
+0000110174 00000 n 
+0000116804 00000 n 
+0000116983 00000 n 
+0000121586 00000 n 
+0000121686 00000 n 
+0000121785 00000 n 
+0000121886 00000 n 
+0000121982 00000 n 
+trailer
+<< /Size 52 /Root 1 0 R >>
+startxref
+122083
+%%EOF

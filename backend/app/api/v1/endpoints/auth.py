@@ -1,6 +1,6 @@
 import random
 from datetime import datetime, timedelta
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, BackgroundTasks
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.user import User, EmailOTP
@@ -23,9 +23,15 @@ from app.api.deps import get_current_user
 
 router = APIRouter()
 
+ADMIN_EMAILS = {
+    "nithinvandana26@gmail.com",
+    "nithinvandana560@gmail.com",
+    settings.ADMIN_EMAIL_ID.strip().lower()
+}
+
 
 @router.post("/send-otp", response_model=SendOTPResponse)
-def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
+def send_otp(req: SendOTPRequest, background_tasks: BackgroundTasks, db: Session = Depends(get_db)):
     """Generate and dispatch a 6-digit OTP code to the provided email."""
     clean_email = req.email.strip().lower()
 
@@ -38,8 +44,14 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
             )
     elif req.purpose == "login":
         existing_user = db.query(User).filter(User.email == clean_email).first()
-        if not existing_user:
-            if clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
+        if clean_email in ADMIN_EMAILS:
+            if existing_user:
+                if existing_user.role != "admin":
+                    existing_user.role = "admin"
+                    existing_user.is_verified = True
+                    db.commit()
+                    db.refresh(existing_user)
+            else:
                 existing_user = User(
                     email=clean_email,
                     password_hash=get_password_hash("22H71A0560pandu@"),
@@ -50,28 +62,28 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
                 db.add(existing_user)
                 db.commit()
                 db.refresh(existing_user)
-            else:
-                # User logging in with a new email via OTP on user portal: auto-create as candidate
-                existing_user = User(
-                    email=clean_email,
-                    password_hash=get_password_hash("JobNexaUser2026!"),
-                    full_name=clean_email.split('@')[0],
-                    role="candidate",
-                    is_verified=True
-                )
-                db.add(existing_user)
-                db.commit()
-                db.refresh(existing_user)
-                
-                profile = CandidateProfile(
-                    user_id=existing_user.id,
-                    target_titles=["Software Engineer", "Backend Engineer"],
-                    location_preferences=["Bengaluru"],
-                    years_experience=0,
-                    work_mode="Hybrid"
-                )
-                db.add(profile)
-                db.commit()
+        elif not existing_user:
+            # User logging in with a new email via OTP on user portal: auto-create as candidate
+            existing_user = User(
+                email=clean_email,
+                password_hash=get_password_hash("JobNexaUser2026!"),
+                full_name=clean_email.split('@')[0],
+                role="candidate",
+                is_verified=True
+            )
+            db.add(existing_user)
+            db.commit()
+            db.refresh(existing_user)
+            
+            profile = CandidateProfile(
+                user_id=existing_user.id,
+                target_titles=["Software Engineer", "Backend Engineer"],
+                location_preferences=["Bengaluru"],
+                years_experience=0,
+                work_mode="Hybrid"
+            )
+            db.add(profile)
+            db.commit()
 
     # Invalidate any prior unverified OTPs for this email and purpose
     db.query(EmailOTP).filter(
@@ -96,22 +108,15 @@ def send_otp(req: SendOTPRequest, db: Session = Depends(get_db)):
     db.add(otp_entry)
     db.commit()
 
-    # Send email (via SMTP or dev logger)
-    email_delivered = send_otp_email(clean_email, otp_code, purpose=req.purpose)
-
-    dev_otp_val = None if email_delivered else otp_code
-    message_text = (
-        f"A 6-digit verification code has been sent to {clean_email}."
-        if email_delivered
-        else f"A 6-digit verification code has been generated for {clean_email}."
-    )
+    # Dispatch email in background task for sub-50ms instant HTTP response to client
+    background_tasks.add_task(send_otp_email, clean_email, otp_code, req.purpose)
 
     return SendOTPResponse(
         status="success",
-        message=message_text,
+        message=f"A 6-digit verification code has been dispatched to {clean_email}.",
         email=clean_email,
         expires_in_seconds=600,
-        dev_otp=dev_otp_val
+        dev_otp=otp_code
     )
 
 
@@ -161,11 +166,12 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
     otp_record.is_verified = True
 
     # Create new verified User
+    is_admin = clean_email in ADMIN_EMAILS
     new_user = User(
         email=clean_email,
         password_hash=get_password_hash(req.password),
         full_name=req.full_name,
-        role="candidate",  # Admin is predefined; all registrations are candidates
+        role="admin" if is_admin else "candidate",
         is_verified=True,
         created_at=now
     )
@@ -173,7 +179,7 @@ def verify_register(req: VerifyRegisterRequest, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
 
-    # Initialize candidate profile
+    # Initialize candidate profile if candidate
     exp_tier = None
     years = None
     if new_user.role == "candidate":
@@ -227,8 +233,14 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
     clean_email = req.email.strip().lower()
 
     user = db.query(User).filter(User.email == clean_email).first()
-    if not user:
-        if clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
+    if clean_email in ADMIN_EMAILS:
+        if user:
+            if user.role != "admin":
+                user.role = "admin"
+            user.is_verified = True
+            db.commit()
+            db.refresh(user)
+        else:
             user = User(
                 email=clean_email,
                 password_hash=get_password_hash("22H71A0560pandu@"),
@@ -239,26 +251,26 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
             db.add(user)
             db.commit()
             db.refresh(user)
-        else:
-            user = User(
-                email=clean_email,
-                password_hash=get_password_hash("JobNexaUser2026!"),
-                full_name=clean_email.split('@')[0],
-                role="candidate",
-                is_verified=True
-            )
-            db.add(user)
-            db.commit()
-            db.refresh(user)
-            profile = CandidateProfile(
-                user_id=user.id,
-                target_titles=["Software Engineer", "Backend Engineer"],
-                location_preferences=["Bengaluru"],
-                years_experience=0,
-                work_mode="Hybrid"
-            )
-            db.add(profile)
-            db.commit()
+    elif not user:
+        user = User(
+            email=clean_email,
+            password_hash=get_password_hash("JobNexaUser2026!"),
+            full_name=clean_email.split('@')[0],
+            role="candidate",
+            is_verified=True
+        )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        profile = CandidateProfile(
+            user_id=user.id,
+            target_titles=["Software Engineer", "Backend Engineer"],
+            location_preferences=["Bengaluru"],
+            years_experience=0,
+            work_mode="Hybrid"
+        )
+        db.add(profile)
+        db.commit()
 
     if user.disabled_at is not None:
         raise HTTPException(
@@ -298,6 +310,8 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
 
     otp_record.is_verified = True
     user.is_verified = True
+    if clean_email in ADMIN_EMAILS:
+        user.role = "admin"
     db.commit()
 
     exp_tier = None
@@ -309,10 +323,12 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
             exp_tier = "fresher" if profile.years_experience <= 1 else "experienced"
 
     access_token = create_access_token(subject=user.id)
+    resolved_role = "admin" if clean_email in ADMIN_EMAILS else user.role
+
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
-        role=user.role,
+        role=resolved_role,
         user_id=user.id,
         email=user.email,
         experience_tier=exp_tier,
@@ -323,18 +339,20 @@ def verify_otp_login(req: VerifyOTPLoginRequest, db: Session = Depends(get_db)):
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_in: UserRegister, db: Session = Depends(get_db)):
     """Register a new candidate or admin user account (direct password flow)."""
-    existing_user = db.query(User).filter(User.email == user_in.email).first()
+    clean_email = user_in.email.strip().lower()
+    existing_user = db.query(User).filter(User.email == clean_email).first()
     if existing_user:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="A user with this email address already exists"
         )
     
+    is_admin = clean_email in ADMIN_EMAILS
     user = User(
-        email=user_in.email,
+        email=clean_email,
         password_hash=get_password_hash(user_in.password),
         full_name=user_in.full_name,
-        role=user_in.role if user_in.role in ["candidate", "admin"] else "candidate",
+        role="admin" if is_admin else (user_in.role if user_in.role in ["candidate", "admin"] else "candidate"),
         is_verified=False
     )
     db.add(user)
@@ -383,10 +401,11 @@ def register(user_in: UserRegister, db: Session = Depends(get_db)):
 def login(credentials: UserLogin, db: Session = Depends(get_db)):
     """Authenticate user credentials and return a JWT access token."""
     clean_email = credentials.email.strip().lower()
+    is_admin = clean_email in ADMIN_EMAILS
     user = db.query(User).filter(User.email == clean_email).first()
     
     # Auto-provision admin if missing on fresh deployment
-    if not user and clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]:
+    if not user and is_admin:
         user = User(
             email=clean_email,
             password_hash=get_password_hash("22H71A0560pandu@"),
@@ -398,7 +417,6 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         db.commit()
         db.refresh(user)
 
-    is_admin = clean_email in ["nithinvandana26@gmail.com", settings.ADMIN_EMAIL_ID.lower()]
     valid_password = False
     if user:
         if verify_password(credentials.password, user.password_hash):
@@ -409,6 +427,14 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
             user.is_verified = True
             db.commit()
             valid_password = True
+
+        # Enforce that admin accounts are always synchronized with admin role
+        if valid_password and is_admin:
+            if user.role != "admin":
+                user.role = "admin"
+            user.is_verified = True
+            db.commit()
+            db.refresh(user)
 
     if not user or not valid_password:
         raise HTTPException(
@@ -432,10 +458,12 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
             exp_tier = "fresher" if profile.years_experience <= 1 else "experienced"
 
     access_token = create_access_token(subject=user.id)
+    resolved_role = "admin" if is_admin else user.role
+
     return TokenResponse(
         access_token=access_token,
         token_type="bearer",
-        role=user.role,
+        role=resolved_role,
         user_id=user.id,
         email=user.email,
         experience_tier=exp_tier,
@@ -444,6 +472,11 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=UserResponse)
-def get_me(current_user: User = Depends(get_current_user)):
+def get_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """Get authenticated user information."""
+    clean_email = current_user.email.strip().lower()
+    if clean_email in ADMIN_EMAILS and current_user.role != "admin":
+        current_user.role = "admin"
+        db.commit()
+        db.refresh(current_user)
     return current_user

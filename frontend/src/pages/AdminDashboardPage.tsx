@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { api } from '../api/client';
+import { api, isKnownAdminEmail } from '../api/client';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import placesToVisitBg from '../assets/places_to_visit_bg.jpg';
 import { useAlertModal } from '../components/Modals/AlertModal';
@@ -193,10 +193,19 @@ export const AdminDashboardPage: React.FC = () => {
   useEffect(() => {
     const role = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
     const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token');
-    if (!token || role !== 'admin') {
+    const email = (sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || '').toLowerCase();
+    const isAdmin = role === 'admin' || isKnownAdminEmail(email);
+
+    if (!token || !isAdmin) {
       navigate('/login?role=admin');
       return;
     }
+
+    if (isKnownAdminEmail(email) && role !== 'admin') {
+      sessionStorage.setItem('user_role', 'admin');
+      localStorage.setItem('user_role', 'admin');
+    }
+
     fetchOverview();
   }, []);
 

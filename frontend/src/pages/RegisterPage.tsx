@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, User, ArrowRight, ShieldCheck, CheckCircle2, ChevronLeft, Eye, EyeOff, Briefcase, Building2, GraduationCap } from 'lucide-react';
-import { api, isUserAuthenticated } from '../api/client';
+import { api, isUserAuthenticated, isKnownAdminEmail } from '../api/client';
 import { TopLoadingBar } from '../components/TopLoadingBar';
 import { useAlertModal } from '../components/Modals/AlertModal';
 import { Compass } from 'lucide-react';
@@ -65,21 +65,18 @@ export const RegisterPage: React.FC = () => {
 
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
-      const res = await api.sendOTP(email.trim(), 'register');
+      const res = await api.sendOTP(cleanEmail, 'register');
       setStep('otp');
       setCountdown(60);
       setSuccessMsg(res.message);
       if (res.dev_otp) {
-        try {
-          await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
-          });
-        } catch (e) {
-          console.error('Email dispatch error:', e);
-        }
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: cleanEmail, otp: res.dev_otp })
+        }).catch((err) => console.warn('Email dispatch notice:', err));
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to dispatch verification code. Please check email address.');
@@ -132,9 +129,10 @@ export const RegisterPage: React.FC = () => {
 
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
       const data = await api.verifyRegister({
-        email: email.trim(),
+        email: cleanEmail,
         otp: code,
         password: password,
         full_name: fullName.trim() || undefined,
@@ -142,11 +140,13 @@ export const RegisterPage: React.FC = () => {
         experience_tier: role === 'candidate' ? experienceTier : undefined,
         years_experience: role === 'candidate' ? (experienceTier === 'fresher' ? 0 : yearsExperience) : undefined,
       });
-      if (role === 'candidate') {
+      if (role === 'candidate' && data.role !== 'admin' && !isKnownAdminEmail(cleanEmail)) {
         sessionStorage.setItem('user_experience_tier', experienceTier);
         localStorage.setItem('user_experience_tier', experienceTier);
       }
-      if (data.role === 'admin') {
+      if (data.role === 'admin' || isKnownAdminEmail(cleanEmail)) {
+        sessionStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_role', 'admin');
         sessionStorage.setItem('trigger_admin_places_popup', 'true');
         navigate('/admin', { replace: true });
       } else {
@@ -163,20 +163,17 @@ export const RegisterPage: React.FC = () => {
     if (countdown > 0) return;
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
-      const res = await api.sendOTP(email.trim(), 'register');
+      const res = await api.sendOTP(cleanEmail, 'register');
       setCountdown(60);
       setSuccessMsg('A new verification code has been dispatched.');
       if (res.dev_otp) {
-        try {
-          await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
-          });
-        } catch (e) {
-          console.error('Email dispatch error:', e);
-        }
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: cleanEmail, otp: res.dev_otp })
+        }).catch((err) => console.warn('Email dispatch notice:', err));
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to resend code.');

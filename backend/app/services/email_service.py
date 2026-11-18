@@ -37,9 +37,10 @@ def is_smtp_configured() -> bool:
 def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> bool:
     """
     Send a professional HTML email with the 6-digit OTP code.
-    If SMTP credentials are configured, sends real email via SMTP.
-    Otherwise, logs OTP clearly for development and testing.
+    Dispatches via Vercel HTTPS Bridge (Port 443) for ultra-fast, firewall-immune delivery,
+    with direct SMTP fallback.
     """
+    clean_email = to_email.strip().lower()
     subject = f"Your JobNexa Verification Code: {otp_code}"
     action_text = "complete your registration" if purpose == "register" else "sign in to your account"
 
@@ -97,48 +98,46 @@ def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> b
 
     plain_content = f"Your JobNexa verification code is: {otp_code}. It is valid for 10 minutes."
 
-    # 0. Send via Vercel HTTPS Bridge (Uses your Gmail & App Password over Port 443 HTTPS, bypassing Render's cloud firewall)
+    # 1. Primary Dispatch: Vercel HTTPS Bridge over Port 443 HTTPS (bypasses cloud firewalls)
     try:
-        import urllib.request, json
+        import httpx
         vercel_api_url = "https://jobnexa-ai-job-intelligence.vercel.app/api/send-email"
-        payload = json.dumps({
-            "to": to_email,
-            "otp": otp_code,
-            "subject": subject,
-            "html": html_content,
-            "text": plain_content
-        }).encode("utf-8")
-        req = urllib.request.Request(
-            vercel_api_url,
-            data=payload,
-            headers={"Content-Type": "application/json", "User-Agent": "JobNexa-Backend/1.0"},
-            method="POST"
-        )
-        with urllib.request.urlopen(req, timeout=8) as resp:
-            if resp.status == 200:
-                print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via Vercel Gmail HTTPS Bridge!")
+        with httpx.Client(timeout=3.5) as client:
+            resp = client.post(
+                vercel_api_url,
+                json={
+                    "to": clean_email,
+                    "otp": otp_code,
+                    "subject": subject,
+                    "html": html_content,
+                    "text": plain_content
+                },
+                headers={"Content-Type": "application/json", "User-Agent": "JobNexa-Backend/1.0"}
+            )
+            if resp.status_code == 200:
+                print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {clean_email} via Vercel Gmail HTTPS Bridge!")
                 return True
     except Exception as e_bridge:
         print(f"[EMAIL SERVICE] Vercel Gmail Bridge attempt: {e_bridge}")
 
-    # 0. Check for HTTPS Transactional API (Bypasses Render cloud firewall on Port 443)
+    # 2. Check for HTTPS Transactional API (Resend / Brevo)
     resend_key = os.getenv("RESEND_API_KEY") or getattr(settings, "RESEND_API_KEY", None)
     if resend_key:
         try:
-            import urllib.request, json
-            req_data = json.dumps({
-                "from": os.getenv("EMAILS_FROM_EMAIL", "onboarding@resend.dev"),
-                "to": [to_email],
-                "subject": subject,
-                "html": html_content
-            }).encode("utf-8")
-            req = urllib.request.Request("https://api.resend.com/emails", data=req_data, headers={
-                "Authorization": f"Bearer {resend_key.strip()}",
-                "Content-Type": "application/json"
-            }, method="POST")
-            with urllib.request.urlopen(req, timeout=4) as r:
-                if r.status in [200, 201]:
-                    print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via Resend HTTPS API")
+            import httpx
+            with httpx.Client(timeout=3.0) as client:
+                r = client.post(
+                    "https://api.resend.com/emails",
+                    json={
+                        "from": os.getenv("EMAILS_FROM_EMAIL", "onboarding@resend.dev"),
+                        "to": [clean_email],
+                        "subject": subject,
+                        "html": html_content
+                    },
+                    headers={"Authorization": f"Bearer {resend_key.strip()}"}
+                )
+                if r.status_code in [200, 201]:
+                    print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {clean_email} via Resend HTTPS API")
                     return True
         except Exception as e_resend:
             print(f"[EMAIL SERVICE] Resend HTTPS failed: {e_resend}")
@@ -146,85 +145,63 @@ def send_otp_email(to_email: str, otp_code: str, purpose: str = "register") -> b
     brevo_key = os.getenv("BREVO_API_KEY") or getattr(settings, "BREVO_API_KEY", None)
     if brevo_key:
         try:
-            import urllib.request, json
-            req_data = json.dumps({
-                "sender": {"name": "JobNexa Intelligence", "email": "jobnexaaiplatform@gmail.com"},
-                "to": [{"email": to_email}],
-                "subject": subject,
-                "htmlContent": html_content
-            }).encode("utf-8")
-            req = urllib.request.Request("https://api.brevo.com/v3/smtp/email", data=req_data, headers={
-                "api-key": brevo_key.strip(),
-                "Content-Type": "application/json"
-            }, method="POST")
-            with urllib.request.urlopen(req, timeout=4) as r:
-                if r.status in [200, 201]:
-                    print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via Brevo HTTPS API")
+            import httpx
+            with httpx.Client(timeout=3.0) as client:
+                r = client.post(
+                    "https://api.brevo.com/v3/smtp/email",
+                    json={
+                        "sender": {"name": "JobNexa Intelligence", "email": "jobnexaaiplatform@gmail.com"},
+                        "to": [{"email": clean_email}],
+                        "subject": subject,
+                        "htmlContent": html_content
+                    },
+                    headers={"api-key": brevo_key.strip()}
+                )
+                if r.status_code in [200, 201]:
+                    print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {clean_email} via Brevo HTTPS API")
                     return True
         except Exception as e_brevo:
             print(f"[EMAIL SERVICE] Brevo HTTPS failed: {e_brevo}")
 
-    webhook_url = os.getenv("EMAIL_WEBHOOK_URL") or getattr(settings, "EMAIL_WEBHOOK_URL", None)
-    if webhook_url:
-        try:
-            import urllib.request, json
-            req_data = json.dumps({
-                "to": to_email,
-                "subject": subject,
-                "otp": otp_code,
-                "purpose": purpose,
-                "html": html_content
-            }).encode("utf-8")
-            req = urllib.request.Request(webhook_url, data=req_data, headers={
-                "Content-Type": "application/json"
-            }, method="POST")
-            with urllib.request.urlopen(req, timeout=4) as r:
-                if r.status in [200, 201]:
-                    print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via HTTPS Webhook")
-                    return True
-        except Exception as e_hook:
-            print(f"[EMAIL SERVICE] HTTPS Webhook failed: {e_hook}")
-
-    # If SMTP is configured, attempt sending real email
+    # 3. Direct SMTP (works in local dev; skip long hangs if on cloud)
     creds = get_smtp_credentials()
     if creds["user"] and creds["password"]:
-        from_addr = creds["from_email"]
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = subject
-        msg["From"] = f"{creds['from_name']} <{from_addr}>"
-        msg["To"] = to_email
+        # Check if running in cloud container with outbound SMTP block
+        is_cloud_container = bool(os.getenv("RENDER") or os.getenv("VERCEL") or os.getenv("RAILWAY_ENVIRONMENT"))
+        if not is_cloud_container:
+            from_addr = creds["from_email"]
+            msg = MIMEMultipart("alternative")
+            msg["Subject"] = subject
+            msg["From"] = f"{creds['from_name']} <{from_addr}>"
+            msg["To"] = clean_email
 
-        part1 = MIMEText(plain_content, "plain")
-        part2 = MIMEText(html_content, "html")
-        msg.attach(part1)
-        msg.attach(part2)
+            part1 = MIMEText(plain_content, "plain")
+            part2 = MIMEText(html_content, "html")
+            msg.attach(part1)
+            msg.attach(part2)
 
-        # 1. First attempt: Direct SSL via Port 465 (SMTPS) with 1.5s timeout for ultra-fast response
-        try:
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=1.5) as server:
-                server.login(creds["user"], creds["password"])
-                server.sendmail(from_addr, [to_email], msg.as_string())
-            print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via SMTP_SSL (port 465)")
-            return True
-        except Exception as e_ssl:
-            print(f"[EMAIL SERVICE] Port 465 SSL failed/timed out: {e_ssl}")
+            # SSL via Port 465 (1.0s timeout)
+            try:
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, timeout=1.0) as server:
+                    server.login(creds["user"], creds["password"])
+                    server.sendmail(from_addr, [clean_email], msg.as_string())
+                print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {clean_email} via SMTP_SSL (port 465)")
+                return True
+            except Exception as e_ssl:
+                print(f"[EMAIL SERVICE] Port 465 SSL failed/timed out: {e_ssl}")
 
-        # 2. Second attempt: STARTTLS via Port 587
-        try:
-            target_port = creds["port"] if creds["port"] != 465 else 587
-            with smtplib.SMTP(creds["host"], target_port, timeout=1.5) as server:
-                server.starttls()
-                server.login(creds["user"], creds["password"])
-                server.sendmail(from_addr, [to_email], msg.as_string())
-            print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {to_email} via SMTP (port {target_port})")
-            return True
-        except Exception as e_tls:
-            print(f"[EMAIL SERVICE] Port {target_port} STARTTLS failed/timed out: {e_tls}")
+            # STARTTLS via Port 587 (1.0s timeout)
+            try:
+                target_port = creds["port"] if creds["port"] != 465 else 587
+                with smtplib.SMTP(creds["host"], target_port, timeout=1.0) as server:
+                    server.starttls()
+                    server.login(creds["user"], creds["password"])
+                    server.sendmail(from_addr, [clean_email], msg.as_string())
+                print(f"[EMAIL SERVICE] Successfully delivered OTP {otp_code} to {clean_email} via SMTP (port {target_port})")
+                return True
+            except Exception as e_tls:
+                print(f"[EMAIL SERVICE] Port {target_port} STARTTLS failed/timed out: {e_tls}")
 
-        # If direct SMTP attempts failed (e.g. Render cloud firewall blocks outbound SMTP ports):
-        print(f"[EMAIL SERVICE DEV LOG] [Outbound SMTP blocked by host] OTP for {to_email}: {otp_code}")
-        return False
-    else:
-        # Development / Waiting for User SMTP credentials
-        print(f"[EMAIL SERVICE DEV LOG] [SMTP not configured] To: {to_email} | OTP: {otp_code} | Purpose: {purpose}")
-        return False
+    # Development / Fallback log
+    print(f"[EMAIL SERVICE DEV LOG] OTP for {clean_email}: {otp_code} | Purpose: {purpose}")
+    return False

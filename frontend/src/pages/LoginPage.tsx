@@ -14,7 +14,7 @@ import {
   User,
   AlertCircle
 } from 'lucide-react';
-import { api, isUserAuthenticated } from '../api/client';
+import { api, isUserAuthenticated, isKnownAdminEmail } from '../api/client';
 import { TopLoadingBar } from '../components/TopLoadingBar';
 import { useAlertModal } from '../components/Modals/AlertModal';
 import { Compass } from 'lucide-react';
@@ -69,8 +69,12 @@ export const LoginPage: React.FC = () => {
     setSuccessMsg(null);
     setOtpStep('request');
     setOtpDigits(['', '', '', '', '', '']);
-    setEmail('');
-    setPassword('');
+    if (newRole === 'admin') {
+      setEmail('nithinvandana26@gmail.com');
+    } else {
+      setEmail('');
+      setPassword('');
+    }
     if (newRole !== 'admin' && authMethod === 'two_factor') {
       setAuthMethod('password');
     }
@@ -93,9 +97,13 @@ export const LoginPage: React.FC = () => {
     }
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
-      const data = await api.login(email.trim(), password);
-      if (data.role === 'admin') {
+      const data = await api.login(cleanEmail, password);
+      const isAdminUser = data.role === 'admin' || isKnownAdminEmail(cleanEmail) || portalRole === 'admin';
+      if (isAdminUser) {
+        sessionStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_role', 'admin');
         sessionStorage.setItem('trigger_admin_places_popup', 'true');
         navigate('/admin', { replace: true });
       } else {
@@ -117,21 +125,19 @@ export const LoginPage: React.FC = () => {
     }
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
-      const res = await api.sendOTP(email.trim(), 'login');
+      const res = await api.sendOTP(cleanEmail, 'login');
       setOtpStep('verify');
       setCountdown(60);
       setSuccessMsg(res.message);
       if (res.dev_otp) {
-        try {
-          await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
-          });
-        } catch (e) {
-          console.error('Email dispatch error:', e);
-        }
+        // Fast asynchronous non-blocking dispatch via Vercel edge bridge
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: cleanEmail, otp: res.dev_otp })
+        }).catch((err) => console.warn('Email dispatch notice:', err));
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Failed to send OTP. Please ensure this email is registered.');
@@ -149,24 +155,21 @@ export const LoginPage: React.FC = () => {
     }
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
       // Step 1: Check password credentials
-      await api.login(email.trim(), password);
+      await api.login(cleanEmail, password);
       // Step 2: Request real OTP for second factor
-      const res = await api.sendOTP(email.trim(), 'login');
+      const res = await api.sendOTP(cleanEmail, 'login');
       setOtpStep('verify');
       setCountdown(60);
-      setSuccessMsg('Step 1 verified! 6-digit OTP has been dispatched to ' + email.trim());
+      setSuccessMsg('Step 1 verified! 6-digit OTP has been dispatched to ' + cleanEmail);
       if (res.dev_otp) {
-        try {
-          await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ to: email.trim(), otp: res.dev_otp })
-          });
-        } catch (e) {
-          console.error('Email dispatch error:', e);
-        }
+        fetch('/api/send-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ to: cleanEmail, otp: res.dev_otp })
+        }).catch((err) => console.warn('Email dispatch notice:', err));
       }
     } catch (err: any) {
       setError(err.response?.data?.detail || 'Password verification failed. Please try again.');
@@ -218,9 +221,13 @@ export const LoginPage: React.FC = () => {
     }
     setLoading(true);
     setError(null);
+    const cleanEmail = email.trim().toLowerCase();
     try {
-      const data = await api.verifyOTPLogin(email.trim(), code);
-      if (data.role === 'admin') {
+      const data = await api.verifyOTPLogin(cleanEmail, code);
+      const isAdminUser = data.role === 'admin' || isKnownAdminEmail(cleanEmail) || portalRole === 'admin';
+      if (isAdminUser) {
+        sessionStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_role', 'admin');
         sessionStorage.setItem('trigger_admin_places_popup', 'true');
         navigate('/admin', { replace: true });
       } else {
@@ -239,6 +246,8 @@ export const LoginPage: React.FC = () => {
     setError(null);
     try {
       if (targetRole === 'admin') {
+        sessionStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_role', 'admin');
         sessionStorage.setItem('trigger_admin_places_popup', 'true');
         await api.quickLoginAsAdmin();
         navigate('/admin', { replace: true });

@@ -1,5 +1,42 @@
 import nodemailer from 'nodemailer';
 
+// Deduplication map to prevent repeated sends when both frontend and backend dispatch in parallel
+const recentDispatches = new Map();
+
+if (typeof setInterval !== 'undefined') {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [key, timestamp] of recentDispatches.entries()) {
+      if (now - timestamp > 60000) {
+        recentDispatches.delete(key);
+      }
+    }
+  }, 30000);
+}
+
+const smtpUser = process.env.SMTP_USER || 'jobnexaaiplatform@gmail.com';
+const smtpPass = (process.env.SMTP_PASSWORD || 'rtunkeubohmrzeya').replace(/\s+/g, '');
+
+// Module-level connection pool for fast subsequent email deliveries
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  pool: true,
+  maxConnections: 5,
+  maxMessages: 100,
+  connectionTimeout: 5000,
+  greetingTimeout: 5000,
+  socketTimeout: 5000,
+  auth: {
+    user: smtpUser,
+    pass: smtpPass,
+  },
+  tls: {
+    rejectUnauthorized: false
+  }
+});
+
 export default async function handler(req, res) {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -24,25 +61,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Recipient "to" email is required' });
   }
 
-  const smtpUser = process.env.SMTP_USER || 'jobnexaaiplatform@gmail.com';
-  const smtpPass = (process.env.SMTP_PASSWORD || 'rtunkeubohmrzeya').replace(/\s+/g, '');
+  const cleanTo = to.trim().toLowerCase();
+  const cacheKey = `${cleanTo}:${otp || 'general'}`;
+  const now = Date.now();
 
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: smtpUser,
-      pass: smtpPass,
-    },
-    tls: {
-      rejectUnauthorized: false
-    }
-  });
+  // Deduplicate if sent within last 20 seconds
+  if (recentDispatches.has(cacheKey) && (now - recentDispatches.get(cacheKey) < 20000)) {
+    return res.status(200).json({ success: true, message: `OTP already dispatched to ${cleanTo}` });
+  }
+  recentDispatches.set(cacheKey, now);
 
   const mailOptions = {
     from: `"JobNexa Intelligence" <${smtpUser}>`,
-    to: to,
+    to: cleanTo,
     subject: subject || `Your JobNexa Verification Code: ${otp || ''}`,
     text: text || `Your JobNexa verification code is: ${otp}. It is valid for 10 minutes.`,
     html: html || `
@@ -79,10 +110,11 @@ export default async function handler(req, res) {
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log(`[VERCEL EMAIL] Successfully sent email to ${to}`);
-    return res.status(200).json({ success: true, message: `Email delivered to ${to}` });
+    console.log(`[VERCEL EMAIL] Successfully sent email to ${cleanTo}`);
+    return res.status(200).json({ success: true, message: `Email delivered to ${cleanTo}` });
   } catch (err) {
     console.error('[VERCEL EMAIL ERROR]', err);
+    recentDispatches.delete(cacheKey);
     return res.status(500).json({ success: false, error: err.message });
   }
 }

@@ -4,7 +4,7 @@ import {
   Briefcase, MapPin, User, LogOut, Shield, Compass, 
   Rocket, LayoutDashboard, Menu, X, Building2 
 } from 'lucide-react';
-import { api, isUserAuthenticated } from '../api/client';
+import { api, isUserAuthenticated, isKnownAdminEmail } from '../api/client';
 import { useLoadingBar } from './TopLoadingBar';
 
 interface NavbarProps {
@@ -16,10 +16,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const location = useLocation();
   const { triggerLoading } = useLoadingBar();
   const authenticated = isUserAuthenticated();
-  const userRole = sessionStorage.getItem('user_role');
-  const userEmail = sessionStorage.getItem('user_email');
+  const userRole = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
+  const userEmail = (sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || '').toLowerCase();
+  const isAdmin = userRole === 'admin' || isKnownAdminEmail(userEmail);
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  React.useEffect(() => {
+    if (isKnownAdminEmail(userEmail) && userRole !== 'admin') {
+      sessionStorage.setItem('user_role', 'admin');
+      localStorage.setItem('user_role', 'admin');
+    }
+  }, [userEmail, userRole]);
 
   const handleLogout = () => {
     api.logout();
@@ -157,7 +165,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
                 <span>Profile</span>
               </Link>
 
-              {userRole === 'admin' && (
+              {isAdmin && (
                 <Link
                   to="/admin?tab=Dashboard"
                   state={{ tab: 'Dashboard' }}
@@ -187,7 +195,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               </div>
 
               {/* Role Indicator (Strictly view only - no unauthorized role switching) */}
-              {userRole === 'admin' ? (
+              {isAdmin ? (
                 <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs">
                   <Shield className="w-3.5 h-3.5 text-amber-600" /> Admin Mode
                 </span>
@@ -331,7 +339,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               <span>Profile</span>
             </Link>
 
-            {userRole === 'admin' && (
+            {isAdmin && (
               <Link
                 to="/admin?tab=Dashboard"
                 state={{ tab: 'Dashboard' }}

@@ -19,15 +19,30 @@ export const apiClient = axios.create({
 
 // Interceptor to attach Authorization Bearer Token
 apiClient.interceptors.request.use((config) => {
-  const token = sessionStorage.getItem('access_token');
+  const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
+export const ADMIN_EMAILS = [
+  'nithinvandana26@gmail.com',
+  'nithinvandana560@gmail.com'
+];
+
+export const isKnownAdminEmail = (email?: string | null): boolean => {
+  if (!email) return false;
+  return ADMIN_EMAILS.includes(email.trim().toLowerCase());
+};
+
+export const resolveUserRole = (email?: string | null, serverRole?: string | null): string => {
+  if (isKnownAdminEmail(email)) return 'admin';
+  return serverRole || 'candidate';
+};
+
 export const isUserAuthenticated = (): boolean => {
-  const token = sessionStorage.getItem('access_token');
+  const token = sessionStorage.getItem('access_token') || localStorage.getItem('access_token');
   return Boolean(token);
 };
 
@@ -36,16 +51,23 @@ export const api = {
   login: async (email: string, password: string) => {
     const response = await apiClient.post('/auth/login', { email, password });
     if (response.data.access_token) {
+      const cleanEmail = (response.data.email || email).trim().toLowerCase();
+      const role = resolveUserRole(cleanEmail, response.data.role);
+      response.data.role = role;
       sessionStorage.setItem('access_token', response.data.access_token);
-      sessionStorage.setItem('user_role', response.data.role);
-      sessionStorage.setItem('user_email', response.data.email);
+      sessionStorage.setItem('user_role', role);
+      sessionStorage.setItem('user_email', cleanEmail);
+      if (role === 'admin') {
+        localStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_email', cleanEmail);
+      } else {
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('user_email');
+      }
       if (response.data.experience_tier) {
         sessionStorage.setItem('user_experience_tier', response.data.experience_tier);
         localStorage.setItem('user_experience_tier', response.data.experience_tier);
       }
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user_role');
-      localStorage.removeItem('user_email');
     }
     return response.data;
   },
@@ -77,16 +99,23 @@ export const api = {
   }) => {
     const response = await apiClient.post('/auth/verify-register', data);
     if (response.data.access_token) {
+      const cleanEmail = (response.data.email || data.email).trim().toLowerCase();
+      const role = resolveUserRole(cleanEmail, response.data.role);
+      response.data.role = role;
       sessionStorage.setItem('access_token', response.data.access_token);
-      sessionStorage.setItem('user_role', response.data.role);
-      sessionStorage.setItem('user_email', response.data.email);
+      sessionStorage.setItem('user_role', role);
+      sessionStorage.setItem('user_email', cleanEmail);
+      if (role === 'admin') {
+        localStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_email', cleanEmail);
+      } else {
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('user_email');
+      }
       if (response.data.experience_tier) {
         sessionStorage.setItem('user_experience_tier', response.data.experience_tier);
         localStorage.setItem('user_experience_tier', response.data.experience_tier);
       }
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user_role');
-      localStorage.removeItem('user_email');
     }
     return response.data;
   },
@@ -94,27 +123,36 @@ export const api = {
   verifyOTPLogin: async (email: string, otp: string) => {
     const response = await apiClient.post('/auth/verify-otp-login', { email, otp });
     if (response.data.access_token) {
+      const cleanEmail = (response.data.email || email).trim().toLowerCase();
+      const role = resolveUserRole(cleanEmail, response.data.role);
+      response.data.role = role;
       sessionStorage.setItem('access_token', response.data.access_token);
-      sessionStorage.setItem('user_role', response.data.role);
-      sessionStorage.setItem('user_email', response.data.email);
+      sessionStorage.setItem('user_role', role);
+      sessionStorage.setItem('user_email', cleanEmail);
+      if (role === 'admin') {
+        localStorage.setItem('user_role', 'admin');
+        localStorage.setItem('user_email', cleanEmail);
+      } else {
+        localStorage.removeItem('user_role');
+        localStorage.removeItem('user_email');
+      }
       if (response.data.experience_tier) {
         sessionStorage.setItem('user_experience_tier', response.data.experience_tier);
         localStorage.setItem('user_experience_tier', response.data.experience_tier);
       }
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('user_role');
-      localStorage.removeItem('user_email');
     }
     return response.data;
   },
-
 
   quickLoginAsCandidate: async () => {
     return api.login('nithin@example.com', 'NithinPass123!');
   },
 
   quickLoginAsAdmin: async () => {
-    return await api.login('nithinvandana26@gmail.com', '9347388372pandu@');
+    const res = await api.login('nithinvandana26@gmail.com', '22H71A0560pandu@');
+    sessionStorage.setItem('user_role', 'admin');
+    localStorage.setItem('user_role', 'admin');
+    return res;
   },
 
   logout: () => {
@@ -181,7 +219,6 @@ export const api = {
     }>('/jobs/auto-scan-check', null, { params: { force } });
     return response.data;
   },
-
 
   // Candidate Matching & Profile
   getProfile: async () => {
