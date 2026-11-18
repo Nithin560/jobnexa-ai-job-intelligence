@@ -5,10 +5,11 @@ import { Job } from '../types';
 import { MatchBadge } from '../components/MatchBadge';
 import { SkillGapAnalysis } from '../components/SkillGapAnalysis';
 import { formatJobRealTime } from '../components/JobCard';
-import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { Briefcase, MapPin, ExternalLink, Bookmark, ArrowLeft, Building, Clock, CheckCircle, ShieldCheck, ShieldAlert, Lock } from 'lucide-react';
 import { JobDetailSkeleton } from '../components/Skeletons/JobDetailSkeleton';
 import { TopLoadingBar, useLoadingBar } from '../components/TopLoadingBar';
 import { useAlertModal } from '../components/Modals/AlertModal';
+import { isDemoCandidateUser } from '../api/client';
 
 export const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -17,7 +18,8 @@ export const JobDetailPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'details' | 'match' | 'company'>('match');
   const [loading, setLoading] = useState(true);
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
-  const { showAdminRestrictedModal, showAlert, showSuccess, showError, showWarning, showInfo, closeAlert } = useAlertModal();
+  const isDemo = isDemoCandidateUser();
+  const { showAdminRestrictedModal, showDemoRestrictedModal, showAlert, showSuccess, showError, showWarning, showInfo, closeAlert } = useAlertModal();
   const [isSaved, setIsSaved] = useState<boolean>(false);
 
   useEffect(() => {
@@ -242,6 +244,16 @@ export const JobDetailPage: React.FC = () => {
                 <ShieldAlert className="w-4 h-4 text-amber-500 shrink-0" />
                 <span>Admin Mode (Apply Disabled)</span>
               </button>
+            ) : isDemo ? (
+              <button
+                type="button"
+                onClick={showDemoRestrictedModal}
+                className="px-6 py-3 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-sm rounded-2xl border border-purple-200 hover:border-purple-300 cursor-pointer flex items-center gap-2 transition shadow-2xs"
+                title="Candidate Demo Mode: Applications are restricted. Click to create a free account."
+              >
+                <Lock className="w-4 h-4 text-purple-600 shrink-0" />
+                <span>Apply (Demo Restricted)</span>
+              </button>
             ) : (
               <a
                 href={job.apply_url}
@@ -305,7 +317,22 @@ export const JobDetailPage: React.FC = () => {
       {activeTab === 'company' && (
         <div className="bg-white rounded-2xl border border-slate-200 p-8 space-y-4">
           <h3 className="font-bold text-slate-900 text-lg">About {job.company_name}</h3>
-          <p className="text-sm text-slate-600">Official Careers Page: <a href={job.company_careers_url || job.apply_url || '/'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">{job.company_careers_url || job.apply_url}</a></p>
+          <p className="text-sm text-slate-600">
+            Official Careers Page:{' '}
+            {isDemo ? (
+              <button
+                type="button"
+                onClick={showDemoRestrictedModal}
+                className="text-purple-600 underline font-semibold cursor-pointer"
+              >
+                {job.company_careers_url || job.apply_url} (Demo Restricted)
+              </button>
+            ) : (
+              <a href={job.company_careers_url || job.apply_url || '/'} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline font-semibold">
+                {job.company_careers_url || job.apply_url}
+              </a>
+            )}
+          </p>
         </div>
       )}
 

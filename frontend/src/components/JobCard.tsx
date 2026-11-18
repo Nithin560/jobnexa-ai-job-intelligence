@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, ShieldCheck, ShieldAlert } from 'lucide-react';
+import { MapPin, Briefcase, Clock, Bookmark, ExternalLink, ShieldCheck, ShieldAlert, Lock } from 'lucide-react';
 import { Job } from '../types';
 import { useAlertModal } from './Modals/AlertModal';
+import { isDemoCandidateUser } from '../api/client';
 
 interface JobCardProps {
   job: Job;
@@ -52,7 +53,8 @@ export const formatJobRealTime = (postedAt?: string, lastSeenAt?: string): strin
 export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
   const isExpired = job.status === 'expired' || job.status === 'closed' || job.status === 'stale';
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
-  const { showAdminRestrictedModal } = useAlertModal();
+  const isDemo = isDemoCandidateUser();
+  const { showAdminRestrictedModal, showDemoRestrictedModal } = useAlertModal();
 
   return (
     <div className={`bg-white rounded-2xl border p-5 transition group relative ${isExpired ? 'border-amber-200 bg-slate-50/50' : 'border-slate-200 hover:shadow-md hover:border-slate-300'}`}>
@@ -256,6 +258,16 @@ export const JobCard: React.FC<JobCardProps> = ({ job, onToggleSave }) => {
             >
               <ShieldAlert className="w-3.5 h-3.5 text-amber-500 shrink-0" />
               <span>Admin (Cannot Apply)</span>
+            </button>
+          ) : isDemo ? (
+            <button
+              type="button"
+              onClick={showDemoRestrictedModal}
+              className="px-4 py-2 bg-purple-50 hover:bg-purple-100 text-purple-700 font-bold text-xs rounded-xl transition flex items-center gap-1.5 border border-purple-200 hover:border-purple-300 shadow-2xs cursor-pointer"
+              title="Candidate Demo Mode: Applications are restricted. Click to create a free account."
+            >
+              <Lock className="w-3.5 h-3.5 text-purple-600 shrink-0" />
+              <span>Apply (Demo Restricted)</span>
             </button>
           ) : (
             <a

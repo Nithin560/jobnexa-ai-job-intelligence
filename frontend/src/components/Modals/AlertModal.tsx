@@ -51,6 +51,7 @@ interface AlertModalContextType {
   showInfo: (title: string, message: string, action?: AlertModalAction) => void;
   showConfirm: (options: ConfirmModalOptions) => void;
   showAdminRestrictedModal: () => void;
+  showDemoRestrictedModal: () => void;
   showProfileUpdatedModal: (options: {
     targetTitle: string;
     skillsCount: number;
@@ -70,6 +71,7 @@ const AlertModalContext = createContext<AlertModalContextType>({
   showInfo: () => {},
   showConfirm: () => {},
   showAdminRestrictedModal: () => {},
+  showDemoRestrictedModal: () => {},
   showProfileUpdatedModal: () => {},
   showComingSoonPlacesToVisitModal: () => {},
   closeAlert: () => {},
@@ -98,6 +100,10 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     if (typeof opts === 'string') {
       if (opts.toLowerCase().includes('admin accounts are not allowed to apply') || opts.toLowerCase().includes('application restricted')) {
         showAdminRestrictedModal();
+        return;
+      }
+      if (opts.toLowerCase().includes('demo account') || opts.toLowerCase().includes('demo restricted') || opts.toLowerCase().includes('applications restricted in demo')) {
+        showDemoRestrictedModal();
         return;
       }
       setOptions({
@@ -216,6 +222,26 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setIsOpen(true);
   }, []);
 
+  const showDemoRestrictedModal = useCallback(() => {
+    setOptions({
+      title: 'Demo Mode: Applications Restricted',
+      badge: 'Candidate Demo Account',
+      message: 'Candidate Demo accounts cannot submit direct job applications.',
+      type: 'warning',
+      details: 'You are currently exploring JobNexa in Candidate Demo Mode. All discovery capabilities—including real-time Bengaluru job feeds, multi-factor ATS indexing, AI skill match scoring, and bookmarking—are 100% active. To apply directly on official employer career portals (Greenhouse, Lever, Ashby, Workday), please register a free candidate account.',
+      confirmText: 'Keep Exploring',
+      actionButton: {
+        label: 'Create Free Account to Apply',
+        variant: 'primary',
+        onClick: () => {
+          setIsOpen(false);
+          window.location.href = '/register';
+        },
+      },
+    });
+    setIsOpen(true);
+  }, []);
+
   const showProfileUpdatedModal = useCallback((opts: {
     targetTitle: string;
     skillsCount: number;
@@ -322,6 +348,7 @@ export const AlertModalProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         showInfo,
         showConfirm,
         showAdminRestrictedModal,
+        showDemoRestrictedModal,
         showProfileUpdatedModal,
         showComingSoonPlacesToVisitModal,
         closeAlert,

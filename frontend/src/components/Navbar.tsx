@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { 
   Briefcase, MapPin, User, LogOut, Shield, Compass, 
-  Rocket, LayoutDashboard, Menu, X, Building2 
+  Rocket, LayoutDashboard, Menu, X, Building2, Sparkles 
 } from 'lucide-react';
-import { api, isUserAuthenticated, isKnownAdminEmail } from '../api/client';
+import { api, isUserAuthenticated, isKnownAdminEmail, isDemoCandidateUser } from '../api/client';
 import { useLoadingBar } from './TopLoadingBar';
 
 interface NavbarProps {
@@ -19,6 +19,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
   const userRole = sessionStorage.getItem('user_role') || localStorage.getItem('user_role');
   const userEmail = (sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || '').toLowerCase();
   const isAdmin = userRole === 'admin' || isKnownAdminEmail(userEmail);
+  const isDemo = isDemoCandidateUser();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/register';
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -198,6 +199,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenAuth }) => {
               {isAdmin ? (
                 <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs">
                   <Shield className="w-3.5 h-3.5 text-amber-600" /> Admin Mode
+                </span>
+              ) : isDemo ? (
+                <span className="inline-flex items-center gap-1 bg-purple-50 text-purple-700 border border-purple-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs" title="Exploring JobNexa in Candidate Demo Mode. Direct job applications restricted.">
+                  <Sparkles className="w-3.5 h-3.5 text-purple-600" /> Candidate Demo
                 </span>
               ) : (
                 <span className="inline-flex items-center gap-1 bg-blue-50 text-blue-700 border border-blue-200 text-xs font-bold px-2.5 py-1 rounded-xl shadow-2xs">

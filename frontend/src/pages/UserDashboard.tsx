@@ -8,8 +8,9 @@ import { useAlertModal } from '../components/Modals/AlertModal';
 import { Job } from '../types';
 import { 
   LayoutDashboard, User, FileText, Compass, Bookmark, CheckCircle, Bell, Building2, MapPin, 
-  Target, Settings, Edit3, ArrowUpRight, ArrowLeft, Shield, Loader2
+  Target, Settings, Edit3, ArrowUpRight, ArrowLeft, Shield, Loader2, Sparkles
 } from 'lucide-react';
+import { isDemoCandidateUser } from '../api/client';
 
 export const UserDashboard: React.FC = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export const UserDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'recommended' | 'saved'>('recommended');
   const [loading, setLoading] = useState(true);
   const isAdmin = (sessionStorage.getItem('user_role') || localStorage.getItem('user_role')) === 'admin';
+  const isDemo = isDemoCandidateUser();
   const { showSuccess, showInfo, showError, showComingSoonPlacesToVisitModal } = useAlertModal();
 
   const handleToggleSave = async (jobId: string) => {
@@ -100,6 +102,24 @@ export const UserDashboard: React.FC = () => {
           </Link>
         )}
       </div>
+
+      {/* Candidate Demo Mode Informational Banner */}
+      {isDemo && !isAdmin && (
+        <div className="bg-purple-50/80 border border-purple-200/90 rounded-2xl p-4 flex items-center justify-between text-xs text-purple-900 shadow-2xs gap-3">
+          <div className="flex items-center gap-2.5">
+            <Sparkles className="w-4 h-4 text-purple-600 shrink-0" />
+            <span>
+              <strong>Candidate Demo Active:</strong> You are exploring candidate features without registering. Job discovery, AI match score, and bookmarking are active. (Direct job applications are disabled in demo mode).
+            </span>
+          </div>
+          <Link
+            to="/register"
+            className="font-bold text-purple-800 hover:text-purple-950 underline shrink-0 whitespace-nowrap"
+          >
+            Create Free Account to Apply →
+          </Link>
+        </div>
+      )}
 
       {/* Admin Mode Informational Banner */}
       {isAdmin && (

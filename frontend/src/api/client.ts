@@ -46,6 +46,12 @@ export const isUserAuthenticated = (): boolean => {
   return Boolean(token);
 };
 
+export const isDemoCandidateUser = (): boolean => {
+  const isDemoFlag = sessionStorage.getItem('is_demo_user') === 'true' || localStorage.getItem('is_demo_user') === 'true';
+  const email = (sessionStorage.getItem('user_email') || localStorage.getItem('user_email') || '').trim().toLowerCase();
+  return isDemoFlag || email === 'candidate.demo@jobnexa.ai' || email === 'nithin@example.com';
+};
+
 export const api = {
   // Authentication
   login: async (email: string, password: string) => {
@@ -57,6 +63,8 @@ export const api = {
       sessionStorage.setItem('access_token', response.data.access_token);
       sessionStorage.setItem('user_role', role);
       sessionStorage.setItem('user_email', cleanEmail);
+      sessionStorage.removeItem('is_demo_user');
+      localStorage.removeItem('is_demo_user');
       if (role === 'admin') {
         localStorage.setItem('user_role', 'admin');
         localStorage.setItem('user_email', cleanEmail);
@@ -105,6 +113,8 @@ export const api = {
       sessionStorage.setItem('access_token', response.data.access_token);
       sessionStorage.setItem('user_role', role);
       sessionStorage.setItem('user_email', cleanEmail);
+      sessionStorage.removeItem('is_demo_user');
+      localStorage.removeItem('is_demo_user');
       if (role === 'admin') {
         localStorage.setItem('user_role', 'admin');
         localStorage.setItem('user_email', cleanEmail);
@@ -129,6 +139,8 @@ export const api = {
       sessionStorage.setItem('access_token', response.data.access_token);
       sessionStorage.setItem('user_role', role);
       sessionStorage.setItem('user_email', cleanEmail);
+      sessionStorage.removeItem('is_demo_user');
+      localStorage.removeItem('is_demo_user');
       if (role === 'admin') {
         localStorage.setItem('user_role', 'admin');
         localStorage.setItem('user_email', cleanEmail);
@@ -151,6 +163,8 @@ export const api = {
         sessionStorage.setItem('access_token', response.data.access_token);
         sessionStorage.setItem('user_role', 'candidate');
         sessionStorage.setItem('user_email', response.data.email || 'candidate.demo@jobnexa.ai');
+        sessionStorage.setItem('is_demo_user', 'true');
+        localStorage.setItem('is_demo_user', 'true');
         const tier = response.data.experience_tier || 'fresher';
         sessionStorage.setItem('user_experience_tier', tier);
         localStorage.setItem('user_experience_tier', tier);
@@ -161,13 +175,18 @@ export const api = {
     } catch (err) {
       console.warn('[Demo Candidate Endpoint Fallback to Password Login]', err);
     }
-    return api.login('nithin@example.com', 'NithinPass123!');
+    const fallbackRes = await api.login('nithin@example.com', 'NithinPass123!');
+    sessionStorage.setItem('is_demo_user', 'true');
+    localStorage.setItem('is_demo_user', 'true');
+    return fallbackRes;
   },
 
   quickLoginAsAdmin: async () => {
     const res = await api.login('nithinvandana26@gmail.com', '22H71A0560pandu@');
     sessionStorage.setItem('user_role', 'admin');
     localStorage.setItem('user_role', 'admin');
+    sessionStorage.removeItem('is_demo_user');
+    localStorage.removeItem('is_demo_user');
     return res;
   },
 
@@ -177,6 +196,7 @@ export const api = {
     localStorage.removeItem('user_role');
     localStorage.removeItem('user_email');
     localStorage.removeItem('user_experience_tier');
+    localStorage.removeItem('is_demo_user');
   },
 
   // Jobs Search & Details
