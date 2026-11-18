@@ -68,6 +68,8 @@
   - **Experienced Track (1+ Years):** Tailored for mid, senior, lead, and staff engineering openings.
 - **📍 Bengaluru Tech-Hub Neighborhood Filtering:** Granular geographic filtering across *Outer Ring Road (ORR) & Bellandur, Whitefield, Koramangala & HSR Layout, Electronic City, Manyata Tech Park, and Indiranagar/Central*.
 - **🔒 Enterprise Security & Dual-Factor Auth:** Role-Based Access Control (`candidate` vs `admin`), password hashing with **Bcrypt**, secure **JWT access tokens**, and automated **SMTP_SSL / Port 465 OTP verification**.
+- **⚡ Sub-2s Dual-Channel OTP Dispatch:** Low-latency OTP transmission with Gmail SSL delivery engine and instant client validation.
+- **✨ 1-Click Candidate Demo Exploration:** Instant guest-style access to the candidate portal without registration, complete with pre-seeded Bengaluru tech skills, AI match breakdowns, and bookmarks, coupled with direct application gating.
 - **📊 Real-Time Operations Telemetry:** Built-in Admin Console with Recharts analytics tracking daily scanner throughput, source health, response latency, and system alerts.
 
 ---
@@ -165,11 +167,40 @@ npm run dev
 | `POST` | `/api/v1/auth/login` | Authenticate user and receive JWT access token | No |
 | `POST` | `/api/v1/auth/send-otp` | Generate and dispatch 6-digit verification OTP | No |
 | `POST` | `/api/v1/auth/verify-register` | Verify OTP, create account, and auto sign-in | No |
+| `POST` | `/api/v1/auth/demo-candidate` | 1-Click instant candidate demo provisioning | No |
 | `GET` | `/api/v1/jobs` | Paginated job search with multi-criteria filters | Optional |
 | `GET` | `/api/v1/jobs/{id}` | Detailed job listing metadata and verified URL | No |
-| `GET` | `/api/v1/jobs/stats/overview` | Bengaluru tech hub metrics and role counts | No |
-| `POST` | `/api/v1/admin/scanner/trigger` | Trigger live ATS career portal scan | Admin Only |
+| `GET` | `/api/v1/candidate/profile` | Candidate target titles, preferences, and skills | Candidate |
+| `POST` | `/api/v1/candidate/profile` | Update profile titles, experience, and skills | Candidate |
+| `GET` | `/api/v1/candidate/matches` | Candidate job recommendations ranked by match score | Candidate |
+| `GET` | `/api/v1/candidate/saved-jobs` | Candidate bookmarked job postings (recency ordered) | Candidate |
+| `POST` | `/api/v1/candidate/saved-jobs/{id}` | Toggle bookmark status for a target position | Candidate |
+| `POST` | `/api/v1/admin/scans/trigger` | Trigger live ATS career portal scan | Admin Only |
 | `GET` | `/api/v1/admin/overview` | Admin crawler throughput and source health | Admin Only |
+
+---
+
+## 🔒 Candidate Demo Mode & Access Control Policy
+
+JobNexa enforces a strict 3-tier Role-Based Access Control (RBAC) model:
+
+1. **Candidate (Verified User)**:
+   - Full access to Bengaluru job feed, startup/MNC filters, experience tier switching (Fresher vs. Experienced).
+   - Dynamic AI skill matching and transparent gap analysis.
+   - Profile management, bookmarking positions, and **100% direct application submission to official employer career portals**.
+
+2. **Candidate Demo (Guest Exploration)**:
+   - 1-Click instant sign-in without registration via `POST /api/v1/auth/demo-candidate`.
+   - Seeded with core Bengaluru tech stack (`Python`, `FastAPI`, `React`, `PostgreSQL`, `Docker`, `SQL`, `AWS`).
+   - Identical feature access to all platform discovery tools, AI match scoring, and bookmarking.
+   - **Application Restriction Guardrail**: Direct external employer apply links are intercepted. Clicking "Apply (Demo Restricted)" opens an informative modal with a 1-click pathway to register a free candidate account.
+
+3. **Administrator (Platform Operations)**:
+   - Restricted to designated administrative identities.
+   - Comprehensive system telemetry, crawler scheduler execution, and source health monitoring.
+   - Prevented from submitting job applications or bookmarking candidate positions.
+
+---
 
 ---
 
